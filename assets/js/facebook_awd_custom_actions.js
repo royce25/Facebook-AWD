@@ -26,13 +26,21 @@ jQuery(document).ready(function($){
 					var AWD_action_callback = window[ajax_data.callbackJs];
 					AWD_action_callback(this,ajax_data);
 				}else if(ajax_data.success){
+<<<<<<< HEAD
 					if(data.typeEvent != 'AWD_facebook_tracker'){
+=======
+					if(datatypeEvent != 'AWD_facebook_tracker'){
+>>>>>>> test fix
 						$this.removeClass('.AWD_error_highlight').addClass('.AWD_success');
 					if(ajax_data.htmlResponse)
 						$this.html(ajax_data.htmlResponse);
 					}
 				}else{
+<<<<<<< HEAD
 					if(data.typeEvent != 'AWD_facebook_tracker'){
+=======
+					if(datatypeEvent != 'AWD_facebook_tracker'){
+>>>>>>> test fix
 						$this.removeClass('.AWD_success').addClass('.AWD_error_highlight');
 						if(ajax_data.htmlResponse)
 							$this.append(ajax_data.message);
@@ -41,7 +49,11 @@ jQuery(document).ready(function($){
 			},"json");
 		});
 		//launch by tracker if needed.
+<<<<<<< HEAD
 		if(data.typeEvent == 'AWD_facebook_tracker')
+=======
+		if(datatypeEvent == 'AWD_facebook_tracker')
+>>>>>>> test fix
 			$this.trigger('AWD_facebook_tracker');
 	});
 });
