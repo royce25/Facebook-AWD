@@ -53,7 +53,7 @@
 										</td>
 										<td>
 											<?php _e('Action',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_action'); ?><br />
-											<select id="<?php echo $this->plugin_option_pref; ?>like_button_action" name="<?php echo $this->plugin_option_pref; ?>like_button_action"  onchange="onchange_uiSelect(this.id);">
+											<select id="<?php echo $this->plugin_option_pref; ?>like_button_action" name="<?php echo $this->plugin_option_pref; ?>like_button_action">
 												<option value="like" <?php if($this->options['like_button_action'] == "like") echo 'selected="selected"'; ?> ><?php echo __("Like",$this->plugin_text_domain).' '.__('(default)',$this->plugin_text_domain); ?></option>
 												<option value="recommend" <?php if($this->options['like_button_action'] == "recommend") echo 'selected="selected"'; ?> ><?php echo __("Recommend",$this->plugin_text_domain); ?></option>
 											</select>
