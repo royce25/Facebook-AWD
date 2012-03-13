@@ -87,7 +87,6 @@ class AWD_facebook_likebutton
 		$this->setColorscheme($colorscheme);
 		$this->setRef($ref);
 		$this->setTemplate($template);
-		print_r($this);
  	}
 
 	/**
