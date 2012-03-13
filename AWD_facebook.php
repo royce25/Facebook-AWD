@@ -931,7 +931,7 @@ Class AWD_facebook
 			}else{
 				return $content;
 			}
-		}elseif(!in_array($post->post_type,$exclude_post_type) && !in_array($post->ID,$exclude_post_page_id) && !$is_term_to_exclude && $custom[$this->plugin_option_pref.'like_button_enabled'][0]){
+		}elseif(!in_array($post->post_type,$exclude_post_type) && !in_array($post->ID,$exclude_post_page_id) && !$is_term_to_exclude && $custom[$this->plugin_option_pref.'like_button_enabled'][0] == 1 OR $custom[$this->plugin_option_pref.'like_button_enabled'][0] == ''){
 			$like_button = $this->get_the_like_button($post);
 			if($post->post_type == 'page' && $this->options['like_button_on_pages']){
 				if($this->options['like_button_place_on_pages'] == 'bottom')
