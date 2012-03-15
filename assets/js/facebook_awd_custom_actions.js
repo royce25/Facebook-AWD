@@ -12,7 +12,7 @@ jQuery(document).ready(function($){
 		//create eventlistener on the element
 		$this.bind(data.typeEvent,function(e){
 			e.preventDefault();
-			$.post(awd_fcbk_custom_action.ajaxurl,
+			$.post(awd_fcbk.ajaxurl,
 			{
 				action				: 'call_action_open_graph',
 				awd_action			: data.action,
@@ -46,3 +46,35 @@ jQuery(document).ready(function($){
 			$this.trigger('AWD_facebook_tracker');
 	});
 });
+
+
+var AWD_facebook = {
+
+	FBEventHandler : function ()
+	{
+		//none for the moment
+	},
+	
+	redirectToLogin : function(redirect_url)
+	{
+		if(response.authResponse) window.location.href = awd_fcbk.loginUrl;
+	},
+	
+	connect :function(redirect_url)
+	{
+		FB.login(
+			AWD_facebook.redirectToLogin,
+			{ scope: awd_fcbk.scope }
+		);
+		return false;
+	},
+	
+	isFbConnected : function(){
+		FB.getLoginStatus(function(response) {
+			if (response.status === 'connected') {
+				return true;
+			}
+			return false;
+		});
+	}
+}

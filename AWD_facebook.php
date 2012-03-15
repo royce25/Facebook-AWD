@@ -226,6 +226,11 @@ Class AWD_facebook
 		add_action('plugins_loaded',array(&$this,'initial'));
 		//like box widget register
 		add_action('widgets_init',  array(&$this,'register_AWD_facebook_widgets'));
+		
+		$this->_login_url = get_option('permalink_structure') != '' ? home_url('facebook-awd/login') : home_url('?facebook_awd[action]=login');
+		$this->_logout_url = get_option('permalink_structure') != '' ? home_url('facebook-awd/logout') : home_url('?facebook_awd[action]=login');
+		$this->_unsync_url = get_option('permalink_structure') != '' ? home_url('facebook-awd/unsync') : home_url('?facebook_awd[action]=unsync');
+
 	}
 	
 	/**
@@ -235,6 +240,18 @@ Class AWD_facebook
 	public function wp_init()
 	{
 		do_action('AWD_facebook_oauth');
+		
+		//add script and styles in the plugin and editos pages.
+		wp_register_script($this->plugin_slug.'-js-cookie',$this->plugin_url.'/assets/js/jquery.cookie.js',array('jquery'));
+		wp_register_script($this->plugin_slug.'-jquery-ui',$this->plugin_url.'/assets/js/jquery-ui-1.8.14.custom.min.js',array('jquery'));
+		wp_register_script($this->plugin_slug.'-admin-js',$this->plugin_url.'/assets/js/facebook_awd.js',array('jquery'));
+		wp_register_script($this->plugin_slug.'-js',$this->plugin_url.'/assets/js/facebook_awd_custom_actions.js',array('jquery'));
+		wp_register_script($this->plugin_slug.'-ui-toolkit',$this->plugin_url.'/assets/js/ui-toolkit.js',array('jquery'));
+		
+		wp_register_style($this->plugin_slug.'-admin', $this->plugin_url.'/assets/css/admin_styles.css',array($this->plugin_slug.'-jquery-ui'));
+		wp_register_style($this->plugin_slug.'-jquery-ui', $this->plugin_url.'/assets/css/jquery-ui-1.8.14.custom.css');
+		wp_register_style($this->plugin_slug.'-ui-toolkit', $this->plugin_url.'/assets/css/ui-toolkit.css');
+		
 	}
 	
 	/**
@@ -441,17 +458,6 @@ Class AWD_facebook
 		add_action( "load-".$this->blog_admin_plugins_hook, array(&$this,'admin_initialisation'));
 		add_action( "load-".$this->blog_admin_opengraph_hook, array(&$this,'admin_initialisation'));
 		
-		
-		//add script and styles in the plugin and editos pages.
-		wp_register_script($this->plugin_slug.'-js-cookie',$this->plugin_url.'/assets/js/jquery.cookie.js',array('jquery'));
-		wp_register_script($this->plugin_slug.'-jquery-ui',$this->plugin_url.'/assets/js/jquery-ui-1.8.14.custom.min.js',array('jquery'));
-		wp_register_script($this->plugin_slug.'-js',$this->plugin_url.'/assets/js/facebook_awd.js',array('jquery'));
-		wp_register_script($this->plugin_slug.'-ui-toolkit',$this->plugin_url.'/assets/js/ui-toolkit.js',array('jquery'));
-		
-		wp_register_style($this->plugin_slug.'-admin', $this->plugin_url.'/assets/css/admin_styles.css',array($this->plugin_slug.'-jquery-ui'));
-		wp_register_style($this->plugin_slug.'-jquery-ui', $this->plugin_url.'/assets/css/jquery-ui-1.8.14.custom.css');
-		wp_register_style($this->plugin_slug.'-ui-toolkit', $this->plugin_url.'/assets/css/ui-toolkit.css');
-		
 		add_action( 'admin_print_styles-'.$this->blog_admin_page_hook, array(&$this,'admin_enqueue_css'));
 		add_action( 'admin_print_styles-'.$this->blog_admin_support_hook, array(&$this,'admin_enqueue_css'));
 		add_action( 'admin_print_styles-'.$this->blog_admin_plugins_hook, array(&$this,'admin_enqueue_css'));
@@ -465,6 +471,10 @@ Class AWD_facebook
 		add_action( 'admin_print_scripts-'.$this->blog_admin_opengraph_hook, array(&$this,'admin_enqueue_js'));
 		add_action( 'admin_print_scripts-post-new.php', array(&$this,'admin_enqueue_js'));
 		add_action( 'admin_print_scripts-post.php', array(&$this,'admin_enqueue_js'));
+		
+		//enqueue here the library facebook connect
+		wp_enqueue_script($this->plugin_slug.'-js');
+		$this->add_js_options();
 		
 		//Add meta box
 		$this->add_meta_boxes();
@@ -565,8 +575,21 @@ Class AWD_facebook
 		wp_enqueue_script('postbox');
 		wp_enqueue_script($this->plugin_slug.'-jquery-ui');
 		wp_enqueue_script($this->plugin_slug.'-js-cookie');
-		wp_enqueue_script($this->plugin_slug.'-js');
+		wp_enqueue_script($this->plugin_slug.'-admin-js');
 		wp_enqueue_script($this->plugin_slug.'-ui-toolkit');
+	}
+	
+	public function add_js_options()
+	{
+		// declare the URL to the file that handles the AJAX request (wp-admin/admin-ajax.php)
+		wp_localize_script($this->plugin_slug.'-js', $this->plugin_slug, array(
+			'ajaxurl' 	=> admin_url('admin-ajax.php'),
+			'homeUrl' 	=> home_url(),
+			'loginUrl' 	=> $this->_login_url,
+			'logoutUrl' => $this->_logout_url,
+			'scope' 	=> current_user_can("manage_options") ? $this->options["perms_admin"] : $this->options["perms"],
+			'app_id'    => $this->options["app_id"]
+		));
 	}
 
 	/**
@@ -1005,109 +1028,14 @@ Class AWD_facebook
 	}
 	
 	/**
-	 * Add Js init fcbk to footer  ADMIN AND FRONT 
-	 * Print debug if active here
-	 * @return void
-	 */
-	public function connect_footer()
-	{
-		if($this->options['connect_enable'] == 1){ ?>
-		<script type="text/javascript">
-            window.fbAsyncInit = function(){
-                FB.init({
-                    appId   : '<?php echo  $this->options["app_id"]; ?>',
-                    cookie  : true, // enable cookies to allow the server to access the session
-                    xfbml   : true,// parse XFBML
-            		oauth : true //wait for php SDK compatible with cookie
-                });				
-                FB.Event.subscribe('auth.login', function(response) {
-                    //reload only if php sdk think user is not logged in.
-					if(window.location != window.parent.location) {
-						// page is in iframe so we need to refresh it
-						top.location.href = '<? echo $this->facebook_page_url; ?>';
-					}else{
-						// page is displayed standalone
-						<?php do_action("AWD_facebook_redirect_login"); ?>
-					}
-				});
-				//this function is used to verify if user is connected to faceboko and authorized the app.
-                FB.getLoginStatus(function(response) {
-					if (response.status === 'connected'){
-						<?php if(!is_user_logged_in()):	?>
-						<?php do_action("AWD_facebook_redirect_login"); ?>
-						<?php endif; ?>
-						<?php do_action("AWD_facebook_js_authorized"); ?>
-					}else if(response.status === 'not_authorized') {
-						// the user is logged in to Facebook, 
-						//but not connected to the app TODO  ? ask for autorisation ? do_action and settings
-						<?php do_action("AWD_facebook_js_not_authorized"); ?>
-					}
-				});
-                //add some js with plugin or admin
-            	<?php do_action('AWD_custom_fbjs'); ?>
-            };
-            function AWD_facebook_connect(login_url){
-				//display some button
-				FB.login(function(response) {
-					//check if user connected
-					if(response.authResponse) {
-						<?php do_action("AWD_facebook_js_authorized"); ?>
-						if(login_url != ''){
-							window.location.href = login_url;
-						}else{
-							<?php do_action('AWD_facebook_redirect_login'); ?>
-						}
-					}else{
-						//reload page if not connected. (cancel button)
-						window.location.reload();
-					}
-				},
-				{ scope:'<?php echo current_user_can("manage_options") ? $this->options["perms_admin"] : $this->options["perms"] ?>'});
-				return false;
-			}
-		</script>
-		<?php 
-		}
-		do_action('AWD_custom_js');
-	}
-	
-	/**
-	 * Core connect the user to wordpress.
-	 * @param WP_User $user_object
-	 * @return void
-	 */
-	public function connect_the_user($user_object)
-	{
-		$secure_cookie = is_ssl();
-		wp_set_current_user($user_object->ID);
-		wp_set_auth_cookie($user_object->ID, true, $secure_cookie);
-	}
-	
-	/**
-	 * Redirect after login hook
-	 * @return void
-	 */
-	public function js_redirect_after_login()
-	{
-		if($this->options['login_button_login_url'] =='')
-			echo 'window.location.reload(true);';
-		else if(preg_match('@%BLOG_URL%@',$this->options['login_button_login_url']))
-			echo 'window.location.href = "'.str_replace('%BLOG_URL%',home_url(),$this->options['login_button_login_url']).'";';
-		else
-			echo 'window.location.href = "'.$this->options['login_button_login_url'].'";';
-
-	}
-	
-	/**
 	 * Add JS to front
 	 * @return void
 	 */
 	public function front_enqueue_js()
 	{
-		wp_register_script($this->plugin_slug.'-custom-action', $this->plugin_url.'/assets/js/facebook_awd_custom_actions.js',array('jquery'));
-		wp_enqueue_script($this->plugin_slug.'-custom-action');
-		// declare the URL to the file that handles the AJAX request (wp-admin/admin-ajax.php)
-		wp_localize_script($this->plugin_slug.'-custom-action', $this->plugin_slug.'_custom_action', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+		wp_register_script($this->plugin_slug.'-js', $this->plugin_url.'/assets/js/facebook_awd_custom_actions.js',array('jquery'));
+		wp_enqueue_script($this->plugin_slug.'-js');
+		$this->add_js_options();
 	}
 	
 	//****************************************************************************************
@@ -1250,16 +1178,10 @@ Class AWD_facebook
 	 */
 	public function user_profile_edit($user)
 	{
-		if(current_user_can('edit_user')): ?>
+		
+		if(current_user_can('read')): ?>
 		<h3><?php _e('Facebook infos',$this->plugin_text_domain); ?></h3>
 		<table class="form-table">
-		<tr>
-			<th><label for="fb_uid"><?php _e('Facebook ID',$this->plugin_text_domain); ?></label></th>
-			<td>
-				<input type="text" name="fb_uid" id="fb_uid" value="<?php echo esc_attr( get_user_meta($user->ID , 'fb_uid', true) ); ?>" class="regular-text" /><br />
-				<span class="description"><?php _e('Enter your Facebook ID',$this->plugin_text_domain); ?></span>
-			</td>
-		</tr>
 		<tr>
 			<th><label for="fb_email"><?php _e('Facebook Email',$this->plugin_text_domain); ?></label></th>
 			<td>
@@ -1268,10 +1190,17 @@ Class AWD_facebook
 			</td>
 		</tr>
 		<tr>
-			<th><label for="fb_reset"><?php _e('Reset all Facebook Data ?',$this->plugin_text_domain); ?></label></th>
+			<th><label for="fb_uid"><?php _e('Facebook ID',$this->plugin_text_domain); ?></label></th>
+			<td>
+				<input type="text" name="fb_uid" id="fb_uid" value="<?php echo esc_attr( get_user_meta($user->ID , 'fb_uid', true) ); ?>" class="regular-text" /><br />
+				<span class="description"><?php _e('Enter your Facebook ID',$this->plugin_text_domain); ?></span>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="fb_reset"><?php _e('Unsync Facebook Account ?',$this->plugin_text_domain); ?></label></th>
 			<td>
 				<input type="checkbox" name="fb_reset" id="fb_reset" value="1" /><br />
-				<span class="description"><?php _e('Note: you must be logged out from facebook.',$this->plugin_text_domain); ?></span>
+				<span class="description"><?php _e('Note: This will clear all your facebook data linked with this account, you could login with WP account.',$this->plugin_text_domain); ?></span>
 			</td>
 		</tr>
 		</table>
@@ -1284,18 +1213,17 @@ Class AWD_facebook
 	 */
 	public function user_profile_save($user_id)
 	{
-		if ( !current_user_can( 'edit_user', $user_id ) )
+		if (!current_user_can('read', $user_id))
 			return false;
-
-		if($_POST['fb_uid'] != '')
-			update_user_meta( $user_id, 'fb_uid', $_POST['fb_uid'] );
-		if($_POST['fb_uid'] != '')
-			update_user_meta( $user_id, 'fb_email', $_POST['fb_email'] );
-			
 		if($_POST['fb_reset']){
-			update_user_meta( $user_id, 'fb_email', '' );
-			update_user_meta( $user_id, 'fb_email', '' );
-			update_user_meta( $user_id, 'fb_infos', array() );
+			wp_redirect($this->_unsync_url);
+			exit();
+		}
+		if($_POST['fb_email'] != ''){
+			update_user_meta( $user_id, 'fb_email', $_POST['fb_email'] );
+		}
+		if($_POST['fb_uid'] != ''){
+			update_user_meta( $user_id, 'fb_uid', $_POST['fb_uid'] );
 		}
 	}
 	
@@ -1400,68 +1328,74 @@ Class AWD_facebook
 	}
 	
 	/**
-	 * Getter 
-	 * Get all facebook Data only when the user is logged in. Then store them.
+	 * Get all facebook Data only when. Then store them.
 	 * @throws FacebookApiException
 	 * @return string
 	 */
 	public function get_facebook_user_data()
 	{
-		if($this->is_user_logged_in_facebook()){
-			//Try batch request on user
-			$fb_queries = array(array('method' => 'GET', 'relative_url' => '/me'));
-			$fb_queries[] = array('method' => 'GET', 'relative_url' => '/me/permissions');
-			$fb_queries[] = array('method' => 'GET', 'relative_url' => '/me/accounts');
-			$me = array();
-			$batchResponse = $this->fcbk->api('?batch='.urlencode(json_encode($fb_queries)),'POST');
-			$me = json_decode($batchResponse[0]['body'], true);
+		//Try batch request on user
+		$fb_queries = array(array('method' => 'GET', 'relative_url' => '/me'));
+		$fb_queries[] = array('method' => 'GET', 'relative_url' => '/me/permissions');
+		$fb_queries[] = array('method' => 'GET', 'relative_url' => '/me/accounts');
+		$me = array();
+		$batchResponse = $this->fcbk->api('?batch='.urlencode(json_encode($fb_queries)),'POST');
+		$me = json_decode($batchResponse[0]['body'], true);
 		
-			//Try to find if the batch return error. IF yes, the user acces token is no more good.
-			if(empty($me['error'])){
-			   
-				$this->me = $me;
-				// Proceed knowing you have a logged in user who's authenticated.
-				$this->me['AWD_acces_token'] = $this->fcbk->getAccessToken();
-				//queries are only exec on admin side for perf...
-				if(is_admin){
-					$fb_perms = json_decode($batchResponse[1]['body'], true);
-					$this->me['permissions'] = $fb_perms['data'][0];
-					$fb_pages = json_decode($batchResponse[2]['body'], true);
-					if($fb_pages['data']){
-						foreach($fb_pages['data'] as $fb_page){
-							$this->me['pages'][$fb_page['id']] = $fb_page;
-						}
+		//Try to find if the batch return error. IF yes, the user acces token is no more good.
+		if(empty($me['error'])){
+			$this->me = $me;
+			// Proceed knowing you have a logged in user who's authenticated.
+			$this->me['AWD_acces_token'] = $this->fcbk->getAccessToken();
+			//queries are only exec on admin side for perf...
+			if(is_admin){
+				$fb_perms = json_decode($batchResponse[1]['body'], true);
+				$this->me['permissions'] = $fb_perms['data'][0];
+				$fb_pages = json_decode($batchResponse[2]['body'], true);
+				if($fb_pages['data']){
+					foreach($fb_pages['data'] as $fb_page){
+						$this->me['pages'][$fb_page['id']] = $fb_page;
 					}
 				}
-				update_user_meta($this->current_user->ID,'fb_user_infos',$this->me);
-			}else{
-				$result = array();
-				$result['error_description'] = $me['error']['message'];
-				$result['error_code'] = $me['error']['code'];
-				//manually trow error, since errors are not catched in batch request.
-				throw new FacebookApiException($result);
 			}
+		}else{
+			$result = array();
+			$result['error_description'] = $me['error']['message'];
+			$result['error_code'] = $me['error']['code'];
+			//manually trow error, since errors are not catched in batch request.
+			throw new FacebookApiException($result);
 		}
 	}
+	
+	public function save_facebook_user_data($user_id){
+		update_user_meta($user_id, 'fb_email', $this->me['email']);
+		update_user_meta($user_id,'fb_user_infos',$this->me);
+		update_user_meta($user_id,'fb_uid',$this->uid);
+	}
+	
+	public function clear_facebook_user_data($user_id){
+		delete_user_meta($user_id, 'fb_email');
+		delete_user_meta($user_id,'fb_user_infos');
+		delete_user_meta($user_id,'fb_uid');
+	}
+	
 	
 	/**
 	 * Get the WP_User ID from current Facebook User
 	 * @return int
 	 */
 	public function get_existing_user_from_facebook(){
+		require_once(ABSPATH . WPINC . '/registration.php');
 	    $existing_user = email_exists($this->me['email']);
-
 	    //if not email, verify in metas.
-
-	    if(!$existing_user){
-
-	        $existing_user = $this->wpdb->get_var(
-
-	                'SELECT DISTINCT `u`.`ID` FROM `' . $this->wpdb->users . '` `u` JOIN `' . $this->wpdb->usermeta . '` `m` ON `u`.`ID` = `m`.`user_id`
-
-	                WHERE (`m`.`meta_key` = "fb_uid" AND `m`.`meta_value` = "' . $this->uid . '" )
-
-	                OR (`m`.`meta_key` = "fb_email" AND `m`.`meta_value` = "' . $this->me['email'] . '" )  LIMIT 1 ');
+	    if(!$existing_user) {
+	    	$existing_user = $this->wpdb->get_var(
+				'SELECT DISTINCT `u`.`ID` FROM `' . $this->wpdb->users . '` `u` JOIN `' . $this->wpdb->usermeta . '` `m` ON `u`.`ID` = `m`.`user_id`
+				WHERE (`m`.`meta_key` = "fb_uid" AND `m`.`meta_value` = "' . $this->uid . '" )
+				OR (`m`.`meta_key` = "fb_email" AND `m`.`meta_value` = "' . $this->me['email'] . '" )  LIMIT 1 '
+	        );
+	        if(empty($existing_user))
+	        	$existing_user = false;
 	    }
 	    return $existing_user;
 	}
@@ -1470,8 +1404,9 @@ Class AWD_facebook
 	 * Know if a user is logged in facebook.
 	 * @return boolean
 	 */
-	public function is_user_logged_in_facebook(){
-	    if($this->uid)
+	public function is_user_logged_in_facebook()
+	{
+	    if($this->uid != 0)
 	        return true;
 	    
 	    return false;
@@ -1482,74 +1417,49 @@ Class AWD_facebook
 	* Connect the user here
 	* @return void
 	*/
-	public function sdk_init()
+	public function php_sdk_init()
 	{
 		$this->fcbk = new Facebook(array(
 			'appId'  => $this->options['app_id'],
 			'secret' => $this->options['app_secret_key'],
 			'timeOut_AWD' => $this->options['timeout']
 		));
-		//should be call after the user was logged out.
-
-		$this->logout_listener();
-		
-		//verify the content of the application ID submited by user, store infos if ok
-		if(isset($_POST[$this->plugin_option_pref.'app_id']) && $_POST[$this->plugin_option_pref.'app_id']){
-			$this->get_app_info();
-		}
-		
-		//if this page is being displayed in an iframe, determine where it is
-		$signedrequest = $this->fcbk->getSignedRequest();
-        if( is_array($signedrequest) && array_key_exists("page", $signedrequest) ){
-            $this->facebook_page_url = json_decode(file_get_contents("https://graph.facebook.com/" . $signedrequest['page']['id']))->{"link"} . "?sk=app_" . $this->fcbk->getAppId();
-        } else {
-            $this->facebook_page_url = "";
-        }
-        
-        
-        //call only if fb connect is enabled
+		$this->uid = $this->fcbk->getUser();
+	}
+	
+	/**
+	 * Add Js init fcbk to footer  ADMIN AND FRONT 
+	 * Print debug if active here
+	 * @return void
+	 */
+	public function js_sdk_init()
+	{
+		$html = '';
 		if($this->options['connect_enable'] == 1){
-			$tmp_user_infos = get_user_meta($this->current_user->ID,'fb_user_infos');
-			$this->me = $tmp_user_infos[0];
-			// Get User ID
-			$this->uid = $this->fcbk->getUser();
-			$scope = current_user_can('manage_options') ? $this->options['perms_admin'] : $this->options['perms'];
-			$this->login_url = $this->fcbk->getLoginUrl(array('scope' => $scope));
-			//IF user is connected to facebook try to log in.
-			try{
-    			if($this->is_user_logged_in_facebook()) {
-    			    
-    			    //if some post form admin refetch user data
-					if(isset($_POST[$this->plugin_option_pref.'app_id']) && $_POST[$this->plugin_option_pref.'app_id']){
-    			    	$this->get_facebook_user_data();
-    			    }
-    			    
-    			    //perform login process
-    			    $this->login_user();
-    			    $this->logout_url = $this->fcbk->getLogoutUrl();
-    			    //logout url
-    			    add_filter('logout_url', array(&$this,'logout_url'),10,1);
-    			}else{
-    			    $this->me = null;
-    			    //force destroy the data from facebook if exist.
-    				$this->destroy_session();
-    			}
-			}catch(FacebookApiException $e){
-			    $this->uid = null;
-			    $this->me = null;
-			    //force destroy the data from facebook if exist.
-
-			    $this->destroy_session();
-			}
+			$html = "\n".'<script type="text/javascript">window.fbAsyncInit = function(){ FB.init({ appId : awd_fcbk.app_id, cookie : true, xfbml : true, oauth : true }); AWD_facebook.FBEventHandler(); };</script>'."\n"; 
 		}
+		echo $html;
+	}
+	
+	/**
+	 * Core connect the user to wordpress.
+	 * @param WP_User $user_object
+	 * @return void
+	 */
+	public function connect_the_user($user_id)
+	{
+		$is_secure_cookie = is_ssl();
+		wp_set_current_user($user_id);
+		wp_set_auth_cookie($user_id, true, $is_secure_cookie);
 	}
 	
 	/**
 	 * login user with facebook account
 	 * return @void
-	 */
+	 *///TODO REMOVE
 	public function login_user()
 	{
+		wp_die('Depreciated...');
 		include_once(dirname(__FILE__).'/inc/login_process.php');
 	}
 	
@@ -1557,47 +1467,171 @@ Class AWD_facebook
 	 * Change logout url for users connected with Facebook
 	 * @param string $url
 	 * @return string
-	 */
+	 *///TODO UPDATE
 	public function logout_url($url)
 	{
 		$params = explode('&',str_replace('&amp;','&',$url));
 		if(preg_match('@redirect_to@',$params[1]))
 			$redirect_to = '&'.$params[1];
 		
-		if($this->uid != 0)
-			return $this->fcbk->getLogoutUrl(array('next' => home_url()."?action=fb_logout".$redirect_to));
+		if($this->is_user_logged_in_facebook())
+			return $this->fcbk->getLogoutUrl(array('next' => $this->_logout_url.$redirect_to));
 		else
 			return $url;
 	}
 	
-	public function destroy_session()
+	public function get_facebook_page_url()
+	{			
+		$facebook_page_url = null;
+		$signedrequest = $this->fcbk->getSignedRequest();
+		if( is_array($signedrequest) && array_key_exists("page", $signedrequest) ){
+			$facebook_page_url = json_decode(file_get_contents("https://graph.facebook.com/" . $signedrequest['page']['id']))->{"link"} . "?sk=app_" . $this->fcbk->getAppId();
+		}
+		return $facebook_page_url; 
+	}
+	
+	public function register_user()
 	{
-	    $this->fcbk->destroySession();
-
-	    unset($_SESSION[$this->plugin_slug]);
+		$username = sanitize_user($this->me['first_name'], true);
+		$i='';
+		while(username_exists($username . $i)){
+			$i = absint($i);
+			$i++;
+		}
+		$username = $username.$i;
+		$userdata = array(
+			'user_pass'		=>	wp_generate_password(),
+			'user_login'	=>	$username,
+			'user_nicename'	=>	$username,
+			'user_email'	=>	$this->me['email'],
+			'display_name'	=>	$this->me['name'],
+			'nickname'		=>	$username,
+			'first_name'	=>	$this->me['first_name'],
+			'last_name'		=>	$this->me['last_name'],
+			'role'			=>	get_option('default_role')
+		);
+		$new_user = wp_insert_user($userdata);
+		//Test the creation							
+		if($new_user->errors){
+			wp_die($this->Debug($new_user->errors));
+		}
+		if(is_int($new_user)){
+			//send email new registration
+			wp_new_user_notification($new_user, $userdata['user_pass']);
+			//call action user_register for other plugins and wordpress core
+			do_action('user_register', $new_user);
+			return $new_user;
+		}
+		
+		return false;
+	}
+	
+	public function login()
+	{
+		if($this->is_user_logged_in_facebook()) {
+			$this->get_facebook_user_data();
+			//Found existing user in WP
+			$user_id = $this->get_existing_user_from_facebook();
+			//No user was found we create a new one	
+			if($user_id === false){
+				$user_id = $this->register_user();
+			}
+			$this->save_facebook_user_data($user_id);
+			$this->connect_the_user($user_id);
+		}else{
+			wp_redirect(home_url('?awd_fcbk_error=403'));
+			exit();
+		}
+		//if we are in an iframe or a canvas page, redirect to
+		if(!empty($this->facebook_page_url)){
+			wp_redirect($this->facebook_page_url);
+		}else{
+			wp_redirect(home_url());
+		}
+		exit();
+	}
+	
+	public function logout()
+	{
+		$this->fcbk->destroySession();
+		wp_logout();
+		//do_action('wp_logout');
+		//if we are in an iframe or a canvas page, redirect to
+		if(!empty($this->facebook_page_url)){
+			wp_redirect($this->facebook_page_url);
+		}else{
+			wp_redirect(home_url().'/wp-login.php?loggedout=true');
+		}
+		exit();
+	}
+	
+	public function parse_request(){
+		global $wp_query;
+		$this->facebook_page_url = $this->get_facebook_page_url();
+		$query = get_query_var('facebook_awd');
+		//Parse the query for internal process
+		if(isset($query)){
+			$action = $query['action'];
+			switch($action){
+				//LOGIN
+				case 'login':
+					$this->login();
+				break;
+				
+				//LOGOUT
+				case 'logout':
+					$this->logout();
+				break;
+				
+				//UNSYNC
+				case 'unsync':
+					$this->clear_facebook_user_data($this->current_user->ID);
+					$this->logout();
+				break;
+			}
+		}
+		//IF user is logged in facebook and logged in wordpress
+		//if($this->is_user_logged_in_facebook()) {
+			//update user fb infos
+			//$this->get_facebook_user_data();
+			//update_user_meta($existing_user, 'fb_uid', $this->uid );
+			//update_user_meta($existing_user, 'fb_email', $this->me['email']);
+			//update_user_meta($existing_user,'fb_user_infos',$this->me);
+		//}
 	}
 	
 	/**
-	* Logout the user from the logout_url...
-	* If $_GET action == fb_logout
-	* If redirect is set, it will redirect to, else, try to get global info, else redirect to wp-login.php?loggedout=true
+	* Flush rules WP
 	* @return void
 	*/
-	public function logout_listener()
-	{
-		if(isset($_GET['action']) && $_GET['action'] == 'fb_logout'){
-		    $this->destroy_session();
-			wp_logout();
-			if($_GET['redirect_to'] != '')
-				wp_redirect($_GET['redirect_to']);
-			elseif($this->options['login_button_logout_url'] != '')
-				wp_redirect(str_ireplace("%BLOG_URL%",home_url(),$this->options['login_button_logout_url']));
-			else
-				wp_redirect(site_url().'/wp-login.php?loggedout=true');
-			exit();
+	public function flush_rules(){
+		$rules = get_option( 'rewrite_rules' );
+		if ( ! isset( $rules['facebook-awd/(login|logout|unsync)$'] ) ) {
+			global $wp_rewrite;
+			$wp_rewrite->flush_rules();
 		}
 	}
 	
+	/**
+	* insert rules WP
+	* @return void
+	*/
+	public function insert_rewrite_rules( $rules )
+	{
+		$newrules = array();
+		$newrules['facebook-awd/(login|logout|unsync)$'] = 'index.php?facebook_awd[action]=$matches[1]';
+		return $newrules + $rules;
+	}
+	
+	/**
+	* Isert query vars
+	* @return $vars
+	*/
+	public function insert_query_vars($vars)
+	{
+		$vars[] = 'facebook_awd';
+		return $vars;
+	}
 	
 	//****************************************************************************************
 	//	ACTIONS OPENGRAPH OBJECT (BETA)
@@ -1665,7 +1699,7 @@ Class AWD_facebook
 	public function call_action_open_graph($namespace,$action,$object,$url)
 	{
 	 	$response = array();
-		if($this->uid){
+		if(is_user_logged_in_facebook()){
 			try{
 				$response['id'] = $this->fcbk->api('/me/'.$namespace.':'.$action.'?'.$object.'='.$url,'post');
 				$response['success'] = true;
@@ -2375,6 +2409,7 @@ Class AWD_facebook
 		$maxrow = ($options['login_button_maxrow'] == '' ? $this->options['login_button_maxrow'] : $options['login_button_maxrow']);
 		$logout_value = ($options['login_button_logout_value'] == '' ? $this->options['login_button_logout_value'] : $options['login_button_logout_value']);
 		$logout_redirect_url = ($options['login_button_logout_url'] == '' ? $this->options['login_button_logout_url'] : $options['login_button_logout_url']);
+		//TODO MUST be doeas only once...
 		$login_redirect_url = str_replace("%BLOG_URL%",home_url(), $options['login_button_login_url'] == '' ? $this->options['login_button_login_url'] : $options['login_button_login_url']);
 		$login_button_image = ($options['login_button_image'] == '' ? $this->options['login_button_image'] : $options['login_button_image']);
 		//we set faces options to false, if user not connected
@@ -2423,7 +2458,7 @@ Class AWD_facebook
 			case 'login':
 				return '
 				<div class="AWD_facebook_login '.$options['login_button_css_classes'].'">
-					<a href="'.$this->login_url.'" onclick="AWD_facebook_connect(\''.$login_redirect_url.'\'); return false;"><img src="'.$login_button_image.'" border="0" /></a>
+					<a href="'.$this->login_url.'" onclick="AWD_facebook.connect(\''.$login_redirect_url.'\'); return false;"><img src="'.$login_button_image.'" border="0" /></a>
 				</div>'."\n";
 			break;
 		
@@ -2449,7 +2484,7 @@ Class AWD_facebook
 		<br />
 		<?php
 		$this->load_sdj_js();
-		$this->connect_footer();
+		$this->js_sdk_init();
 	}
 	
 	//****************************************************************************************
