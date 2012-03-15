@@ -1413,7 +1413,7 @@ Class AWD_facebook
 	}
 	
 	/**
-	* INIT PHP SDK 3 version
+	* INIT PHP SDK 3.1.1 version Modified to Change TimeOut
 	* Connect the user here
 	* @return void
 	*/
