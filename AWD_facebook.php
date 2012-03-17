@@ -69,7 +69,7 @@ Class AWD_facebook
      * public
      * Debug this object
      */
-    public $debug_active = false;
+    public $debug_active = true;
     
     /**
      * public
@@ -104,6 +104,11 @@ Class AWD_facebook
     */
     public $message;
     
+    /**
+    * me represent the facebook user datas
+    */
+    public $me = null;
+    
 	//****************************************************************************************
 	//	GLOBALS FUNCTIONS
 	//****************************************************************************************    
@@ -111,7 +116,7 @@ Class AWD_facebook
 	 * Setter $this->current_user
 	 * @return void
 	 */
-	public function current_user()
+	public function get_current_user()
 	{
 	    global $current_user;
 		get_currentuserinfo();
@@ -238,9 +243,7 @@ Class AWD_facebook
 	 * @return void
 	 */
 	public function wp_init()
-	{
-		do_action('AWD_facebook_oauth');
-		
+	{		
 		//add script and styles in the plugin and editos pages.
 		wp_register_script($this->plugin_slug.'-js-cookie',$this->plugin_url.'/assets/js/jquery.cookie.js',array('jquery'));
 		wp_register_script($this->plugin_slug.'-jquery-ui',$this->plugin_url.'/assets/js/jquery-ui-1.8.14.custom.min.js',array('jquery'));
@@ -304,7 +307,7 @@ Class AWD_facebook
 		if($this->options['app_id'] =='' OR $this->options['app_secret_key'] =='' OR $this->options['admins'] ==''){
 			?>
 			<div class="ui-state-error">
-				<p><?php printf( __('Facebook AWD is almost ready... Go to settings and set your FB app Id and your FB secret key (Notification from Facebook AWD)', $this->plugin_text_domain), admin_url( 'admin.php?page='.$this->plugin_slug)); ?></p>
+				<p><?php printf( __('Facebook AWD is almost ready... Go to settings and set your FB app Id, youe FB Secret Key and your FB User ID (Notification from Facebook AWD)', $this->plugin_text_domain), admin_url( 'admin.php?page='.$this->plugin_slug)); ?></p>
 			</div> 
 			<?php	
 		}
@@ -1150,8 +1153,6 @@ Class AWD_facebook
 			$this->get_facebook_user_data();
 			//do custom action for sub plugins or other exec.
 			do_action('AWD_facebook_save_custom_settings');
-			//Unset The fetched status, to force update infos form api.
-			$_SESSION[$this->plugin_slug]['fetched_user_data'] = false;
 			//unset submit to not be stored
 			unset($_POST[$this->plugin_option_pref.'submit']);
 			unset($_POST[$this->plugin_option_pref.'_nonce_options_update_field']);
@@ -1299,22 +1300,20 @@ Class AWD_facebook
 				$fbuid = get_user_meta($comments_objects->user_id,'fb_uid', true);
 				//hack for avatar AWD comments_ plus
 				if($fbuid==''){
-					$fbuid = $comments_objects->user_id;//try if we directlu get fbuid
+					$fbuid = $comments_objects->user_id;//try if we directly get fbuid
 				}
 			}elseif(is_numeric($comments_objects)){
 				$fbuid = get_user_meta($comments_objects,'fb_uid', true);
 			}elseif($comments_objects !=''){
 				$user = get_user_by('email', $comments_objects);
-				//print_r($comments_objects);
 				$fbuid = get_user_meta($user->ID,'fb_uid', true);
 				
-			}else{
-				//$fbuid = get_user_meta($this->current_user->ID,'fb_uid', true);
 			}
+			
 			if($fbuid !=''){
-                if( $size < 60 ){
+                if( $size <= 64 ){
 			        $type = 'square';
-			    }else if($size > 50){
+			    }else if($size > 64){
 			        $type = 'normal';
 			    }else{
 			        $type = 'large';
@@ -1327,6 +1326,8 @@ Class AWD_facebook
 		return $avatar;
 	}
 	
+	
+	
 	/**
 	 * Get all facebook Data only when. Then store them.
 	 * @throws FacebookApiException
@@ -1334,39 +1335,47 @@ Class AWD_facebook
 	 */
 	public function get_facebook_user_data()
 	{
-		//Try batch request on user
-		$fb_queries = array(array('method' => 'GET', 'relative_url' => '/me'));
-		$fb_queries[] = array('method' => 'GET', 'relative_url' => '/me/permissions');
-		$fb_queries[] = array('method' => 'GET', 'relative_url' => '/me/accounts');
-		$me = array();
-		$batchResponse = $this->fcbk->api('?batch='.urlencode(json_encode($fb_queries)),'POST');
-		$me = json_decode($batchResponse[0]['body'], true);
-		
-		//Try to find if the batch return error. IF yes, the user acces token is no more good.
-		if(empty($me['error'])){
-			$this->me = $me;
-			// Proceed knowing you have a logged in user who's authenticated.
-			$this->me['AWD_acces_token'] = $this->fcbk->getAccessToken();
-			//queries are only exec on admin side for perf...
-			if(is_admin){
-				$fb_perms = json_decode($batchResponse[1]['body'], true);
-				$this->me['permissions'] = $fb_perms['data'][0];
-				$fb_pages = json_decode($batchResponse[2]['body'], true);
-				if($fb_pages['data']){
-					foreach($fb_pages['data'] as $fb_page){
-						$this->me['pages'][$fb_page['id']] = $fb_page;
+		if($this->is_user_logged_in_facebook()){
+			//Try batch request on user
+			$fb_queries = array(array('method' => 'GET', 'relative_url' => '/me'));
+			$fb_queries[] = array('method' => 'GET', 'relative_url' => '/me/permissions');
+			$fb_queries[] = array('method' => 'GET', 'relative_url' => '/me/accounts');
+			$me = array();
+			$batchResponse = $this->fcbk->api('?batch='.urlencode(json_encode($fb_queries)),'POST');
+			$me = json_decode($batchResponse[0]['body'], true);
+			//Try to find if the batch return error. IF yes, the user acces token is no more good.
+			if(!isset($me['error'])){
+				// Proceed knowing you have a logged in user who's authenticated.
+				$me['AWD_acces_token'] = $this->fcbk->getAccessToken();
+				//queries are only exec on admin side for perf...
+				if(is_admin()){
+					$fb_perms = json_decode($batchResponse[1]['body'], true);
+					$me['permissions'] = $fb_perms['data'][0];
+					$fb_pages = json_decode($batchResponse[2]['body'], true);
+					if($fb_pages['data']){
+						foreach($fb_pages['data'] as $fb_page){
+							$me['pages'][$fb_page['id']] = $fb_page;
+						}
 					}
 				}
+				$this->me = $me;
+			}else{
+				$result = array();
+				$result['error_description'] = $me['error']['message'];
+				$result['error_code'] = $me['error']['code'];
+				//manually trow error, since errors are not catched in batch request.
+				wp_die(new FacebookApiException($result));
 			}
-		}else{
-			$result = array();
-			$result['error_description'] = $me['error']['message'];
-			$result['error_code'] = $me['error']['code'];
-			//manually trow error, since errors are not catched in batch request.
-			throw new FacebookApiException($result);
 		}
 	}
 	
+	/**
+	 * Set all facebook Data
+	 * @return void
+	 */
+	public function init_facebook_user_data($user_id){
+		$this->me = get_user_meta($user_id, 'fb_user_infos', true);
+	}
 	public function save_facebook_user_data($user_id){
 		update_user_meta($user_id, 'fb_email', $this->me['email']);
 		update_user_meta($user_id,'fb_user_infos',$this->me);
@@ -1425,6 +1434,9 @@ Class AWD_facebook
 			'timeOut_AWD' => $this->options['timeout']
 		));
 		$this->uid = $this->fcbk->getUser();
+		//Set the current user data
+		$this->get_current_user();
+		$this->init_facebook_user_data($this->current_user->ID);
 	}
 	
 	/**
@@ -1467,17 +1479,15 @@ Class AWD_facebook
 	 * Change logout url for users connected with Facebook
 	 * @param string $url
 	 * @return string
-	 *///TODO UPDATE
+	 */
 	public function logout_url($url)
 	{
-		$params = explode('&',str_replace('&amp;','&',$url));
-		if(preg_match('@redirect_to@',$params[1]))
-			$redirect_to = '&'.$params[1];
-		
-		if($this->is_user_logged_in_facebook())
-			return $this->fcbk->getLogoutUrl(array('next' => $this->_logout_url.$redirect_to));
-		else
-			return $url;
+		if($this->is_user_logged_in_facebook()){
+			$parsing = parse_url($url);
+			$redirect_url = str_ireplace('action=logout&amp;','', $this->_logout_url.'?'.$parsing['query']);
+			return $this->fcbk->getLogoutUrl(array('next' =>$redirect_url));
+		}
+		return $url;
 	}
 	
 	public function get_facebook_page_url()
@@ -1526,8 +1536,9 @@ Class AWD_facebook
 		return false;
 	}
 	
-	public function login()
+	public function login($redirect_url)
 	{
+		$referer = wp_get_referer();
 		if($this->is_user_logged_in_facebook()) {
 			$this->get_facebook_user_data();
 			//Found existing user in WP
@@ -1537,6 +1548,7 @@ Class AWD_facebook
 				$user_id = $this->register_user();
 			}
 			$this->save_facebook_user_data($user_id);
+			$this->init_facebook_user_data($user_id);
 			$this->connect_the_user($user_id);
 		}else{
 			wp_redirect(home_url('?awd_fcbk_error=403'));
@@ -1545,22 +1557,31 @@ Class AWD_facebook
 		//if we are in an iframe or a canvas page, redirect to
 		if(!empty($this->facebook_page_url)){
 			wp_redirect($this->facebook_page_url);
+		}elseif($redirect_url){
+			wp_redirect($redirect_url);
+		}elseif($referer){
+			wp_redirect($referer);
 		}else{
 			wp_redirect(home_url());
 		}
 		exit();
 	}
 	
-	public function logout()
+	public function logout($redirect_url)
 	{
+		$referer = wp_get_referer();
 		$this->fcbk->destroySession();
 		wp_logout();
-		//do_action('wp_logout');
+		do_action('wp_logout');
 		//if we are in an iframe or a canvas page, redirect to
 		if(!empty($this->facebook_page_url)){
 			wp_redirect($this->facebook_page_url);
+		}elseif($redirect_url){
+			wp_redirect($redirect_url);
+		}elseif($referer){
+			wp_redirect($referer);
 		}else{
-			wp_redirect(home_url().'/wp-login.php?loggedout=true');
+			wp_redirect(home_url());
 		}
 		exit();
 	}
@@ -1572,21 +1593,22 @@ Class AWD_facebook
 		//Parse the query for internal process
 		if(isset($query)){
 			$action = $query['action'];
+			$redirect_url = $_GET['redirect_to'];
 			switch($action){
 				//LOGIN
 				case 'login':
-					$this->login();
+					$this->login($redirect_url);
 				break;
 				
 				//LOGOUT
 				case 'logout':
-					$this->logout();
+					$this->logout($redirect_url);
 				break;
 				
 				//UNSYNC
 				case 'unsync':
 					$this->clear_facebook_user_data($this->current_user->ID);
-					$this->logout();
+					$this->logout($redirect_url);
 				break;
 			}
 		}
@@ -2409,8 +2431,9 @@ Class AWD_facebook
 		$maxrow = ($options['login_button_maxrow'] == '' ? $this->options['login_button_maxrow'] : $options['login_button_maxrow']);
 		$logout_value = ($options['login_button_logout_value'] == '' ? $this->options['login_button_logout_value'] : $options['login_button_logout_value']);
 		$logout_redirect_url = ($options['login_button_logout_url'] == '' ? $this->options['login_button_logout_url'] : $options['login_button_logout_url']);
-		//TODO MUST be doeas only once...
-		$login_redirect_url = str_replace("%BLOG_URL%",home_url(), $options['login_button_login_url'] == '' ? $this->options['login_button_login_url'] : $options['login_button_login_url']);
+		$logout_redirect_url = str_ireplace("%BLOG_URL%",home_url(),$logout_redirect_url);
+		$login_redirect_url = ($options['login_button_login_url'] == '' ? $this->options['login_button_login_url'] : $options['login_button_login_url']);
+		$login_redirect_url = str_replace("%BLOG_URL%",home_url(),$login_redirect_url);
 		$login_button_image = ($options['login_button_image'] == '' ? $this->options['login_button_image'] : $options['login_button_image']);
 		//we set faces options to false, if user not connected
 		//old perms perms="'.$this->options['perms'].'"
@@ -2423,7 +2446,7 @@ Class AWD_facebook
 			else if($this->options['connect_enable'] == 1)
 				$case = 'login';
 			else 
-				$case = 'message_connect_active';
+				$case = 'message_connect_disabled';
 		}else{
 			$case = $options['case'];
 		}
@@ -2442,7 +2465,6 @@ Class AWD_facebook
 					}
 					//display logout button only if we are not in facebook tab.
 					if($this->facebook_page_url == ''){
-						$logout_redirect_url = str_ireplace("%BLOG_URL%",home_url(),$logout_redirect_url);
 						$html .='<div class="AWD_logout"><a href="'.wp_logout_url($logout_redirect_url).'">'.$logout_value.'</a></div>'."\n";
 					}
 				$html .='</div>'."\n";
@@ -2450,22 +2472,17 @@ Class AWD_facebook
 				$html .='</div>'."\n";
 				return $html;
 			break;	
-		
-			/*case 'login_xfbml':
-				return '
-				<div class="AWD_facebook_login">'.$login_button.'</div>'."\n";;
-			break;*/
+			
 			case 'login':
 				return '
 				<div class="AWD_facebook_login '.$options['login_button_css_classes'].'">
-					<a href="'.$this->login_url.'" onclick="AWD_facebook.connect(\''.$login_redirect_url.'\'); return false;"><img src="'.$login_button_image.'" border="0" /></a>
+					<a href="'.$this->login_url.'" onclick="AWD_facebook.connect(\''.urlencode($login_redirect_url).'\'); return false;"><img src="'.$login_button_image.'" border="0" /></a>
 				</div>'."\n";
 			break;
 		
-			case 'message_connect_active':
+			case 'message_connect_disabled':
 				if(is_admin())
-				return '
-				<div class="ui-state-highlight">'.sprintf(__('You should enable FB connect in %sApp settings%s to use Login buttons',$this->plugin_text_domain),'<a href="admin.php?page='.$this->plugin_slug.'">','</a>').'</div>';
+				return '<div class="ui-state-highlight">'.sprintf(__('You should enable FB connect in %sApp settings%s to use Login buttons',$this->plugin_text_domain),'<a href="admin.php?page='.$this->plugin_slug.'">','</a>').'</div>';
 			break;
 		}
 	}
@@ -2483,6 +2500,8 @@ Class AWD_facebook
 		</div>
 		<br />
 		<?php
+		wp_enqueue_script($this->plugin_slug.'-js');
+		$this->add_js_options();
 		$this->load_sdj_js();
 		$this->js_sdk_init();
 	}
@@ -2858,8 +2877,47 @@ Class AWD_facebook
 	 * @return void
 	 */
 	public function debug_content()
-	{
-		$this->Debug(array('$AWD_facebook->me'=>$this->me,"DEBUG FCBK"=>$this->fcbk,'$this'=>$this));
+	{		
+		$_this = (array) $this;
+		unset($_this['current_user']);
+		unset($_this['wpdb']);
+		unset($_this['optionsManager']);
+		$_this['fcbk']->setAppSecret('***************');
+		$_this['fcbk']->setAccessToken('***************');
+		$_this['options']['app_secret_key'] = '***************';
+		?>
+		<div class="facebook_awd_debug">
+			<h2><?php _e('Facebook AWD API',$this->plugin_text_domain); ?></h2><?php
+			$this->Debug(array('$AWD_facebook->fcbk'=>$_this['fcbk']));		
+	
+			?><h2><?php _e('Facebook AWD APPLICATIONS INFOS',$this->plugin_text_domain); ?></h2><?php
+			$this->Debug(array('$AWD_facebook->options["app_infos"]'=>$_this['options']['app_infos']));		
+		
+			?><h2><?php _e('Facebook AWD CURRENT USER',$this->plugin_text_domain); ?></h2><?php
+			$this->Debug(array('$AWD_facebook->me'=>$_this['me']));	
+			
+			?><h2><?php _e('Facebook AWD Options',$this->plugin_text_domain); ?></h2><?php
+			$this->Debug(array('$AWD_facebook->options'=>$_this['options']));		
+			
+			?><h2><?php _e('Facebook AWD FULL',$this->plugin_text_domain); ?></h2><?php
+			$this->Debug(array('$AWD_facebook'=>$_this));
+			?>
+		</div>
+		<script>
+			jQuery(document).ready(function($){
+				$('.facebook_awd_debug h2').each(function(){
+					$(this).next().hide();
+					$(this).css('fontSize', '20px');
+					$(this).css('fontWeight', 'bold');
+					$(this).css('borderBottom', '1px solid #000');
+					$(this).click(function(){
+						$(this).next().slideToggle();
+					});
+				});
+			});
+		</script>
+		<?php
+		
 	}
 
 }

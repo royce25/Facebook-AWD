@@ -43,7 +43,6 @@ if($this->debug_active){ add_action('wp_footer',array(&$this,'debug_content')); 
 
 //INTERNAL
 add_action("AWD_facebook_get_admin_fbuid",array(&$this,'get_admin_fbuid'));
-add_action('AWD_facebook_oauth', array(&$this,'current_user'));
 add_action('wp_ajax_call_action_open_graph', array(&$this,'ajax_call_action_open_graph'));
 add_action('wp_ajax_get_app_infos_content', array(&$this,'get_app_infos_content'));
 add_filter('rewrite_rules_array',array(&$this,'insert_rewrite_rules' ));
@@ -66,6 +65,14 @@ $this->optionsManager = new AWD_facebook_options($this->plugin_option_pref,$this
 $this->optionsManager->load();
 $this->options = $this->optionsManager->getOptions();
 
+
+//Init the SDK PHP
+if(!empty($this->options['app_id'])  && !empty($this->options['app_secret_key'])){
+	//add_action('wp_loaded', array(&$this,'php_sdk_init'));
+	$this->php_sdk_init();
+}
+
+
 /****************************************************
 * load subplugins AWD
 * save settings
@@ -80,10 +87,6 @@ $this->optionsManager->load();
 $this->options = $this->optionsManager->getOptions();
 
 
-//init the PHP SDK
-if(!empty($this->options['app_id'])  && !empty($this->options['app_secret_key'])){
-	add_action('init', array(&$this,'php_sdk_init'));
-}
 //init the FB connect
 if($this->options['connect_enable'] == 1 && $this->options['app_id'] !='' && $this->options['app_secret_key'] !=''){
 	add_action('wp_print_footer_scripts',array(&$this,'js_sdk_init'));

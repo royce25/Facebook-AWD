@@ -52,21 +52,41 @@ var AWD_facebook = {
 
 	FBEventHandler : function ()
 	{
-		//none for the moment
+		/*FB.Event.subscribe('auth.logout',function(response){
+			if(response)
+				AWD_facebook.logout();
+		});*/
 	},
 	
-	redirectToLogin : function(redirect_url)
+	callbackLogin : function(response,redirect_url)
 	{
-		if(response.authResponse) window.location.href = awd_fcbk.loginUrl;
+		
+		var redirect = '';
+		if(response.authResponse){
+			if(!redirect_url){
+				window.location.href = awd_fcbk.loginUrl;
+			}else{
+				redirect = "?redirect_to="+redirect_url;
+				window.location.href = awd_fcbk.loginUrl+redirect;
+			}
+		}
 	},
 	
 	connect :function(redirect_url)
 	{
 		FB.login(
-			AWD_facebook.redirectToLogin,
-			{ scope: awd_fcbk.scope }
+			function(response){
+				AWD_facebook.callbackLogin(response,redirect_url);
+			},
+			{ 
+				scope: awd_fcbk.scope
+			}
 		);
 		return false;
+	},
+	
+	logout : function(){
+		window.location.href = awd_fcbk.logoutUrl;
 	},
 	
 	isFbConnected : function(){
