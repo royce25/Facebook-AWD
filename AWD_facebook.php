@@ -65,19 +65,6 @@ Class AWD_facebook
      */
     public $blog_admin_page_hook;
     
-    /**
-     * public
-     * Debug this object
-     */
-    public $debug_active = true;
-    
-    /**
-     * public
-     * Debug and add list of debug in this array
-     * if $debug_active == true, so we write $debug_echo in footer
-     */
-    public $debug_echo = array();
-	
 	/**
      * public
      * current_user
@@ -788,7 +775,7 @@ Class AWD_facebook
 					</tr>
 					<tr>
 						<td><img src="<?php echo $infos['logo_url']; ?>" class="awd_app_logo"/></td>
-						<td><a href="#" id="reload_app_infos" class="uiButton uiButtonNormal">Reload</a></td>
+						<td><a href="#" id="reload_app_infos" class="uiButton uiButtonNormal"><?php _e('Test Settings',$this->plugin_text_domain); ?></a></td>
 	
 					</tr>
 				</table>
@@ -1156,17 +1143,18 @@ Class AWD_facebook
 	public function hook_post_from_plugin_options()
 	{
 		if(isset($_POST[$this->plugin_option_pref.'_nonce_options_update_field']) && wp_verify_nonce($_POST[$this->plugin_option_pref.'_nonce_options_update_field'],$this->plugin_slug.'_update_options')){
-			
-			$this->get_facebook_user_data();
 			//do custom action for sub plugins or other exec.
 			do_action('AWD_facebook_save_custom_settings');
 			//unset submit to not be stored
 			unset($_POST[$this->plugin_option_pref.'submit']);
 			unset($_POST[$this->plugin_option_pref.'_nonce_options_update_field']);
 			unset($_POST['_wp_http_referer']);
-			if($this->update_options_from_post())
+			if($this->update_options_from_post()){
+				$this->get_facebook_user_data();
+				$this->get_app_info();
+				$this->save_facebook_user_data($this->current_user->ID);
 				$this->message = '<div class="ui-state-highlight fadeOnload"><p>'.__('Options updated',$this->plugin_text_domain).'</p></div>';
-			else
+			}else
 				$this->message = '<div class="ui-state-error"><p>'.__('Options not updated there is an error...',$this->plugin_text_domain).'</p></div>';
 		
 		}else if(isset($_POST[$this->plugin_option_pref.'_nonce_reset_options']) && wp_verify_nonce($_POST[$this->plugin_option_pref.'_nonce_reset_options'],$this->plugin_slug.'_reset_options')){
@@ -1473,16 +1461,6 @@ Class AWD_facebook
 	}
 	
 	/**
-	 * login user with facebook account
-	 * return @void
-	 *///TODO REMOVE
-	public function login_user()
-	{
-		wp_die('Depreciated...');
-		include_once(dirname(__FILE__).'/inc/login_process.php');
-	}
-	
-	/**
 	 * Change logout url for users connected with Facebook
 	 * @param string $url
 	 * @return string
@@ -1747,9 +1725,6 @@ Class AWD_facebook
 	//****************************************************************************************
 	//	OPENGRAPH
 	//****************************************************************************************
-	//TODO Update openGraph protocol with new ogp.me
-
-	
 	/**
 	 * Generate the open graph tags
 	 * @param array $options
@@ -2448,7 +2423,7 @@ Class AWD_facebook
 		
 		//if some options defined
 		if(empty($options['case'])){
-			if($this->uid)
+			if($this->is_user_logged_in_facebook() && $this->options['connect_enable'] == 1)
 				$case = 'profile';
 			else if($this->options['connect_enable'] == 1)
 				$case = 'login';
@@ -2885,45 +2860,46 @@ Class AWD_facebook
 	 */
 	public function debug_content()
 	{		
-		$_this = clone $this;
-		$_this = (array) $_this;
-		unset($_this['current_user']);
-		unset($_this['wpdb']);
-		unset($_this['optionsManager']);
-		?>
-		<div class="facebook_awd_debug">
-			<h2><?php _e('Facebook AWD API',$this->plugin_text_domain); ?></h2><?php
-			$this->Debug($_this['fcbk']);		
-	
-			?><h2><?php _e('Facebook AWD APPLICATIONS INFOS',$this->plugin_text_domain); ?></h2><?php
-			$this->Debug($_this['options']['app_infos']);		
-		
-			?><h2><?php _e('Facebook AWD CURRENT USER',$this->plugin_text_domain); ?></h2><?php
-			$this->Debug($_this['me']);	
-			
-			?><h2><?php _e('Facebook AWD Options',$this->plugin_text_domain); ?></h2><?php
-			$this->Debug($_this['options']);		
-			
-			?><h2><?php _e('Facebook AWD FULL',$this->plugin_text_domain); ?></h2><?php
-			$this->Debug($_this);
+		if($this->options['debug_enable'] == 1){
+			$_this = clone $this;
+			$_this = (array) $_this;
+			unset($_this['current_user']);
+			unset($_this['wpdb']);
+			unset($_this['optionsManager']);
 			?>
-		</div>
-		<script>
-			jQuery(document).ready(function($){
-				$('.facebook_awd_debug h2').each(function(){
-					$(this).next().hide();
-					$(this).css('fontSize', '20px');
-					$(this).css('fontWeight', 'bold');
-					$(this).css('borderBottom', '1px solid #000');
-					$(this).css('cursor', 'pointer');
-					$(this).click(function(){
-						$(this).next().slideToggle();
+			<div class="facebook_awd_debug">
+				<h2><?php _e('Facebook AWD API',$this->plugin_text_domain); ?></h2><?php
+				$this->Debug($_this['fcbk']);		
+		
+				?><h2><?php _e('Facebook AWD APPLICATIONS INFOS',$this->plugin_text_domain); ?></h2><?php
+				$this->Debug($_this['options']['app_infos']);		
+			
+				?><h2><?php _e('Facebook AWD CURRENT USER',$this->plugin_text_domain); ?></h2><?php
+				$this->Debug($_this['me']);	
+				
+				?><h2><?php _e('Facebook AWD Options',$this->plugin_text_domain); ?></h2><?php
+				$this->Debug($_this['options']);		
+				
+				?><h2><?php _e('Facebook AWD FULL',$this->plugin_text_domain); ?></h2><?php
+				$this->Debug($_this);
+				?>
+			</div>
+			<script>
+				jQuery(document).ready(function($){
+					$('.facebook_awd_debug h2').each(function(){
+						$(this).next().hide();
+						$(this).css('fontSize', '20px');
+						$(this).css('fontWeight', 'bold');
+						$(this).css('borderBottom', '1px solid #000');
+						$(this).css('cursor', 'pointer');
+						$(this).click(function(){
+							$(this).next().slideToggle();
+						});
 					});
 				});
-			});
-		</script>
-		<?php
-		
+			</script>
+			<?php
+		}
 	}
 
 }

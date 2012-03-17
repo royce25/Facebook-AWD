@@ -30,6 +30,7 @@ add_action('show_user_profile', array(&$this,'user_profile_edit'));
 add_action('personal_options_update', array(&$this,'user_profile_save'));
 add_action('edit_user_profile_update', array(&$this,'user_profile_save'));
 add_action("AWD_facebook_save_settings",array(&$this,'hook_post_from_plugin_options'));
+add_action('admin_footer',array(&$this,'debug_content'));
 
 //DISPLAY FRONT
 add_action('after_setup_theme',array(&$this,'add_thumbnail_support'));
@@ -39,7 +40,7 @@ add_action('admin_print_footer_scripts',array(&$this,'load_sdj_js'));
 add_filter('the_content', array(&$this,'the_content'));
 add_action('comment_form_after', array(&$this,'the_comments_form'));
 add_action('wp_enqueue_scripts',array(&$this,'front_enqueue_js'));
-if($this->debug_active){ add_action('wp_footer',array(&$this,'debug_content')); }
+add_action('wp_footer',array(&$this,'debug_content'));
 
 //INTERNAL
 add_action("AWD_facebook_get_admin_fbuid",array(&$this,'get_admin_fbuid'));
@@ -66,12 +67,13 @@ $this->optionsManager->load();
 $this->options = $this->optionsManager->getOptions();
 
 
+
+
 //Init the SDK PHP
 if(!empty($this->options['app_id'])  && !empty($this->options['app_secret_key'])){
 	//add_action('wp_loaded', array(&$this,'php_sdk_init'));
 	$this->php_sdk_init();
 }
-
 
 /****************************************************
 * load subplugins AWD
@@ -81,8 +83,11 @@ if(!empty($this->options['app_id'])  && !empty($this->options['app_secret_key'])
 do_action("AWD_facebook_plugins_init");
 /****************************************************/
 
+
 //UPDATES OPTIONS
 do_action("AWD_facebook_save_settings");
+
+
 $this->optionsManager->load();
 $this->options = $this->optionsManager->getOptions();
 

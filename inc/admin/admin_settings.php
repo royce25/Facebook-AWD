@@ -36,12 +36,19 @@
 					<td class="data"><input type="text" class="uiTextbox" name="<?php echo $this->plugin_option_pref; ?>locale" value="<?php echo $this->options['locale']; ?>" size="6" /></td>
 				</tr>
 				<tr class="dataRow">
+					<th class="label"><?php _e('Activate Mode Debug ?',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('debug_enable'); ?></th>
+					<td class="data">
+						<input type="radio" class="uiRadio" name="<?php echo $this->plugin_option_pref; ?>debug_enable" id="<?php echo $this->plugin_option_pref; ?>debug_enable_on" value="1" <?php if($this->options['debug_enable'] == '1') echo 'checked="checked"'; ?>  /> <label for="<?php echo $this->plugin_option_pref; ?>debug_enable_on"><?php echo __('Yes',$this->plugin_text_domain); ?></label><br />
+						<input type="radio" class="uiRadio" name="<?php echo $this->plugin_option_pref; ?>debug_enable" id="<?php echo $this->plugin_option_pref; ?>debug_enable_off" value="0" <?php if($this->options['debug_enable'] == '0') echo 'checked="checked"'; ?>  /> <label for="<?php echo $this->plugin_option_pref; ?>debug_enable_off"><?php _e('No',$this->plugin_text_domain); ?></label>
+					</td>
+				</tr>
+				<tr class="dataRow">
 					<th class="label" colspan="2"><h3 class="center"><?php _e('Open Graph',$this->plugin_text_domain);?></h3></th>
 				</tr>
 				<tr class="dataRow">
 					<th class="label"><?php _e('Activate Open Graph ?',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('open_graph'); ?></th>
 					<td class="data">
-						<input type="radio" class="uiRadio" name="<?php echo $this->plugin_option_pref; ?>open_graph_enable" id="<?php echo $this->plugin_option_pref; ?>open_graph_enable_on" value="1" <?php if($this->options['open_graph_enable'] == '1') echo 'checked="checked"'; ?>  /> <label for="<?php echo $this->plugin_option_pref; ?>open_graph_enable_on"><?php echo __('Yes',$this->plugin_text_domain).' '.__('(recommended)',$this->plugin_text_domain);; ?></label><br />
+						<input type="radio" class="uiRadio" name="<?php echo $this->plugin_option_pref; ?>open_graph_enable" id="<?php echo $this->plugin_option_pref; ?>open_graph_enable_on" value="1" <?php if($this->options['open_graph_enable'] == '1') echo 'checked="checked"'; ?>  /> <label for="<?php echo $this->plugin_option_pref; ?>open_graph_enable_on"><?php echo __('Yes',$this->plugin_text_domain).' '.__('(recommended)',$this->plugin_text_domain); ?></label><br />
 						<input type="radio" class="uiRadio" name="<?php echo $this->plugin_option_pref; ?>open_graph_enable" id="<?php echo $this->plugin_option_pref; ?>open_graph_enable_off" value="0" <?php if($this->options['open_graph_enable'] == '0') echo 'checked="checked"'; ?>  /> <label for="<?php echo $this->plugin_option_pref; ?>open_graph_enable_off"><?php _e('No',$this->plugin_text_domain); ?></label>
 					</td>
 				</tr>
