@@ -3,7 +3,7 @@
 Plugin Name: Facebook AWD All in One
 Plugin URI: http://www.ahwebdev.fr
 Description: This plugin integrates Facebook open graph, Plugins from facebook, and FB connect, with SDK JS AND SDK PHP Facebook
-Version: 0.9.9.3
+Version: 1.0Beta
 Author: AHWEBDEV
 Author URI: http://www.ahwebdev.fr
 License: Copywrite AHWEBDEV
@@ -365,14 +365,21 @@ Class AWD_facebook
 	public function admin_bar_links()
 	{
 		global $wp_admin_bar;
-		// Links to add, in the form: 'Label' => 'URL'
-		$links = array(
-			__('Test on the Facebook Debugger',$this->plugin_text_domain) => 'https://developers.facebook.com/tools/debug/og/object?q='.urlencode($this->get_current_url()),
-			__('WIKI',$this->plugin_text_domain) => 'http://trac.ahwebdev.fr/projects/facebook-awd/Wiki',
-			__('Support',$this->plugin_text_domain) => 'http://trac.ahwebdev.fr/projects/facebook-awd'
-		);
-	
-		// Add the Parent link.
+		$links = array();
+		
+		if($this->me['link'] != ''){
+			$links[] = array(__('My Profile',$this->plugin_text_domain), $this->me['link']);
+		}
+		$links[] = array(__('Settings',$this->plugin_text_domain),admin_url('admin.php?page='.$this->plugin_slug));
+		$links[] = array(__('Wiki',$this->plugin_text_domain),'http://trac.ahwebdev.fr/projects/facebook-awd/Wiki');
+		$links[] = array(__('Support',$this->plugin_text_domain),'http://trac.ahwebdev.fr/projects/facebook-awd');
+		$links[] = array(__('Debugger',$this->plugin_text_domain),'https://developers.facebook.com/tools/debug/og/object?q='.urlencode($this->get_current_url()));
+
+		if($this->is_user_logged_in_facebook()){
+			$links[] = array(__('Refresh Facebook Data',$this->plugin_text_domain),  $this->_login_url);
+			$links[] = array(__('Unsync FB Account',$this->plugin_text_domain), $this->_unsync_url);
+		}
+
 		$wp_admin_bar->add_menu( array(
 			'title' => '<img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/> '.$this->plugin_name,
 			'href' => false,
@@ -380,10 +387,10 @@ Class AWD_facebook
 			'href' => false
 		));
  
-		foreach ($links as $label => $url) {
+		foreach ($links as $link => $infos) {
 			$wp_admin_bar->add_menu( array(
-				'title' => $label,
-				'href' => $url,
+				'title' => $infos[0],
+				'href' => $infos[1],
 				'parent' => $this->plugin_slug,
 				'meta' => array('target' => '_blank')
 			));
@@ -2878,29 +2885,27 @@ Class AWD_facebook
 	 */
 	public function debug_content()
 	{		
-		$_this = (array) $this;
+		$_this = clone $this;
+		$_this = (array) $_this;
 		unset($_this['current_user']);
 		unset($_this['wpdb']);
 		unset($_this['optionsManager']);
-		$_this['fcbk']->setAppSecret('***************');
-		$_this['fcbk']->setAccessToken('***************');
-		$_this['options']['app_secret_key'] = '***************';
 		?>
 		<div class="facebook_awd_debug">
 			<h2><?php _e('Facebook AWD API',$this->plugin_text_domain); ?></h2><?php
-			$this->Debug(array('$AWD_facebook->fcbk'=>$_this['fcbk']));		
+			$this->Debug($_this['fcbk']);		
 	
 			?><h2><?php _e('Facebook AWD APPLICATIONS INFOS',$this->plugin_text_domain); ?></h2><?php
-			$this->Debug(array('$AWD_facebook->options["app_infos"]'=>$_this['options']['app_infos']));		
+			$this->Debug($_this['options']['app_infos']);		
 		
 			?><h2><?php _e('Facebook AWD CURRENT USER',$this->plugin_text_domain); ?></h2><?php
-			$this->Debug(array('$AWD_facebook->me'=>$_this['me']));	
+			$this->Debug($_this['me']);	
 			
 			?><h2><?php _e('Facebook AWD Options',$this->plugin_text_domain); ?></h2><?php
-			$this->Debug(array('$AWD_facebook->options'=>$_this['options']));		
+			$this->Debug($_this['options']);		
 			
 			?><h2><?php _e('Facebook AWD FULL',$this->plugin_text_domain); ?></h2><?php
-			$this->Debug(array('$AWD_facebook'=>$_this));
+			$this->Debug($_this);
 			?>
 		</div>
 		<script>
@@ -2910,6 +2915,7 @@ Class AWD_facebook
 					$(this).css('fontSize', '20px');
 					$(this).css('fontWeight', 'bold');
 					$(this).css('borderBottom', '1px solid #000');
+					$(this).css('cursor', 'pointer');
 					$(this).click(function(){
 						$(this).next().slideToggle();
 					});

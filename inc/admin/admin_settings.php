@@ -76,7 +76,7 @@
 				</tr>
 				<tr class="dataRow hidden connect_options">
 					<td class="data" colspan="2">
-						<?php if($this->me['permissions']['publish_stream'] == 1){ ?>
+						<?php if($this->is_user_logged_in_facebook() && $this->me['permissions']['publish_stream'] == 1){ ?>
 							<p class="AWD_button_succes"><?php _e('Publish Stream is enabled',$this->plugin_text_domain); ?></p>
 						<?php }else{ ?>
 							<a href="#" data-scope="email,publish_stream" class="get_permissions floatright uiButton uiButtonNormal"><?php _e('Authorize App to publish on your pages',$this->plugin_text_domain); ?></a>
@@ -85,14 +85,14 @@
 				</tr>
 				<tr class="dataRow hidden connect_options">
 					<td class="data" colspan="2">
-						<?php if($this->me['permissions']['manage_pages'] == 1){ ?>
+						<?php if($this->is_user_logged_in_facebook() && $this->me['permissions']['manage_pages'] == 1){ ?>
 							<span class="AWD_button_succes"><?php _e('Pages can be managed by this plugin.',$this->plugin_text_domain); ?></span> <a href="#" id="toogle_list_pages" class="floatright uiButton uiButtonNormal"><?php _e('Select pages to link with Wordpress',$this->plugin_text_domain); ?></a>
 						<?php }else{ ?>
 							<a href="#" data-scope="email,manage_pages" class="get_permissions floatright uiButton uiButtonNormal"><?php _e('Authorize App to access your pages',$this->plugin_text_domain); ?></a>
 						<?php } ?>
 					</td>
 				</tr>
-				<?php if($this->me['permissions']['manage_pages'] == 1){ ?>
+				<?php if($this->is_user_logged_in_facebook() && $this->me['permissions']['manage_pages'] == 1){ ?>
 					<tr class="dataRow hidden connect_options">
 						<td class="data" colspan="2">
 							<div class="toogle_fb_pages hidden">
@@ -118,7 +118,7 @@
 				</tr>
 				<tr class="dataRow hidden connect_options">
 					<td class="data" colspan="2">
-						<?php if($this->me['permissions']['publish_actions'] == 1){ ?>
+						<?php if($this->is_user_logged_in_facebook() && $this->me['permissions']['publish_actions'] == 1){ ?>
 							<p class="AWD_button_succes"><?php _e('Actions can be posted on your timeline wall',$this->plugin_text_domain); ?></p>
 						<?php }else{ ?>
 							<!--<a href="#" id="get_permissions" data-scope="publish_actions" class="get_permissions floatright uiButton uiButtonNormal"><?php _e('Authorize App to publish actions on your timeline',$this->plugin_text_domain); ?></a>-->
