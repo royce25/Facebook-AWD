@@ -199,6 +199,10 @@ Class AWD_facebook
 	    return (empty($_SERVER['HTTPS']) ? 'http://' : 'https://').$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 	}
 	
+	public function get_plugins_model_path(){
+		return realpath(dirname(__FILE__)).'/inc/classes/plugins/class.AWD_facebook_plugin_abstract.php';
+	}
+	
 	//****************************************************************************************
 	//	INIT
 	//****************************************************************************************
@@ -469,6 +473,7 @@ Class AWD_facebook
 		add_action( 'admin_print_scripts-post-new.php', array(&$this,'admin_enqueue_js'));
 		add_action( 'admin_print_scripts-post.php', array(&$this,'admin_enqueue_js'));
 		
+		
 		//enqueue here the library facebook connect
 		wp_enqueue_script($this->plugin_slug.'-js');
 		$this->add_js_options();
@@ -545,6 +550,21 @@ Class AWD_facebook
 			add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $this->blog_admin_opengraph_hook , 'side', 'core');
 			add_meta_box($this->plugin_slug."_activity_metabox",  __('Activity on your site',$this->plugin_text_domain), array(&$this,'activity_content'),  $this->blog_admin_opengraph_hook , 'side', 'core');
 			add_meta_box($this->plugin_slug."_discover_metabox",  __('Discover',$this->plugin_text_domain), array(&$this,'discover_content'),  $this->blog_admin_opengraph_hook , 'normal', 'core');
+		}
+		
+		//Call the menu init to get page hook for each menu
+		do_action('admin_plugins_menu');
+		//For each page hook declared in plugins add side meta box
+		$plugins = $this->plugins;
+		if(is_array($plugins)){
+			foreach($plugins as $plugin){
+				$page_hook = $plugin->plugin_admin_hook;
+				add_meta_box($this->plugin_slug."_meta_metabox",  __('My Facebook',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'fcbk_content'),  $page_hook , 'side', 'core');
+				add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->options['app_infos']['icon_url'].'" alt=""/>', array(&$this,'app_infos_content'),  $page_hook , 'side', 'core');
+				add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $page_hook , 'side', 'core');
+				add_meta_box($this->plugin_slug."_activity_metabox",  __('Activity on your site',$this->plugin_text_domain), array(&$this,'activity_content'),  $page_hook , 'side', 'core');
+				add_meta_box($this->plugin_slug."_discover_metabox",  __('Discover',$this->plugin_text_domain), array(&$this,'discover_content'),  $page_hook , 'normal', 'core');
+			}
 		}
 	}
 	
@@ -1289,7 +1309,8 @@ Class AWD_facebook
 	 */
 	public function fb_get_avatar($avatar, $comments_objects, $size, $default, $alt)
 	{
-		if($default == $this->plugin_slug){
+		$default_avatar = get_option('avatar_default');
+		if($default_avatar == $this->plugin_slug){
 			//$avatar format includes the tag <img>
 			if(is_object($comments_objects)){
 				$fbuid = get_user_meta($comments_objects->user_id,'fb_uid', true);
