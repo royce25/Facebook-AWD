@@ -48,9 +48,16 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 		$this->plugin_url = plugins_url("facebook-awd-seo-comments",dirname($file));
 		$this->plugin_url_images = $this->plugin_url."/assets/css/images/";
 		load_plugin_textdomain($this->plugin_text_domain,false,dirname(plugin_basename($this->file)).'/langs/');
-		add_action('admin_plugins_menu', array(&$this,'admin_menu'));
+		add_action('AWD_facebook_admin_menu', array(&$this,'admin_menu'));
 		add_action('wp_enqueue_scripts',array(&$this,'front_enqueue_js'));
 	}
+	
+	public function get_version(){
+	    include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	    $plugin_folder = get_plugins();
+	    return $plugin_folder[basename(dirname(dirname(dirname($this->file)))).'/'.str_replace('class.','',basename($this->file))]['Version'];
+	}
+
 	public function old_parent()
 	{
 		echo '<div class="error"><p>'.$this->plugin_name.' '.__("can not be activated: Facebook AWD All in One plugin is out to date... You can download the last version or update it from the Wordpress plugin directory",$this->plugin_text_domain).'</p></div>';
@@ -93,7 +100,7 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 		add_action('admin_print_styles-'.$this->plugin_admin_hook, array(&$this->AWD_facebook,'admin_enqueue_css'));
 		add_action('admin_print_scripts-'.$this->plugin_admin_hook, array(&$this->AWD_facebook,'admin_enqueue_js'));
 		add_action('AWD_facebook_plugins_menu',array(&$this,'plugin_menu'));
-		add_action('AWD_facebook_plugins_form',array(&$this,'plugin_form'));
+		//add_action('AWD_facebook_plugins_form',array(&$this,'plugin_form'));
 	}
 	public function front_enqueue_js()
 	{}

@@ -553,7 +553,7 @@ Class AWD_facebook
 		}
 		
 		//Call the menu init to get page hook for each menu
-		do_action('admin_plugins_menu');
+		do_action('AWD_facebook_admin_menu');
 		//For each page hook declared in plugins add side meta box
 		$plugins = $this->plugins;
 		if(is_array($plugins)){
@@ -709,6 +709,24 @@ Class AWD_facebook
 			<a href="http://wordpress.org/extend/plugins/facebook-awd/" target="_blank" class="uiButton uiButtonNormal"><?php _e('Rate this plugin',$this->plugin_text_domain); ?></a>
 			<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZQ2VL33YXHJLC" target="_blank" class="uiButton uiButtonNormal"><?php _e('Donate',$this->plugin_text_domain); ?></a>
 			<a href="http://trac.ahwebdev.fr/projects/facebook-awd" target="_blank" class="uiButton uiButtonNormal">Support</a><br /><br />
+			
+			<?php
+			//List plugins
+			echo '<h3 style="color:#627AAD;margin:0px;font-size:13px;text-align:left;">'.__('Plugins installed',$this->plugin_text_domain).'</h3>';
+			if(is_array($this->plugins)){
+				foreach($this->plugins as $plugin){
+					echo'<p style="color:#627AAD;margin:0px;font-size:12px; text-align:left;">
+					- '.$plugin->plugin_name.'
+					<sup style="color:#627AAD;font-size:0.6em;">v'.$plugin->get_version().'</sup>
+					</p>';
+				}
+			}else{
+				echo'<p style="color:#627AAD;margin:0px;font-size:12px; text-align:left;">
+					'.__('- None',$this->plugin_text_domain).'
+					</p>';
+			}
+			?>
+			<h3 style="color:#627AAD;margin:0px;font-size:13px;text-align:left;">Follow Me</h3>
 			<?php echo do_shortcode('[AWD_likebox url="https://www.facebook.com/pages/AHWEBDEV/207050892672485" colorscheme="light" stream="0" xfbml="0" header="0" width="257" height="333" faces="1"]'); ?>
 	   	    <h2><a href="#tab-link-AWD_facebook_contact_support" onclick="jQuery('#contextual-help-link').trigger('click');"><?php _e('WIKI',$this->plugin_text_domain); ?></a></h2>
 	    </div>
@@ -820,7 +838,7 @@ Class AWD_facebook
 	 */
 	public function discover()
 	{
-		$html = '<a href="http://www.ahwebdev.fr/plugins/facebook-awd-seo-comments.html" target="_blank"><img src="'.$this->plugin_url_images.'facebook-awd-seo-comments-promo.png" alt="SEO comments" width="258" height="105" border="0" /></a>';
+		$html = '<a href="http://trac.ahwebdev.fr/projects/facebook-awd-seocom" target="_blank"><img src="'.$this->plugin_url_images.'facebook-awd-seo-comments-promo.png" alt="SEO comments" width="258" height="105" border="0" /></a>';
 		return $html;
 	}
 	

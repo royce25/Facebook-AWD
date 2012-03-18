@@ -675,7 +675,7 @@
  											* nb (number)<br />
 											* width (number)<br />
 											* colorscheme (light or dark)<br />
-											* mobile (light or dark)<br />
+											* mobile (true or false)<br />
 											* type (xfbml or html5)<br />
 										</div>
 									</div>

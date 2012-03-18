@@ -18,6 +18,7 @@ interface AWD_facebook_plugin_interface{
 	public function admin_menu();
 	public function front_enqueue_js();
 	public function admin_enqueue_js();
+	public function get_version();
 	public function init();
 }
 ?>
