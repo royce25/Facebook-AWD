@@ -820,58 +820,7 @@ Class AWD_facebook
 	 */
 	public function discover()
 	{
-		//submit form
-		$message = '';
-		$tab_error = array();
-		if(empty($_POST['AWD_ads_contact_mail']))
-			$tab_error[] = __('Email can not be empty',$this->plugin_text_domain);
-		if(empty($_POST['AWD_ads_contact']))
-			$tab_error[] = __('Message Can not be empty',$this->plugin_text_domain);
-		if(isset($_POST['AWD_ads_contact'])){
-			if (!wp_verify_nonce($this->plugin_slug.'_AWD_ads_contact',$this->plugin_option_pref.'_nonce_AWD_ads_contact_field') && count($tab_error) == 0 ){
-				wp_mail('contact@ahwebdev.fr', 'Un nouveau Contact Freelance (AWD)', $_POST['AWD_ads_contact']."\nFrom email:".$_POST['AWD_ads_contact_mail'], $headers, $attachments );
-				$message .= '<div class="ui-state-highlight fadeOnload"><p>'.__('Message sent',$this->plugin_text_domain).'</p></div>';
-			}else{
-				if(count($tab_error)>0){
-					$message .= '<div class="ui-state-error">';
-					foreach($tab_error as $error){
-						$message .= '<p>'.$error.'</p>';
-					}
-					$message .= '</div>';
-				}
-			}
-		}
-		$html = '
-		<div id="AWD_adform" class="uiForm">
-			<h2 id="custom_pub" style="margin:0;">'.sprintf(__('Looking for a web developer ? %s Contact a Wordpress Master %s (NO SUPPORT QUESTION)',$this->plugin_text_domain),'<br />','<br />').'</h2>
-			'.$message.'
-			<form method="post" id="AWD_adform_form">
-				<table>
-					<tr class="dataRow">
-						<th class="label"><label for="AWD_ads_contact_mail">'.__('Email:',$this->plugin_text_domain).'</label></th>
-						<td class="data">
-							<input type="text" class="uiTextbox" name="AWD_ads_contact_mail" id="AWD_ads_contact_mail" value="'.$this->current_user->user_email.'"/>
-						</td>
-					</tr>
-					<tr class="dataRow">
-						<th class="label"><label for="AWD_ads_contact">'.__('Explain your needs here:',$this->plugin_text_domain).'</label></th>
-						<td class="data">
-							<textarea name="AWD_ads_contact" class="uiTextarea" id="AWD_ads_contact"></textarea>
-						</td>
-					</tr>
-				</table>	
-				'.wp_nonce_field($this->plugin_slug.'_AWD_ads_contact',$this->plugin_option_pref.'_nonce_AWD_ads_contact_field',true,false).'
-				<div class="center"><a href="#" id="send_ads" class="uiButton uiButtonSubmit">'.__('Send',$this->plugin_text_domain).'</a></div>
-			</form>
-		</div>
-		<br />';
-		$html .= '<a href="http://www.ahwebdev.fr/plugins/facebook-awd-seo-comments.html" target="_blank"><img src="'.$this->plugin_url_images.'facebook-awd-seo-comments-promo.png" alt="SEO comments" width="258" height="105" border="0" /></a>
-		<script type="text/javascript">
-			jQuery("#send_ads").click(function(e){
-				e.preventDefault();
-				jQuery("#AWD_adform_form").submit();
-			});
-		</script>';
+		$html = '<a href="http://www.ahwebdev.fr/plugins/facebook-awd-seo-comments.html" target="_blank"><img src="'.$this->plugin_url_images.'facebook-awd-seo-comments-promo.png" alt="SEO comments" width="258" height="105" border="0" /></a>';
 		return $html;
 	}
 	
