@@ -52,10 +52,13 @@ var AWD_facebook = {
 
 	FBEventHandler : function ()
 	{
-		/*FB.Event.subscribe('auth.logout',function(response){
-			if(response)
-				AWD_facebook.logout();
-		});*/
+		if(awd_fcbk.FBEventHandler.callbacks){
+			jQuery.each(awd_fcbk.FBEventHandler.callbacks,function(){
+				var AWD_actions_callback = window[this];
+				if(jQuery.isFunction(AWD_actions_callback))
+					AWD_actions_callback(this);
+			});
+		}
 	},
 	
 	callbackLogin : function(response,redirect_url)
@@ -96,5 +99,5 @@ var AWD_facebook = {
 			}
 			return false;
 		});
-	}
-}
+	},
+};

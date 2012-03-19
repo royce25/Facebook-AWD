@@ -60,10 +60,10 @@ class AWD_facebook_options
 	 * @param   object   wpdb instance
 	 * @return  void
 	 */
-    public function defaultOptions()
+    public function defaultOptions($options)
     {
 		global $AWD_facebook;
-		
+		$this->options = $options;
 		$this->setDefaultValue('timeout', 10);
 		
 		//langs
@@ -231,9 +231,7 @@ class AWD_facebook_options
 	 */
 	public function load()
 	{
-		$this->options = get_option($this->filterName);
-		//set default options
-		$this->defaultOptions();
+		$this->options = apply_filters($this->filterName, get_option($this->filterName));
 	}
 	
 	/**
@@ -246,8 +244,7 @@ class AWD_facebook_options
 		//create new options
 		$this->options = array_merge($old_options, $this->options);
 		//verify default value
-
-		$this->defaultOptions();
+		$this->defaultOptions($this->options);
 		update_option($this->filterName, $this->options);
 	}
 	

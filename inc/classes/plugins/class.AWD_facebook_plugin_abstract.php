@@ -45,11 +45,17 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 	}
 	public function init()
 	{
-		$this->plugin_url = plugins_url("facebook-awd-seo-comments",dirname($file));
+		$this->plugin_url = plugins_url(basename(dirname(dirname(dirname($this->file)))));
 		$this->plugin_url_images = $this->plugin_url."/assets/css/images/";
 		load_plugin_textdomain($this->plugin_text_domain,false,dirname(plugin_basename($this->file)).'/langs/');
 		add_action('AWD_facebook_admin_menu', array(&$this,'admin_menu'));
 		add_action('wp_enqueue_scripts',array(&$this,'front_enqueue_js'));
+	
+		add_filter('AWD_facebook_options', array($this,'default_options'));
+	}
+	
+	public function default_options($options){
+		return $options;
 	}
 	
 	public function get_version(){
@@ -73,10 +79,6 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 	//****************************************************************************************
 	//	LIB Facebook AWD
 	//****************************************************************************************
-	public function plugin_menu()
-	{}
-	public function plugin_form()
-	{}
 	public function admin_init()
 	{
 		add_screen_option('layout_columns', array('max' => 2, 'default' => 2));
@@ -96,15 +98,28 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 	}
 	public function admin_menu()
 	{
+		//Load the js lib AWD
 		add_action('load-'.$this->plugin_admin_hook, array(&$this,'admin_init'));
 		add_action('admin_print_styles-'.$this->plugin_admin_hook, array(&$this->AWD_facebook,'admin_enqueue_css'));
 		add_action('admin_print_scripts-'.$this->plugin_admin_hook, array(&$this->AWD_facebook,'admin_enqueue_js'));
-		add_action('AWD_facebook_plugins_menu',array(&$this,'plugin_menu'));
-		//add_action('AWD_facebook_plugins_form',array(&$this,'plugin_form'));
+		
+		//Add action to create custom menu and custom form in plugin
+		add_action('AWD_facebook_plugins_menu',array(&$this,'plugin_settings_menu'));
+		add_action('AWD_facebook_plugins_form',array(&$this,'plugin_settings_form'));
 	}
-	public function front_enqueue_js()
+	public function admin_form()
 	{}
 	
+	public function plugin_settings_menu()
+	{}
+	public function plugin_settings_form()
+	{}
+	
+	public function front_enqueue_js()
+	{
+		//no need to call it twice, already call from the main plugin.
+		//$this->AWD_facebook->front_enqueue_js();
+	}
 	public function admin_enqueue_js()
 	{
 		$this->AWD_facebook->admin_enqueue_js();

@@ -599,14 +599,17 @@ Class AWD_facebook
 	public function add_js_options()
 	{
 		// declare the URL to the file that handles the AJAX request (wp-admin/admin-ajax.php)
-		wp_localize_script($this->plugin_slug.'-js', $this->plugin_slug, array(
+		$AWD_facebook_vars = array(
 			'ajaxurl' 	=> admin_url('admin-ajax.php'),
 			'homeUrl' 	=> home_url(),
 			'loginUrl' 	=> $this->_login_url,
 			'logoutUrl' => $this->_logout_url,
 			'scope' 	=> current_user_can("manage_options") ? $this->options["perms_admin"] : $this->options["perms"],
-			'app_id'    => $this->options["app_id"]
-		));
+			'app_id'    => $this->options["app_id"],
+			'FBEventHandler' => array('callbacks'=>array())
+		);
+		$AWD_facebook_vars = apply_filters('AWD_facebook_js_vars', $AWD_facebook_vars);
+		wp_localize_script($this->plugin_slug.'-js', $this->plugin_slug, $AWD_facebook_vars);
 	}
 
 	/**
