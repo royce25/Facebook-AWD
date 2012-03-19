@@ -447,11 +447,11 @@ Class AWD_facebook
 		
 		//admin hook
 		$this->blog_admin_page_hook = add_menu_page($this->plugin_page_admin_name, __($this->plugin_name,$this->plugin_text_domain), 'administrator', $this->plugin_slug, array($this,'admin_content'), $this->plugin_url_images.'facebook-mini.png',$this->blog_admin_hook_position);
-		$this->blog_admin_settings_hook = add_submenu_page($this->plugin_slug, __('Settings',$this->plugin_text_domain), __('Settings',$this->plugin_text_domain), 'administrator', $this->plugin_slug);
-		$this->blog_admin_plugins_hook = add_submenu_page($this->plugin_slug, __('Plugins',$this->plugin_text_domain), __('Plugins',$this->plugin_text_domain), 'administrator', $this->plugin_slug.'_plugins', array($this,'admin_content'));
-	    $this->blog_admin_support_hook = add_submenu_page($this->plugin_slug, __('Support',$this->plugin_text_domain), __('Support',$this->plugin_text_domain), 'administrator', $this->plugin_slug.'_support', array($this,'admin_content'));
+		$this->blog_admin_settings_hook = add_submenu_page($this->plugin_slug, __('Settings',$this->plugin_text_domain), '<img src="'.$this->plugin_url_images.'settings.png" /> '.__('Settings',$this->plugin_text_domain), 'administrator', $this->plugin_slug);
+		$this->blog_admin_plugins_hook = add_submenu_page($this->plugin_slug, __('Plugins',$this->plugin_text_domain), '<img src="'.$this->plugin_url_images.'plugins.png" /> '.__('Plugins',$this->plugin_text_domain), 'administrator', $this->plugin_slug.'_plugins', array($this,'admin_content'));
+	    $this->blog_admin_support_hook = add_submenu_page($this->plugin_slug, __('Support',$this->plugin_text_domain), '<img src="'.$this->plugin_url_images.'info.png" /> '.__('Support',$this->plugin_text_domain), 'administrator', $this->plugin_slug.'_support', array($this,'admin_content'));
 		if($this->options['open_graph_enable'] == 1){
-			$this->blog_admin_opengraph_hook = add_submenu_page($this->plugin_slug, __('Open Graph',$this->plugin_text_domain), __('Open Graph',$this->plugin_text_domain), 'administrator', $this->plugin_slug.'_open_graph', array($this,'admin_content'));
+			$this->blog_admin_opengraph_hook = add_submenu_page($this->plugin_slug, __('Open Graph',$this->plugin_text_domain), '<img src="'.$this->plugin_url_images.'ogp-logo.png" /> '.__('Open Graph',$this->plugin_text_domain), 'administrator', $this->plugin_slug.'_open_graph', array($this,'admin_content'));
 		}
 		
 		add_action( "load-".$this->blog_admin_page_hook, array(&$this,'admin_initialisation'));
@@ -511,7 +511,7 @@ Class AWD_facebook
 	public function add_meta_boxes(){
 		//sidebar boxes
 		//Settings page
-		add_meta_box($this->plugin_slug."_settings_metabox", __('Settings',$this->plugin_text_domain), array(&$this,'settings_content'), $this->blog_admin_page_hook , 'normal', 'core');
+		add_meta_box($this->plugin_slug."_settings_metabox", __('Settings',$this->plugin_text_domain).' <img src="'.$this->plugin_url_images.'settings.png" />', array(&$this,'settings_content'), $this->blog_admin_page_hook , 'normal', 'core');
 		add_meta_box($this->plugin_slug."_meta_metabox",  __('My Facebook',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'fcbk_content'),  $this->blog_admin_page_hook, 'side', 'core');
 		add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->options['app_infos']['icon_url'].'" alt=""/>', array(&$this,'app_infos_content'),  $this->blog_admin_page_hook, 'side', 'core');
 		add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $this->blog_admin_page_hook, 'side', 'core');
@@ -519,7 +519,7 @@ Class AWD_facebook
 		add_meta_box($this->plugin_slug."_discover_metabox",  __('Discover',$this->plugin_text_domain), array(&$this,'discover_content'),  $this->blog_admin_page_hook , 'normal', 'core');
 
 		//Plugins page
-		add_meta_box($this->plugin_slug."_plugins_metabox", __('Plugins Settings',$this->plugin_text_domain), array(&$this,'plugins_content'),  $this->blog_admin_plugins_hook , 'normal', 'core');
+		add_meta_box($this->plugin_slug."_plugins_metabox", __('Plugins Settings',$this->plugin_text_domain).' <img src="'.$this->plugin_url_images.'plugins.png" />', array(&$this,'plugins_content'),  $this->blog_admin_plugins_hook , 'normal', 'core');
 		add_meta_box($this->plugin_slug."_meta_metabox",  __('My Facebook',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'fcbk_content'),  $this->blog_admin_plugins_hook , 'side', 'core');
 		add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->options['app_infos']['icon_url'].'" alt=""/>', array(&$this,'app_infos_content'),  $this->blog_admin_plugins_hook , 'side', 'core');
 		add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $this->blog_admin_plugins_hook , 'side', 'core');
@@ -527,7 +527,7 @@ Class AWD_facebook
 		add_meta_box($this->plugin_slug."_discover_metabox",  __('Discover',$this->plugin_text_domain), array(&$this,'discover_content'),  $this->blog_admin_plugins_hook , 'normal', 'core');
 		
 		//Support page
-		add_meta_box($this->plugin_slug."_support_metabox",  __('Support',$this->plugin_text_domain), array(&$this,'support_content'),  $this->blog_admin_support_hook, 'normal', 'core');
+		add_meta_box($this->plugin_slug."_support_metabox",  __('Support',$this->plugin_text_domain).' <img src="'.$this->plugin_url_images.'info.png" />', array(&$this,'support_content'),  $this->blog_admin_support_hook, 'normal', 'core');
 		add_meta_box($this->plugin_slug."_meta_metabox",  __('My Facebook',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'fcbk_content'),  $this->blog_admin_support_hook , 'side', 'core');
 		add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->options['app_infos']['icon_url'].'" alt=""/>', array(&$this,'app_infos_content'),  $this->blog_admin_support_hook , 'side', 'core');
 		add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $this->blog_admin_support_hook , 'side', 'core');
@@ -535,11 +535,11 @@ Class AWD_facebook
 		add_meta_box($this->plugin_slug."_discover_metabox",  __('Discover',$this->plugin_text_domain), array(&$this,'discover_content'),  $this->blog_admin_support_hook , 'normal', 'core');
 
 		//OpenGraph And post edito pages
-		add_meta_box($this->plugin_slug."_open_graph_metabox", __('Open Graph',$this->plugin_text_domain), array(&$this,'open_graph_content'),  $this->blog_admin_opengraph_hook, 'normal', 'core');
+		add_meta_box($this->plugin_slug."_open_graph_metabox", __('Open Graph',$this->plugin_text_domain).' <img src="'.$this->plugin_url_images.'ogp-logo.png" />', array(&$this,'open_graph_content'),  $this->blog_admin_opengraph_hook, 'normal', 'core');
 		$post_types = get_post_types();
 		foreach($post_types as $type){
 			if($this->options['open_graph_enable'] == 1){
-				add_meta_box($this->plugin_slug."_open_graph_post_metas_form", __('Open Graph Metas',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'open_graph_post_metas_form'),  $type , 'normal', 'core',array("prefix"=>$this->plugin_option_pref.'ogtags_'));
+				add_meta_box($this->plugin_slug."_open_graph_post_metas_form", __('Open Graph Metas',$this->plugin_text_domain).' <img src="'.$this->plugin_url_images.'ogp-logo.png" />', array(&$this,'open_graph_post_metas_form'),  $type , 'normal', 'core',array("prefix"=>$this->plugin_option_pref.'ogtags_'));
 			}
 			//Like button manager on post page type
 			add_meta_box($this->plugin_slug."_awd_mini_form_metabox", __('Facebook AWD Manager',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'like_button_mini_form'),  $type , 'side', 'core');
