@@ -2840,6 +2840,8 @@ Class AWD_facebook
 		 register_widget("AWD_facebook_widget_loginbutton");
 		 register_widget("AWD_facebook_widget_activity");
 		 register_widget("AWD_facebook_widget_comments");
+		 
+		 do_action('AWD_facebook_register_widgets');
 	}
 
 	//****************************************************************************************

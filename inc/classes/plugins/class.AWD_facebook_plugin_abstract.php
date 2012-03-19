@@ -41,7 +41,8 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 			deactivate_plugins($this->file);
 		}else
 			add_action('AWD_facebook_plugins_init',array(&$this,'initialisation'));
-			
+		
+		add_action('AWD_facebook_register_widgets', array(&$this, 'register_widgets'));
 	}
 	public function init()
 	{
@@ -53,10 +54,15 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 	
 		add_filter('AWD_facebook_options', array($this,'default_options'));
 	}
-	
+
+	public function register_widgets()
+	{
+	}
+
 	public function default_options($options){
 		return $options;
 	}
+
 	
 	public function get_version(){
 	    include_once( ABSPATH . 'wp-admin/includes/plugin.php' );

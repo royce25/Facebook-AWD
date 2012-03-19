@@ -15,6 +15,7 @@ interface AWD_facebook_plugin_interface{
 	public function old_parent();
 	public function missing_parent();
 	public function default_options($options);
+	public function register_widgets();
 
 	public function admin_init();
 	public function admin_menu();
