@@ -74,6 +74,8 @@ if(!empty($this->options['app_id'])  && !empty($this->options['app_secret_key'])
 	//add_action('wp_loaded', array(&$this,'php_sdk_init'));
 	$this->php_sdk_init();
 }
+//UPDATES OPTIONS
+do_action("AWD_facebook_save_settings");
 
 /****************************************************
 * load subplugins AWD
@@ -81,11 +83,12 @@ if(!empty($this->options['app_id'])  && !empty($this->options['app_secret_key'])
 * refresh options from bdd.
 /****************************************************/
 do_action("AWD_facebook_plugins_init");
+//UPDATES OPTIONS FOR PLUGINS
+do_action("AWD_facebook_save_settings");
 /****************************************************/
 
 
-//UPDATES OPTIONS
-do_action("AWD_facebook_save_settings");
+
 
 
 $this->optionsManager->load();
