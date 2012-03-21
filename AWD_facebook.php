@@ -841,7 +841,7 @@ Class AWD_facebook
 	 */
 	public function discover()
 	{
-		$html = '<a href="http://trac.ahwebdev.fr/projects/facebook-awd-seocom" target="_blank"><img src="'.$this->plugin_url_images.'facebook-awd-seo-comments-promo.png" alt="SEO comments" width="258" height="105" border="0" /></a>';
+		$html = '<a href="http://wordpress.org/extend/plugins/facebook-awd-seo-comments/" target="_blank"><img src="'.$this->plugin_url_images.'facebook-awd-seo-comments-promo.jpg" alt="SEO comments" border="0" /></a>';
 		return $html;
 	}
 	
