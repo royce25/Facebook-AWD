@@ -629,7 +629,7 @@ Class AWD_facebook
 		if($manual == 1){
 			$temp = array();
 			$temp = $AWD_facebook_vars;
-			echo '<script>var '.$this->plugin_slug.'='.json_encode($temp).';</script>';
+			echo '<script type="text/javascript">var '.$this->plugin_slug.'='.json_encode($temp).';</script>';
 		}
 		
 		$AWD_facebook_vars = apply_filters('AWD_facebook_js_vars', $AWD_facebook_vars);
