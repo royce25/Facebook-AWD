@@ -51,11 +51,13 @@ var AWD_facebook = {
 	},
 	
 	isFbConnected : function(){
+		var connected = false;
 		FB.getLoginStatus(function(response) {
 			if (response.status === 'connected') {
-				return true;
+				connected = true;
+				AWD_facebook.access_token = response.authResponse.accessToken;
 			}
-			return false;
 		});
+		return connected;		
 	},
 };
