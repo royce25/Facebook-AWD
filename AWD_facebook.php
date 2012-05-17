@@ -847,6 +847,7 @@ Class AWD_facebook
 	 */
 	public function general_content()
 	{
+	wp_dashboard_secondary_output();
 	    ?>
 	    <div style="text-align:center;">
 			<div class="header_AWD_facebook_wrap">
