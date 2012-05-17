@@ -842,12 +842,39 @@ Class AWD_facebook
 	}
 	
 	/**
+	 * Fetch Feed infos in admin side.
+	 * Rss Feed $url
+	 */
+	 function admin_get_feeds()
+	 {
+	 	$rss = @fetch_feed( 'http://facebook-awd.ahwebdev.fr/feed/' );
+		if ( is_wp_error($rss) ) {
+			if ( is_admin() || current_user_can('manage_options') ) {
+				echo '<div class="rss-widget"><p>';
+				printf(__('<strong>RSS Error</strong>: %s'), $rss->get_error_message());
+				echo '</p></div>';
+			}
+		} elseif ( !$rss->get_item_quantity() ) {
+			$rss->__destruct();
+			unset($rss);
+			return false;
+		} else {
+			echo '<div class="rss-widget">';
+			wp_widget_rss_output( $rss, $widgets['dashboard_secondary'] );
+			echo '</div>';
+			$rss->__destruct();
+			unset($rss);
+		}
+	 }
+	
+	
+	/**
 	 * Admin Infos
 	 * @return void
 	 */
 	public function general_content()
 	{
-	wp_dashboard_secondary_output();
+		$this->admin_get_feeds();
 	    ?>
 	    <div style="text-align:center;">
 			<div class="header_AWD_facebook_wrap">
