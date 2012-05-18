@@ -73,11 +73,11 @@
 <div id="lightbox_help_page_sync" class="hidden">
 	<p>
 	<?php _e('The plugin can publish on your facebook pages and on your facebook profile when you edit a post, to allow the app to make call to the Facebook api, please ask for custom permissions by clicking on the related\'s button dialog (Stream publish and Manage pages). Then, you will be able to choose which pages you want to sync with your blog by selecting them. After you saved settings, a dedicated web form will appear in post editor to manage published\'s actions',$this->plugin_text_domain); ?>
-	<?php echo sprintf(__('Learn more on %sWiki%s',$this->plugin_text_domain),'<a href="http://trac.ahwebdev.fr/projects/facebook-awd/wiki/How_to_sync_posts_with_facebook_Pages_and_profile" target="_blank">','</a>'); ?>
+	<?php echo sprintf(__('Learn more on %sWiki%s',$this->plugin_text_domain),'<a href="http://facebook-awd.ahwebdev.fr/documentation/" target="_blank">','</a>'); ?>
 	</p>
 </div>
 <div id="lightbox_help_custom_actions" class="hidden">
 	<p>
-	<?php echo sprintf(__('Learn more on %sWiki%s',$this->plugin_text_domain),'<a href="http://trac.ahwebdev.fr/projects/facebook-awd/wiki/How_to_use_Custom_OpenGraph_Objects_and_OpenGraph_Objects_Actions" target="_blank">','</a>'); ?>
+	<?php echo sprintf(__('Learn more on %sWiki%s',$this->plugin_text_domain),'<a href="http://facebook-awd.ahwebdev.fr/documentation/" target="_blank">','</a>'); ?>
 	</p>
 </div>
