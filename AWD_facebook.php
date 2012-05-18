@@ -872,7 +872,7 @@ Class AWD_facebook
 			'show_author' => 0,
 			'show_date' => 0,
 		);
-		if($echo): echo $this->admin_get_feeds($widget_awd_rss) else: $this->admin_get_feeds($widget_awd_rss); endif;			
+		if($echo){ echo $this->admin_get_feeds($widget_awd_rss) }else{ $this->admin_get_feeds($widget_awd_rss); }			
 	}
 	
 	public function get_plugins_feed($echo=true)
@@ -886,7 +886,7 @@ Class AWD_facebook
 			'show_author' => 0,
 			'show_date' => 0,
 		);
-		if($echo): echo $this->admin_get_feeds($widget_awd_rss) else: $this->admin_get_feeds($widget_awd_rss); endif;			
+		if($echo){ echo $this->admin_get_feeds($widget_awd_rss) }else{ $this->admin_get_feeds($widget_awd_rss); }			
 	}
 	
 	
