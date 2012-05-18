@@ -623,18 +623,38 @@ Class AWD_facebook
 	{			
 		add_screen_option('layout_columns', array('max' => 2, 'default' => 2));
 		$screen = convert_to_screen(get_current_screen());
-		$support = $this->support();
+		
+		
+		ob_start();
+		$this->get_documentation_feed();
+		$documentation_content = ob_get_clean();
+		ob_end_flush();
+		
 		$screen->add_help_tab( array(
-			'id'      => 'AWD_facebook_contact_support',
-			'title'   => __( 'WIKI & SUPPORT', $this->plugin_text_domain ),
-			'content' => $support
+			'id'      => 'AWD_facebook_documentation_tab',
+			'title'   => __( 'Documentation', $this->plugin_text_domain ),
+			'content' => $documentation_content
 		));
-		$discover_content = $this->discover();
+		
+		
+		ob_start();
+		$this->get_plugins_feed();
+		$discover_content = ob_get_clean();
+		ob_end_flush();
+		
 		$screen->add_help_tab( array(
-			'id'      => 'AWD_facebook_contact_dev',
-			'title'   => __( 'Get Top Freelance Web Developer & Pay Per Hour', $this->plugin_text_domain ),
+			'id'      => 'AWD_facebook_plugins_list_tab',
+			'title'   => __('Facebook AWD plugins', $this->plugin_text_domain ),
 			'content' => $discover_content
 		));
+		
+		$support_content = $this->support();
+		$screen->add_help_tab( array(
+			'id'      => 'AWD_facebook_support_tab',
+			'title'   => __( 'Bug Tracker', $this->plugin_text_domain ),
+			'content' => $support_content
+		));
+		
 	}
 	
 	/**
@@ -652,7 +672,7 @@ Class AWD_facebook
 		add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$icon.'" alt=""/>', array(&$this,'app_infos_content'),  $this->blog_admin_page_hook, 'side', 'core');
 		add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $this->blog_admin_page_hook, 'side', 'core');
 		add_meta_box($this->plugin_slug."_activity_metabox",  __('Activity on your site',$this->plugin_text_domain), array(&$this,'activity_content'),  $this->blog_admin_page_hook , 'side', 'core');
-		add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'discover_content'),  $this->blog_admin_page_hook , 'normal', 'core');
+		add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_plugins_feed'),  $this->blog_admin_page_hook , 'normal', 'core');
 
 		//Plugins page
 		add_meta_box($this->plugin_slug."_plugins_metabox", __('Plugins Settings',$this->plugin_text_domain).' <img src="'.$this->plugin_url_images.'plugins.png" />', array(&$this,'plugins_content'),  $this->blog_admin_plugins_hook , 'normal', 'core');
@@ -660,7 +680,7 @@ Class AWD_facebook
 		add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$icon.'" alt=""/>', array(&$this,'app_infos_content'),  $this->blog_admin_plugins_hook , 'side', 'core');
 		add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $this->blog_admin_plugins_hook , 'side', 'core');
 		add_meta_box($this->plugin_slug."_activity_metabox",  __('Activity on your site',$this->plugin_text_domain), array(&$this,'activity_content'),  $this->blog_admin_plugins_hook , 'side', 'core');
-		add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'discover_content'),  $this->blog_admin_plugins_hook , 'normal', 'core');
+		add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_plugins_feed'),  $this->blog_admin_page_hook , 'normal', 'core');
 		
 		
 		//OpenGraph And post edito pages
@@ -678,7 +698,7 @@ Class AWD_facebook
 			add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$icon.'" alt=""/>', array(&$this,'app_infos_content'),  $this->blog_admin_opengraph_hook , 'side', 'core');
 			add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $this->blog_admin_opengraph_hook , 'side', 'core');
 			add_meta_box($this->plugin_slug."_activity_metabox",  __('Activity on your site',$this->plugin_text_domain), array(&$this,'activity_content'),  $this->blog_admin_opengraph_hook , 'side', 'core');
-			add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'discover_content'),  $this->blog_admin_opengraph_hook , 'normal', 'core');
+			add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_plugins_feed'),  $this->blog_admin_opengraph_hook , 'normal', 'core');
 		}
 		
 		//Call the menu init to get page hook for each menu
@@ -692,7 +712,7 @@ Class AWD_facebook
 				add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$icon.'" alt=""/>', array(&$this,'app_infos_content'),  $page_hook , 'side', 'core');
 				add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $page_hook , 'side', 'core');
 				add_meta_box($this->plugin_slug."_activity_metabox",  __('Activity on your site',$this->plugin_text_domain), array(&$this,'activity_content'),  $page_hook , 'side', 'core');
-				add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'discover_content'),  $page_hook , 'normal', 'core');
+				add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_plugins_feed'),  $page_hook , 'normal', 'core');
 			}
 		}
 		
@@ -702,7 +722,7 @@ Class AWD_facebook
 		add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$icon.'" alt=""/>', array(&$this,'app_infos_content'),  $this->blog_admin_support_hook , 'side', 'core');
 		add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $this->blog_admin_support_hook , 'side', 'core');
 		add_meta_box($this->plugin_slug."_activity_metabox",  __('Activity on your site',$this->plugin_text_domain), array(&$this,'activity_content'),  $this->blog_admin_support_hook , 'side', 'core');
-		add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'discover_content'),  $this->blog_admin_support_hook , 'normal', 'core');
+		add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_plugins_feed'),  $this->blog_admin_support_hook , 'normal', 'core');
 
 	}
 	
@@ -841,13 +861,43 @@ Class AWD_facebook
 		return $html;
 	}
 	
+	public function get_documentation_feed()
+	{
+		$widget_awd_rss = array(
+			'link' => 'http://facebook-awd.ahwebdev.fr/documentation/',
+			'url' => 'http://facebook-awd.ahwebdev.fr/feed/?post_type=page&parent=220',
+			'title' => $this->plugin_name.' Documentation',
+			'items' => 20,
+			'show_summary' => 1,
+			'show_author' => 0,
+			'show_date' => 0,
+		);
+		$this->admin_get_feeds($widget_awd_rss);
+	}
+	
+	public function get_plugins_feed()
+	{
+		$widget_awd_rss = array(
+			'link' => 'http://facebook-awd.ahwebdev.fr/plugins/',
+			'url' => 'http://facebook-awd.ahwebdev.fr/feed/?post_type=btp_work',
+			'title' => $this->plugin_name.' Documentation',
+			'items' => 20,
+			'show_summary' => 1,
+			'show_author' => 0,
+			'show_date' => 0,
+		);
+		$this->admin_get_feeds($widget_awd_rss);
+	}
+	
+	
 	/**
 	 * Fetch Feed infos in admin side.
 	 * Rss Feed $url
 	 */
-	 function admin_get_feeds()
+	 public function admin_get_feeds($widget_awd_rss)
 	 {
-	 	$rss = @fetch_feed( 'http://facebook-awd.ahwebdev.fr/feed/' );
+	 	
+		$rss = @fetch_feed( $widget_awd_rss['url'] );
 		if ( is_wp_error($rss) ) {
 			if ( is_admin() || current_user_can('manage_options') ) {
 				echo '<div class="rss-widget"><p>';
@@ -860,7 +910,7 @@ Class AWD_facebook
 			return false;
 		} else {
 			echo '<div class="rss-widget">';
-			wp_widget_rss_output( $rss, $widgets['dashboard_secondary'] );
+			wp_widget_rss_output( $rss, $widget_awd_rss );
 			echo '</div>';
 			$rss->__destruct();
 			unset($rss);
@@ -874,7 +924,6 @@ Class AWD_facebook
 	 */
 	public function general_content()
 	{
-		$this->admin_get_feeds();
 	    ?>
 	    <div style="text-align:center;">
 			<div class="header_AWD_facebook_wrap">
@@ -1006,29 +1055,6 @@ Class AWD_facebook
 			<div class="center"></div>
 			<?php
 		}
-	}
-	
-	/**
-	 * Discover content Ads
-	 * @return void
-	 */
-	public function discover_content()
-	{
-		echo $this->discover();
-	}
-	
-	/**
-	 * Discover content Ads
-	 * @return void
-	 */
-	public function discover()
-	{
-		$html = '
-		<div class="AWD_facebook_promo_plugin">
-			<a href="http://wordpress.org/extend/plugins/facebook-awd-seo-comments/" target="_blank"><img src="'.$this->plugin_url_images.'facebook-awd-seo-comments-promo.jpg" alt="SEO Comments" border="0" /></a>
-			<a href="http://wordpress.org/extend/plugins/facebook-awd-app-requests/" target="_blank"><img src="'.$this->plugin_url_images.'facebook-awd-app-request-promo.jpg" alt="APP Requests" border="0" /></a>
-		</div>';
-		return $html;
 	}
 	
 	/**
