@@ -624,24 +624,14 @@ Class AWD_facebook
 		add_screen_option('layout_columns', array('max' => 2, 'default' => 2));
 		$screen = convert_to_screen(get_current_screen());
 		
-		
-		ob_start();
-		$this->get_documentation_feed(false);
-		$documentation_content = ob_get_clean();
-		ob_end_flush();
-		
+		$documentation_content = $this->get_documentation_feed(false);
 		$screen->add_help_tab( array(
 			'id'      => 'AWD_facebook_documentation_tab',
 			'title'   => __( 'Documentation', $this->plugin_text_domain ),
 			'content' => $documentation_content
 		));
 		
-		
-		ob_start();
-		$this->get_plugins_feed(false);
-		$discover_content = ob_get_clean();
-		ob_end_flush();
-		
+		$discover_content = $this->get_plugins_feed(false);
 		$screen->add_help_tab( array(
 			'id'      => 'AWD_facebook_plugins_list_tab',
 			'title'   => __('Facebook AWD plugins', $this->plugin_text_domain ),
