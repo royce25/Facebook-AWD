@@ -872,7 +872,7 @@ Class AWD_facebook
 			'show_author' => 0,
 			'show_date' => 0,
 		);
-		$echo ? echo $this->admin_get_feeds($widget_awd_rss) ? $this->admin_get_feeds($widget_awd_rss);			
+		if($echo): echo $this->admin_get_feeds($widget_awd_rss) else: $this->admin_get_feeds($widget_awd_rss); endif;			
 	}
 	
 	public function get_plugins_feed($echo=true)
@@ -886,7 +886,7 @@ Class AWD_facebook
 			'show_author' => 0,
 			'show_date' => 0,
 		);
-		$echo ? echo $this->admin_get_feeds($widget_awd_rss) : $this->admin_get_feeds($widget_awd_rss);
+		if($echo): echo $this->admin_get_feeds($widget_awd_rss) else: $this->admin_get_feeds($widget_awd_rss); endif;			
 	}
 	
 	
@@ -925,7 +925,7 @@ Class AWD_facebook
 	 * @param string|array|object $rss RSS url.
 	 * @param array $args Widget arguments.
 	 */
-	function wp_widget_rss_output( $rss, $args = array() ) {
+	public function wp_widget_rss_output( $rss, $args = array() ) {
 		$html = '';
 		if ( is_string( $rss ) ) {
 			$rss = fetch_feed($rss);
