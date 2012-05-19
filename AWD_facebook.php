@@ -2031,7 +2031,6 @@ Class AWD_facebook
 		}
 		//add attachment fields to global fields for display
 		$og_tags_final = array_merge($og_tags,$tag_attachment_fields);
-		
 		//add new custom fields to array
 		$this->og_custom_fields = apply_filters('AWD_facebook_og_custom_fields', $this->og_custom_fields);
 		$tag_custom_fields = array();
@@ -2047,7 +2046,8 @@ Class AWD_facebook
 		//if disabled from post settings, disable all
 		$disabled_general = $this->options[$prefix_option.'disable'] == 1 ? true : false;
 		$disabled_from_post = $custom_post[$this->plugin_option_pref.'ogtags_disable'][0] == 1 ? true : false;
-		
+						
+
 		if(!$disabled_general AND !$disabled_from_post){
 			//foreach tags, set value
 			foreach($og_tags_final as $tag=>$tag_infos){
