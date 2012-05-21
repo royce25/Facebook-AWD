@@ -1369,8 +1369,8 @@ Class AWD_facebook
 					'message' => stripcslashes($message),
 					'link' => $permalink,
 					'actions' => array(array(
-						'text' => stripcslashes($read_more_text),
-						'href' => $permalink
+						'name' => stripcslashes($read_more_text),
+						'link' => $permalink
 					))
 				);
 				try{
