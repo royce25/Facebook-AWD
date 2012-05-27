@@ -206,7 +206,7 @@ Class AWD_facebook
 	public function url_to_postid($url)
 	{
 		global $wp_rewrite;
-	 
+
 		$url = apply_filters('url_to_postid', $url);
 	 
 		// First, check to see if there is a 'p=N' or 'page_id=N' to match against
@@ -363,7 +363,7 @@ Class AWD_facebook
 		wp_register_script($this->plugin_slug,$this->plugin_url.'/assets/js/facebook_awd.js',array('jquery'));
 		wp_register_script($this->plugin_slug.'-ui-toolkit',$this->plugin_url.'/assets/js/ui-toolkit.js',array('jquery'));
 		wp_register_style($this->plugin_slug.'-admin-css', $this->plugin_url.'/assets/css/facebook_awd_admin.css',array($this->plugin_slug.'-jquery-ui'));
-		wp_register_style($this->plugin_slug.'-jquery-ui', $this->plugin_url.'/assets/css/jquery-ui-1.8.14.custom.css');
+		wp_register_style($this->plugin_slug.'-jquery-ui', $this->plugin_url.'/assets/css/jquery-ui-1.8.20.custom.css');
 		wp_register_style($this->plugin_slug.'-ui-toolkit', $this->plugin_url.'/assets/css/ui-toolkit.css');
 		
 	}
@@ -424,7 +424,7 @@ Class AWD_facebook
 		//error for connect
 		if($this->options['app_id'] =='' OR $this->options['app_secret_key'] =='' OR $this->options['admins'] ==''){
 			?>
-			<div class="ui-state-error">
+			<div class="ui-state-error admin_notice">
 				<p><?php printf( __('Facebook AWD is almost ready... Go to settings and set your FB app Id, youe FB Secret Key and your FB User ID (Notification from Facebook AWD)', $this->plugin_text_domain), admin_url( 'admin.php?page='.$this->plugin_slug)); ?></p>
 			</div> 
 			<?php	
@@ -438,7 +438,7 @@ Class AWD_facebook
 	public function message_register_disabled()
 	{
 		echo'
-		<div class="ui-state-error">
+		<div class="ui-state-error admin_notice">
 			<p>'.__('Users can not register, please enable registration account in blog settings before using FB Connect. (Notification from Facebook AWD)', $this->plugin_text_domain).'</p>
 		</div>
 		';
@@ -488,30 +488,35 @@ Class AWD_facebook
 		if($this->me['link'] != ''){
 			$links[] = array(__('My Profile',$this->plugin_text_domain), $this->me['link']);
 		}
-		$links[] = array(__('Settings',$this->plugin_text_domain),admin_url('admin.php?page='.$this->plugin_slug));
-		$links[] = array(__('Docuementation',$this->plugin_text_domain),'http://facebook-awd.ahwebdev.fr/documentation/');
-		$links[] = array(__('Support',$this->plugin_text_domain),'http://facebook-awd.ahwebdev.fr/support/');
-		$links[] = array(__('Debugger',$this->plugin_text_domain),'https://developers.facebook.com/tools/debug/og/object?q='.urlencode($this->get_current_url()));
-
 		if($this->is_user_logged_in_facebook()){
 			$links[] = array(__('Refresh Facebook Data',$this->plugin_text_domain),  $this->_login_url);
 			$links[] = array(__('Unsync FB Account',$this->plugin_text_domain), $this->_unsync_url);
 		}
-
-		$wp_admin_bar->add_menu( array(
-			'title' => '<img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/> '.$this->plugin_name,
-			'href' => false,
-			'id' => $this->plugin_slug,
-			'href' => false
-		));
- 
-		foreach ($links as $link => $infos) {
+		
+		if(current_user_can('manage_options')){
+			$links[] = array(__('Settings',$this->plugin_text_domain),admin_url('admin.php?page='.$this->plugin_slug));
+			$links[] = array(__('Documentation',$this->plugin_text_domain),'http://facebook-awd.ahwebdev.fr/documentation/');
+			$links[] = array(__('Support',$this->plugin_text_domain),'http://facebook-awd.ahwebdev.fr/support/');
+			if(!is_admin())
+				$links[] = array(__('Debugger',$this->plugin_text_domain),'http://developers.facebook.com/tools/debug/og/object?q='.urlencode($this->get_current_url()));
+		}
+		if(count($links)){
 			$wp_admin_bar->add_menu( array(
-				'title' => $infos[0],
-				'href' => $infos[1],
-				'parent' => $this->plugin_slug,
-				'meta' => array('target' => '_blank')
+				'title' => '<img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/> '.$this->plugin_name,
+				'href' => false,
+				'id' => $this->plugin_slug,
+				'href' => false
 			));
+		
+ 
+			foreach ($links as $link => $infos) {
+				$wp_admin_bar->add_menu( array(
+					'title' => $infos[0],
+					'href' => $infos[1],
+					'parent' => $this->plugin_slug,
+					'meta' => array('target' => '_blank')
+				));
+			}
 		}
 	}
 	
@@ -624,14 +629,14 @@ Class AWD_facebook
 		add_screen_option('layout_columns', array('max' => 2, 'default' => 2));
 		$screen = convert_to_screen(get_current_screen());
 		
-		$documentation_content = $this->get_documentation_feed(false);
+		$documentation_content = $this->get_documentation_feed();
 		$screen->add_help_tab( array(
 			'id'      => 'AWD_facebook_documentation_tab',
 			'title'   => __( 'Documentation', $this->plugin_text_domain ),
 			'content' => $documentation_content
 		));
 		
-		$discover_content = $this->get_plugins_feed(false);
+		$discover_content = $this->get_plugins_feed();
 		$screen->add_help_tab( array(
 			'id'      => 'AWD_facebook_plugins_list_tab',
 			'title'   => __('Facebook AWD plugins', $this->plugin_text_domain ),
@@ -653,42 +658,45 @@ Class AWD_facebook
 	 */
 	public function add_meta_boxes(){
 		
-		$icon = isset($icon) ? $icon : '';
+		$icon = isset($this->options['app_infos']['icon_url']) ? '<img style="vertical-align:middle;" src="'.$this->options['app_infos']['icon_url'].'" alt=""/>' : '';
 	
 		//sidebar boxes
 		//Settings page
-		add_meta_box($this->plugin_slug."_settings_metabox", __('Settings',$this->plugin_text_domain).' <img src="'.$this->plugin_url_images.'settings.png" />', array(&$this,'settings_content'), $this->blog_admin_page_hook , 'normal', 'core');
+		add_meta_box($this->plugin_slug."_settings_metabox", __('Settings',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'settings.png" />', array(&$this,'settings_content'), $this->blog_admin_page_hook , 'normal', 'core');
 		add_meta_box($this->plugin_slug."_meta_metabox",  __('My Facebook',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'fcbk_content'),  $this->blog_admin_page_hook, 'side', 'core');
-		add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$icon.'" alt=""/>', array(&$this,'app_infos_content'),  $this->blog_admin_page_hook, 'side', 'core');
+		add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' '.$icon, array(&$this,'app_infos_content'),  $this->blog_admin_page_hook, 'side', 'core');
 		add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $this->blog_admin_page_hook, 'side', 'core');
 		add_meta_box($this->plugin_slug."_activity_metabox",  __('Activity on your site',$this->plugin_text_domain), array(&$this,'activity_content'),  $this->blog_admin_page_hook , 'side', 'core');
-		add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_plugins_feed'),  $this->blog_admin_page_hook , 'normal', 'core');
+		add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_feed_meta_box'),  $this->blog_admin_page_hook , 'normal', 'core', $this->get_plugins_feed_config());
+		add_meta_box($this->plugin_slug."_blog_metabox",  __('Facebook AWD News',$this->plugin_text_domain), array(&$this,'get_feed_meta_box'),  $this->blog_admin_page_hook , 'normal', 'core', $this->get_news_feed_config());
 
 		//Plugins page
-		add_meta_box($this->plugin_slug."_plugins_metabox", __('Plugins Settings',$this->plugin_text_domain).' <img src="'.$this->plugin_url_images.'plugins.png" />', array(&$this,'plugins_content'),  $this->blog_admin_plugins_hook , 'normal', 'core');
+		add_meta_box($this->plugin_slug."_plugins_metabox", __('Plugins Settings',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'plugins.png" />', array(&$this,'plugins_content'),  $this->blog_admin_plugins_hook , 'normal', 'core');
 		add_meta_box($this->plugin_slug."_meta_metabox",  __('My Facebook',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'fcbk_content'),  $this->blog_admin_plugins_hook , 'side', 'core');
-		add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$icon.'" alt=""/>', array(&$this,'app_infos_content'),  $this->blog_admin_plugins_hook , 'side', 'core');
+		add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' '.$icon, array(&$this,'app_infos_content'),  $this->blog_admin_plugins_hook , 'side', 'core');
 		add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $this->blog_admin_plugins_hook , 'side', 'core');
 		add_meta_box($this->plugin_slug."_activity_metabox",  __('Activity on your site',$this->plugin_text_domain), array(&$this,'activity_content'),  $this->blog_admin_plugins_hook , 'side', 'core');
-		add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_plugins_feed'),  $this->blog_admin_page_hook , 'normal', 'core');
-		
+		add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_feed_meta_box'),  $this->blog_admin_plugins_hook , 'normal', 'core',$this->get_plugins_feed_config());
+		add_meta_box($this->plugin_slug."_blog_metabox",  __('Facebook AWD News',$this->plugin_text_domain), array(&$this,'get_feed_meta_box'),  $this->blog_admin_plugins_hook , 'normal', 'core', $this->get_news_feed_config());
+
 		
 		//OpenGraph And post edito pages
-		add_meta_box($this->plugin_slug."_open_graph_metabox", __('Open Graph',$this->plugin_text_domain).' <img src="'.$this->plugin_url_images.'ogp-logo.png" />', array(&$this,'open_graph_content'),  $this->blog_admin_opengraph_hook, 'normal', 'core');
+		add_meta_box($this->plugin_slug."_open_graph_metabox", __('Open Graph',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'ogp-logo.png" />', array(&$this,'open_graph_content'),  $this->blog_admin_opengraph_hook, 'normal', 'core');
 		$post_types = get_post_types();
 		foreach($post_types as $type){
 			if($this->options['open_graph_enable'] == 1){
-				add_meta_box($this->plugin_slug."_open_graph_post_metas_form", __('Open Graph Metas',$this->plugin_text_domain).' <img src="'.$this->plugin_url_images.'ogp-logo.png" />', array(&$this,'open_graph_post_metas_form'),  $type , 'normal', 'core',array("prefix"=>$this->plugin_option_pref.'ogtags_'));
+				add_meta_box($this->plugin_slug."_open_graph_post_metas_form", __('Open Graph Metas',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'ogp-logo.png" />', array(&$this,'open_graph_post_metas_form'),  $type , 'normal', 'core',array("prefix"=>$this->plugin_option_pref.'ogtags_'));
 			}
 			//Like button manager on post page type
-			add_meta_box($this->plugin_slug."_awd_mini_form_metabox", __('Facebook AWD Manager',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'post_manager_content'),  $type , 'side', 'core');
+			add_meta_box($this->plugin_slug."_awd_mini_form_metabox", __('Facebook AWD Manager',$this->plugin_text_domain).' <img style="vertical-align:middle;" style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'post_manager_content'),  $type , 'side', 'core');
 		}
 		if($this->options['open_graph_enable'] == 1){			
 			add_meta_box($this->plugin_slug."_meta_metabox",  __('My Facebook',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'fcbk_content'),  $this->blog_admin_opengraph_hook , 'side', 'core');
-			add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$icon.'" alt=""/>', array(&$this,'app_infos_content'),  $this->blog_admin_opengraph_hook , 'side', 'core');
+			add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' '.$icon, array(&$this,'app_infos_content'),  $this->blog_admin_opengraph_hook , 'side', 'core');
 			add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $this->blog_admin_opengraph_hook , 'side', 'core');
 			add_meta_box($this->plugin_slug."_activity_metabox",  __('Activity on your site',$this->plugin_text_domain), array(&$this,'activity_content'),  $this->blog_admin_opengraph_hook , 'side', 'core');
-			add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_plugins_feed'),  $this->blog_admin_opengraph_hook , 'normal', 'core');
+			add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_feed_meta_box'),  $this->blog_admin_opengraph_hook , 'normal', 'core',$this->get_plugins_feed_config());
+			add_meta_box($this->plugin_slug."_blog_metabox",  __('Facebook AWD News',$this->plugin_text_domain), array(&$this,'get_feed_meta_box'),  $this->blog_admin_opengraph_hook , 'normal', 'core', $this->get_news_feed_config());
 		}
 		
 		//Call the menu init to get page hook for each menu
@@ -699,21 +707,22 @@ Class AWD_facebook
 			foreach($plugins as $plugin){
 				$page_hook = $plugin->plugin_admin_hook;
 				add_meta_box($this->plugin_slug."_meta_metabox",  __('My Facebook',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'fcbk_content'),  $page_hook , 'side', 'core');
-				add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$icon.'" alt=""/>', array(&$this,'app_infos_content'),  $page_hook , 'side', 'core');
+				add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' '.$icon, array(&$this,'app_infos_content'),  $page_hook , 'side', 'core');
 				add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $page_hook , 'side', 'core');
 				add_meta_box($this->plugin_slug."_activity_metabox",  __('Activity on your site',$this->plugin_text_domain), array(&$this,'activity_content'),  $page_hook , 'side', 'core');
-				add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_plugins_feed'),  $page_hook , 'normal', 'core');
+				add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_feed_meta_box'),  $page_hook , 'normal', 'core',$this->get_plugins_feed_config());
+				add_meta_box($this->plugin_slug."_blog_metabox",  __('Facebook AWD News',$this->plugin_text_domain), array(&$this,'get_feed_meta_box'),  $page_hook , 'normal', 'core', $this->get_news_feed_config());
 			}
 		}
 		
 		//Support page
-		add_meta_box($this->plugin_slug."_support_metabox",  __('Support',$this->plugin_text_domain).' <img src="'.$this->plugin_url_images.'info.png" />', array(&$this,'support_content'),  $this->blog_admin_support_hook, 'normal', 'core');
+		add_meta_box($this->plugin_slug."_support_metabox",  __('Support',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'info.png" />', array(&$this,'support_content'),  $this->blog_admin_support_hook, 'normal', 'core');
 		add_meta_box($this->plugin_slug."_meta_metabox",  __('My Facebook',$this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'fcbk_content'),  $this->blog_admin_support_hook , 'side', 'core');
-		add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' <img style="vertical-align:middle;" src="'.$icon.'" alt=""/>', array(&$this,'app_infos_content'),  $this->blog_admin_support_hook , 'side', 'core');
+		add_meta_box($this->plugin_slug."_app_infos_metabox",  __('Application Infos', $this->plugin_text_domain).' '.$icon, array(&$this,'app_infos_content'),  $this->blog_admin_support_hook , 'side', 'core');
 		add_meta_box($this->plugin_slug."_info_metabox",  __('Informations',$this->plugin_text_domain), array(&$this,'general_content'),  $this->blog_admin_support_hook , 'side', 'core');
 		add_meta_box($this->plugin_slug."_activity_metabox",  __('Activity on your site',$this->plugin_text_domain), array(&$this,'activity_content'),  $this->blog_admin_support_hook , 'side', 'core');
-		add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_plugins_feed'),  $this->blog_admin_support_hook , 'normal', 'core');
-
+		add_meta_box($this->plugin_slug."_discover_metabox",  __('Facebook AWD Plugins',$this->plugin_text_domain), array(&$this,'get_feed_meta_box'),  $this->blog_admin_support_hook , 'normal', 'core',$this->get_plugins_feed_config());
+		add_meta_box($this->plugin_slug."_blog_metabox",  __('Facebook AWD News',$this->plugin_text_domain), array(&$this,'get_feed_meta_box'),  $this->blog_admin_support_hook , 'normal', 'core', $this->get_news_feed_config());
 	}
 	
 	/**
@@ -851,34 +860,65 @@ Class AWD_facebook
 		return $html;
 	}
 	
-	public function get_documentation_feed($echo=true)
+	
+	/**
+	 * Feeds functions
+	 */
+	protected function get_documentation_feed_config()
 	{
-		$widget_awd_rss = array(
+		return array(
 			'link' => 'http://facebook-awd.ahwebdev.fr/documentation/',
 			'url' => 'http://facebook-awd.ahwebdev.fr/feed/?post_type=page&parent=220',
 			'title' => $this->plugin_name.' Documentation',
-			'items' => 20,
+			'items' => 100,
 			'show_summary' => 1,
 			'show_author' => 0,
 			'show_date' => 0,
 		);
-		if($echo){ echo $this->admin_get_feeds($widget_awd_rss); }else{ $this->admin_get_feeds($widget_awd_rss); }			
 	}
 	
-	public function get_plugins_feed($echo=true)
+	protected function get_plugins_feed_config()
 	{
-		$widget_awd_rss = array(
+		return array(
 			'link' => 'http://facebook-awd.ahwebdev.fr/plugins/',
 			'url' => 'http://facebook-awd.ahwebdev.fr/feed/?post_type=btp_work',
-			'title' => $this->plugin_name.' Documentation',
-			'items' => 20,
+			'title' => $this->plugin_name.' Plugins list',
+			'items' => 100,
 			'show_summary' => 1,
 			'show_author' => 0,
 			'show_date' => 0,
 		);
-		if($echo){ echo $this->admin_get_feeds($widget_awd_rss); }else{ $this->admin_get_feeds($widget_awd_rss); }			
 	}
 	
+	protected function get_news_feed_config()
+	{
+		return array(
+			'link' => 'http://facebook-awd.ahwebdev.fr/',
+			'url' => 'http://facebook-awd.ahwebdev.fr/feed/',
+			'title' => $this->plugin_name.' News',
+			'items' => 100,
+			'show_summary' => 1,
+			'show_author' => 0,
+			'show_date' => 0,
+		);
+	}
+	
+	public function get_documentation_feed()
+	{
+		$widget_awd_rss = $this->get_documentation_feed_config();
+		return $this->admin_get_feeds($widget_awd_rss);	
+	}
+	
+	public function get_plugins_feed()
+	{
+		$widget_awd_rss = $this->get_plugins_feed_config();
+		return $this->admin_get_feeds($widget_awd_rss);			
+	}
+	
+	public function get_feed_meta_box($post, $widget_awd_rss)
+	{
+		echo $this->admin_get_feeds($widget_awd_rss['args']);			
+	}
 	
 	/**
 	 * Fetch Feed infos in admin side.
@@ -891,7 +931,7 @@ Class AWD_facebook
 		if ( is_wp_error($rss) ) {
 			if ( is_admin() || current_user_can('manage_options') ) {
 				$html .='<div class="rss-widget"><p>';
-				printf(__('<strong>RSS Error</strong>: %s'), $rss->get_error_message());
+				$html .= sprintf(__('<strong>RSS Error</strong>: %s'), $rss->get_error_message());
 				$html .= '</p></div>';
 			}
 		} elseif ( !$rss->get_item_quantity() ) {
@@ -905,6 +945,7 @@ Class AWD_facebook
 			$rss->__destruct();
 			unset($rss);
 		}
+		return $html;
 	}
 	
 	/**
@@ -1052,7 +1093,7 @@ Class AWD_facebook
 			
 			<h3 style="margin:0px;font-size:13px;text-align:left;"><?php _e('Follow Me',$this->plugin_text_domain); ?></h3>
 			<?php echo do_shortcode('[AWD_likebox url="https://www.facebook.com/Ahwebdev" colorscheme="light" stream="0" xfbml="0" header="0" width="257" height="333" faces="1"]'); ?>
-	   	    <h2><a href="#tab-link-AWD_facebook_contact_support" onclick="jQuery('#contextual-help-link').trigger('click');"><?php _e('WIKI',$this->plugin_text_domain); ?></a></h2>
+	   	    <h2><a href="#tab-link-AWD_facebook_contact_support" class="uiButton uiButtonNormal" onclick="jQuery('#contextual-help-link').trigger('click');"><?php _e('WIKI',$this->plugin_text_domain); ?></a></h2>
 	    </div>
 	    <?php
 	}
@@ -1444,13 +1485,13 @@ Class AWD_facebook
 				$this->get_facebook_user_data();
 				$this->get_app_info();
 				$this->save_facebook_user_data($this->current_user->ID);
-				$this->message = '<div class="ui-state-highlight fadeOnload"><p>'.__('Options updated',$this->plugin_text_domain).'</p></div>';
+				$this->message = '<div class="ui-state-highlight fadeOnload admin_notice success"><p>'.__('Options updated',$this->plugin_text_domain).'</p></div>';
 			}else
-				$this->message = '<div class="ui-state-error"><p>'.__('Options not updated there is an error...',$this->plugin_text_domain).'</p></div>';
+				$this->message = '<div class="ui-state-error admin_notice"><p>'.__('Options not updated there is an error...',$this->plugin_text_domain).'</p></div>';
 		
 		}else if(isset($_POST[$this->plugin_option_pref.'_nonce_reset_options']) && wp_verify_nonce($_POST[$this->plugin_option_pref.'_nonce_reset_options'],$this->plugin_slug.'_reset_options')){
 			$this->optionsManager->reset();
-			$this->message = '<div class="ui-state-highlight fadeOnload"><p>'.__('Options were reseted',$this->plugin_text_domain).'</p></div>';
+			$this->message = '<div class="ui-state-highlight fadeOnload admin_notice"><p>'.__('Options were reseted',$this->plugin_text_domain).'</p></div>';
 		}
 	}
 	
@@ -1866,8 +1907,14 @@ Class AWD_facebook
 		$referer = wp_get_referer();
 		if($this->is_user_logged_in_facebook()) {
 			$this->get_facebook_user_data();
-			//Found existing user in WP
-			$user_id = $this->get_existing_user_from_facebook();
+			
+			//If user is already logged in and lauch a connect with facebook, try to change info about user account
+			if(is_user_logged_in()){
+				$user_id = $this->current_user->ID;
+			}else{
+				//Found existing user in WP
+				$user_id = $this->get_existing_user_from_facebook();
+			}
 			//No user was found we create a new one	
 			if($user_id === false){
 				$user_id = $this->register_user();

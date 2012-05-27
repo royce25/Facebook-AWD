@@ -30,6 +30,7 @@ $current_screen = get_current_screen();
 		unset($this->message); 
 	}
 	?>
+	<div id="logo_facebook_awd"></div>
 	<div id="poststuff" class="metabox-holder <?php echo 2 == $screen_layout_columns ? ' has-right-sidebar' : ''; ?>">
 		<?php wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false ); ?>
 		<?php wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false ); ?>
