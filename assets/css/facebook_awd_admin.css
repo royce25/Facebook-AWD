@@ -1,5 +1,5 @@
 /** CSS AWD Facebook connect * Admin FACEBOOK * (C) 2011 AH WEB DEV */
-#wpwrap {
+#wpwrap,.header_lightbox_help {
 	background: linear-gradient(left bottom, rgb(33,113,148) 25%, rgb(21,83,110) 63%, rgb(3,68,98) 82%);
 	background: -o-linear-gradient(left bottom, rgb(33,113,148) 25%, rgb(21,83,110) 63%, rgb(3,68,98) 82%);
 	background: -moz-linear-gradient(left bottom, rgb(33,113,148) 25%, rgb(21,83,110) 63%, rgb(3,68,98) 82%);
@@ -673,7 +673,7 @@ table.AWD_form_table{
 }
 
 .header_lightbox_help{
-    background-color:#6D84B4;
+    /*background-color:#6D84B4;*/
     border-bottom:1px solid #3B5998;
 }
 
