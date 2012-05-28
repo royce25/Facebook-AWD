@@ -362,10 +362,14 @@ Class AWD_facebook
 		wp_register_script($this->plugin_slug.'-admin-js',$this->plugin_url.'/assets/js/facebook_awd_admin.js',array('jquery'));
 		wp_register_script($this->plugin_slug,$this->plugin_url.'/assets/js/facebook_awd.js',array('jquery'));
 		wp_register_script($this->plugin_slug.'-ui-toolkit',$this->plugin_url.'/assets/js/ui-toolkit.js',array('jquery'));
+		
 		wp_register_style($this->plugin_slug.'-admin-css', $this->plugin_url.'/assets/css/facebook_awd_admin.css',array($this->plugin_slug.'-jquery-ui'));
 		wp_register_style($this->plugin_slug.'-jquery-ui', $this->plugin_url.'/assets/css/jquery-ui-1.8.20.custom.css');
 		wp_register_style($this->plugin_slug.'-ui-toolkit', $this->plugin_url.'/assets/css/ui-toolkit.css');
 		
+		//Css framework bootstrap
+		wp_register_style($this->plugin_slug.'-ui-bootstrap', $this->plugin_url.'/assets/bootstrap/css/bootstrap.min.css');
+		wp_register_style($this->plugin_slug.'-ui-bootstrap-responsive', $this->plugin_url.'/assets/bootstrap/css/bootstrap-responsive.min.css', array($this->plugin_slug.'-ui-bootstrap'));
 	}
 	
 	/**
@@ -733,6 +737,10 @@ Class AWD_facebook
 	{
 		wp_enqueue_style($this->plugin_slug.'-admin-css');
 		wp_enqueue_style($this->plugin_slug.'-jquery-ui');
+		
+		wp_enqueue_style($this->plugin_slug.'-ui-bootstrap');
+		wp_enqueue_style($this->plugin_slug.'-ui-bootstrap-responsive');
+
 		wp_enqueue_style('thickbox');
 	}
 	
