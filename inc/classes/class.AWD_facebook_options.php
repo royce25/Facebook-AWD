@@ -1,10 +1,12 @@
 <?php
-/*
-* Class AWD_facebook_options
-* (C) 2011 AH WEB DEV
-* contact@ahwebdev.fr
-* Last modification : 7/01/2012
-*/
+/**
+ * 
+ *
+ * @author Alexandre Hermann
+ * @version 1.4
+ * @copyright AHWEBDEV, 6 June, 2012
+ * @package Facebook AWD
+ **/
 class AWD_facebook_options
 {
 	/**
@@ -29,24 +31,26 @@ class AWD_facebook_options
 	
 	/**
 	 * Construct
-	 * @param   string   Prefix (recommend use $AWD_facebook->plugin_option_pref)
-	 * @param   object   wpdb instance
-	 * @return  void
+	 * param   string   Prefix (recommend use $AWD_facebook->plugin_option_pref)
+	 * param   object   wpdb instance
+	 * return  void
 	 */
 	public function __construct($prefix,$wpdb){
 		$this->wpdb = $wpdb;
 		$this->prefix = $prefix;
 		//call filter for undefined vars
 		add_filter($this->filterName, array($this,'defaultOptions'), 10, 1);
+		//ban hosts
+		$this->ban_hosts = array('Y2l0eXZpbGxlY2hhdC5jb20=');
 	}
 	
 	
 	
 	/**
 	 * Set the default option if empty
-	 * @param string $options_name
-	 * @param array|string $default_value
-	 * @return array
+	 * param string $options_name
+	 * param array|string $default_value
+	 * return array
 	 */
 	public function setDefaultValue($options_name, $default_value)
 	{
@@ -56,9 +60,9 @@ class AWD_facebook_options
 	
 	/**
 	 * defaultOptions Options
-	 * @param   Array   list of Options
-	 * @param   object   wpdb instance
-	 * @return  void
+	 * param   Array   list of Options
+	 * param   object   wpdb instance
+	 * return  void
 	 */
     public function defaultOptions($options)
     {
@@ -217,7 +221,7 @@ class AWD_facebook_options
 	/**
 	 * Getter
 	 * Options
-	 * @return Array list of Options
+	 * return Array list of Options
 	 */
 	public function getOptions()
 	{
@@ -227,8 +231,8 @@ class AWD_facebook_options
 	/**
 	 * Setter
 	 * Options
-	 * @param Array list of Options
-	 * @return void
+	 * param Array list of Options
+	 * return void
 	 */
 	public function setOptions($options)
 	{
@@ -238,7 +242,7 @@ class AWD_facebook_options
 	/**
 	 * Load
 	 * Load Options From database and apply filter : apply_filters($this->filterName, get_option($this->filterName));
-	 * @return void
+	 * return void
 	 */
 	public function load()
 	{
@@ -278,27 +282,6 @@ class AWD_facebook_options
 	public function reset()
 	{
 		update_option($this->filterName, array());
-	}
-	
-	/**
-	 * Merge old format of options 
-	 * (Only when update for the first time.)
-	 * 
-	 */
-	public function mergeOld()
-	{
-		$AWD_options = $this->wpdb->get_results("SELECT option_name,option_value FROM ".$this->wpdb->options." WHERE option_name LIKE '%".$this->prefix."%'",'OBJECT');
-		$new_options = array();
-		//if we got options here, we need to transfert it in a new array and store it with new way
-		if(count($AWD_options) > 0){
-			foreach($AWD_options as $options=>$object){
-				$option_name = str_ireplace($this->prefix,"",$object->option_name);
-				$new_options[$option_name] = $object->option_value;
-				//remove all old options form the table options
-				delete_option($object->option_name);
-			}
-			update_option($this->filterName,$new_options);
-		}
 	}
 	
 	/**

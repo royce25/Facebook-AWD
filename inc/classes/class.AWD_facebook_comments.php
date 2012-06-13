@@ -1,10 +1,12 @@
 <?php 
-/*
-* Class AWD_facebook_activity
-* (C) 2012 AH WEB DEV
-* contact@ahwebdev.fr
-* Last modification : 21/01/2012
-*/
+/**
+ * 
+ *
+ * @author Alexandre Hermann
+ * @version 1.4
+ * @copyright AHWEBDEV, 6 June, 2012
+ * @package Facebook AWD
+ **/
 class AWD_facebook_comments
 {
 	/**
@@ -52,8 +54,8 @@ class AWD_facebook_comments
 	 
 	/**
 	 * Setter: href
-	 * @param String $href
-	 * @return void
+	 * param String $href
+	 * return void
 	 */
 	public function setHref( $href )
 	{
@@ -64,8 +66,8 @@ class AWD_facebook_comments
 	
 	/**
 	 * Setter: width
-	 * @param String $width
-	 * @return void
+	 * param String $width
+	 * return void
 	 */
 	public function setWidth( $width )
 	{
@@ -74,8 +76,8 @@ class AWD_facebook_comments
 	
 	/**
 	 * Setter: colorscheme
-	 * @param String $colorscheme
-	 * @return void
+	 * param String $colorscheme
+	 * return void
 	 */
 	public function setColorscheme( $colorscheme )
 	{
@@ -84,8 +86,8 @@ class AWD_facebook_comments
 	
 	/**
 	 * Setter: num_posts
-	 * @param String $num_posts
-	 * @return void
+	 * param String $num_posts
+	 * return void
 	 */
 	public function setNumPosts( $num_posts )
 	{
@@ -94,8 +96,8 @@ class AWD_facebook_comments
 	
 	/**
 	 * Setter: mobile
-	 * @param String $mobile
-	 * @return void
+	 * param String $mobile
+	 * return void
 	 */
 	public function setMobile( $mobile )
 	{
@@ -104,8 +106,8 @@ class AWD_facebook_comments
 	
 	/**
 	 * Setter: template
-	 * @param String $template
-	 * @return void
+	 * param String $template
+	 * return void
 	 */
 	public function setTemplate( $template )
 	{
@@ -114,7 +116,7 @@ class AWD_facebook_comments
 	
 	/**
 	 * Getter: href
-	 * @return String
+	 * return String
 	 */
 	public function getHref()
 	{
@@ -123,7 +125,7 @@ class AWD_facebook_comments
 	
 	/**
 	 * Getter: width
-	 * @return String
+	 * return String
 	 */
 	public function getWidth()
 	{
@@ -132,7 +134,7 @@ class AWD_facebook_comments
 	
 	/**
 	 * Getter: colorscheme
-	 * @return String
+	 * return String
 	 */
 	public function getColorscheme()
 	{
@@ -141,7 +143,7 @@ class AWD_facebook_comments
 	
 	/**
 	 * Getter: num_posts
-	 * @return String
+	 * return String
 	 */
 	public function getNumPosts()
 	{
@@ -150,7 +152,7 @@ class AWD_facebook_comments
 	
 	/**
 	 * Getter: mobile
-	 * @return String
+	 * return String
 	 */
 	public function getMobile()
 	{
@@ -159,7 +161,7 @@ class AWD_facebook_comments
 	
 	/**
 	 * Getter: template
-	 * @return String
+	 * return String
 	 */
 	public function getTemplate()
 	{
@@ -168,7 +170,7 @@ class AWD_facebook_comments
 
 	/**
 	 * Getter: activity
-	 * @return activity html/xfbml/iframe
+	 * return activity html/xfbml/iframe
 	 */
 	public function get()
 	{	

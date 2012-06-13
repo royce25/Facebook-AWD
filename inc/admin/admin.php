@@ -23,14 +23,57 @@ else{
 $current_screen = get_current_screen();
 
 ?>
-<div class="wrap" id="AWD_facebook_wrap">
-	<?php 
-	if($this->message){
-		echo $this->message;
-		unset($this->message); 
-	}
-	?>
+<style>
+#wpwrap,.header_lightbox_help {
+	background: linear-gradient(left, rgb(33,113,148) 25%, rgb(21,83,110) 63%, rgb(3,68,98) 82%);
+	background: -o-linear-gradient(left, rgb(33,113,148) 25%, rgb(21,83,110) 63%, rgb(3,68,98) 82%);
+	background: -moz-linear-gradient(left, rgb(33,113,148) 25%, rgb(21,83,110) 63%, rgb(3,68,98) 82%);
+	background: -webkit-linear-gradient(left, rgb(33,113,148) 25%, rgb(21,83,110) 63%, rgb(3,68,98) 82%);
+	background: -ms-linear-gradient(left, rgb(33,113,148) 25%, rgb(21,83,110) 63%, rgb(3,68,98) 82%);
+	background: -webkit-gradient(
+		linear,
+		left,
+		right top,
+		color-stop(0.25, rgb(33,113,148)),
+		color-stop(0.63, rgb(21,83,110)),
+		color-stop(0.82, rgb(3,68,98))
+	);
+}
+#footer{
+	background-color: #fff;
+	padding: 10px;
+	-webkit-border-radius: 10px 10px 0px 0px;
+	border-radius: 10px 10px 0px 0px; 
+}
+</style>
+<div class="wrap AWD_facebook_wrap">
 	<div id="logo_facebook_awd"></div>
+	<div class="navbar primary">
+    	<div class="navbar-inner">
+    		<div class="container">
+    			<ul class="nav">
+					<?php
+					global $submenu;
+					foreach($submenu[$this->plugin_slug] as $page){
+						if (current_user_can($page[1])){
+							echo '
+							<li '.($_GET['page'] == $page[2] ? 'class="active"': '').'><a href="'.admin_url('admin.php?page='.$page[2]).'" title="'.$page[3].'">'.$page[0].'</a></li>
+							';
+						}
+					}
+					?>
+    			</ul>
+    			<form class="navbar-search pull-right" action="http://facebook-awd.ahwebdev.fr/" method="GET" target="_blank">
+    				<input type="text" name="s" class="search-query span2" placeholder="Search">
+   	 			</form>
+   	 		
+    		</div>
+    	</div>
+    </div>
+	<div class="bgshadow"></div>
+	<?php 
+	do_action('AWD_facebook_admin_notices');
+	?>
 	<div id="poststuff" class="metabox-holder <?php echo 2 == $screen_layout_columns ? ' has-right-sidebar' : ''; ?>">
 		<?php wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false ); ?>
 		<?php wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false ); ?>

@@ -102,7 +102,7 @@ if(is_object($post)){ ?>
 				<div>
 				<i>'.__('Facebook supports embedding video in SWF format only. File ith extension ".swf"',$this->plugin_text_domain).'</i>
 				<div class="uiForm">
-					<div id="'.$prefix.'message_video" class="ui-state-highlight hidden">'.__('You must include a valid Image for your video in Tags section to be displayed in the news feed.',$this->plugin_text_domain).'</div>
+					<div id="'.$prefix.'message_video" class="alert alert-warning hidden">'.__('You must include a valid Image for your video in Tags section to be displayed in the news feed.',$this->plugin_text_domain).'</div>
 					<table class="AWD_form_table">';
 					foreach($tag_fields as $tag=>$tag_infos){
 						$input = $this->get_input_html_from_type($tag_infos['type'], $tag, $custom, $prefix);	

@@ -1,10 +1,14 @@
 <?php 
-/*
-* Class AWD_facebook_activity
-* (C) 2012 AH WEB DEV
-* contact@ahwebdev.fr
-* Last modification : 21/01/2012
-*/
+/**
+ * 
+ *
+ * @author Alexandre Hermann
+ * @version 1.4
+ * @copyright AHWEBDEV, 6 June, 2012
+ * @package Facebook AWD
+ **/
+
+
 class AWD_facebook_activity
 {
 	/**
@@ -125,8 +129,8 @@ class AWD_facebook_activity
 	
 	/**
 	 * Setter: site
-	 * @param String $site
-	 * @return void
+	 * param String $site
+	 * return void
 	 */
 	public function setSite( $site )
 	{
@@ -137,8 +141,8 @@ class AWD_facebook_activity
 	
 	/**
 	 * Setter: width
-	 * @param String $width
-	 * @return void
+	 * param String $width
+	 * return void
 	 */
 	public function setWidth( $width )
 	{
@@ -147,8 +151,8 @@ class AWD_facebook_activity
 	
 	/**
 	 * Setter: height
-	 * @param String $height
-	 * @return void
+	 * param String $height
+	 * return void
 	 */
 	public function setHeight( $height )
 	{
@@ -157,8 +161,8 @@ class AWD_facebook_activity
 	
 	/**
 	 * Setter: header
-	 * @param String $header
-	 * @return void
+	 * param String $header
+	 * return void
 	 */
 	public function setHeader( $header )
 	{
@@ -167,8 +171,8 @@ class AWD_facebook_activity
 	
 	/**
 	 * Setter: colorscheme
-	 * @param String $colorscheme
-	 * @return void
+	 * param String $colorscheme
+	 * return void
 	 */
 	public function setColorscheme( $colorscheme )
 	{
@@ -177,8 +181,8 @@ class AWD_facebook_activity
 	
 	/**
 	 * Setter: font
-	 * @param String $font
-	 * @return void
+	 * param String $font
+	 * return void
 	 */
 	public function setFont( $font )
 	{
@@ -187,8 +191,8 @@ class AWD_facebook_activity
 	
 	/**
 	 * Setter: border_color
-	 * @param String $border_color
-	 * @return void
+	 * param String $border_color
+	 * return void
 	 */
 	public function setBorderColor( $border_color )
 	{
@@ -197,8 +201,8 @@ class AWD_facebook_activity
 	
 	/**
 	 * Setter: recommendations
-	 * @param String $recommendations
-	 * @return void
+	 * param String $recommendations
+	 * return void
 	 */
 	public function setRecommendations( $recommendations )
 	{
@@ -207,8 +211,8 @@ class AWD_facebook_activity
 	
 	/**
 	 * Setter: filter
-	 * @param String $filter
-	 * @return void
+	 * param String $filter
+	 * return void
 	 */
 	public function setFilter( $filter )
 	{
@@ -217,8 +221,8 @@ class AWD_facebook_activity
 	
 	/**
 	 * Setter: linktarget
-	 * @param String $linktarget
-	 * @return void
+	 * param String $linktarget
+	 * return void
 	 */
 	public function setLinktarget( $linktarget )
 	{
@@ -227,8 +231,8 @@ class AWD_facebook_activity
 	
 	/**
 	 * Setter: ref
-	 * @param String $ref
-	 * @return void
+	 * param String $ref
+	 * return void
 	 */
 	public function setRef( $ref )
 	{
@@ -237,8 +241,8 @@ class AWD_facebook_activity
 	
 	/**
 	 * Setter: max_age
-	 * @param String $max_age
-	 * @return void
+	 * param String $max_age
+	 * return void
 	 */
 	public function setMaxAge( $max_age )
 	{
@@ -247,8 +251,8 @@ class AWD_facebook_activity
 	
 	/**
 	 * Setter: template
-	 * @param String $template
-	 * @return void
+	 * param String $template
+	 * return void
 	 */
 	public function setTemplate( $template )
 	{
@@ -257,7 +261,7 @@ class AWD_facebook_activity
 	
 	/**
 	 * Getter: site
-	 * @return String
+	 * return String
 	 */
 	public function getSite()
 	{
@@ -266,7 +270,7 @@ class AWD_facebook_activity
 	
 	/**
 	 * Getter: width
-	 * @return String
+	 * return String
 	 */
 	public function getWidth()
 	{
@@ -275,7 +279,7 @@ class AWD_facebook_activity
 	
 	/**
 	 * Getter: height
-	 * @return String
+	 * return String
 	 */
 	public function getHeight()
 	{
@@ -284,7 +288,7 @@ class AWD_facebook_activity
 	
 	/**
 	 * Getter: header
-	 * @return String
+	 * return String
 	 */
 	public function getHeader()
 	{
@@ -293,7 +297,7 @@ class AWD_facebook_activity
 	
 	/**
 	 * Getter: colorscheme
-	 * @return String
+	 * return String
 	 */
 	public function getColorscheme()
 	{
@@ -302,7 +306,7 @@ class AWD_facebook_activity
 	
 	/**
 	 * Getter: font
-	 * @return String
+	 * return String
 	 */
 	public function getFont()
 	{
@@ -311,7 +315,7 @@ class AWD_facebook_activity
 	
 	/**
 	 * Getter: border_color
-	 * @return String
+	 * return String
 	 */
 	public function getBorderColor()
 	{
@@ -320,7 +324,7 @@ class AWD_facebook_activity
 	
 	/**
 	 * Getter: recommendations
-	 * @return String
+	 * return String
 	 */
 	public function getRecommendations()
 	{
@@ -329,7 +333,7 @@ class AWD_facebook_activity
 	
 	/**
 	 * Getter: filter
-	 * @return String
+	 * return String
 	 */
 	public function getFilter()
 	{
@@ -338,7 +342,7 @@ class AWD_facebook_activity
 	
 	/**
 	 * Getter: linktarget
-	 * @return String
+	 * return String
 	 */
 	public function getLinktarget()
 	{
@@ -347,7 +351,7 @@ class AWD_facebook_activity
 	
 	/**
 	 * Getter: ref
-	 * @return String
+	 * return String
 	 */
 	public function getRef()
 	{
@@ -356,7 +360,7 @@ class AWD_facebook_activity
 	
 	/**
 	 * Getter: max_age
-	 * @return String
+	 * return String
 	 */
 	public function getMaxAge()
 	{
@@ -365,7 +369,7 @@ class AWD_facebook_activity
 	
 	/**
 	 * Getter: template
-	 * @return String
+	 * return String
 	 */
 	public function getTemplate()
 	{
@@ -374,7 +378,7 @@ class AWD_facebook_activity
 	
 	/**
 	 * Getter: activity
-	 * @return activity html/xfbml/iframe
+	 * return activity html/xfbml/iframe
 	 */
 	public function get()
 	{	

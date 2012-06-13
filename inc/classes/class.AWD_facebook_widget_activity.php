@@ -1,11 +1,12 @@
 <?php
-/*
-*
-* WIDGET LIKE BOX AWD Facebook
-* (C) 2011 AH WEB DEV
-* Hermann.alexandre@ahwebdev.fr
-*
-*/
+/**
+ * 
+ *
+ * @author Alexandre Hermann
+ * @version 1.4
+ * @copyright AHWEBDEV, 6 June, 2012
+ * @package Facebook AWD
+ **/
 class AWD_facebook_widget_activity extends WP_Widget {
 	
 	/*

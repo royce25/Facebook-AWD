@@ -1,10 +1,12 @@
 <?php 
-/*
-* Class AWD_facebook_activity
-* (C) 2012 AH WEB DEV
-* contact@ahwebdev.fr
-* Last modification : 21/01/2012
-*/
+/**
+ * 
+ *
+ * @author Alexandre Hermann
+ * @version 1.4
+ * @copyright AHWEBDEV, 6 June, 2012
+ * @package Facebook AWD
+ **/
 class AWD_facebook_likebox
 {
 	/**
@@ -85,8 +87,8 @@ class AWD_facebook_likebox
 
 	/**
 	 * Setter: href
-	 * @param String $href
-	 * @return void
+	 * param String $href
+	 * return void
 	 */
 	public function setHref( $href )
 	{
@@ -97,8 +99,8 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Setter: width
-	 * @param String $width
-	 * @return void
+	 * param String $width
+	 * return void
 	 */
 	public function setWidth( $width )
 	{
@@ -107,8 +109,8 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Setter: height
-	 * @param String $height
-	 * @return void
+	 * param String $height
+	 * return void
 	 */
 	public function setHeight( $height )
 	{
@@ -117,8 +119,8 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Setter: colorscheme
-	 * @param String $colorscheme
-	 * @return void
+	 * param String $colorscheme
+	 * return void
 	 */
 	public function setColorscheme( $colorscheme )
 	{
@@ -127,8 +129,8 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Setter: show_faces
-	 * @param String $show_faces
-	 * @return void
+	 * param String $show_faces
+	 * return void
 	 */
 	public function setShowFaces( $show_faces )
 	{
@@ -137,8 +139,8 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Setter: stream
-	 * @param String $stream
-	 * @return void
+	 * param String $stream
+	 * return void
 	 */
 	public function setStream( $stream )
 	{
@@ -147,8 +149,8 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Setter: header
-	 * @param String $header
-	 * @return void
+	 * param String $header
+	 * return void
 	 */
 	public function setHeader( $header )
 	{
@@ -157,8 +159,8 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Setter: border_color
-	 * @param String $border_color
-	 * @return void
+	 * param String $border_color
+	 * return void
 	 */
 	public function setBorderColor( $border_color )
 	{
@@ -167,8 +169,8 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Setter: force_wall
-	 * @param String $force_wall
-	 * @return void
+	 * param String $force_wall
+	 * return void
 	 */
 	public function setForceWall( $force_wall )
 	{
@@ -177,8 +179,8 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Setter: template
-	 * @param String $template
-	 * @return void
+	 * param String $template
+	 * return void
 	 */
 	public function setTemplate($template)
 	{
@@ -187,7 +189,7 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Getter: href
-	 * @return String
+	 * return String
 	 */
 	public function getHref()
 	{
@@ -196,7 +198,7 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Getter: width
-	 * @return String
+	 * return String
 	 */
 	public function getWidth()
 	{
@@ -205,7 +207,7 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Getter: height
-	 * @return String
+	 * return String
 	 */
 	public function getHeight()
 	{
@@ -214,7 +216,7 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Getter: colorscheme
-	 * @return String
+	 * return String
 	 */
 	public function getColorscheme()
 	{
@@ -223,7 +225,7 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Getter: show_faces
-	 * @return String
+	 * return String
 	 */
 	public function getShowFaces()
 	{
@@ -232,7 +234,7 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Getter: stream
-	 * @return String
+	 * return String
 	 */
 	public function getStream()
 	{
@@ -241,7 +243,7 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Getter: header
-	 * @return String
+	 * return String
 	 */
 	public function getHeader()
 	{
@@ -250,7 +252,7 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Getter: border_color
-	 * @return String
+	 * return String
 	 */
 	public function getBorderColor()
 	{
@@ -259,7 +261,7 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Getter: force_wall
-	 * @return String
+	 * return String
 	 */
 	public function getForceWall()
 	{
@@ -268,7 +270,7 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Getter: template
-	 * @return String
+	 * return String
 	 */
 	public function getTemplate()
 	{
@@ -277,7 +279,7 @@ class AWD_facebook_likebox
 	
 	/**
 	 * Getter: activity
-	 * @return activity html/xfbml/iframe
+	 * return activity html/xfbml/iframe
 	 */
 	public function get()
 	{	

@@ -1,11 +1,13 @@
 <?php
-/*
-*
-* abstract AWD_facebook_plugin_abstract AWD Facebook
-* (C) 2012 AH WEB DEV
-* Hermann.alexandre@ahwebdev.fr
-*
-*/
+/**
+ * 
+ *
+ * @author Alexandre Hermann
+ * @version 1.4
+ * @copyright AHWEBDEV, 6 June, 2012
+ * @package Facebook AWD
+ **/
+
 require_once(dirname(__FILE__).'/class.AWD_facebook_plugin_interface.php');
 
 
@@ -36,10 +38,10 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 		require_once(ABSPATH.'wp-admin/includes/plugin.php');
 		
 		if(is_plugin_inactive('facebook-awd/AWD_facebook.php')){
-			add_action('admin_notices',array(&$this,'missing_parent'));
+			add_action('AWD_facebook_admin_notices',array(&$this,'missing_parent'));
 			deactivate_plugins($this->file);
 		}elseif($this->AWD_facebook->get_version() < $this->version_requiered){
-			add_action('admin_notices',array(&$this,'old_parent'));
+			add_action('AWD_facebook_admin_notices',array(&$this,'old_parent'));
 			deactivate_plugins($this->file);
 		}else
 			add_action('AWD_facebook_plugins_init',array(&$this,'initialisation'));
@@ -52,7 +54,7 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 	{	
 	
 		if($this->AWD_facebook->options['connect_enable'] != 1 && $this->deps['connect'] == 1){
-			add_action('admin_notices',array(&$this,'missing_facebook_connect'));
+			add_action('AWD_facebook_admin_notices',array(&$this,'missing_facebook_connect'));
 			deactivate_plugins($this->file);
 		}
 		
@@ -83,15 +85,15 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 
 	public function missing_facebook_connect()
 	{
-		echo '<div class="ui-state-error"><p>'.$this->plugin_name.' '.__("can not be activated: Facebook AWD All in One - Facebook Connect plugin must be activated",$this->plugin_text_domain).'</p></div>';
+		echo '<div class="alert alert-error"><p>'.$this->plugin_name.' '.__("can not be activated: Facebook AWD All in One - Facebook Connect plugin must be activated",$this->plugin_text_domain).'</p></div>';
 	}
 	public function old_parent()
 	{
-		echo '<div class="ui-state-error"><p>'.$this->plugin_name.' '.__("can not be activated: Facebook AWD All in One plugin is out to date... You can download the last version or update it from the Wordpress plugin directory",$this->plugin_text_domain).'</p></div>';
+		echo '<div class="alert alert-error"><p>'.$this->plugin_name.' '.__("can not be activated: Facebook AWD All in One plugin is out to date... You can download the last version or update it from the Wordpress plugin directory",$this->plugin_text_domain).'</p></div>';
 	}
 	public function missing_parent()
 	{
-		echo '<div class="ui-state-error"><p>'.$this->plugin_name.' '.__("can not be activated: Facebook AWD All in One plugin must be installed... you can download it from the Wordpress plugin directory",$this->plugin_text_domain).'</p></div>';
+		echo '<div class="alert alert-error"><p>'.$this->plugin_name.' '.__("can not be activated: Facebook AWD All in One plugin must be installed... you can download it from the Wordpress plugin directory",$this->plugin_text_domain).'</p></div>';
 	}
 	public function deactivation()
 	{}
@@ -104,27 +106,6 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 	{
 		add_screen_option('layout_columns', array('max' => 2, 'default' => 2));
 		$screen = convert_to_screen(get_current_screen());
-		
-		$documentation_content = $this->AWD_facebook->get_documentation_feed(false);
-		$screen->add_help_tab( array(
-			'id'      => 'AWD_facebook_documentation_tab',
-			'title'   => __( 'Documentation', $this->AWD_facebook->plugin_text_domain ),
-			'content' => $documentation_content
-		));
-		
-		$discover_content = $this->AWD_facebook->get_plugins_feed(false);
-		$screen->add_help_tab( array(
-			'id'      => 'AWD_facebook_plugins_list_tab',
-			'title'   => __('Facebook AWD plugins', $this->AWD_facebook->plugin_text_domain ),
-			'content' => $discover_content
-		));
-		
-		$support_content = $this->AWD_facebook->support();
-		$screen->add_help_tab( array(
-			'id'      => 'AWD_facebook_support_tab',
-			'title'   => __( 'Bug Tracker', $this->AWD_facebook->plugin_text_domain ),
-			'content' => $support_content
-		));
 	}
 	public function admin_menu()
 	{

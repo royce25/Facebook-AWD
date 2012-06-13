@@ -102,7 +102,7 @@ function uiSelect(el) {
   this.buildUiSelect = function() {    
     /* build DOM to this template:
       <div id='uiSelect-uiSelectExample' class='uiSelectContainer'>
-        <a id='uiSelect-uiSelectExample-button' href='#' class='uiButton uiButtonSelect'>Choose Options</a>
+        <a id='uiSelect-uiSelectExample-button' href='#' class='btn btnSelect'>Choose Options</a>
         <ul class='dropdownContainer'>
           <li class='row selected'>Choose Options</li>
           <li class='divider'></li>
@@ -124,7 +124,7 @@ function uiSelect(el) {
     jQuery('#'+this.htmlId).before('<div id='+this.id+' class=\'uiSelectContainer\'></div>');
     
     // Build rest of DOM in the div we just created
-    jQuery('#'+this.id).append('<a id=\''+this.id+'-button\' href=\'#\' class=\'uiButton uiButtonSelect\'>'+this.selected['text']+'</a>');
+    jQuery('#'+this.id).append('<a id=\''+this.id+'-button\' href=\'#\' class=\'btn btnSelect\'>'+this.selected['text']+'</a>');
     jQuery('#'+this.id).append('<ul class=\'dropdownContainer\'></ul>');
     var ul = jQuery('#'+this.id).find('ul[class=\'dropdownContainer\']').first();
     for (var i in this.options) {
@@ -180,15 +180,15 @@ function uiSelect(el) {
     var button = jQuery('#'+this.id).find('a[idjQuery=\'-button\']');
     if (force) {
       if (force == 'off') {
-        button.removeClass('uiButtonSelectPressed');
+        button.removeClass('btnSelectPressed');
         return;
       }
       if (force == 'on') {
-        button.addClass('uiButtonSelectPressed');
+        button.addClass('btnSelectPressed');
         return;
       }
     }
-    button.toggleClass('uiButtonSelectPressed');
+    button.toggleClass('btnSelectPressed');
   };
 
   this.setHTMLSelected = function(val) {
@@ -209,7 +209,7 @@ function uiSelect(el) {
     var setText = jQuery(clicked).text();
     this.selected = {'value': setValue, 'text': setText};
     
-    // Set the text value of the visibl uiButton
+    // Set the text value of the visibl btn
     jQuery('#'+this.id).find('a[idjQuery=\'-button\']').text(setText);
   };
 

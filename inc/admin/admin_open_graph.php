@@ -118,7 +118,7 @@
 						echo '</div>';
 					}
 				}else{
-					echo '<div class="ui-state-highlight AWD_message"><p>'.__('There is no custom post types',$this->plugin_text_domain).'</p></div>';
+					echo '<div class="alert alert-warning AWD_message"><p>'.__('There is no custom post types',$this->plugin_text_domain).'</p></div>';
 				}
 				?>
 			</div>
@@ -144,7 +144,7 @@
 						echo '</div>';
 					}
 				}else{
-					echo '<div class="ui-state-highlight AWD_message"><p>'.__('There is no Taxonomies',$this->plugin_text_domain).'</p></div>';
+					echo '<div class="alert alert-warning AWD_message"><p>'.__('There is no Taxonomies',$this->plugin_text_domain).'</p></div>';
 				}
 				?>
 			</div>
@@ -155,7 +155,7 @@
 		<?php wp_nonce_field($this->plugin_slug.'_update_options',$this->plugin_option_pref.'_nonce_options_update_field'); ?>
 		<br />
 		<div class="center">
-			<a href="#" id="submit_opg" class="uiButton uiButtonSubmit"><?php _e('Save all settings',$this->plugin_text_domain); ?></a>
+			<a href="#" id="submit_opg" class="btn btnSubmit"><?php _e('Save all settings',$this->plugin_text_domain); ?></a>
 		</div>
 	</form>
 </div>

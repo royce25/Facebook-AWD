@@ -10,27 +10,30 @@
 * Help app id
 */
 ?>
-<div id="header_AWD_lightbox" class="hidden">
-	<div class="header_lightbox_help">
-		<div class="header_lightbox_help_text"><img style="vertical-align:middle;" src="<?php echo $this->plugin_url_images; ?>facebook-mini.png" alt="facebook logo"/> <?php _e('Help',$this->plugin_text_domain); ?></div>
-	</div>
-</div>
+<div class="header_lightbox_help_title hidden"><img style="vertical-align:middle;" src="<?php echo $this->plugin_url_images; ?>facebook-mini.png" alt="facebook logo"/> <?php _e('Help',$this->plugin_text_domain); ?></div>
 <div id="lightbox_help_debug_enable" class="hidden">
 	<p><?php
-	_e("Help you debugging Facebook AWD object",$this->plugin_text_domain); 
+	_e("Help you debugging Facebook AWD object.",$this->plugin_text_domain); 
 	?></p>
 </div>
 <div id="lightbox_help_app_id" class="hidden">
 	<p>
 	<?php
-	printf(__("This is the id of your application on Facebook, if you have not yet an application, you can create one %shere%s.",$this->plugin_text_domain),'<a href="https://www.facebook.com/developers/createapp.php" target="_blank">','</a>'); 
+	printf(__("This is the id of your application on Facebook. You can find this info on your application dashboard on Facebook developers platform. If you have not yet create an application, you can create one %shere%s.",$this->plugin_text_domain),'<a class="btn btn-mini" href="https://www.facebook.com/developers/createapp.php" target="_blank">','</a>'); 
+	?>
+	</p>
+</div>
+<div id="lightbox_help_app_secret_key" class="hidden">
+	<p>
+	<?php
+	printf(__("This is the secret key of your application on Facebook. You can find this info on your application dashboard on Facebook developers platform. If you have not yet create an application, you can create one %shere%s.",$this->plugin_text_domain),'<a class="btn btn-mini" href="https://www.facebook.com/developers/createapp.php" target="_blank">','</a>'); 
 	?>
 	</p>
 </div>
 <div id="lightbox_help_xfbml" class="hidden">
 	<p>
 	<?php
-	printf(__("Use xfbml parsing, Visit %sthis page%s",$this->plugin_text_domain),'<a href="https://developers.facebook.com/docs/reference/fbml/" target="_blank">','</a>');
+	printf(__("Use xfbml parsing, Visit %sthis page%s",$this->plugin_text_domain),'<a class="btn btn-mini" href="https://developers.facebook.com/docs/reference/fbml/" target="_blank">','</a>');
 	
 	?>
 	<br /><i><?php _e('If you set this option to "No" you will never be able to use xfbml',$this->plugin_text_domain); ?></i>
@@ -40,14 +43,14 @@
 <div id="lightbox_help_open_graph" class="hidden">
 	<p>
 	<?php
-	printf(__("The Open Graph Protocol enables you to integrate your Web pages into the social graph. It is currently designed for Web pages representing profiles of real-world things — things like movies, sports teams, celebrities, and restaurants. Including Open Graph tags on your Web page, makes your page equivalent to a Facebook Page. This means when a user clicks a Like button on your page, a connection is made between your page and the user. Your page will appear in the ”Likes and Interests” section of the user’s profile, and you have the ability to publish updates to the user. Your page will show up in the same places that Facebook pages show up around the site (e.g. search), and you can target ads to people who like your content. The structured data you provide via the Open Graph Protocol defines how your page will be represented on Facebook. %sRead more%s",$this->plugin_text_domain),'<a href="https://developers.facebook.com/docs/opengraph/" target="_blank">','</a>'); 
+	printf(__("The Open Graph Protocol enables you to integrate your Web pages into the social graph. It is currently designed for Web pages representing profiles of real-world things — things like movies, sports teams, celebrities, and restaurants. Including Open Graph tags on your Web page, makes your page equivalent to a Facebook Page. This means when a user clicks a Like button on your page, a connection is made between your page and the user. Your page will appear in the ”Likes and Interests” section of the user’s profile, and you have the ability to publish updates to the user. Your page will show up in the same places that Facebook pages show up around the site (e.g. search), and you can target ads to people who like your content. The structured data you provide via the Open Graph Protocol defines how your page will be represented on Facebook. %sRead more%s",$this->plugin_text_domain),'<a class="btn btn-mini" href="https://developers.facebook.com/docs/opengraph/" target="_blank">','</a>'); 
 	?>
 	</p>
 </div>
 <div id="lightbox_help_connect" class="hidden">
 	<p>
 	<?php
-	printf(__("Facebook helps you simplify and enhance user registration and sign-in by using Facebook as your login system. Users no longer need to fill in yet another registration form or remember another username and password to use your site. As long as the user is signed into Facebook, they are automatically signed into your site as well. Using Facebook for login provides you with all the information you need to create a social, personalized experience from the moment the user visits your site in their browser. %sRead more%s",$this->plugin_text_domain),'<a href="https://developers.facebook.com/docs/guides/web/#login" target="_blank">','</a>'); 
+	printf(__("Facebook helps you simplify and enhance user registration and sign-in by using Facebook as your login system. Users no longer need to fill in yet another registration form or remember another username and password to use your site. As long as the user is signed into Facebook, they are automatically signed into your site as well. Using Facebook for login provides you with all the information you need to create a social, personalized experience from the moment the user visits your site in their browser. %sRead more%s",$this->plugin_text_domain),'<a class="btn btn-mini" href="https://developers.facebook.com/docs/guides/web/#login" target="_blank">','</a>'); 
 	?>
 	</p>
 </div>
@@ -61,7 +64,7 @@
 <div id="lightbox_help_permissions" class="hidden">
 	<p>
 	<?php
-	printf(__('Facebook Connect permissions (example: publish_stream,user_photos,user_status) %sSee%s the list of permissions ',$this->plugin_text_domain),'<a href="https://developers.facebook.com/docs/authentication/permissions/" target="_blank">',"</a>");
+	printf(__('Facebook Connect permissions (example: publish_stream,user_photos,user_status) %sSee the list of permissions%s',$this->plugin_text_domain),'<a class="btn btn-mini" href="https://developers.facebook.com/docs/authentication/permissions/" target="_blank">',"</a>");
 	?>
 	</p>
 </div>
@@ -73,11 +76,37 @@
 <div id="lightbox_help_page_sync" class="hidden">
 	<p>
 	<?php _e('The plugin can publish on your facebook pages and on your facebook profile when you edit a post, to allow the app to make call to the Facebook api, please ask for custom permissions by clicking on the related\'s button dialog (Stream publish and Manage pages). Then, you will be able to choose which pages you want to sync with your blog by selecting them. After you saved settings, a dedicated web form will appear in post editor to manage published\'s actions',$this->plugin_text_domain); ?>
-	<?php echo sprintf(__('Learn more on %sWiki%s',$this->plugin_text_domain),'<a href="http://facebook-awd.ahwebdev.fr/documentation/" target="_blank">','</a>'); ?>
+	<?php echo sprintf(__('Learn more on %sWiki%s',$this->plugin_text_domain),'<a class="btn btn-mini" href="http://facebook-awd.ahwebdev.fr/documentation/" target="_blank">','</a>'); ?>
 	</p>
 </div>
 <div id="lightbox_help_custom_actions" class="hidden">
 	<p>
-	<?php echo sprintf(__('Learn more on %sWiki%s',$this->plugin_text_domain),'<a href="http://facebook-awd.ahwebdev.fr/documentation/" target="_blank">','</a>'); ?>
+	<?php echo sprintf(__('Learn more on %sWiki%s',$this->plugin_text_domain),'<a class="btn btn-mini" href="http://facebook-awd.ahwebdev.fr/documentation/" target="_blank">','</a>'); ?>
 	</p>
+</div>
+<div id="lightbox_help_admins" class="hidden">
+	<p><?php
+	_e("This is your Facebook User Id. It's a numeric number. You can find it in your application infos on the facebook developers platform.",$this->plugin_text_domain); 
+	?></p>
+</div>
+<div id="lightbox_help_connect_fbavatar_on" class="hidden">
+	<p><?php
+	_e("This will add the Facebook Avatar to the avatar function of Wordpress, You will be able to activate it on the discussion settings.",$this->plugin_text_domain); 
+	?></p>
+</div>
+<div id="lightbox_help_publish_to_profile_pages" class="hidden">
+	<p><?php
+	_e("If YES the checkbox in post editor will be always checked.",$this->plugin_text_domain); 
+	?></p>
+</div>      
+<div id="lightbox_help_publish_read_more_text" class="hidden">
+	<p><?php
+	_e("You can redefine the default text use for the action link. This setting can be redefined in the post editor.",$this->plugin_text_domain); 
+	?></p>
+</div>
+<div class="header_lightbox_donate_title hidden"><img style="vertical-align:middle;" src="<?php echo $this->plugin_url_images; ?>facebook-mini.png" alt="facebook logo"/> <?php _e('I am sure you love it...',$this->plugin_text_domain); ?></div>
+<div id="lightbox_donate" class="hidden">
+	<p><?php
+	_e("I am sure you love it, you can help me to continue support this plugin...Click!",$this->plugin_text_domain); 
+	?></p>
 </div>

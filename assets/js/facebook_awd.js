@@ -61,3 +61,12 @@ var AWD_facebook = {
 		return connected;		
 	},
 };
+
+jQuery(document).ready(function($){
+	//add usefull tool for creating connect button by hand.
+	$('.AWD_facebook_connect_button').live('click',function(e){
+		e.preventDefault();
+		var redirect = $(this).data('redirect');
+		AWD_facebook.connect(redirect);
+	});
+});

@@ -22,7 +22,9 @@ add_action('admin_init', array(&$this,'admin_initialisation'));
 
 //DISPLAY ADMIN
 add_action('admin_bar_init', array(&$this,'admin_bar_init'));
-add_action('admin_notices',array(&$this,'missing_config'));
+add_action('AWD_facebook_admin_notices',array(&$this,'missing_config'));
+add_action('AWD_facebook_admin_notices',array(&$this,'display_errors'));
+
 add_action('admin_menu', array(&$this,'admin_menu'));
 add_action('network_admin_menu', array(&$this,'add_js_options'));
 

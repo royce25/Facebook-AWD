@@ -1,10 +1,12 @@
 <?php 
-/*
-* Class AWD_facebook_likebutton
-* (C) 2012 AH WEB DEV
-* contact@ahwebdev.fr
-* Last modification : 21/01/2012
-*/
+/**
+ * 
+ *
+ * @author Alexandre Hermann
+ * @version 1.4
+ * @copyright AHWEBDEV, 6 June, 2012
+ * @package Facebook AWD
+ **/
 class AWD_facebook_likebutton
 {
 
@@ -91,8 +93,8 @@ class AWD_facebook_likebutton
 
 	/**
 	 * Setter: href
-	 * @param String $href
-	 * @return void
+	 * param String $href
+	 * return void
 	 */
 	public function setHref( $href )
 	{
@@ -103,8 +105,8 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Setter: send
-	 * @param String $send
-	 * @return void
+	 * param String $send
+	 * return void
 	 */
 	public function setSend( $send )
 	{
@@ -113,8 +115,8 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Setter: layout
-	 * @param String $layout
-	 * @return void
+	 * param String $layout
+	 * return void
 	 */
 	public function setLayout( $layout )
 	{
@@ -123,8 +125,8 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Setter: show_faces
-	 * @param String $show_faces
-	 * @return void
+	 * param String $show_faces
+	 * return void
 	 */
 	public function setShowFaces( $show_faces )
 	{
@@ -133,8 +135,8 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Setter: width
-	 * @param String $width
-	 * @return void
+	 * param String $width
+	 * return void
 	 */
 	public function setWidth( $width )
 	{
@@ -143,8 +145,8 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Setter: height
-	 * @param String $height
-	 * @return void
+	 * param String $height
+	 * return void
 	 */
 	public function setHeight( $height )
 	{
@@ -153,8 +155,8 @@ class AWD_facebook_likebutton
 
 	/**
 	 * Setter: action
-	 * @param String $action
-	 * @return void
+	 * param String $action
+	 * return void
 	 */
 	public function setAction( $action )
 	{
@@ -163,8 +165,8 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Setter: font
-	 * @param String $font
-	 * @return void
+	 * param String $font
+	 * return void
 	 */
 	public function setFont( $font )
 	{
@@ -173,8 +175,8 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Setter: colorscheme
-	 * @param String $colorscheme
-	 * @return void
+	 * param String $colorscheme
+	 * return void
 	 */
 	public function setColorscheme( $colorscheme )
 	{
@@ -183,8 +185,8 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Setter: ref
-	 * @param String $ref
-	 * @return void
+	 * param String $ref
+	 * return void
 	 */
 	public function setRef( $ref )
 	{
@@ -193,8 +195,8 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Setter: template
-	 * @param String $template
-	 * @return void
+	 * param String $template
+	 * return void
 	 */
 	public function setTemplate( $template )
 	{
@@ -203,7 +205,7 @@ class AWD_facebook_likebutton
 
 	/**
 	 * Getter: href
-	 * @return String
+	 * return String
 	 */
 	public function getHref()
 	{
@@ -212,7 +214,7 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Getter: send
-	 * @return String
+	 * return String
 	 */
 	public function getSend()
 	{
@@ -221,7 +223,7 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Getter: layout
-	 * @return String
+	 * return String
 	 */
 	public function getLayout()
 	{
@@ -230,7 +232,7 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Getter: show_faces
-	 * @return String
+	 * return String
 	 */
 	public function getShowFaces()
 	{
@@ -239,7 +241,7 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Getter: width
-	 * @return String
+	 * return String
 	 */
 	public function getWidth()
 	{
@@ -248,7 +250,7 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Getter: height
-	 * @return String
+	 * return String
 	 */
 	public function getHeight()
 	{
@@ -257,7 +259,7 @@ class AWD_facebook_likebutton
 
 	/**
 	 * Getter: action
-	 * @return String
+	 * return String
 	 */
 	public function getAction()
 	{
@@ -266,7 +268,7 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Getter: font
-	 * @return String
+	 * return String
 	 */
 	public function getFont()
 	{
@@ -275,7 +277,7 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Getter: colorscheme
-	 * @return String
+	 * return String
 	 */
 	public function getColorscheme()
 	{
@@ -284,7 +286,7 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Getter: ref
-	 * @return String
+	 * return String
 	 */
 	public function getRef()
 	{
@@ -293,7 +295,7 @@ class AWD_facebook_likebutton
 	 
 	/**
 	 * Getter: template
-	 * @return String
+	 * return String
 	 */
 	public function getTemplate()
 	{
@@ -303,7 +305,7 @@ class AWD_facebook_likebutton
 	
 	/**
 	 * Getter: likebutton
-	 * @return likebutton html/xfbml/iframe
+	 * return likebutton html/xfbml/iframe
 	 */
 	public function get()
 	{	
