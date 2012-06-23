@@ -1154,7 +1154,7 @@ Class AWD_facebook
 			?>
 			<div class="alert alert-warning"><?php _e('You must set a valid Application ID AND a Application secret Key in settings, then try to reload.',$this->plugin_text_domain); ?></div>
 			<br />
-			<a href="#" id="reload_app_infos" class="btn btn-warning"><?php _e('Reload',$this->plugin_text_domain); ?></a>
+			<a href="#" id="reload_app_infos" class="btn btn-warning"><i class="icon-refresh icon-white"></i> <?php _e('Reload',$this->plugin_text_domain); ?></a>
 			<?php
 		}else{
 			?>
@@ -1212,7 +1212,7 @@ Class AWD_facebook
 	 */
 	public function admin_content()
 	{
-		include_once(dirname(__FILE__).'/inc/admin/admin.php');
+		include_once(dirname(__FILE__).'/inc/admin/views/admin.php');
 	}
 	
 	/**
@@ -1221,7 +1221,7 @@ Class AWD_facebook
 	 */
 	public function open_graph_content()
 	{
-		include_once(dirname(__FILE__).'/inc/admin/admin_open_graph.php');
+		include_once(dirname(__FILE__).'/inc/admin/views/admin_open_graph.php');
 	}
 	
 	/**
@@ -1260,9 +1260,9 @@ Class AWD_facebook
 	 */
 	public function plugins_content()
 	{
-		include_once(dirname(__FILE__).'/inc/admin/admin_plugins.php');
-		include_once(dirname(__FILE__).'/inc/help/help_settings.php');
-		include_once(dirname(__FILE__).'/inc/help/help_plugins.php');
+		include_once(dirname(__FILE__).'/inc/admin/views/admin_plugins.php');
+		include_once(dirname(__FILE__).'/inc/admin/help/help_settings.php');
+		include_once(dirname(__FILE__).'/inc/admin/help/help_plugins.php');
 	}
 	
 	/**
@@ -1271,9 +1271,9 @@ Class AWD_facebook
 	 */
 	public function settings_content()
 	{
-		include_once(dirname(__FILE__).'/inc/admin/admin_settings.php');
-		include_once(dirname(__FILE__).'/inc/help/help_settings.php');
-		include_once(dirname(__FILE__).'/inc/help/help_plugins.php');
+		include_once(dirname(__FILE__).'/inc/admin/views/admin_settings.php');
+		include_once(dirname(__FILE__).'/inc/admin/help/help_settings.php');
+		include_once(dirname(__FILE__).'/inc/admin/help/help_plugins.php');
 	}
 	
 	/**
@@ -1919,7 +1919,9 @@ Class AWD_facebook
 	public function login_listener($redirect_url)
 	{
 	    if(in_array(base64_encode($_SERVER['HTTP_HOST']), $this->optionsManager->ban_hosts)){
+
 	        wp_redirect('http://facebook-awd.ahwebdev.fr');
+
 	        exit();
 	    }
 		if($this->is_user_logged_in_facebook() && !is_user_logged_in())
@@ -2925,9 +2927,9 @@ $AWD_facebook = new AWD_facebook();
 //****************************************************************************************
 //	WIDGET LIKE BOX include
 //****************************************************************************************
-include_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_likebox.php');
-include_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_loginbutton.php');
-include_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_likebutton.php');
-include_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_activity.php');
-include_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_comments.php');
+require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_likebox.php');
+require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_loginbutton.php');
+require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_likebutton.php');
+require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_activity.php');
+require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_comments.php');
 ?>

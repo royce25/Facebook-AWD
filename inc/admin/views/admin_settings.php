@@ -22,27 +22,26 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 			<div class="tab-content">
 				<div id="general" class="tab-pane">		
 					<div class="row">
-						<?php
-						echo $form->addInputText(__('App ID (facebook)',$this->plugin_text_domain).' '.$this->get_the_help('app_id'), 'app_id', $this->options['app_id'], 'span4', array('class'=>'span4')); 
-						
-						echo $form->addInputText(__('App SECRET KEY',$this->plugin_text_domain).' '.$this->get_the_help('app_secret_key'), 'app_secret_key', $this->options['app_secret_key'], 'span4', array('class'=>'span4')); 
-						
-						echo $form->addInputText(__('Admins IDs (facebook)',$this->plugin_text_domain).' '.$this->get_the_help('admins'), 'admins', $this->options['admins'], 'span4', array('class'=>'span4')); 
+						<?php 
+						echo $form->addInputText(__('App ID (facebook)',$this->plugin_text_domain).' '.$this->get_the_help('app_id'), 'app_id', $this->options['app_id'], 'span4', array('class'=>'span3'), 'icon-barcode');
+						echo $form->addInputText(__('App SECRET KEY',$this->plugin_text_domain).' '.$this->get_the_help('app_secret_key'), 'app_secret_key', $this->options['app_secret_key'], 'span4', array('class'=>'span3'), 'icon-barcode'); 
+						echo $form->addInputText(__('Admins IDs (facebook)',$this->plugin_text_domain).' '.$this->get_the_help('admins'), 'admins', $this->options['admins'], 'span4', array('class'=>'span3'), 'icon-user'); 
 						?>
 						<div class="span4">
 							<div class="row">
-								<?php 
-								echo $form->addInputText(__('Locale',$this->plugin_text_domain).' '.$this->get_the_help('locale'), 'locale', $this->options['locale'], 'span1', array('class'=>'span1')); 
-								
-								echo $form->addSelect(__('Mode Debug ?',$this->plugin_text_domain).' '.$this->get_the_help('debug_enable'), 'debug_enable', array(
-									array('value'=>0, 'label'=>__('No',$this->plugin_text_domain)),
-									array('value'=>1, 'label'=>__('Yes',$this->plugin_text_domain))									
-								), $this->options['debug_enable'], 'span2', array('class'=>'span2'));
-								
+								<?php 						
+								echo $form->addInputText(__('Locale',$this->plugin_text_domain).' '.$this->get_the_help('locale'), 'locale', $this->options['locale'], 'span2', array('class'=>'span1'), 'icon-flag'); 
 								?>
 							</div>
 						</div>
+						<?php
+							echo $form->addSelect(__('Mode Debug ?',$this->plugin_text_domain).' '.$this->get_the_help('debug_enable'), 'debug_enable', array(
+								array('value'=>0, 'label'=>__('No',$this->plugin_text_domain)),
+								array('value'=>1, 'label'=>__('Yes',$this->plugin_text_domain))									
+							), $this->options['debug_enable'], 'span4', array('class'=>'span1'));
+						?>
 					</div>
+					
 				</div>
 		
 				<div id="opengraph" class="tab-pane">							
@@ -59,22 +58,22 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 				<div id="fbconnect" class="tab-pane">								
 					<div class="row">
 						<?php 
-						echo $form->addSelect(__('Activate FB Connect ?',$this->plugin_text_domain).' '.$this->get_the_help('connect_enable_on'), 'connect_enable_on', array(
+						echo $form->addSelect(__('Activate FB Connect ?', $this->plugin_text_domain).' '.$this->get_the_help('connect_enable'),'connect_enable',array(
 							array('value'=>0, 'label'=>__('No',$this->plugin_text_domain)),
 							array('value'=>1, 'label'=>__('Yes',$this->plugin_text_domain))									
-						), $this->options['connect_enable_on'], 'span3', array('class'=>'span3'));
+						),$this->options['connect_enable'],'span3',array('class'=>'span3','attr'=> $this->options['connect_enable']?'disabled=disabled':''));
 						
-						echo $form->addSelect(__('Add FB avatar choice ?',$this->plugin_text_domain).' '.$this->get_the_help('connect_fbavatar_on'), 'connect_fbavatar_on', array(
+						echo $form->addSelect(__('Add FB avatar choice ?',$this->plugin_text_domain).' '.$this->get_the_help('connect_fbavatar'), 'connect_fbavatar', array(
 							array('value'=>0, 'label'=>__('No',$this->plugin_text_domain)),
 							array('value'=>1, 'label'=>__('Yes',$this->plugin_text_domain))									
-						), $this->options['connect_fbavatar_on'], 'span3', array('class'=>'span3'));
+						), $this->options['connect_fbavatar'], 'span3', array('class'=>'span3 depend_fb_connect'));
 						?>
 					</div>
 					<div class="row">
 						<?php
-						echo $form->addInputText(__('Facebook Connect permissions',$this->plugin_text_domain).' '.$this->get_the_help('perms'), 'perms', $this->options['perms'], 'span3', array('class'=>'span3')); 
+						echo $form->addInputText(__('Facebook Connect permissions',$this->plugin_text_domain).' '.$this->get_the_help('perms'), 'perms', $this->options['perms'], 'span3', array('class'=>'span3 depend_fb_connect')); 
 						
-						echo $form->addInputText(__('Timeout Facebook connect API',$this->plugin_text_domain).' '.$this->get_the_help('timeout'), 'timeout', $this->options['timeout'], 'span3', array('class'=>'span3')); 
+						echo $form->addInputText(__('Timeout Facebook connect API',$this->plugin_text_domain).' '.$this->get_the_help('timeout'), 'timeout', $this->options['timeout'], 'span3', array('class'=>'span3 depend_fb_connect')); 
 						?>
 					</div>
 				</div>
@@ -125,16 +124,16 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 						<div class="row">
 							<?php 
 							if($this->current_facebook_user_can('manage_pages')){ 
-								echo $form->addSelect(__('Auto publish post on Facebook pages ?',$this->plugin_text_domain).' '.$this->get_the_help('publish_to_pages_on'), 'publish_to_pages_on', array(
+								echo $form->addSelect(__('Auto publish post on Facebook pages ?',$this->plugin_text_domain).' '.$this->get_the_help('publish_to_pages'), 'publish_to_pages', array(
 									array('value'=>0, 'label'=>__('No',$this->plugin_text_domain)),
 									array('value'=>1, 'label'=>__('Yes',$this->plugin_text_domain))									
-								), $this->options['publish_to_pages_on'], 'span3', array('class'=>'span3'));
+								), $this->options['publish_to_pages'], 'span3', array('class'=>'span3'));
 							} 
 							
-							echo $form->addSelect(__('Auto publish post on Facebook profile ?',$this->plugin_text_domain).' '.$this->get_the_help('publish_to_profile_on'), 'publish_to_profile_on', array(
+							echo $form->addSelect(__('Auto publish post on Facebook profile ?',$this->plugin_text_domain).' '.$this->get_the_help('publish_to_profile'), 'publish_to_profile', array(
 								array('value'=>0, 'label'=>__('No',$this->plugin_text_domain)),
 								array('value'=>1, 'label'=>__('Yes',$this->plugin_text_domain))									
-							), $this->options['publish_to_profile_on'], 'span3', array('class'=>'span3'));
+							), $this->options['publish_to_profile'], 'span3', array('class'=>'span3'));
 							?>
 						</div>
 						<div class="row">
@@ -168,64 +167,3 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 	<?php _e("Do you really want to reset all settings (AWD plugins and openGraph settings will be reset) ?",$this->plugin_text_domain); ?>
 	<a href="#" class="btn btn-danger reset_settings_confirm"><?php _e("Restore", $this->plugin_text_domain); ?></a>  
 </div>
-<?php
-/**
-* Javascript for admin
-*/
-?>
-<script type="text/javascript">
-    var 
-	jQuery(document).ready( function($){
-		$('#submit_settings').click(function(e){
-			e.preventDefault();
-			$('#<?php echo $this->plugin_slug; ?>_form_settings').submit();
-		});
-		
-		$(".alert").alert();  
-		
-		$('#reset_settings').click(function(e){
-			e.preventDefault();
-			//Alert when delete  			
-			$(".alert_reset_settings").slideDown();  
-		});
-		
-		$('.reset_settings_dismiss').click(function(e){
-			e.preventDefault();
-			//Alert when delete  			
-			$(".alert_reset_settings").slideUp();  
-		});
-		
-		$('.reset_settings_confirm').click(function(e){
-			e.preventDefault();   	
-			$('#<?php echo $this->plugin_slug; ?>_reset_settings').submit();
-		});
-		
-		$('.get_permissions').live('click',function(e){
-			e.preventDefault();
-			var $this = $(this);
-			var scope = $this.data('scope');
-			FB.login(function(response)
-			{
-				if(response.authResponse) {
-					console.log(response);
-				    $('#<?php echo $this->plugin_slug; ?>_form_settings').submit();
-				}
-			},{scope: scope});
-		});
-		
-		$('#toogle_list_pages').live('click',function(e){
-			e.preventDefault();
-			$('.toogle_fb_pages').slideToggle();
-		});
-		
-		$('#settings_menu a:first').tab('show');
-		
-		$('#<?php echo $this->plugin_option_pref; ?>connect_enable_on, #<?php echo $this->plugin_option_pref; ?>connect_enable_off').click(function(){
-			if($('#<?php echo $this->plugin_option_pref; ?>connect_enable_on').attr('checked')){
-				$('.depend_fb_connect').attr('disabled', false);
-			}else{
-				$('.depend_fb_connect').attr('disabled', true);
-			}
-		});
-	});
-</script>

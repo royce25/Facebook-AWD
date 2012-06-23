@@ -7,381 +7,52 @@
 *
 */
 ?>
+<?php 
+$fields = array();
+$list_menu_plugins = array();
+require_once(dirname(dirname(__FILE__)).'/model/admin_plugins_menu.php');
+require_once(dirname(dirname(__FILE__)).'/model/like_button.php');
+require_once(dirname(dirname(__FILE__)).'/model/like_box.php');
 
+$fields = apply_filters('AWD_facebook_plugins', $fields);
+if(!is_array($fields)){
+	$fields = array();
+}
+$list_menu_plugins = apply_filters('AWD_facebook_list_plugins_menu', $list_menu_plugins);
+if(!is_array($list_menu_plugins)){
+	$list_menu_plugins = array();
+}
+$form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_pref);
+?>
 <div id="div_options_content">
-	<form method="POST" action="" id="<?php echo $this->plugin_slug; ?>_form_settings">
+
+	<?php echo $form->start(); ?>
+
 		<div id="settings_plugins" class="tabbable tabs-left">
-			<ul id="plugins_menu" class="nav nav-tabs">  		
-				<li><a href="#like_button_settings" data-toggle="tab"><?php _e('Like Button',$this->plugin_text_domain); ?></a></li>
-				<li><a href="#like_box_settings" data-toggle="tab"><?php _e('Like Box',$this->plugin_text_domain); ?></a></li>
-				<li><a href="#activity_settings" data-toggle="tab"><?php _e('Activity Feed',$this->plugin_text_domain); ?></a></li>
-				<li><a href="#login_button_settings" data-toggle="tab"><?php _e('Login Button',$this->plugin_text_domain); ?></a></li>
-				<li><a href="#comments_settings" data-toggle="tab"><?php _e('Comments',$this->plugin_text_domain); ?></a></li>
-				<?php do_action('AWD_facebook_plugins_menu'); ?>
-			</ul>
-			
-			<div class="tab-content">
-				
-				<?php
-				/**
-				* Like button Settings
-				*/
-				?>
-			
-				<div id="like_button_settings" class="tab-pane">
-					<p class="alert alert-info"><?php _e('Settings are defaults, you can redefine them in shortcodes, widgets, and themes functions',$this->plugin_text_domain); ?></p>
-				
-					<h1><?php _e('Configure the button',$this->plugin_text_domain); ?></h1>
-
-					<div class="row">
-						<div class="span2">
-							<label for="<?php echo $this->plugin_option_pref; ?>like_button_font">
-								<?php _e('Fonts of button',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_font'); ?>
-								<select id="<?php echo $this->plugin_option_pref; ?>like_button_font" name="<?php echo $this->plugin_option_pref; ?>like_button_font" class="input-medium">
-									<option value="arial" <?php if($this->options['like_button_font'] == "arial") echo 'selected="selected"'; ?> >Arial</option>
-									<option value="lucida grande" <?php if($this->options['like_button_font'] == "lucida grande") echo 'selected="selected"'; ?> >Lucida grande</option>
-									<option value="segoe ui" <?php if($this->options['like_button_font'] == "segoe ui") echo 'selected="selected"'; ?> >Segoe ui</option>
-									<option value="tahoma" <?php if($this->options['like_button_font'] == "tahoma") echo 'selected="checked"'; ?> >Tahoma</option>
-									<option value="trebuchet ms" <?php if($this->options['like_button_font'] == "trebuchet ms") echo 'selected="selected"'; ?> >Trebuchet ms</option>
-									<option value="verdana" <?php if($this->options['like_button_font'] == "verdana") echo 'selected="selected"'; ?> >Verdana</option>
-								</select>
-							</label>
-						</div>     
-						<div class="span2">
-							<label for="<?php echo $this->plugin_option_pref; ?>like_button_action">
-								<?php _e('Action',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_action'); ?>
-								<select id="<?php echo $this->plugin_option_pref; ?>like_button_action" name="<?php echo $this->plugin_option_pref; ?>like_button_action" class="input-medium">
-									<option value="like" <?php if($this->options['like_button_action'] == "like") echo 'selected="selected"'; ?> ><?php _e("Like",$this->plugin_text_domain); ?></option>
-									<option value="recommend" <?php if($this->options['like_button_action'] == "recommend") echo 'selected="selected"'; ?> ><?php _e("Recommend",$this->plugin_text_domain); ?></option>
-								</select>
-							</label>
-						</div>   
-						<div class="span2">
-							<label for="<?php echo $this->plugin_option_pref; ?>like_button_layout"><?php _e('Layout style',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_layout'); ?>
-								<select id="<?php echo $this->plugin_option_pref; ?>like_button_layout" name="<?php echo $this->plugin_option_pref; ?>like_button_layout" class="input-medium">
-									<option value="standard" <?php if($this->options['like_button_layout'] == "standard") echo 'selected="selected"'; ?> ><?php _e("Standard",$this->plugin_text_domain); ?></option>
-									<option value="button_count" <?php if($this->options['like_button_layout'] == "button_count") echo 'selected="selected"'; ?> ><?php _e("Button Count",$this->plugin_text_domain); ?></option>
-									<option value="box_count" <?php if($this->options['like_button_layout'] == "box_count") echo 'selected="selected"'; ?> ><?php _e("Box Count",$this->plugin_text_domain); ?></option>
-								</select>
-							</label> 
-						</div>          
-						<div class="span2">  
-							<label><?php echo _e('Type',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_type'); ?>
-								<select id="<?php echo $this->plugin_option_pref; ?>like_button_type" name="<?php echo $this->plugin_option_pref; ?>like_button_type" class="input-medium">
-									<option value="iframe" <?php if($this->options['like_button_type'] == "iframe") echo 'selected="selected"'; ?> ><?php _e("Iframe",$this->plugin_text_domain); ?></option>
-									<option value="xfbml" <?php if($this->options['like_button_type'] == "xfbml") echo 'selected="selected"'; ?> ><?php _e("Xfbml",$this->plugin_text_domain); ?></option>
-									<option value="html5" <?php if($this->options['like_button_type'] == "html5") echo 'selected="selected"'; ?> ><?php _e("Html5",$this->plugin_text_domain); ?></option>
-								</select>   
-							</label>					
-						</div> 
-						<div class="span2">  
-							<label>
-								<?php _e('Send button ?',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_send'); ?>
-								<select <?php if($this->options['like_button_type'] == "iframe") echo 'disabled="disabled"'; ?> id="<?php echo $this->plugin_option_pref; ?>like_button_send" name="<?php echo $this->plugin_option_pref; ?>like_button_send" class="input-medium">
-									<option value="0" <?php if($this->options['like_button_send'] == "0") echo 'selected="selected"'; ?> ><?php _e("No",$this->plugin_text_domain); ?></option>
-									<option value="1" <?php if($this->options['like_button_send'] == "1") echo 'selected="selected"'; ?> ><?php _e("Yes",$this->plugin_text_domain); ?></option>
-								</select>
-							</label>
-						</div>   
-						<div class="span2">  
-							<label>
-								<?php _e('Colors',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_colorscheme'); ?>
-								<select id="<?php echo $this->plugin_option_pref; ?>like_button_colorscheme" name="<?php echo $this->plugin_option_pref; ?>like_button_colorscheme" class="input-medium">
-									<option value="light" <?php if($this->options['like_button_colorscheme'] == "light") echo 'selected="selected"'; ?> ><?php _e("Light",$this->plugin_text_domain); ?></option>
-									<option value="dark" <?php if($this->options['like_button_colorscheme'] == "dark") echo 'selected="selected"'; ?> ><?php _e("Dark",$this->plugin_text_domain); ?></option>
-								</select>
-							</label>
-						</div>   
-						<div class="span2">  
-							<label>
-								<?php echo _e('Show Faces ?',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_faces'); ?>
-								<select id="<?php echo $this->plugin_option_pref; ?>like_button_faces" name="<?php echo $this->plugin_option_pref; ?>like_button_faces" class="input-medium">
-									<option value="0" <?php if($this->options['like_button_faces'] == "0") echo 'selected="selected"'; ?> ><?php _e("No",$this->plugin_text_domain); ?></option>
-									<option value="1" <?php if($this->options['like_button_faces'] == "1") echo 'selected="selected"'; ?> ><?php _e("Yes",$this->plugin_text_domain); ?></option>
-								</select>   
-							</label>					
-						</div> 
-						<div class="span2">  
-							<label>
-								<?php _e('Width of button',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_width'); ?>
-								<input type="text" name="<?php echo $this->plugin_option_pref; ?>like_button_width" value="<?php echo $this->options['like_button_width']; ?>" class="span2" />
-							</label>
-						</div> 
-						<div class="span2">  
-							<label>
-								<?php _e('Height of button',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_height'); ?>
-								<input type="text" name="<?php echo $this->plugin_option_pref; ?>like_button_height" <?php if($this->options['like_button_xfbml'] == 1){ echo 'disabled="disabled"'; } ?> value="<?php echo $this->options['like_button_height']; ?>" class="span2"/>
-							</label>
-						</div> 
-						<div class="span2">
-							<label>
-								<?php _e('Ref',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_ref'); ?>
-								<input type="text" id="<?php echo $this->plugin_option_pref; ?>like_button_ref" name="<?php echo $this->plugin_option_pref; ?>like_button_ref" value="<?php echo $this->options['like_button_ref']; ?>" class="span2"/>
-							</label>
-						</div> 
-					</div>
-
-					<h1><?php _e('Define a default usage',$this->plugin_text_domain); ?></h1>
-					<div class="row">
-						<div class="span4">
-							<label><?php _e('Default Url to like',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_url'); ?>
-								<input type="text" name="<?php echo $this->plugin_option_pref; ?>like_button_url" value="<?php echo $this->options['like_button_url']; ?>" class="span4"/>
-							</label>
-						</div>
-					</div>
-					<div class="row">
-						<div class="span2">
-							<label>
-								<?php echo _e('Display on pages ?',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_on_pages'); ?>
-								<select id="<?php echo $this->plugin_option_pref; ?>like_button_on_pages" name="<?php echo $this->plugin_option_pref; ?>like_button_on_pages" class="input-medium">
-									<option value="0" <?php if($this->options['like_button_on_pages'] == "0") echo 'selected="selected"'; ?> ><?php _e("No",$this->plugin_text_domain); ?></option>
-									<option value="1" <?php if($this->options['like_button_on_pages'] == "1") echo 'selected="selected"'; ?> ><?php _e("Yes",$this->plugin_text_domain); ?></option>
-								</select> 
-							</label>	
-						</div>
-						<div class="span2">
-							<label>
-								<?php echo _e('Where ?',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_place_on_pages'); ?>
-								<select <?php if($this->options['like_button_on_pages'] == "0") echo 'disabled="disabled"'; ?> id="<?php echo $this->plugin_option_pref; ?>like_button_place_on_pages" name="<?php echo $this->plugin_option_pref; ?>like_button_place_on_pages" class="input-medium">
-									<option value="top" <?php if($this->options['like_button_place_on_pages'] == "top") echo 'selected="selected"'; ?> ><?php _e("Top",$this->plugin_text_domain); ?></option>
-									<option value="bottom" <?php if($this->options['like_button_place_on_pages'] == "bottom") echo 'selected="selected"'; ?> ><?php _e("Bottom",$this->plugin_text_domain); ?></option>
-									<option value="both" <?php if($this->options['like_button_place_on_pages'] == "both") echo 'selected="selected"'; ?> ><?php _e("Both",$this->plugin_text_domain); ?></option>
-								</select> 
-							</label>	
-						</div>
-					</div>
-					<div class="row">
-						<div class="span2">
-							<label>
-								<?php echo _e('On posts ?',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_on_posts'); ?>
-								<select id="<?php echo $this->plugin_option_pref; ?>like_button_on_posts" name="<?php echo $this->plugin_option_pref; ?>like_button_on_posts" class="input-medium">
-									<option value="0" <?php if($this->options['like_button_on_posts'] == "0") echo 'selected="selected"'; ?> ><?php _e("No",$this->plugin_text_domain); ?></option>
-									<option value="1" <?php if($this->options['like_button_on_posts'] == "1") echo 'selected="selected"'; ?> ><?php _e("Yes",$this->plugin_text_domain); ?></option>
-								</select> 
-							</label>	
-						</div>
-						<div class="span2">
-							<label>
-								<?php echo _e('Where ?',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_place_on_posts'); ?>
-								<select <?php if($this->options['like_button_on_posts'] == "0") echo 'disabled="disabled"'; ?> id="<?php echo $this->plugin_option_pref; ?>like_button_place_on_posts" name="<?php echo $this->plugin_option_pref; ?>like_button_place_on_posts" class="input-medium">
-									<option value="top" <?php if($this->options['like_button_place_on_posts'] == "top") echo 'selected="selected"'; ?> ><?php _e("Top",$this->plugin_text_domain); ?></option>
-									<option value="bottom" <?php if($this->options['like_button_place_on_posts'] == "bottom") echo 'selected="selected"'; ?> ><?php _e("Bottom",$this->plugin_text_domain); ?></option>
-									<option value="both" <?php if($this->options['like_button_place_on_posts'] == "both") echo 'selected="selected"'; ?> ><?php _e("Both",$this->plugin_text_domain); ?></option>
-								</select> 
-							</label>	
-						</div>
-					</div>
-					<div class="row">
-						<div class="span2">
-							<label>
-								<?php echo _e('On custom posts ?',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_on_custom_post_types'); ?>
-								<select id="<?php echo $this->plugin_option_pref; ?>like_button_on_custom_post_types" name="<?php echo $this->plugin_option_pref; ?>like_button_on_custom_post_types" class="input-medium">
-									<option value="0" <?php if($this->options['like_button_on_custom_post_types'] == "0") echo 'selected="selected"'; ?> ><?php _e("No",$this->plugin_text_domain); ?></option>
-									<option value="1" <?php if($this->options['like_button_on_custom_post_types'] == "1") echo 'selected="selected"'; ?> ><?php _e("Yes",$this->plugin_text_domain); ?></option>
-								</select> 
-							</label>	
-						</div>
-						<div class="span2">
-							<label>
-								<?php echo _e('Where ?',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_place_on_custom_post_types'); ?>
-								<select <?php if($this->options['like_button_on_custom_post_types'] == "0") echo 'disabled="disabled"'; ?> id="<?php echo $this->plugin_option_pref; ?>like_button_place_on_custom_post_types" name="<?php echo $this->plugin_option_pref; ?>like_button_place_on_custom_post_types" class="input-medium">
-									<option value="top" <?php if($this->options['like_button_place_on_custom_post_types'] == "top") echo 'selected="selected"'; ?> ><?php _e("Top",$this->plugin_text_domain); ?></option>
-									<option value="bottom" <?php if($this->options['like_button_place_on_custom_post_types'] == "bottom") echo 'selected="selected"'; ?> ><?php _e("Bottom",$this->plugin_text_domain); ?></option>
-									<option value="both" <?php if($this->options['like_button_place_on_custom_post_types'] == "both") echo 'selected="selected"'; ?> ><?php _e("Both",$this->plugin_text_domain); ?></option>
-								</select> 
-							</label>	
-						</div>
-					</div>
-					<div class="row">
-						<div class="span4">
-							<label>
-								<?php _e('Exclude Post types',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_exclude_post_type'); ?>
-								<input type="text" name="<?php echo $this->plugin_option_pref; ?>like_button_exclude_post_type" value="<?php echo $this->options['like_button_exclude_post_type']; ?>" class="span4" />
-							</label>
-						</div>
-						<div class="span4">
-							<label>
-								<?php _e('Exclude Categories or other terms',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_exclude_terms_slug'); ?>
-								<input type="text" name="<?php echo $this->plugin_option_pref; ?>like_button_exclude_terms_slug" value="<?php echo $this->options['like_button_exclude_terms_slug']; ?>" class="span4" />
-							</label>
-						</div>
-						<div class="span4">
-							<label>
-								<?php _e('Exclude Posts or Pages ID',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_exclude_post_id'); ?>
-								<input type="text" name="<?php echo $this->plugin_option_pref; ?>like_button_exclude_post_id" value="<?php echo $this->options['like_button_exclude_post_id']; ?>" class="span4" />
-							</label>
-						</div>
-					</div>
-				
-
-					<h1><?php _e('Preview',$this->plugin_text_domain); ?></h1>
-					
-					<div class="well">
-					<?php echo $this->get_the_like_button(); ?>	
-					</div> 
-					
-					<h1><?php _e('Options List',$this->plugin_text_domain); ?></h1>
-					
-					<table class="table table-bordered table-condensed table-striped">
-						<thead>
-							<tr>
-								<th>Option</th>
-								<th>Value</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr><td>url</td><td>string</td></tr>
-							<tr><td>send</td><td>0 or 1</td></tr>
-							<tr><td>width</td><td>number</td></tr>
-							<tr><td>height</td><td>number</td></tr>
-							<tr><td>colorscheme</td><td>light or dark</td></tr>
-							<tr><td>faces</td><td>0 or 1</td></tr>
-							<tr><td>fonts</td><td>string</td></tr>
-							<tr><td>action</td><td>like or recommend</td></tr>
-							<tr><td>layout</td><td>standard, box_count or button_count</td></tr>
-							<tr><td>type</td><td>xfbml or iframe or html5</td></tr>
-							<tr><td>ref</td><td>string</td></tr>
-						</tbody>
-						<tfoot>
-							<th colspan="2">[AWD_likebutton option="value"]</th>
-						</tfoot>
-					</table>  
-					 
-				</div>
-			
-			
-			
 			
 			<?php
-			/**
-			* Like box settings
-			*/
-			?>
-			<div id="like_box_settings" class="tab-pane">
-				<p class="alert alert-info"><?php _e('The like box is added via shortcodes, widgets, and themes functions',$this->plugin_text_domain); ?></p>
-				
-				<h1><?php _e('Configure the box',$this->plugin_text_domain); ?></h1>
-				
-				<div class="row">
-					<div class="span4"> 
-						<label>
-							<?php _e('Url of the page',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_url'); ?>
-							<input type="text" name="<?php echo $this->plugin_option_pref; ?>like_box_url" value="<?php echo $this->options['like_box_url']; ?>" class="span4"/>
-						</label>
-					</div>
+			if(count($list_menu_plugins)){ ?>
+			<ul id="plugins_menu" class="nav nav-tabs">  	
+				<?php 
+				foreach($list_menu_plugins as $item_id => $label){
+					echo '<li><a href="#'.$item_id.'" data-toggle="tab">'.$label.'</a></li>';
+				}
+				?>
+			</ul>
+			<?php } ?>
+			
+			
+			<div class="tab-content">
+				<div id="like_button_settings" class="tab-pane">
+					<p class="alert alert-info"><?php _e('Settings are defaults, you can redefine them in shortcodes, widgets, and themes functions',$this->plugin_text_domain); ?></p>
+					<?php echo $form->proccessFields($fields['like_button']); ?>
+				</div>
+ 
+				<div id="like_box_settings" class="tab-pane">
+					<p class="alert alert-info"><?php _e('The like box is added via shortcodes, widgets, and themes functions',$this->plugin_text_domain); ?></p>
+					<?php echo $form->proccessFields($fields['like_box']); ?>
 				</div>
 				
-				<div class="row">  
-					<div class="span2">  
-						<label><?php echo _e('Type',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_box_type'); ?>
-							<select id="<?php echo $this->plugin_option_pref; ?>like_box_type" name="<?php echo $this->plugin_option_pref; ?>like_box_type" class="input-medium">
-								<option value="iframe" <?php if($this->options['like_box_type'] == "iframe") echo 'selected="selected"'; ?> ><?php _e("Iframe",$this->plugin_text_domain); ?></option>
-								<option value="xfbml" <?php if($this->options['like_box_type'] == "xfbml") echo 'selected="selected"'; ?> ><?php _e("Xfbml",$this->plugin_text_domain); ?></option>
-								<option value="html5" <?php if($this->options['like_box_type'] == "html5") echo 'selected="selected"'; ?> ><?php _e("Html5",$this->plugin_text_domain); ?></option>
-							</select>   
-						</label>					
-					</div>
-					<div class="span2">  
-						<label>
-							<?php _e('Colors',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_box_colorscheme'); ?>
-							<select id="<?php echo $this->plugin_option_pref; ?>like_box_colorscheme" name="<?php echo $this->plugin_option_pref; ?>like_box_colorscheme" class="input-medium">
-								<option value="light" <?php if($this->options['like_box_colorscheme'] == "light") echo 'selected="selected"'; ?> ><?php _e("Light",$this->plugin_text_domain); ?></option>
-								<option value="dark" <?php if($this->options['like_box_colorscheme'] == "dark") echo 'selected="selected"'; ?> ><?php _e("Dark",$this->plugin_text_domain); ?></option>
-							</select>
-						</label>
-					</div> 
-					<div class="span2">  
-						<label>
-							<?php _e('Show Faces ?',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_box_faces'); ?>
-							<select id="<?php echo $this->plugin_option_pref; ?>like_box_faces" name="<?php echo $this->plugin_option_pref; ?>like_box_faces" class="input-medium">
-								<option value="0" <?php if($this->options['like_box_faces'] == "0") echo 'selected="selected"'; ?> ><?php _e("No",$this->plugin_text_domain); ?></option>
-								<option value="1" <?php if($this->options['like_box_faces'] == "1") echo 'selected="selected"'; ?> ><?php _e("Yes",$this->plugin_text_domain); ?></option>
-							</select>
-						</label>
-					</div> 
-					<div class="span2">  
-						<label>
-							<?php _e('Show Stream ?',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_box_stream'); ?>
-							<select id="<?php echo $this->plugin_option_pref; ?>like_box_stream" name="<?php echo $this->plugin_option_pref; ?>like_box_stream" class="input-medium">
-								<option value="0" <?php if($this->options['like_box_stream'] == "0") echo 'selected="selected"'; ?> ><?php _e("No",$this->plugin_text_domain); ?></option>
-								<option value="1" <?php if($this->options['like_box_stream'] == "1") echo 'selected="selected"'; ?> ><?php _e("Yes",$this->plugin_text_domain); ?></option>
-							</select>
-						</label>
-					</div>  
-					<div class="span2">  
-						<label>
-							<?php _e('Show Header ?',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_box_header'); ?>
-							<select id="<?php echo $this->plugin_option_pref; ?>like_box_header" name="<?php echo $this->plugin_option_pref; ?>like_box_header" class="input-medium">
-								<option value="0" <?php if($this->options['like_box_header'] == "0") echo 'selected="selected"'; ?> ><?php _e("No",$this->plugin_text_domain); ?></option>
-								<option value="1" <?php if($this->options['like_box_header'] == "1") echo 'selected="selected"'; ?> ><?php _e("Yes",$this->plugin_text_domain); ?></option>
-							</select>
-						</label>
-					</div> 
-					<div class="span2">  
-						<label>
-							<?php _e('Force Wall ?',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_box_header'); ?>
-							<select id="<?php echo $this->plugin_option_pref; ?>like_box_force_wall" name="<?php echo $this->plugin_option_pref; ?>like_box_force_wall" class="input-medium">
-								<option value="0" <?php if($this->options['like_box_force_wall'] == "0") echo 'selected="selected"'; ?> ><?php _e("No",$this->plugin_text_domain); ?></option>
-								<option value="1" <?php if($this->options['like_box_force_wall'] == "1") echo 'selected="selected"'; ?> ><?php _e("Yes",$this->plugin_text_domain); ?></option>
-							</select>
-						</label>
-					</div>  
-					<div class="span2">  
-						<label>
-							<?php _e('Width of box',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_button_width'); ?>
-							<input type="text" name="<?php echo $this->plugin_option_pref; ?>like_box_width" value="<?php echo $this->options['like_box_width']; ?>" class="span2" />
-						</label>
-					</div>
-					<div class="span2">  
-						<label>
-							<?php _e('Height of box',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_box_height'); ?>
-							<input type="text" name="<?php echo $this->plugin_option_pref; ?>like_box_height" value="<?php echo $this->options['like_box_height']; ?>" class="span2" />
-						</label>
-					</div>
-					<div class="span2">  
-						<label>
-							<?php _e('Border color',$this->plugin_text_domain); ?> <?php echo $this->get_the_help('like_box_border_color'); ?>
-							<input type="text" name="<?php echo $this->plugin_option_pref; ?>like_box_border_color" value="<?php echo $this->options['like_box_border_color']; ?>" class="span2" />
-						</label>
-					</div>
-				</div>
-
-				<h1><?php _e('Preview',$this->plugin_text_domain); ?></h1>
-					
-				<div class="well">
-					<?php echo $this->get_the_like_box(); ?>
-				</div>
-					
-				<h1><?php _e('Options List',$this->plugin_text_domain); ?></h1>
-					
-				<table class="table table-bordered table-condensed table-striped">
-					<thead>
-						<tr>
-							<th>Option</th>
-							<th>Value</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr><td>url</td><td>string</td></tr>
-						<tr><td>width</td><td>number</td></tr>
-						<tr><td>height</td><td>number</td></tr>
-						<tr><td>colorscheme</td><td>light or dark</td></tr>
-						<tr><td>faces</td><td>0 or 1</td></tr>
-						<tr><td>border_color</td><td>hexadecimal string (ex: #ffffff for white)</td></tr>
-						<tr><td>stream</td><td>like or recommend</td></tr>
-						<tr><td>header</td><td>0 or 1</td></tr>
-						<tr><td>type</td><td>xfbml or iframe or html5</td></tr>
-						<tr><td>force_wall</td><td>string</td></tr>
-					</tbody>
-					<tfoot>
-						<th colspan="2">[AWD_likebutton option="value"]</th>
-					</tfoot>
-				</table>
-			</div>
-			
-			
-			
-			
 			
 			<div id="activity_settings" class="tab-pane">
 			    <p class="alert alert-info"><?php _e('The activity box is added via shortcodes, widgets, and themes functions',$this->plugin_text_domain); ?></p>
@@ -740,7 +411,7 @@
 			<a href="#" id="submit_settings" class="btn btn-primary"><i class="icon-cog icon-white"></i> <?php _e('Save all settings',$this->plugin_text_domain); ?></a>
 			<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZQ2VL33YXHJLC" class="awd_tooltip_donate btn pull-right" id="help_donate" target="_blank" class="btn pull-right"><i class="icon-heart"></i> <?php _e('Donate!',$this->plugin_text_domain); ?></a>
 		</div>
-	</form>
+	<?php echo $form->end(); ?>
 </div>
 <?php
 /**
