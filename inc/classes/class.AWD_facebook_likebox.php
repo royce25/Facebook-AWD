@@ -1,7 +1,6 @@
 <?php 
 /**
  * 
- *
  * @author Alexandre Hermann
  * @version 1.4
  * @copyright AHWEBDEV, 6 June, 2012
@@ -307,7 +306,7 @@ class AWD_facebook_likebox
 	}
 	public function likeboxXfbml()
 	{
-		return '<fb:likebox href="'.$this->href.'" width="'.$this->width.'" height="'.$this->height.'" colorscheme="'.$this->colorscheme.'" show-faces="'.$this->show_faces.'" border-color="'.urlencode($this->border_color).'" stream="'.$this->stream.'" header="'.$this->header.'" force_wall="'.$this->force_wall.'"></fb:activity>';
+		return '<fb:like-box href="'.$this->href.'" width="'.$this->width.'" height="'.$this->height.'" colorscheme="'.$this->colorscheme.'" show-faces="'.$this->show_faces.'" border-color="'.urlencode($this->border_color).'" stream="'.$this->stream.'" header="'.$this->header.'" force_wall="'.$this->force_wall.'"></fb:like-box>';
 	}
 	public function likeboxIframe()
 	{

@@ -336,7 +336,7 @@ $fields['like_button'] = array(
 					<th colspan="2">[AWD_likebutton option="value"]</th>
 				</tfoot>
 			</table>  
-		',
+		'
 	)
 );
 ?>

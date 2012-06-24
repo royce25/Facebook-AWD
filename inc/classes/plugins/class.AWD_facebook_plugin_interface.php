@@ -24,8 +24,8 @@ interface AWD_facebook_plugin_interface{
 	public function admin_menu();
 	public function admin_form();
 	
-	public function plugin_settings_menu();
-	public function plugin_settings_form();
+	public function plugin_settings_menu($list);
+	public function plugin_settings_form($fields);
 	
 	public function front_enqueue_js();
 	public function admin_enqueue_js();

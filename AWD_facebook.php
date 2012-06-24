@@ -3,7 +3,7 @@
 Plugin Name: Facebook AWD All in One
 Plugin URI: http://facebook-awd.ahwebdev.fr
 Description: This plugin integrates Facebook open graph, Plugins from facebook, and FB connect, with SDK JS AND SDK PHP Facebook
-Version: 1.3.1
+Version: 1.4
 Author: AHWEBDEV
 Author URI: http://www.ahwebdev.fr
 License: Copywrite AHWEBDEV
@@ -1091,6 +1091,12 @@ Class AWD_facebook
 	public function general_content()
 	{
 		echo do_shortcode('[AWD_likebox url="https://www.facebook.com/Ahwebdev" colorscheme="light" stream="0" faces="0" xfbml="0" header="0" width="257" height="60"]');
+		?>
+		<p class="pull-right">
+		<a href="https://twitter.com/ah_webdev" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @ah_webdev</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+		</p>
+		<?php
 		echo '
 		<div class="page-header">
 			<h4>'.__('Plugins installed',$this->plugin_text_domain).'</h4>
@@ -1104,11 +1110,12 @@ Class AWD_facebook
 					</span></p>';
 				}
 			}
-			echo'
-			<p><a href="http://facebook-awd.ahwebdev.fr/plugins/" class="btn btn-important" target="blank">
-				'.__('Find plugins',$this->plugin_text_domain).'
-			</a></p>';
+		echo'
+		<p><a href="http://facebook-awd.ahwebdev.fr/plugins/" class="btn btn-important" target="blank">
+			'.__('Find plugins',$this->plugin_text_domain).'
+		</a></p>';
 	}
+	
 	
 	/**
 	 * Get app infos content model
@@ -1154,7 +1161,7 @@ Class AWD_facebook
 			?>
 			<div class="alert alert-warning"><?php _e('You must set a valid Application ID AND a Application secret Key in settings, then try to reload.',$this->plugin_text_domain); ?></div>
 			<br />
-			<a href="#" id="reload_app_infos" class="btn btn-warning"><i class="icon-refresh icon-white"></i> <?php _e('Reload',$this->plugin_text_domain); ?></a>
+			<a href="#" id="reload_app_infos" class="btn btn-warning" data-loading-text="<i class='icon-time icon-white'></i> Testing..."><i class="icon-refresh icon-white"></i> <?php _e('Reload',$this->plugin_text_domain); ?></a>
 			<?php
 		}else{
 			?>

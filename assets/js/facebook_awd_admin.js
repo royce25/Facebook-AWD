@@ -9,10 +9,12 @@ function AWDFacebookAdmin($){
 
 	this.reloadAppInfos = function(button)
 	{
-		$(button).html('<img src="/wp-content/plugins/facebook-awd/assets/css/images/loading.gif" alt="loading..."/>');
+		$(button).button('loading');
 		$.post(ajaxurl,{action:'get_app_infos_content'},function(data){	
 			if(data)
 				jQuery('#awd_fcbk_app_infos_metabox.postbox .inside').html(data);
+				
+			$(button).button('reset')
 		});
 	};
 	
@@ -55,6 +57,25 @@ function AWDFacebookAdmin($){
 				hide:500
 			}
 		});
+		
+		$('.awd_tooltip').popover({
+			placement: 'top',
+			title : function(){
+				return $(".header_lightbox_help_title").html();
+			},
+			content: function(){
+				var id = $(this).attr('id');
+				console.log(id);
+				var html = $("#lightbox_"+id).html();
+				if(html == null){html = '...';}
+				return '<div class="AWD_facebook_wrap">'+html+'</div>';
+			},
+			delay:{
+				show:300,
+				hide:500
+			}
+		});
+		
 		$('#toogle_list_pages').live('click',function(e){
 			e.preventDefault();
 			$('.toogle_fb_pages').slideToggle();
@@ -64,12 +85,12 @@ function AWDFacebookAdmin($){
 		//Forms
 		$(".AWD_button_media").click(function(e){
 			e.preventDefault();
-			$awd.showUploadDialog()
+			$awd.showUploadDialog(this)
 		});
 		$('.awd_tooltip').click(function(e){ e.preventDefault();});
 		$('#submit_settings').click(function(e){
 			e.preventDefault();
-			$('#awd_fcbk_form_settings').submit();
+			$('#awd_fcbk_option_form_settings').submit();
 		});
 		$('#reset_settings').click(function(e){
 			e.preventDefault();  			
@@ -91,6 +112,17 @@ function AWDFacebookAdmin($){
 				$('.depend_fb_connect').attr('disabled', true);
 			}
 		});
+		
+		
+		$('#awd_fcbk_option_like_button_type').change(function(){
+			if($(this).val() == 'iframe'){
+				$('#awd_fcbk_option_like_button_send').attr('disabled', true);
+			}else{
+				$('#awd_fcbk_option_like_button_send').attr('disabled', false);
+			}
+		});
+		
+		
 		
 		//FB events
 		$('.get_permissions').live('click',function(e){

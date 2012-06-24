@@ -66,7 +66,6 @@ $current_screen = get_current_screen();
     			<form class="navbar-search pull-right" action="http://facebook-awd.ahwebdev.fr/" method="GET" target="_blank">
     				<input type="text" name="s" class="search-query span2" placeholder="Search">
    	 			</form>
-   	 		
     		</div>
     	</div>
     </div>

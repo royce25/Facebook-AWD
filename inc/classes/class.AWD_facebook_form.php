@@ -41,18 +41,23 @@ class AWD_facebook_form
 		return $html;
 	}
 	
-	public function addInputText($label, $id, $value, $class, $attrs = array(), $prepend = '')
+	public function addInputText($label, $id, $value, $class, $attrs = array(), $prepend = '',$append ='')
 	{
 		$html ='
 		<div class="'.$class.'">
 			<label for="'.$this->prefix.$id.'">'.$label.'</label>';
-			if($prepend != ''){
+			if($prepend != '' OR $append){
 				$html .= '
-				<div class="input-prepend">
-					<span class="add-on"><i class="'.$prepend.'"></i></span>';
+				<div class="'.($append != '' ? 'input-append' : '').' '.($prepend != '' ? 'input-prepend' : '').' ">';
 			} 
-			$html .= '<input type="text" id="'.$this->prefix.$id.'" name="'.$this->prefix.$id.'" value="'.$value.'" '.$this->processAttr($attrs).' />';
 			if($prepend != ''){
+				$html .= '<span class="add-on"><i class="'.$prepend.'"></i></span>';
+			}
+			$html .= '<input type="text" id="'.$this->prefix.$id.'" name="'.$this->prefix.$id.'" value="'.$value.'" '.$this->processAttr($attrs).' />';
+			if($append != ''){
+				$html .= $append;
+			}
+			if($prepend OR $append){
 				$html .= '
 				</div>';
 			}
@@ -83,8 +88,23 @@ class AWD_facebook_form
 	{
 		$html = '';
 		foreach($attrs as $attr=>$value){
-			$html .= $attr.'="'.$value.'" ';
+			if($value != ''){
+				$html .= $attr.'="'.$value.'" ';
+			}
 		}
+		return $html;
+	}
+	
+	public function addMediaButton($label, $id, $value, $class, $attrs = array(),$datas=array('data-title'=>'Upload Media', 'data-type'=> 'image'))
+	{
+		$html ='
+		<div class="'.$class.'">
+			<label for="'.$this->prefix.$id.'">'.$label.'</label>
+			<div class="input-append">
+				<input type="text" id="'.$this->prefix.$id.'" name="'.$this->prefix.$id.'" value="'.$value.'" '.$this->processAttr($attrs).' />
+				<button class="btn AWD_button_media btn-info" type="button" '.$this->processAttr($datas).' data-field="'.$this->prefix.$id.'"><i class="icon-white icon-picture"></i> Upload</button>
+			</div>
+		</div>';
 		return $html;
 	}
 	
@@ -101,13 +121,15 @@ class AWD_facebook_form
 					case 'select':
 						$html.= $this->addSelect($field['label'].' '.$AWD_facebook->get_the_help($id), $id, $field['options'], $AWD_facebook->options[$id], $field['class'], $field['attr']);
 					break;
-					
 					case 'text':
 						$html.= $this->addInputText($field['label'].' '.$AWD_facebook->get_the_help($id), $id, $AWD_facebook->options[$id], $field['class'], $field['attr']); 
 					break;	
 					case 'html':
 						$html.= $field['html']; 
 					break;	
+					case 'media':
+						$html.= $this->addMediaButton($field['label'].' '.$AWD_facebook->get_the_help($id), $id, $AWD_facebook->options[$id], $field['class'], $field['attr']); 
+					break;
 				}
 			}
 		}

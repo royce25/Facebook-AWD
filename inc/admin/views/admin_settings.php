@@ -61,19 +61,19 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 						echo $form->addSelect(__('Activate FB Connect ?', $this->plugin_text_domain).' '.$this->get_the_help('connect_enable'),'connect_enable',array(
 							array('value'=>0, 'label'=>__('No',$this->plugin_text_domain)),
 							array('value'=>1, 'label'=>__('Yes',$this->plugin_text_domain))									
-						),$this->options['connect_enable'],'span3',array('class'=>'span3','attr'=> $this->options['connect_enable']?'disabled=disabled':''));
+						),$this->options['connect_enable'],'span3',array('class'=>'span3'));
 						
 						echo $form->addSelect(__('Add FB avatar choice ?',$this->plugin_text_domain).' '.$this->get_the_help('connect_fbavatar'), 'connect_fbavatar', array(
 							array('value'=>0, 'label'=>__('No',$this->plugin_text_domain)),
 							array('value'=>1, 'label'=>__('Yes',$this->plugin_text_domain))									
-						), $this->options['connect_fbavatar'], 'span3', array('class'=>'span3 depend_fb_connect'));
+						), $this->options['connect_fbavatar'], 'span3', array('class'=>'span3 depend_fb_connect', 'disabled'=> $this->options['connect_enable']== '0' ? 'disabled':''));
 						?>
 					</div>
 					<div class="row">
 						<?php
-						echo $form->addInputText(__('Facebook Connect permissions',$this->plugin_text_domain).' '.$this->get_the_help('perms'), 'perms', $this->options['perms'], 'span3', array('class'=>'span3 depend_fb_connect')); 
+						echo $form->addInputText(__('Facebook Connect permissions',$this->plugin_text_domain).' '.$this->get_the_help('perms'), 'perms', $this->options['perms'], 'span3', array('class'=>'span3 depend_fb_connect', 'disabled'=> $this->options['connect_enable']== '0' ? 'disabled':'')); 
 						
-						echo $form->addInputText(__('Timeout Facebook connect API',$this->plugin_text_domain).' '.$this->get_the_help('timeout'), 'timeout', $this->options['timeout'], 'span3', array('class'=>'span3 depend_fb_connect')); 
+						echo $form->addInputText(__('Timeout Facebook connect API',$this->plugin_text_domain).' '.$this->get_the_help('timeout'), 'timeout', $this->options['timeout'], 'span3', array('class'=>'span3 depend_fb_connect', 'disabled'=> $this->options['connect_enable']== '0' ? 'disabled':''));
 						?>
 					</div>
 				</div>
