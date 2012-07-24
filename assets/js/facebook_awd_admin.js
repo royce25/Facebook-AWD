@@ -80,28 +80,37 @@ function AWDFacebookAdmin($){
 			e.preventDefault();
 			$('.toogle_fb_pages').slideToggle();
 		});
-		$('#settings_menu a:first').tab('show');
+		
+		$('#plugins_menu a:first').tab('show');
+		
+		$('#settings_opg_menu a:first').tab('show');
 		
 		//Forms
 		$(".AWD_button_media").click(function(e){
 			e.preventDefault();
 			$awd.showUploadDialog(this)
 		});
+		
 		$('.awd_tooltip').click(function(e){ e.preventDefault();});
+		
 		$('#submit_settings').click(function(e){
+			$(this).button('loading');
 			e.preventDefault();
 			$('#awd_fcbk_option_form_settings').submit();
 		});
 		$('#reset_settings').click(function(e){
+			$(this).button('loading');
 			e.preventDefault();  			
 			$(".alert_reset_settings").slideDown();  
 		});
 		$('.reset_settings_dismiss').click(function(e){
 			e.preventDefault();		
+			$('#reset_settings').button('reset');
 			$(".alert_reset_settings").slideUp();  
 		});
 		$('.reset_settings_confirm').click(function(e){
-			e.preventDefault();   	
+			e.preventDefault();  
+			$(this).button('loading');
 			$('#awd_fcbk_reset_settings').submit();
 		});
 		

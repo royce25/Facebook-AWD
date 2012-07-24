@@ -61,7 +61,7 @@ class FacebookApiException extends Exception
   }
 
   /**
-   * Return the associated result object returned by the API server.
+   * @return the associated result object returned by the API server.
    *
    * @return array The result from the API server
    */
@@ -70,7 +70,7 @@ class FacebookApiException extends Exception
   }
 
   /**
-   * Returns the associated type for the error. This will default to
+   * @returns the associated type for the error. This will default to
    * 'Exception' when a type is not available.
    *
    * @return string
@@ -363,7 +363,7 @@ abstract class BaseFacebook
    * Determines and returns the user access token, first using
    * the signed request if present, and then falling back on
    * the authorization code if present.  The intent is to
-   * return a valid user access token, or false if one is determined
+   * @return a valid user access token, or false if one is determined
    * to not be available.
    *
    * @return string A valid user access token, or false if one
@@ -385,6 +385,15 @@ abstract class BaseFacebook
       // the JS SDK puts a code in with the redirect_uri of ''
       if (array_key_exists('code', $signed_request)) {
         $code = $signed_request['code'];
+        $access_token = $this->getAccessTokenFromCode($code, '');
+        if ($access_token) {
+          $this->setPersistentData('code', $code);
+          $this->setPersistentData('access_token', $access_token);
+          return $access_token;
+        }
+      //Update AHWEBDEV for autologin when user come from featured dialog.
+      }else if (isset($_GET['code'])) {
+        $code = $_GET['code'];
         $access_token = $this->getAccessTokenFromCode($code, '');
         if ($access_token) {
           $this->setPersistentData('code', $code);
@@ -662,7 +671,7 @@ abstract class BaseFacebook
   }
 
   /**
-   * Returns the access token that should be used for logged out
+   * @returns the access token that should be used for logged out
    * users when no authorization code is available.
    *
    * @return string The application access token, useful for gathering
@@ -766,7 +775,7 @@ abstract class BaseFacebook
   }
 
   /**
-   * Return true if this is video post.
+   * @return true if this is video post.
    *
    * @param string $path The path
    * @param string $method The http method (default 'GET')
@@ -1031,7 +1040,7 @@ abstract class BaseFacebook
   }
 
   /**
-   * Returns the Current URL, stripping it of known FB parameters that should
+   * @returns the Current URL, stripping it of known FB parameters that should
    * not persist.
    *
    * @return string The current URL
@@ -1077,10 +1086,10 @@ abstract class BaseFacebook
   }
 
   /**
-   * Returns true if and only if the key or key/value pair should
+   * @returns true if and only if the key or key/value pair should
    * be retained as part of the query string.  This amounts to
    * a brute-force search of the very small list of Facebook-specific
-   * params that should be stripped out.
+   * @params that should be stripped out.
    *
    * @param string $param A key or key/value pair within a URL's query (e.g.
    *                     'foo=a', 'foo=', or 'foo'.

@@ -87,23 +87,28 @@ class AWD_facebook_form
 	protected function processAttr($attrs)
 	{
 		$html = '';
-		foreach($attrs as $attr=>$value){
-			if($value != ''){
-				$html .= $attr.'="'.$value.'" ';
+		if(is_array($attrs) && count($attrs)){
+			foreach($attrs as $attr=>$value){
+				if($value != ''){
+					$html .= $attr.'="'.$value.'" ';
+				}
 			}
 		}
 		return $html;
 	}
 	
-	public function addMediaButton($label, $id, $value, $class, $attrs = array(),$datas=array('data-title'=>'Upload Media', 'data-type'=> 'image'))
+	public function addMediaButton($label, $id, $value, $class, $attrs = array(),$datas=array('data-title'=>'Upload Media', 'data-type'=> 'image'), $rm=false)
 	{
 		$html ='
 		<div class="'.$class.'">
 			<label for="'.$this->prefix.$id.'">'.$label.'</label>
 			<div class="input-append">
 				<input type="text" id="'.$this->prefix.$id.'" name="'.$this->prefix.$id.'" value="'.$value.'" '.$this->processAttr($attrs).' />
-				<button class="btn AWD_button_media btn-info" type="button" '.$this->processAttr($datas).' data-field="'.$this->prefix.$id.'"><i class="icon-white icon-picture"></i> Upload</button>
-			</div>
+				<button class="btn AWD_button_media btn-info" type="button" '.$this->processAttr($datas).' data-field="'.$this->prefix.$id.'"><i class="icon-white icon-picture"></i></button>';
+				if($rm == true){
+					$html .='<button class="btn btn-warning"><i class="icon-minus icon-white"></i></button>';
+				}
+			$html.='</div>
 		</div>';
 		return $html;
 	}

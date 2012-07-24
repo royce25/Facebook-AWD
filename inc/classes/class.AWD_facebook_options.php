@@ -31,9 +31,9 @@ class AWD_facebook_options
 	
 	/**
 	 * Construct
-	 * param   string   Prefix (recommend use $AWD_facebook->plugin_option_pref)
-	 * param   object   wpdb instance
-	 * return  void
+	 * @param   string   Prefix (recommend use $AWD_facebook->plugin_option_pref)
+	 * @param   object   wpdb instance
+	 * @return  void
 	 */
 	public function __construct($prefix,$wpdb){
 		$this->wpdb = $wpdb;
@@ -48,9 +48,9 @@ class AWD_facebook_options
 	
 	/**
 	 * Set the default option if empty
-	 * param string $options_name
-	 * param array|string $default_value
-	 * return array
+	 * @param string $options_name
+	 * @param array|string $default_value
+	 * @return array
 	 */
 	public function setDefaultValue($options_name, $default_value)
 	{
@@ -60,9 +60,9 @@ class AWD_facebook_options
 	
 	/**
 	 * defaultOptions Options
-	 * param   Array   list of Options
-	 * param   object   wpdb instance
-	 * return  void
+	 * @param   Array   list of Options
+	 * @param   object   wpdb instance
+	 * @return  void
 	 */
     public function defaultOptions($options)
     {
@@ -221,7 +221,7 @@ class AWD_facebook_options
 	/**
 	 * Getter
 	 * Options
-	 * return Array list of Options
+	 * @return Array list of Options
 	 */
 	public function getOptions()
 	{
@@ -231,8 +231,8 @@ class AWD_facebook_options
 	/**
 	 * Setter
 	 * Options
-	 * param Array list of Options
-	 * return void
+	 * @param Array list of Options
+	 * @return void
 	 */
 	public function setOptions($options)
 	{
@@ -242,7 +242,7 @@ class AWD_facebook_options
 	/**
 	 * Load
 	 * Load Options From database and apply filter : apply_filters($this->filterName, get_option($this->filterName));
-	 * return void
+	 * @return void
 	 */
 	public function load()
 	{

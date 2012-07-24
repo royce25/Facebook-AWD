@@ -148,8 +148,8 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 		</div>
 		<?php wp_nonce_field($this->plugin_slug.'_update_options',$this->plugin_option_pref.'_nonce_options_update_field'); ?>
 		<div class="form-actions">
-			<a href="#" id="submit_settings" class="btn btn-primary"><i class="icon-cog icon-white"></i> <?php _e('Save all settings',$this->plugin_text_domain); ?></a>
-			<a href="#" id="reset_settings" class="btn btn-danger"><i class="icon-trash icon-white"></i> <?php _e('Restore defaults settings',$this->plugin_text_domain); ?></a>
+			<a href="#" id="submit_settings" class="btn btn-primary" data-loading-text="<i class='icon-time icon-white'></i> <?php _e('Saving settings...',$this->plugin_text_domain); ?>"><i class="icon-cog icon-white"></i> <?php _e('Save all settings',$this->plugin_text_domain); ?></a>
+			<a href="#" id="reset_settings" class="btn btn-danger" data-loading-text="<i class='icon-time icon-white'></i> <?php _e('Waiting for your anwser',$this->plugin_text_domain); ?>"><i class="icon-trash icon-white"></i> <?php _e('Restore defaults settings',$this->plugin_text_domain); ?></a>
 			<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZQ2VL33YXHJLC" class="awd_tooltip_donate btn pull-right" id="help_donate" target="_blank" class="btn pull-right"><i class="icon-heart"></i> <?php _e('Donate!',$this->plugin_text_domain); ?></a>
 		</div>
 	<?php 
