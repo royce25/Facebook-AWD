@@ -41,7 +41,15 @@ class AWD_facebook_form
 		return $html;
 	}
 	
-	public function addInputText($label, $id, $value, $class, $attrs = array(), $prepend = '',$append ='')
+	public function addInputHidden($id, $value, $class='', $attrs = array())
+	{
+		$html .= '<input type="hidden" id="'.$this->prefix.$id.'" name="'.$this->prefix.$id.'" value="'.$value.'" '.$this->processAttr($attrs).' />';
+		return $html;
+	}
+
+
+	
+	public function addInputText($label, $id, $value, $class='', $attrs = array(), $prepend = '',$append ='')
 	{
 		$html ='
 		<div class="'.$class.'">
@@ -66,7 +74,7 @@ class AWD_facebook_form
 		return $html;
 	}
 	
-	public function addSelect($label, $id, $values, $value ,$class, $attrs = array())
+	public function addSelect($label, $id, $values, $value ,$class='', $attrs = array())
 	{
 		$html ='
 		<div class="'.$class.'">
@@ -97,16 +105,16 @@ class AWD_facebook_form
 		return $html;
 	}
 	
-	public function addMediaButton($label, $id, $value, $class, $attrs = array(),$datas=array('data-title'=>'Upload Media', 'data-type'=> 'image'), $rm=false)
+	public function addMediaButton($label, $id, $value, $class='', $attrs = array(),$datas=array('data-title'=>'Upload Media', 'data-type'=> 'image'), $rm=false)
 	{
 		$html ='
 		<div class="'.$class.'">
 			<label for="'.$this->prefix.$id.'">'.$label.'</label>
 			<div class="input-append">
 				<input type="text" id="'.$this->prefix.$id.'" name="'.$this->prefix.$id.'" value="'.$value.'" '.$this->processAttr($attrs).' />
-				<button class="btn AWD_button_media btn-info" type="button" '.$this->processAttr($datas).' data-field="'.$this->prefix.$id.'"><i class="icon-white icon-picture"></i></button>';
+				<button class="btn AWD_button_media" type="button" '.$this->processAttr($datas).' data-field="'.$this->prefix.$id.'"><i class="icon-upload"></i></button>';
 				if($rm == true){
-					$html .='<button class="btn btn-warning"><i class="icon-minus icon-white"></i></button>';
+					$html .='<button class="btn btn-warning AWD_delete_media"><i class="icon-minus icon-white"></i></button>';
 				}
 			$html.='</div>
 		</div>';

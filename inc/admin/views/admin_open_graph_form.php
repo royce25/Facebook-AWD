@@ -1,241 +1,92 @@
-<?php
-$prefix = $this->plugin_option_pref.'ogtags_';
-if(is_array($metabox)){
-	if(is_array($metabox['args'])){
-		$prefix = $metabox['args']['prefix'];
-		//custom is the name of the array of option
-		$customTemp = $metabox['args']['custom'];
-		$custom = $this->options[$customTemp];
-		//reconstruct the arry to be compatible with this function and args metabox
-		if($customTemp){
-			foreach($this->options as $option=>$value)
-				if(preg_match('@'.$customTemp.'@',$option))
-					$custom[str_ireplace($customTemp.'_',"",$prefix).$option][0] = $value;
-		}
-		//use h4 or other
-		$custom_header = $metabox['args']['header'];
-		$custom_help = $metabox['args']['help'];
-	}
-}
+<h1><?php _e('1. Define Object',$this->plugin_text_domain); ?></h1>
 
-if($custom_header =='')
-	$custom_header ='h4';
-if(is_object($post))
-	$custom = get_post_custom($post->ID);
-elseif(!$custom)
-	$custom = array();
-?>
-<script type="text/javascript">
-	jQuery(document).ready(function($){
-		$("#<?php echo $prefix.'disable_off';?>").click(function(){
-			$(".ui_ogtags_allform<?php echo $customTemp;?>").slideDown();
-		});
-		$("#<?php echo $prefix.'disable_on';?>").click(function(){
-			$(".ui_ogtags_allform<?php echo $customTemp;?>").slideUp();
-		});
-		$("#<?php echo $prefix.'redefine_on';?>").click(function(){
-			$(".ui_ogtags_form<?php echo $customTemp;?>").slideDown();
-		});
-		$("#<?php echo $prefix.'redefine_off';?>").click(function(){
-			$(".ui_ogtags_form<?php echo $customTemp;?>").slideUp();
-		});
-	});
-</script>
-<p>
-	<?php 
-	//if post or global form
-	if(is_object($post)){ ?>
-		<label class="up_label"><?php _e('Disable Tags for this page ?',$this->plugin_text_domain); ?></label>
-		<?php 
-	}else{
-		?>
-		<label class="up_label"><?php _e('Disable Tags for this type ? ',$this->plugin_text_domain); ?> <i><?php _e('You can override settings on each page individually',$this->plugin_text_domain); ?></i></label>
-		<?php
-	}
+<?php
+if($object_id == '')
+	$object = array('id'=>'','title'=>'%TITLE%');
+else{
+	$object = $this->options['opengraph_objects'][$object_id];
+}
+if($copy == 'true')
+	unset($object['id']);
+
+$ogp = $this->opengraph_array_to_object($object);
+$form = new AWD_facebook_form('form_create_opengraph_object', 'POST', '', $this->plugin_option_pref);
+echo $form->start();
 	?>
-	<input type="radio" name="<?php echo $prefix.'disable';?>" <?php if($custom[$prefix.'disable'][0] == 1 OR ($custom[$prefix.'disable'][0] == '' && !is_object($post))){echo 'checked="checked"';} ?> id="<?php echo $prefix.'disable_on';?>" value="1"/> <?php _e('Yes',$this->plugin_text_domain); ?>
-	<input type="radio" name="<?php echo $prefix.'disable';?>" <?php if($custom[$prefix.'disable'][0] == "0" OR (is_object($post) && $custom[$prefix.'disable'][0]=='')){echo 'checked="checked"';} ?> id="<?php echo $prefix.'disable_off';?>" value="0"/> <?php _e('No',$this->plugin_text_domain); ?>
-</p>
-<div class="ui_ogtags_allform<?php echo $customTemp; ?> <?php if($custom[$prefix.'disable'][0] == 1 OR ($custom[$prefix.'disable'][0] == '' && !is_object($post))){echo 'hidden';} ?>">
-<?php 
-//if post or global form
-if(is_object($post)){ ?>	
-<p>
-	<label class="up_label"><?php _e('Redefine Tags for this page ?',$this->plugin_text_domain); ?></label>
-	<input type="radio" name="<?php echo $prefix.'redefine';?>" <?php if($custom[$prefix.'redefine'][0] == 1){echo 'checked="checked"';} ?> id="<?php echo $prefix.'redefine_on';?>" value="1"/> <?php _e('Yes',$this->plugin_text_domain); ?>
-	<input type="radio" name="<?php echo $prefix.'redefine';?>" <?php if($custom[$prefix.'redefine'][0] == 0){echo 'checked="checked"';} ?> id="<?php echo $prefix.'redefine_off';?>" value="0"/> <?php _e('No',$this->plugin_text_domain); ?>
-</p>
-<?php }	?>
-<div class="ui_ogtags_form ui_ogtags_form<?php echo $customTemp; ?> <?php if($custom[$prefix.'redefine'][0]!= 1 && is_object($post)){echo 'hidden';} ?>">
-	<?php echo $this->get_the_help_box($custom_help); ?>
-	<<?php echo $custom_header; ?>><a href="#"><?php _e('Tags',$this->plugin_text_domain); ?></a></<?php echo $custom_header; ?>>
-	<div>
-	<div class="uiForm">
-		<table class="AWD_form_table">
+	<div class="row">
 		<?php
-		$this->og_tags = apply_filters('AWD_facebook_og_tags', $this->og_tags);
-		foreach($this->og_tags as $tag=>$tag_infos){
-			$input = $this->get_input_html_from_type($tag_infos['type'], $tag, $custom, $prefix);	
-			if($tag_infos['name']){
-				?>
-				<tr class="dataRow">
-					<th class="label"><?php echo $tag_infos['name']; ?></th>
-					<td class="data">
-						<?php echo $input; ?>
-					</td>
-				</tr>
-				<?php
-			}
-		}
+		echo $form->addInputHidden('awd_ogp[id]', $object['id']);
+		echo $form->addInputText(__('Title of object (only for reference)',$this->plugin_text_domain),  'awd_ogp[object_title]', $object['object_title'], 'span4', array('class'=>'span4'));
+		$locales = $ogp->supported_locales();
+		$_locales = array();
+		foreach($locales as $locale => $label){ $_locales[] = array('value'=>$locale, 'label'=> $label ); }
+		echo $form->addSelect(__('Locale',$this->plugin_text_domain), 'awd_ogp[locale]', $_locales, $ogp->getLocale(), 'span4', array('class'=>'span2'));					
 		?>
-		</table>
 	</div>
+	<div class="row">
+		<?php
+		$_determiners = array(
+			array('value'=> 'auto', 'label'=> __('Auto',$this->plugin_text_domain)),
+			array('value'=> 'a', 'label'=> __('A',$this->plugin_text_domain)),
+			array('value'=> 'an', 'label'=> __('An',$this->plugin_text_domain)),
+			array('value'=> 'the', 'label'=> __('The',$this->plugin_text_domain))
+		);
+		echo $form->addSelect(__('The determiner',$this->plugin_text_domain), 'awd_ogp[determiner]', $_determiners, $ogp->getDeterminer(), 'span2', array('class'=>'span2'));					
+		echo $form->addInputText('Title',  'awd_ogp[title]', $ogp->getTitle(), 'span4', array('class'=>'span4'));
+		$types = $ogp->supported_types(true);
+		foreach($types as $type){ $options[] = array('value'=>$type, 'label'=> ucfirst($type)); }
+		echo $form->addSelect(__('Type',$this->plugin_text_domain).' '.$this->get_the_help('type'), 'awd_ogp[type]', $options, $ogp->gettype(), 'span2', array('class'=>'span2'));
+		?>
 	</div>
-	<?php
-	$this->og_attachement_field = apply_filters('AWD_facebook_og_attachement_fields', $this->og_attachement_field);
-	foreach($this->og_attachement_field as $type=>$tag_fields){
-		switch($type){
-			//video form
-			case 'video':
-				echo '<'.$custom_header.'><a href="#">'.__('Video Attachement',$this->plugin_text_domain).'</a></'.$custom_header.'>';
-				echo '
-				<div>
-				<i>'.__('Facebook supports embedding video in SWF format only. File ith extension ".swf"',$this->plugin_text_domain).'</i>
-				<div class="uiForm">
-					<div id="'.$prefix.'message_video" class="alert alert-warning hidden">'.__('You must include a valid Image for your video in Tags section to be displayed in the news feed.',$this->plugin_text_domain).'</div>
-					<table class="AWD_form_table">';
-					foreach($tag_fields as $tag=>$tag_infos){
-						$input = $this->get_input_html_from_type($tag_infos['type'], $tag, $custom, $prefix);	
-						if($tag != 'video:type' && $tag != 'video:type_html' && $tag != 'video:type_mp4'):
-						?>
-						<tr class="dataRow">
-							<th class="label"><?php echo $tag_infos['name']; ?></th>
-							<td class="data">
-								<?php echo $input; ?>
-							</td>
-						</tr>
-						<?php
-						endif;
-					}
-				echo '</table>
-				</div>
-				</div>';
-			break;
-			//audio form
-			case 'audio':
-				echo '<'.$custom_header.'><a href="#">'.__('Audio Attachement',$this->plugin_text_domain).'</a></'.$custom_header.'>';
-				echo '
-				<div>
-					<i>'.__('In a similar fashion to Video you can add an audio file to your markup',$this->plugin_text_domain).'</i>
-					<div class="uiForm">
-						<table class="AWD_form_table">';
-						foreach($tag_fields as $tag=>$tag_infos){
-							$input = $this->get_input_html_from_type($tag_infos['type'], $tag, $custom, $prefix);
-							if($tag != 'audio:type'){ 
-								?>
-								<tr class="dataRow">
-									<th class="label"><?php echo $tag_infos['name']; ?></th>
-									<td class="data">
-										<?php echo $input; ?>
-									</td>
-								</tr>
-								<?php 
-							}
-						}
-				echo '</table>
-				</div>
-				</div>';
-			break;
-			//isbn and upc code
-			case 'isbn':
-			case 'upc':
-				foreach($tag_fields as $tag=>$tag_name){
-					$prefixtag = $prefix.$tag;
-					$custom_value = $custom[$prefixtag][0];
-					echo '<'.$custom_header.'><a href="#">'.strtoupper($type).' '.__('code',$this->plugin_text_domain).'</a></'.$custom_header.'>';
-					echo '
-					<div>
-					<div class="uiForm">
-						<table class="AWD_form_table">
-							<tr class="dataRow">
-								<th class="label">'.__('For products which have a UPC code or ISBN number',$this->plugin_text_domain).'</th>
-								<td class="data"><input id="'.$prefixtag.'" name="'.$prefixtag.'" type="text" value="'.($custom_value != '' ? $custom_value : '').'" /></td>
-							</tr>
-						</table>
-					</div>
-					</div>';
+	<div class="row">
+		<?php
+		echo $form->addInputText('Description',  'awd_ogp[description]', $ogp->getDescription(), 'span6', array('class'=>'span6'));
+		?>
+	</div>
+	<div class="row">
+		<?php
+		echo $form->addInputText('Site Name', 'awd_ogp[site_name]', $ogp->getSiteName(), 'span4', array('class'=>'span4'));
+		echo $form->addInputText('Url',  'awd_ogp[url]', $ogp->getUrl(), 'span4', array('class'=>'span4'));
+		?>
+	</div>
+	<h1><?php _e('2. Add Media to Object',$this->plugin_text_domain); ?></h1>
+	<h2><?php _e('Images',$this->plugin_text_domain); ?> <button class="btn btn-mini awd_add_media_field" data-label="<?php _e('Image url',$this->plugin_text_domain); ?>" data-label2="<?php _e('Upload an Image',$this->plugin_text_domain); ?>" data-type="image" data-name="awd_ogp[images][]"><i class="icon-picture"></i> Add an image</button></h2>
+	<div class="row">
+		<div class="awd_ogp_fields_image">
+			<?php
+			$images = $object['images'];
+			if(count($images))
+			{
+				echo $form->addMediaButton('Image url', 'awd_ogp[images][]', $images[0],'span8', array('class'=>'span6'), array('data-title'=>__('Upload an Image',$this->plugin_text_domain), 'data-type'=> 'image'), false);
+				unset($images[0]);
+				foreach($images as $image){
+					echo $form->addMediaButton('Image url', 'awd_ogp[images][]', $image,'span8', array('class'=>'span6'), array('data-title'=>__('Upload an Image',$this->plugin_text_domain), 'data-type'=> 'image'), true);
 				}
-			break;
-			//contact form
-			case 'contact':
-				echo '<'.$custom_header.'><a href="#">'.__('Contact infos',$this->plugin_text_domain).'</a></'.$custom_header.'>';
-				echo '<div>';
-					echo '<i>'.__('Consider including contact information if your page is about an entity that can be contacted.',$this->plugin_text_domain).'</i>
-					<div class="uiForm">
-						<table class="AWD_form_table">';
-						foreach($tag_fields as $tag=>$tag_infos){
-							$input = $this->get_input_html_from_type($tag_infos['type'], $tag, $custom, $prefix); 
-							?>
-							<tr class="dataRow">
-								<th class="label"><?php echo $tag_infos['name']; ?></th>
-								<td class="data">
-									<?php echo $input; ?>
-								</td>
-							</tr>
-							<?php
-						}
-				echo '</table>
-				</div>
-				</div>';
-			break;
-			//location form
-			case 'location':
-				echo '<'.$custom_header.'><a href="#">'.__('Location infos',$this->plugin_text_domain).'</a></'.$custom_header.'>';
-				echo '<div>';
-					echo '<i>'.__('This is useful if your pages is a business profile or about anything else with a real-world location. You can specify location via latitude and longitude, a full address, or both.',$this->plugin_text_domain).'</i>
-					<div class="uiForm">
-						<table class="AWD_form_table">';
-						foreach($tag_fields as $tag=>$tag_infos){
-							$input = $this->get_input_html_from_type($tag_infos['type'], $tag, $custom, $prefix);
-							?>
-							<tr class="dataRow">
-								<th class="label"><?php echo $tag_infos['name']; ?></th>
-								<td class="data">
-									<?php echo $input; ?>
-								</td>
-							</tr>
-							<?php
-						}
-				echo '</table>
-				</div>
-				</div>';
-			break;
-			
-		}
-	}
-	$this->og_custom_fields = apply_filters('AWD_facebook_og_custom_fields', $this->og_custom_fields);
-	echo '<'.$custom_header.'><a href="#">'.__('Customs fields',$this->plugin_text_domain).'</a></'.$custom_header.'>
-		<div>
-			<div class="uiForm">
-				<table class="AWD_form_table">';
-				if(count($this->og_custom_fields)){
-					foreach($this->og_custom_fields as $tag=>$tag_infos){
-						$input = $this->get_input_html_from_type($tag_infos['type'], $tag, $custom, $prefix); 
-						?>
-						<tr class="dataRow">
-							<th class="label"><?php echo $tag_infos['name']; ?></th>
-							<td class="data">
-								<?php echo $input; ?>
-							</td>
-						</tr>
-						<?php
-					}
-				}else{
-					echo "<p><i>".__('Learn more how to add custom fields in the openGraph form',$this->plugin_text_domain)."</i></p>";
-				}
-				?>
-				</table>
-			</div>
+			}else{
+				echo $form->addMediaButton('Image url', 'awd_ogp[images][]', $images[0],'span8', array('class'=>'span6'), array('data-title'=>__('Upload an Image',$this->plugin_text_domain), 'data-type'=> 'image'), false);
+			}
+			?>
 		</div>
 	</div>
-</div>
+	<h2><?php _e('Videos',$this->plugin_text_domain); ?> <button class="btn btn-mini awd_add_media_field" data-label="<?php _e('Video url',$this->plugin_text_domain); ?>" data-label2="<?php _e('Upload an Image',$this->plugin_text_domain); ?>" data-type="video" data-name="awd_ogp[videos][]"><i class="icon-film"></i> Add a video</button></h2>
+	<div class="row">
+		<div class="awd_ogp_fields_video">
+			<?php echo $form->addMediaButton('Video url', 'awd_ogp[videos][]', '','span8', array('class'=>'span6'), array('data-title'=>__('Upload a Video',$this->plugin_text_domain), 'data-type'=> 'video'), false); ?>
+		</div>
+	</div>
+	<h2><?php _e('Audios',$this->plugin_text_domain); ?> <button class="btn btn-mini awd_add_media_field" data-label="<?php _e('Audio url',$this->plugin_text_domain); ?>" data-label2="<?php _e('Upload an Image',$this->plugin_text_domain); ?>" data-type="audio" data-name="awd_ogp[audios][]"><i class="icon-music"></i> Add a song</button></h2>
+	<div class="row">
+		<div class="awd_ogp_fields_audio">
+			<?php echo $form->addMediaButton('Audio url', 'awd_ogp[audios][]', '','span8', array('class'=>'span6'), array('data-title'=>__('Upload a Song',$this->plugin_text_domain), 'data-type'=> 'audio'), false); ?>
+		</div>
+	</div>
+	<div class="form-actions">
+		<div class="btn-group pull-right">
+			<button class="btn btn-primary awd_submit_ogp"><i class="icon-ok icon-white"></i> <?php _e('Save',$this->plugin_text_domain); ?></button>
+			<button class="btn btn-danger pull-right hide_ogp_form"><i class="icon-remove icon-white"></i> <?php _e('Cancel',$this->plugin_text_domain); ?></button>
+		</div>
+	</div>
+	<?php wp_nonce_field($this->plugin_slug.'_save_ogp_object',$this->plugin_option_pref.'_nonce_options_save_ogp_object'); ?>
+<?php echo $form->end(); ?>
+<h2><?php _e('Preview',$this->plugin_text_domain); ?></h2>
+<?php echo $this->render_ogp_tags($ogp); ?>

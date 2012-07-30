@@ -22,7 +22,7 @@ function AWDFacebookAdmin($){
 	{
 		var $button = $(button);
 		var $data = $button.data();
-		var $field = $('#'+$data.field);
+		var $field = $button.prev();
 		var formfieldName =  $field.attr('name');
 		tb_show($data.title, 'media-upload.php?type='+$data.type+'&amp;TB_iframe=true');
 		window.send_to_editor = function(html){
@@ -33,15 +33,8 @@ function AWDFacebookAdmin($){
 		return false;
 	};
 	
-	this.bindEvents = function()
-	{	
-		var $awd = this;
-		//Admin
-		$(".alert").alert();
-		$('#reload_app_infos').live('click',function(e){
-			e.preventDefault();
-			$awd.reloadAppInfos(this);
-		});
+	this.initToolTip = function()
+	{
 		$('.awd_tooltip_donate').popover({
 			placement: 'top',
 			title : function(){
@@ -57,7 +50,6 @@ function AWDFacebookAdmin($){
 				hide:500
 			}
 		});
-		
 		$('.awd_tooltip').popover({
 			placement: 'top',
 			title : function(){
@@ -75,23 +67,43 @@ function AWDFacebookAdmin($){
 				hide:500
 			}
 		});
+	};
+	
+	this.initTab = function()
+	{
+		$('#plugins_menu li:eq(0) a').tab('show');
+		$('#settings_menu li:eq(0) a').tab('show');
+		$('#settings_ogp_menu li:eq(0) a').tab('show');
+	};
+	
+	this.bindEvents = function()
+	{	
+		var $awd = this;
+		$awd.initToolTip();
+		//Admin
+		$(".alert").alert();
+		$('#reload_app_infos').live('click',function(e){
+			e.preventDefault();
+			$awd.reloadAppInfos(this);
+		});
+		
 		
 		$('#toogle_list_pages').live('click',function(e){
 			e.preventDefault();
 			$('.toogle_fb_pages').slideToggle();
 		});
 		
-		$('#plugins_menu a:first').tab('show');
-		
-		$('#settings_opg_menu a:first').tab('show');
-		
 		//Forms
-		$(".AWD_button_media").click(function(e){
+		$(".AWD_button_media").live('click',function(e){
 			e.preventDefault();
-			$awd.showUploadDialog(this)
+			$awd.showUploadDialog(this);
+		});
+		$(".AWD_delete_media").live('click',function(e){
+			e.preventDefault();
+			$(this).parent().parent().slideUp().remove();
 		});
 		
-		$('.awd_tooltip').click(function(e){ e.preventDefault();});
+		$('.awd_tooltip').live('click',function(e){ e.preventDefault();});
 		
 		$('#submit_settings').click(function(e){
 			$(this).button('loading');
@@ -111,9 +123,8 @@ function AWDFacebookAdmin($){
 		$('.reset_settings_confirm').click(function(e){
 			e.preventDefault();  
 			$(this).button('loading');
-			$('#awd_fcbk_reset_settings').submit();
+			$('#awd_fcbk_option_reset_settings').submit();
 		});
-		
 		$('#awd_fcbk_option_connect_enable').change(function(){
 			if($(this).val() == 1){
 				$('.depend_fb_connect').attr('disabled', false);
@@ -121,8 +132,6 @@ function AWDFacebookAdmin($){
 				$('.depend_fb_connect').attr('disabled', true);
 			}
 		});
-		
-		
 		$('#awd_fcbk_option_like_button_type').change(function(){
 			if($(this).val() == 'iframe'){
 				$('#awd_fcbk_option_like_button_send').attr('disabled', true);
@@ -146,20 +155,147 @@ function AWDFacebookAdmin($){
 				}
 			},{scope: scope});
 		});
+		
+		
+		//Open graph form
+		$('.show_ogp_form').button('reset');
+		
+		$('.awd_add_media_field').live('click',function(e){
+			e.preventDefault();
+			var $button = $(this);
+			var label = $button.data('label');
+			var type = $button.data('type');
+			var name = $button.data('name');
+			var label2 = $button.data('label2');
+			$button.button('loading');
+			$.post(ajaxurl,{action:'get_media_field', label: label, type: type, name: name, label2: label2},function(data){	
+				if(data)
+					$('.awd_ogp_fields_'+type+'').append(data);
+				$button.button('reset');
+			});
+		});
+		
+		
+		//show an empty form
+		$('.show_ogp_form').live('click',function(e){
+			e.preventDefault();
+			var $button = $(this);
+			var object_id = '';
+			$button.button('loading');
+			$('.awd_ogp_form').slideUp();
+			$.post(ajaxurl,'object_id='+object_id+'&action=get_open_graph_object_form',function(data){	
+				$('.awd_ogp_form').html(data).slideDown();
+				$awd.initToolTip();
+				prettyPrint();
+			});
+		});
+		
+		//show an existing object form
+		$('.awd_edit_opengraph_object').live('click',function(e){
+			var $button = $(this);
+			var object_id = $(this).parent().data('objectId');
+			var copy = $(this).hasClass('copy');
+			$button.button('loading');
+			$('.show_ogp_form').button('loading');
+			$('.awd_ogp_form').slideUp();
+			$.post(ajaxurl,'object_id='+object_id+'&copy='+copy+'&action=get_open_graph_object_form',function(data){	
+				$('.awd_ogp_form').html(data).slideDown();
+				$awd.initToolTip();
+				$button.button('reset');
+				prettyPrint();
+			});
+		});
+		
+		//hide the form and reset it.
+		$('.hide_ogp_form').live('click',function(e){
+			e.preventDefault();
+			$('.awd_ogp_form').slideUp().html('');
+			$('.show_ogp_form').button('reset');
+		});
+		
+		//delete an existing object
+		$('.awd_delete_opengraph_object').live('click',function(e){
+			var $button = $(this);
+			var object_id = $(this).parent().data('objectId');
+			var $tr = $(this).closest('tr');
+			$button.button('loading');
+			$.post(ajaxurl,'object_id='+object_id+'&action=delete_ogp_object',function(data){	
+				if(data.success){
+					$tr.slideUp().remove();
+					if(data.count == 0){
+						$('.awd_no_objects').slideDown();
+					}
+					$('.awd_ogp_links').html(data.links_form);
+				}
+				$button.button('reset');
+			}, 'json');
+		});
+		
+		//submit the form to update/save the object
+		$('#awd_fcbk_option_form_create_opengraph_object').live('submit',function(e){
+			e.preventDefault();
+			var $form = $(this);
+			$('.awd_submit_ogp').button('loading');
+			$.post(ajaxurl,$form.serialize()+'&action=save_ogp_object',function(data){	
+				if(data.success){
+					$('.awd_ogp_form').slideUp().html('');
+					if($('.awd_object_item_'+data.item_id).length > 0){
+						$('.awd_object_item_'+data.item_id).replaceWith($(data.item));
+					}else{
+						$('.awd_list_opengraph_object tbody.content').append(data.item);
+					}
+					$('.awd_no_objects').slideUp();
+					$('.awd_ogp_links').html(data.links_form);
+				}
+				$('.awd_submit_ogp').button('reset');
+				$('.show_ogp_form').button('reset');
+			},'json');
+		});
+		
+		$('#submit_ogp').live('click',function(e){
+			e.preventDefault();
+			$('#awd_fcbk_option_form_create_opengraph_object_links').submit();
+		});
+		$('#awd_fcbk_option_form_create_opengraph_object_links').live('submit',function(e){
+			e.preventDefault();
+			$('#submit_ogp').button('loading');
+			$.post(ajaxurl,$(this).serialize()+'&action=save_ogp_object_links',function(data){
+				$('#submit_ogp').button('reset');
+			});
+		});
+		
+		
+		
+		
+		$('.awd_debug .page-header').each(function(){
+			$(this).next().hide();
+			$(this).css('cursor', 'pointer');
+			$(this).click(function(){
+				$(this).next().slideToggle();
+			});
+		});
 	};
+	
 	
 	this.init = function()
 	{
+		$.fn.button.defaults = {
+			loadingText: 'Loading...'
+		}
 		$('.AWD_profile').wrap('<div class="well">');
 		$('.AWD_logout a').addClass('btn btn-danger').css('marginTop','5px');
 		$('.AWD_profile_image').addClass('pull-left').css('marginRight','10px');		
-		$(".fadeOnload").delay(4000).fadeOut();		
+		$(".fadeOnload").delay(4000).fadeOut();	
 		this.bindEvents();
+		this.initTab();
+		prettyPrint();
+		$('.AWD_facebook').button();
 	};
 	this.init();
 };
+var AWD_facebook_admin;
 jQuery(document).ready( function($){
-	var AWD_facebook_admin = new AWDFacebookAdmin($);
+	AWD_facebook_admin = new AWDFacebookAdmin($);
 });
 
 	

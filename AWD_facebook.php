@@ -240,11 +240,14 @@ Class AWD_facebook
 	{		
 		//add script and styles in the plugin and editos pages.
 		wp_register_script($this->plugin_slug.'-bootstrap-js',$this->plugin_url.'/assets/bootstrap/js/bootstrap.js',array('jquery'));
-		wp_register_script($this->plugin_slug.'-admin-js',$this->plugin_url.'/assets/js/facebook_awd_admin.js',array('jquery','jquery-ui-tabs','jquery-ui-accordion'));
+		wp_register_script($this->plugin_slug.'-google-code-prettify',$this->plugin_url.'/assets/js/google-code-prettify/prettify.js',array('jquery'));
+		wp_register_script($this->plugin_slug.'-admin-js',$this->plugin_url.'/assets/js/facebook_awd_admin.js',array('jquery','jquery-ui-tabs','jquery-ui-accordion',$this->plugin_slug.'-google-code-prettify'));
 		wp_register_script($this->plugin_slug,$this->plugin_url.'/assets/js/facebook_awd.js',array('jquery'));
 		
 		wp_register_style($this->plugin_slug.'-admin-css', $this->plugin_url.'/assets/css/facebook_awd_admin.css');
 		
+		wp_register_style($this->plugin_slug.'-google-code-prettify-css',$this->plugin_url.'/assets/js/google-code-prettify/prettify.css');
+
 		//Css framework bootstrap
 		wp_register_style($this->plugin_slug.'-ui-bootstrap', $this->plugin_url.'/assets/css/bootstrap.css');
 		wp_register_style($this->plugin_slug.'-ui-bootstrap-responsive', $this->plugin_url.'/assets/bootstrap/css/bootstrap-responsive.min.css', array($this->plugin_slug.'-ui-bootstrap'));
@@ -633,6 +636,7 @@ Class AWD_facebook
 	public function admin_enqueue_css()
 	{
 		wp_enqueue_style($this->plugin_slug.'-ui-bootstrap');
+		wp_enqueue_style($this->plugin_slug.'-google-code-prettify-css');
 		wp_enqueue_style('thickbox');
 	}
 	
@@ -647,12 +651,11 @@ Class AWD_facebook
 		wp_enqueue_script('common');
 		wp_enqueue_script('wp-list');
 		wp_enqueue_script('postbox');
-		//wp_enqueue_script('jquery-tabs');
 		wp_enqueue_script('jquery-ui-accordion');
 		wp_enqueue_script($this->plugin_slug.'-js-cookie');
 		wp_enqueue_script($this->plugin_slug.'-admin-js');
 		wp_enqueue_script($this->plugin_slug.'-bootstrap-js');
-		//wp_enqueue_script($this->plugin_slug.'-ui-toolkit');
+		wp_enqueue_script($this->plugin_slug.'-google-code-prettify');
 	}
 	
 	public function add_js_options($manual = 0)
@@ -1116,10 +1119,353 @@ Class AWD_facebook
 	 * Open graph admin content
 	 * @return void
 	 */
+	public function ajax_get_media_field()
+	{
+		$label = $_POST['label'];
+		$label2 = $_POST['label2'];
+		$type = $_POST['type'];
+		$name = $_POST['name'];
+		$form = new AWD_facebook_form('form_media_field', 'POST', '', $this->plugin_option_pref);
+		echo $form->addMediaButton($label, $name, '','span8', array('class'=>'span6'), array('data-title'=> $label2, 'data-type'=> $type), true);
+		exit();
+	}
+	
+	
+	
+	
+	
+	
+	//****************************************************************************************
+	//	OPENGRAPH
+	//****************************************************************************************
+	
+	
+	/**
+	 * Open graph admin content
+	 * @return void
+	 */
 	public function open_graph_content()
 	{
 		include_once(dirname(__FILE__).'/inc/admin/views/admin_open_graph.php');
 	}
+	
+	/**
+	 * Open graph admin content
+	 * @return void
+	 */
+	public function get_open_graph_object_form($object_id = '', $copy=false)
+	{
+		include_once(dirname(__FILE__).'/inc/admin/views/admin_open_graph_form.php');
+	}
+	
+	/**
+	 * Open graph admin content
+	 * @return void
+	 */
+	public function ajax_get_open_graph_object_form()
+	{
+		$object_id = $_POST['object_id'];
+		$copy = $_POST['copy'];
+		echo $this->get_open_graph_object_form($object_id, $copy);
+		exit();
+	}
+	
+	
+	
+	/**
+	 * Open graph admin content
+	 * @return void
+	 */
+	public function get_open_graph_object_list_item($object)
+	{
+		return '<tr class="awd_object_item_'.$object['id'].'">
+					<td><strong>'.$object['object_title'].'</strong></td>
+					<td>
+						<div class="btn-group pull-right" data-object-id="'.$object['id'].'">
+							<button class="btn btn-mini awd_edit_opengraph_object"><i class="icon-edit"></i> '.__('Edit',$this->plugin_text_domain).'</button>
+							<button class="btn btn-mini awd_edit_opengraph_object copy"><i class="icon-share"></i> '.__('Copy',$this->plugin_text_domain).'</button>
+							<button class="btn btn-mini awd_delete_opengraph_object btn-warning"><i class="icon-remove icon-white"></i> '.__('Delete',$this->plugin_text_domain).'</button>
+						</div>
+					</td>
+				</tr>';
+	}
+	
+	/**
+	 * Open graph admin content
+	 * @return json array
+	 */
+	public function save_ogp_object()
+	{
+		if(isset($_POST[$this->plugin_option_pref.'_nonce_options_save_ogp_object']) && wp_verify_nonce($_POST[$this->plugin_option_pref.'_nonce_options_save_ogp_object'],$this->plugin_slug.'_save_ogp_object')){
+			if($_POST){
+				$opengraph_object = array();
+				foreach($_POST[$this->plugin_option_pref.'awd_ogp'] as $option=>$value){
+					$option_name = str_ireplace($this->plugin_option_pref,"",$option);
+					$opengraph_object[$option_name] = $value;
+				}
+				
+				//verification submitted value
+				if($opengraph_object['object_title'] == '')
+					$opengraph_object['object_title'] = __('Default Opengraph Object', $this->plugin_text_domain);
+				
+				//Check if the id  of the object was supplied
+				if($opengraph_object['id'] == '')
+					$opengraph_object['id'] = rand(0,9999).'_'.time();
+					
+				if(isset($this->options['opengraph_objects'][$opengraph_object['id']])){
+					$this->options['opengraph_objects'][$opengraph_object['id']] = $opengraph_object;
+				//if no object existing, create a new object reference and save it.
+				}else{
+					$this->options['opengraph_objects'][$opengraph_object['id']] = $opengraph_object;
+				}
+				//save with option manager
+				$this->optionsManager->update_option('opengraph_objects',$this->options['opengraph_objects'], true);
+				$this->options = $this->optionsManager->getOptions();
+				echo json_encode(array(
+					'success'=>1, 
+					'item'=> $this->get_open_graph_object_list_item($opengraph_object),
+					'item_id'=> $opengraph_object['id'],
+					'links_form' => $this->get_open_graph_object_links_form()
+				));
+				exit();
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Open graph admin content
+	 * @return json array
+	 */
+	public function save_ogp_object_links()
+	{
+		if(isset($_POST[$this->plugin_option_pref.'_nonce_options_object_links']) && wp_verify_nonce($_POST[$this->plugin_option_pref.'_nonce_options_object_links'],$this->plugin_slug.'_update_object_links')){
+			if($_POST){
+				$opengraph_object_links = array();
+				foreach($_POST[$this->plugin_option_pref.'opengraph_object_link'] as $context=>$object_id){
+					$opengraph_object_links[$context] = $object_id;
+				}
+				$this->options['opengraph_object_links'] = $opengraph_object_links;
+				//save with option manager
+				$this->optionsManager->update_option('opengraph_object_links',$this->options['opengraph_object_links'], true);
+				$this->options = $this->optionsManager->getOptions();
+				echo json_encode(array(
+					'success'=>1
+				));
+				exit();
+			}
+		}
+	}
+	
+	public function delete_ogp_object()
+	{
+		$object_id = $_POST['object_id'];
+		unset($this->options['opengraph_objects'][$object_id]);
+		//delete relation here ?
+		$this->optionsManager->update_option('opengraph_objects', $this->options['opengraph_objects'], true);
+		echo json_encode(array(
+			'success'=>1,
+			'count'=> count($this->options['opengraph_objects']),
+			'links_form'=> $this->get_open_graph_object_links_form()
+		));
+		exit();
+	}
+	
+	public function opengraph_array_to_object($object)
+	{
+		$ogp = new OpenGraphProtocol();
+		if(isset($object['locale']))
+			$ogp->setLocale($object['locale']);
+		else
+			$ogp->setLocale($this->options['locale']);
+		if(isset($object['site_name']))
+			$ogp->setSiteName($object['site_name']);
+		if(isset($object['title']))
+			$ogp->setTitle($object['title']);
+		if(isset($object['description']))
+			$ogp->setDescription($object['description']);
+		if(isset($object['type']))
+			$ogp->setType($object['type']);
+		if(isset($object['url']))
+			$ogp->setURL($object['url']);
+		if(isset($object['determiner']))
+			$ogp->setDeterminer($object['determiner']);
+		
+		if(isset($object['images'])){
+			if(is_array($object['images']) && count($object['images'])){
+				foreach($object['images'] as $image){
+					if($image !=''){
+						$ogp_img = new OpenGraphProtocolImage();
+						$ogp_img->setURL($image);
+						//Calcul with and height here ?
+						$ogp->addImage($ogp_img);
+					}
+				}
+			}		
+		}		
+		/*if(isset($object['audio']))
+			$ogp->addAudio($object['audio']);
+		if(isset($object['video']))
+			$ogp->addVideo($object['video']);
+		*/
+		return $ogp;
+	}
+	
+	public function get_open_graph_object_links_form()
+	{
+		$html = ''; 
+		$form = new AWD_facebook_form('form_create_opengraph_object_links', 'POST', '', $this->plugin_option_pref);
+		$ogp_objects = apply_filters('AWD_facebook_ogp_objects', $this->options['opengraph_objects']);
+		$page_contexts = array(
+			'frontpage' => __('Frontpage',$this->plugin_text_domain),
+			'page' => __('Pages',$this->plugin_text_domain),
+			'post' => __('Posts',$this->plugin_text_domain),
+			'archive' => __('Archives',$this->plugin_text_domain),
+			'author' => __('Authors',$this->plugin_text_domain),				
+		);
+		$taxonomies = get_taxonomies(array('public'=> true,'show_ui'=>true),'objects');
+		if(!empty($taxonomies)){
+			foreach($taxonomies as $taxonomie_name=>$tax_values){
+				$page_contexts[$tax_values->name] = $tax_values->label;
+			}
+		}
+		$postypes_media = get_post_types(array('name'=>'attachment'),'objects');
+		$postypes = get_post_types(array('show_ui'=>true),'objects');
+		if(is_object($postypes_media['attachment'])) $postypes['attachment'] = $postypes_media['attachment'];
+		unset($postypes['post']);
+		unset($postypes['page']);
+		if(!empty($postypes)){
+			foreach($postypes as $postype_name=>$posttype_values){
+				$page_contexts[$posttype_values->name] = $posttype_values->label;
+			}
+		}
+		
+		$html.= $form->start();
+		if(is_array($ogp_objects) && count($ogp_objects)){
+			foreach($page_contexts as $key=>$context){
+				$options = array();
+				$linked_object = $this->options['opengraph_object_links'][$key];
+				$options[] = array(0=>'');
+				foreach($ogp_objects as $ogp_object){
+					$options[] = array('value'=>$ogp_object['id'], 'label'=> $ogp_object['object_title']);
+				}
+				
+				$html.= $form->addSelect(__('Choose Opengraph object for',$this->plugin_text_domain).' '.$context, 'opengraph_object_link['.$key.']', $options, $linked_object, 'span4', array('class'=>'span4'));
+			}
+		}else{
+			$html.= '<p class="alert alert-warning">'.__('No Object found',$this->plugin_text_domain).'</p></td>';
+		}
+		$html.= wp_nonce_field($this->plugin_slug.'_update_object_links',$this->plugin_option_pref.'_nonce_options_object_links',null,false);
+		$html.= $form->end();
+		return $html;
+	}
+	
+	
+	public function render_ogp_tags($ogp)
+	{
+		$prefix .= $ogp::PREFIX . ': ' . $ogp::NS . ' ';
+		return '<pre class="prettyprint linenums lang-html">'."\n"
+			.htmlentities('<html prefix="'.rtrim( $prefix,' ' ).'">')."\n"
+			.htmlentities('<head>')."\n"
+			.htmlentities($ogp->toHTML())."\n"
+			.htmlentities('<head>')."\n"
+		."</pre>";
+	}
+
+	
+	public function define_ogp_objects()
+	{
+		global $wp_query,$post;
+		$current_post_type = get_post_type();
+		$blog_name = get_bloginfo('name');
+		$blog_description = str_replace(array("\n","\r"),"",get_bloginfo('description'));
+		$home_url = home_url();
+		$array_pattern = array("%BLOG_TITLE%","%BLOG_DESCRIPTION%","%BLOG_URL%","%TITLE%","%DESCRIPTION%","%IMAGE%","%URL%");
+		$linked_object = 'dd';
+		switch(1){
+			case is_front_page():
+			case is_home():
+				$array_replace = array($blog_name,$blog_description,$home_url);
+				$linked_object = $this->options['opengraph_object_links']['frontpage'];
+			break;
+			
+			case is_author():
+				$linked_object = $this->options['opengraph_object_links']['author'];
+				$current_author = get_user_by('slug',$wp_query->query_vars['author_name']);
+				$avatar = get_avatar($current_author->ID, '50');
+				if($avatar) $gravatar_attributes = simplexml_load_string($avatar);
+				if(!empty($gravatar_attributes['src'])) $gravatar_url = $gravatar_attributes['src'];
+				$array_replace = array($blog_name,$blog_description,$home_url,trim(wp_title('',false)),$current_author->description,$gravatar_url,$this->get_current_url());
+			break;
+			case is_archive():
+				switch(1){
+					case is_tag():
+						$linked_object = $this->options['opengraph_object_links']['post_tag'];
+						$array_replace = array($blog_name,$blog_description,$home_url,trim(wp_title('',false)),'','',$this->get_current_url());
+					break;
+					case is_tax():
+						$taxonomy_slug = $wp_query->query_vars['taxonomy'];
+						$linked_object = $this->options['opengraph_object_links'][$taxonomy_slug];
+						$array_replace = array($blog_name,$blog_description,$home_url,trim(wp_title('',false)),term_description(),'',$this->get_current_url());
+					break;
+					case is_category():
+						$linked_object = $this->options['opengraph_object_links']['category'];
+						$array_replace = array($blog_name,$blog_description,$home_url,trim(wp_title('',false)),category_description(),'',$this->get_current_url());
+					break;
+					default:
+						$linked_object = $this->options['opengraph_object_links']['archive'];
+						$array_replace = array($blog_name,$blog_description,$home_url,trim(wp_title('',false)),'','',$this->get_current_url());
+					break;
+				}
+			break;
+			case is_attachment():
+				$linked_object = $this->options['opengraph_object_links']['attachment'];
+				$array_replace = array($blog_name,$blog_description,$home_url,trim(wp_title('',false)),'','',$this->get_current_url());
+			break;
+			case is_page():
+			case is_single():
+				$linked_object = $this->options['opengraph_object_links'][(is_single() ? 'post' : 'page')];
+				if(current_theme_supports('post-thumbnails')){
+					if(has_post_thumbnail($post->ID)){
+						$img = $this->catch_that_image(get_the_post_thumbnail($post->ID, 'AWD_facebook_ogimage'));
+					}
+				}
+                if($img == ""){
+                	if(isset($this->options['app_infos']['logo_url']))
+                		$img = $this->options['app_infos']['logo_url'];
+                }
+                if(!empty($post->post_excerpt)){
+                	$description = esc_attr(str_replace("\r\n",' ',substr(strip_tags(strip_shortcodes($post->post_excerpt)), 0, 160)));
+                }else{
+					$description = esc_attr(str_replace("\r\n",' ',substr(strip_tags(strip_shortcodes($post->post_content)), 0, 160)));
+                }
+				$array_replace = array($blog_name,$blog_description,$home_url,$post->post_title,$description,$img,get_permalink($post->ID));
+			break;
+		}
+
+		//define object value depending on TYPE
+		$object_template = $this->options['opengraph_objects'][$linked_object];
+		if(is_array($object_template)){
+			foreach($object_template as $field=>$value){
+				$value = str_replace($array_pattern, $array_replace, $value);
+				$object_template[$field]= $value;
+			}
+			//construct related ogp object
+			$ogp = $this->opengraph_array_to_object($object_template);
+			echo '<!-- '.$this->plugin_name.' Opengraph [v'.$this->get_version().'] (object reference: "'.$object_template['object_title'].'") -->'."\n";
+			echo $ogp->toHTML();
+			echo "\n".'<!-- '.$this->plugin_name.' END Opengraph -->'."\n";
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * Support content
@@ -1964,140 +2310,6 @@ Class AWD_facebook
 	}
 	
 	//****************************************************************************************
-	//	OPENGRAPH
-	//****************************************************************************************
-	public function get_the_open_graph_tags($options=array())
-	{
-	}
-	
-	public function construct_open_graph_tags()
-	{
-	}
-	
-	/**
-	* Display the openGraph for the page
-	* @return void
-	*/
-	public function define_open_graph_tags_header()
-	{
-		$current_post_type = get_post_type();
-		$options = array();
-		$blog_name = get_bloginfo('name');
-		$blog_description = str_replace(array("\n","\r"),"",get_bloginfo('description'));
-		$home_url = home_url();
-		switch(1){
-			//for posts
-			case is_front_page():
-			case is_home():
-				$array_pattern = array("%BLOG_TITLE%","%BLOG_DESCRIPTION%","%BLOG_URL%",'%CURRENT_URL%');
-				$array_replace = array($blog_name,$blog_description,$home_url,$home_url);
-				$options = $this->construct_open_graph_tags('ogtags_frontpage_',$array_pattern,$array_replace);
-			break;
-			//for all type of post
-			case is_page():
-			case is_single():
-				global $post;
-				$custom_post = get_post_custom($post->ID);
-				$postypes_media = get_post_types(array('label'=>'Media'),'objects');
-				$postypes = get_post_types(array('show_ui'=>true),'objects');
-				//if find attachement type
-				if(is_object($postypes_media['attachment']))
-					$postypes['attachment'] = $postypes_media['attachment'];				
-				//post types
-				//change name of prefix for post type and post page
-				if($current_post_type == 'post') $prefix_option = 'ogtags_post_';
-				elseif($current_post_type == 'page') $prefix_option = 'ogtags_page_';
-				else
-					foreach($postypes as $postypes_name=>$type_values){
-						if($current_post_type == $postypes_name){
-						 	$prefix_option = 'ogtags_custom_post_types_'.$postypes_name.'_';						 	
-							$type = $type_values->label;
-						}
-					}
-				global $wpzoom_cf_use;
-				//take from post thumbnail
-				if(current_theme_supports('post-thumbnails')){
-					if(has_post_thumbnail($post->ID)){
-						$img = $this->catch_that_image(get_the_post_thumbnail($post->ID, 'AWD_facebook_ogimage'));
-					}
-				}
-				//if no post thumbnail	
-				if($img == ""){
-                    if($wpzoom_cf_use == 'Yes')
-                    	$img = get_post_meta($post->ID, $wpzoom_cf_photo, true);
-                    	if(!$img)
-                    		$img = $this->catch_that_image($post->post_content);
-                }
-                //take default if no image found.
-                if($img==""){
-                	is_single() ? $img = $this->options['ogtags_page_image'] : "";
-                	is_page() ? $img = $this->options['ogtags_post_image'] : "";
-                }
-                
-                //try to create a nice description
-                if(!empty($post->post_excerpt)){
-                	$description = esc_attr(str_replace("\r\n",' ',substr(strip_tags(strip_shortcodes($post->post_excerpt)), 0, 160)));
-                }else{
-					$description = esc_attr(str_replace("\r\n",' ',substr(strip_tags(strip_shortcodes($post->post_content)), 0, 160)));
-                }
-                
-				$array_pattern = array("%BLOG_TITLE%","%BLOG_DESCRIPTION%","%BLOG_URL%","%POST_TITLE%","%POST_EXCERPT%","%POST_IMAGE%","%CURRENT_URL%");
-				$array_replace = array($blog_name,$blog_description,$home_url,$post->post_title,$description,$img,get_permalink($post->ID));
-				$options = $this->construct_open_graph_tags($prefix_option,$array_pattern,$array_replace,$custom_post);
-			break;
-			//for tag archives
-			case is_author():
-				global $wp_query;
-				$author_slug = $wp_query->query_vars['author_name'];
-				$current_author = get_user_by('slug',$author_slug);
-				$current_archive_url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-				$type =  'Authors';
-				//get avatar for replace in pattern
-				$avatar = get_avatar($current_author->ID, '50');
-				//get the url of avatar
-				if($avatar)
-				    $gravatar_attributes = simplexml_load_string($avatar);
-				if(!empty($gravatar_attributes['src']))
-					$gravatar_url = $gravatar_attributes['src'];
-				$prefix_option = 'ogtags_author_';
-				$array_pattern = array("%BLOG_TITLE%","%BLOG_DESCRIPTION%","%BLOG_URL%","%AUTHOR_TITLE%","%AUTHOR_IMAGE%","%AUTHOR_DESCRIPTION%","%CURRENT_URL%");
-				$array_replace = array($blog_name,$blog_description,$home_url,trim(wp_title('',false)),$gravatar_url,$current_author->description,$current_archive_url);
-				$options = $this->construct_open_graph_tags($prefix_option,$array_pattern,$array_replace);
-			break;
-			case is_tag():
-			case is_date():
-				$current_archive_url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-				$type =  'Archives';
-				$prefix_option = 'ogtags_archive_';
-				$array_pattern = array("%BLOG_TITLE%","%BLOG_DESCRIPTION%","%BLOG_URL%","%ARCHIVE_TITLE%","%CURRENT_URL%");
-				$array_replace = array($blog_name,$blog_description,$home_url,trim(wp_title('',false)),$current_archive_url);
-				$options = $this->construct_open_graph_tags($prefix_option,$array_pattern,$array_replace);
-			break;
-			//for taxonomies register public
-			case is_tax():
-				global $wp_query;
-				$taxonomy_slug = $wp_query->query_vars['taxonomy'];
-				$taxonomy_name = get_term_by('slug',$value,$taxonomy_slug);
-				$current_archive_url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-				$type =  'Taxonomies';
-				$prefix_option = 'ogtags_taxonomies_'.$taxonomy_slug.'_';
-				$array_pattern = array("%BLOG_TITLE%","%BLOG_DESCRIPTION%","%BLOG_URL%","%TERM_TITLE%","%TERM_DESCRIPTION%","%CURRENT_URL%");
-				$array_replace = array($blog_name,$blog_description,$home_url,trim(wp_title('',false)),term_description(),$current_archive_url);
-				$options = $this->construct_open_graph_tags($prefix_option,$array_pattern,$array_replace);
-				$type = 'TAX';
-			break;
-			//for categories
-			case is_category():
-					$current_archive_url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-					$type =  'Categories';
-					$prefix_option = 'ogtags_taxonomies_category_';
-					$array_pattern = array("%BLOG_TITLE%","%BLOG_DESCRIPTION%","%BLOG_URL%","%TERM_TITLE%","%TERM_DESCRIPTION%","%CURRENT_URL%");
-					$array_replace = array($blog_name,$blog_description,$home_url,trim(wp_title('',false)),category_description(),$current_archive_url);
-					$options = $this->construct_open_graph_tags($prefix_option,$array_pattern,$array_replace);
-			break;
-		}
-	}
-	//****************************************************************************************
 	//	LOGIN BUTTON
 	//****************************************************************************************
 	/**
@@ -2587,37 +2799,28 @@ Class AWD_facebook
 			unset($_this['wpdb']);
 			unset($_this['optionsManager']);
 			?>
-			<div class="facebook_awd_debug">
-				<h2><?php _e('Facebook AWD API',$this->plugin_text_domain); ?></h2><?php
-				$this->Debug($_this['fcbk']);		
-		
-				?><h2><?php _e('Facebook AWD APPLICATIONS INFOS',$this->plugin_text_domain); ?></h2><?php
-				$this->Debug($_this['options']['app_infos']);		
-			
-				?><h2><?php _e('Facebook AWD CURRENT USER',$this->plugin_text_domain); ?></h2><?php
-				$this->Debug($_this['me']);	
-				
-				?><h2><?php _e('Facebook AWD Options',$this->plugin_text_domain); ?></h2><?php
-				$this->Debug($_this['options']);		
-				
-				?><h2><?php _e('Facebook AWD FULL',$this->plugin_text_domain); ?></h2><?php
-				$this->Debug($_this);
-				?>
+			<div class="AWD_facebook_wrap">
+				<div class="container-fluid">
+					<div class="awd_debug well">
+						<div class="page-header"><h2><?php _e('Facebook AWD API',$this->plugin_text_domain); ?></h2></div>
+						<?php $this->Debug($_this['fcbk']);	?>
+						
+						<div class="page-header"><h2><?php _e('Facebook AWD APPLICATIONS INFOS',$this->plugin_text_domain); ?></h2></div>
+						<?php $this->Debug($_this['options']['app_infos']);	?>
+						
+						<div class="page-header"><h2><?php _e('Facebook AWD CURRENT USER',$this->plugin_text_domain); ?></h2></div>
+						<?php $this->Debug($_this['me']); ?>
+						
+						<div class="page-header"><h2><?php _e('Facebook AWD Options',$this->plugin_text_domain); ?></h2></div>
+						<?php $this->Debug($_this['options']); ?>
+						
+						<div class="page-header"><h2><?php _e('Facebook AWD FULL',$this->plugin_text_domain); ?></h2></div>
+						<?php $this->Debug($_this); ?>
+					</div>
+				</div>
 			</div>
-			<script>
-				jQuery(document).ready(function($){
-					$('.facebook_awd_debug h2').each(function(){
-						$(this).next().hide();
-						$(this).css('fontSize', '20px');
-						$(this).css('fontWeight', 'bold');
-						$(this).css('borderBottom', '1px solid #000');
-						$(this).css('cursor', 'pointer');
-						$(this).click(function(){
-							$(this).next().slideToggle();
-						});
-					});
-				});
-			</script>
+			<br />
+			<br />
 			<?php
 		}
 	}

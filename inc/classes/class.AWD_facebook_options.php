@@ -80,7 +80,10 @@ class AWD_facebook_options
 		        }
 		    }
 		}
-		
+
+		//Define default object
+		$this->setDefaultValue('opengraph_objects', array());
+
 		//Define Default Vars if not set
 		$this->setDefaultValue('connect_enable', 0);
 		$this->setDefaultValue('open_graph_enable', 1);
@@ -145,52 +148,6 @@ class AWD_facebook_options
 		$this->setDefaultValue('comments_on_pages', 0);
 		$this->setDefaultValue('comments_on_posts', 0);
 		$this->setDefaultValue('comments_on_custom_post_types', 0);
-
-		//OpenGraph
-		$this->setDefaultValue('ogtags_frontpage_disable', 1);
-		$this->setDefaultValue('ogtags_frontpage_type', 'website');
-		$this->setDefaultValue('ogtags_frontpage_site_name', '%BLOG_TITLE%');
-		$this->setDefaultValue('ogtags_frontpage_title', '%BLOG_TITLE%');
-		$this->setDefaultValue('ogtags_frontpage_description', '%BLOG_DESCRIPTION%');
-		$this->setDefaultValue('ogtags_frontpage_locale', $this->options['locale']);
-		$this->setDefaultValue('ogtags_frontpage_image', '%POST_IMAGE%');
-
-		$this->setDefaultValue('ogtags_page_disable', 1);
-		$this->setDefaultValue('ogtags_page_type', 'blog');
-		$this->setDefaultValue('ogtags_page_site_name', '%BLOG_TITLE%');
-		$this->setDefaultValue('ogtags_page_title', '%POST_TITLE%');
-		$this->setDefaultValue('ogtags_page_description', '%POST_EXCERPT%');
-		$this->setDefaultValue('ogtags_page_locale', $this->options['locale']);
-		$this->setDefaultValue('ogtags_page_image', '%POST_IMAGE%');
-	
-		$this->setDefaultValue('ogtags_post_disable', 1);
-		$this->setDefaultValue('ogtags_post_type', 'article');
-		$this->setDefaultValue('ogtags_post_site_name', '%BLOG_TITLE%');
-		$this->setDefaultValue('ogtags_post_title', '%POST_TITLE%');
-		$this->setDefaultValue('ogtags_post_description', '%POST_EXCERPT%');
-		$this->setDefaultValue('ogtags_post_locale', $this->options['locale']);
-		$this->setDefaultValue('ogtags_post_image', '%POST_IMAGE%');
-		
-		$this->setDefaultValue('ogtags_archive_disable', 1);
-		$this->setDefaultValue('ogtags_archive_type', 'blog');
-		$this->setDefaultValue('ogtags_archive_site_name', '%BLOG_TITLE%');
-		$this->setDefaultValue('ogtags_archive_title', '%ARCHIVE_TITLE%');
-		$this->setDefaultValue('ogtags_archive_locale', $this->options['locale']);
-
-		$this->setDefaultValue('ogtags_taxonomies_category_disable', 1);
-		$this->setDefaultValue('ogtags_taxonomies_category_type', 'blog');
-		$this->setDefaultValue('ogtags_taxonomies_category_site_name', '%BLOG_TITLE%');
-		$this->setDefaultValue('ogtags_taxonomies_category_title', '%TERM_TITLE%');
-		$this->setDefaultValue('ogtags_taxonomies_category_description', '%TERM_DESCRIPTION%');
-		$this->setDefaultValue('ogtags_taxonomies_category_locale', $this->options['locale']);
-
-		$this->setDefaultValue('ogtags_author_disable', 1);
-		$this->setDefaultValue('ogtags_author_type', 'blog');
-		$this->setDefaultValue('ogtags_author_site_name', '%BLOG_TITLE%');
-		$this->setDefaultValue('ogtags_author_title', '%POST_TITLE%');
-		$this->setDefaultValue('ogtags_author_image', '%AUTHOR_IMAGE%');
-		$this->setDefaultValue('ogtags_author_description', '%AUTHOR_DESCRIPTION%');
-		$this->setDefaultValue('ogtags_author_locale', $this->options['locale']);
 
 		//publish
 		$this->setDefaultValue('publish_to_profile', 0);
@@ -262,6 +219,7 @@ class AWD_facebook_options
 		//verify default value
 		$this->defaultOptions($this->options);
 		update_option($this->filterName, $this->options);
+		$this->load();
 	}
 	
 	/**
@@ -274,6 +232,7 @@ class AWD_facebook_options
 		if($flush === true)
 			$this->save();
 	}
+	
 	
 	/**
 	 * reset

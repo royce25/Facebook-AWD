@@ -11,7 +11,7 @@
 $plugin_directory = array_pop(explode(DIRECTORY_SEPARATOR, dirname(dirname(__FILE__))));
 $this->wpdb = $wpdb;
 $this->plugin_url = plugins_url($plugin_directory);
-$this->plugin_url_images = $this->plugin_url."/assets/css/images/";
+$this->plugin_url_images = $this->plugin_url."/assets/img/";
 
 //TRANSLATION
 load_plugin_textdomain($this->plugin_text_domain,false,dirname( plugin_basename( __FILE__ ) ) . '/langs/');
@@ -38,7 +38,7 @@ add_action('admin_footer',array(&$this,'debug_content'));
 
 //DISPLAY FRONT
 add_action('after_setup_theme',array(&$this,'add_theme_support'));
-add_action('wp_head',array(&$this,'define_open_graph_tags_header'));
+add_action('wp_head',array(&$this,'define_ogp_objects'));
 add_action('wp_footer',array(&$this,'load_sdj_js'));
 add_action('admin_print_footer_scripts',array(&$this,'load_sdj_js'));
 add_filter('the_content', array(&$this,'the_content'));
@@ -48,7 +48,12 @@ add_action('wp_footer',array(&$this,'debug_content'));
 
 //INTERNAL
 add_action("AWD_facebook_get_admin_fbuid",array(&$this,'get_admin_fbuid'));
+add_action('wp_ajax_get_media_field', array(&$this,'ajax_get_media_field'));
 add_action('wp_ajax_get_app_infos_content', array(&$this,'get_app_infos_content'));
+add_action('wp_ajax_delete_ogp_object', array(&$this,'delete_ogp_object'));
+add_action('wp_ajax_save_ogp_object', array(&$this,'save_ogp_object'));
+add_action('wp_ajax_save_ogp_object_links', array(&$this,'save_ogp_object_links'));
+add_action('wp_ajax_get_open_graph_object_form', array(&$this,'ajax_get_open_graph_object_form'));
 add_filter('rewrite_rules_array',array(&$this,'insert_rewrite_rules' ));
 add_filter('query_vars',array(&$this,'insert_query_vars' ));
 add_action('wp_loaded',array(&$this,'flush_rules' ));
