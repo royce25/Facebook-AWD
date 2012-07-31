@@ -32,7 +32,6 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 	//****************************************************************************************
 	public function __construct($file,$AWD_facebook)
 	{
-	
 		$this->file = $file;
 		$this->AWD_facebook = $AWD_facebook;
 		$AWD_facebook->plugins[$this->plugin_slug] = $this;
@@ -69,7 +68,8 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 
 	public function register_widgets(){}
 
-	public function default_options($options){
+	public function default_options($options)
+	{
 		return $options;
 	}
 

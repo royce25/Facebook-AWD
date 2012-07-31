@@ -21,7 +21,7 @@ $fields['like_button'] = array(
 		'
 	),
 	
-	'like_button_font'=> array(
+	'font'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'arial', 'label'=>__('Arial',$this->plugin_text_domain)),
@@ -36,7 +36,7 @@ $fields['like_button'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_button_action'=> array(
+	'action'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'like', 'label'=>__('Like',$this->plugin_text_domain)),
@@ -47,7 +47,7 @@ $fields['like_button'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_button_layout'=> array(
+	'layout'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'standard', 'label'=>__('Standard',$this->plugin_text_domain)),
@@ -59,7 +59,7 @@ $fields['like_button'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_button_type'=> array(
+	'type'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'iframe', 'label'=>__('Iframe',$this->plugin_text_domain)),
@@ -71,7 +71,7 @@ $fields['like_button'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_button_send'=> array(
+	'send'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -79,10 +79,10 @@ $fields['like_button'] = array(
 		),
 		'label'=> __('Send button ?',$this->plugin_text_domain),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2','disabled'=>($this->options['like_button_type'] == "iframe" ? 'disabled' : ''))
+		'attr'=> array('class'=>'span2','disabled'=>($this->options['like_button']['type'] == "iframe" ? 'disabled' : ''))
 	),
 	
-	'like_button_colorscheme'=> array(
+	'colorscheme'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'light', 'label'=>__('light',$this->plugin_text_domain)),
@@ -93,7 +93,7 @@ $fields['like_button'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_button_faces'=> array(
+	'show_faces'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -104,21 +104,21 @@ $fields['like_button'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_button_width'=> array(
+	'width'=> array(
 		'type'=> 'text',
 		'label'=> __('Width of button',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_button_height'=> array(
+	'height'=> array(
 		'type'=> 'text',
 		'label'=> __('Height of button',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_button_ref'=> array(
+	'ref'=> array(
 		'type'=> 'text',
 		'label'=> __('Ref',$this->plugin_text_domain),
 		'class'=>'span2',
@@ -146,7 +146,7 @@ $fields['like_button'] = array(
 		'
 	),
 	
-	'like_button_url'=> array(
+	'href'=> array(
 		'type'=> 'text',
 		'label'=> __('Default Url to like',$this->plugin_text_domain),
 		'class'=>'span4',
@@ -167,7 +167,7 @@ $fields['like_button'] = array(
 		'
 	),
 	
-	'like_button_on_pages'=> array(
+	'on_pages'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -178,7 +178,7 @@ $fields['like_button'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_button_place_on_pages'=> array(
+	'place_on_pages'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'top', 'label'=>__('Top',$this->plugin_text_domain)),
@@ -187,7 +187,7 @@ $fields['like_button'] = array(
 		),
 		'label'=> __('Where ?',$this->plugin_text_domain),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['like_button_on_pages'] == "0" ? 'disabled' : ''))
+		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['like_button']['on_pages'] == "0" ? 'disabled' : ''))
 	),
 	
 	'after_on_pages' => array(
@@ -204,7 +204,7 @@ $fields['like_button'] = array(
 		',
 	),
 	
-	'like_button_on_posts'=> array(
+	'on_posts'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -215,7 +215,7 @@ $fields['like_button'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_button_place_on_posts'=> array(
+	'place_on_posts'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'top', 'label'=>__('Top',$this->plugin_text_domain)),
@@ -224,7 +224,7 @@ $fields['like_button'] = array(
 		),
 		'label'=> __('Where ?',$this->plugin_text_domain),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['like_button_on_posts'] == "0" ? 'disabled' : ''))
+		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['like_button']['on_posts'] == "0" ? 'disabled' : ''))
 	),
 	
 	'after_on_posts' => array(
@@ -241,7 +241,7 @@ $fields['like_button'] = array(
 		',
 	),
 	
-	'like_button_on_custom_post_types'=> array(
+	'on_custom_post_types'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -252,7 +252,7 @@ $fields['like_button'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_button_place_on_custom_post_types'=> array(
+	'place_on_custom_post_types'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'top', 'label'=>__('Top',$this->plugin_text_domain)),
@@ -261,7 +261,7 @@ $fields['like_button'] = array(
 		),
 		'label'=> __('Where ?',$this->plugin_text_domain),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['like_button_on_custom_post_types'] == "0" ? 'disabled' : ''))
+		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['like_button']['on_custom_post_types'] == "0" ? 'disabled' : ''))
 	),
 	
 	'after_on_posts_types' => array(
@@ -278,21 +278,21 @@ $fields['like_button'] = array(
 		',
 	),
 
-	'like_button_exclude_post_type'=> array(
+	'exclude_post_type'=> array(
 		'type'=> 'text',
 		'label'=> __('Exclude Post types',$this->plugin_text_domain),
 		'class'=>'span4',
 		'attr'=> array('class'=>'span4')
 	),
 	
-	'like_button_exclude_terms_slug'=> array(
+	'exclude_terms_slug'=> array(
 		'type'=> 'text',
 		'label'=> __('Exclude Categories or other terms',$this->plugin_text_domain),
 		'class'=>'span4',
 		'attr'=> array('class'=>'span4')
 	),
 	
-	'like_button_exclude_post_id'=> array(
+	'exclude_post_id'=> array(
 		'type'=> 'text',
 		'label'=> __('Exclude Posts or Pages ID',$this->plugin_text_domain),
 		'class'=>'span4',

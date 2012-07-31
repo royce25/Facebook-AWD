@@ -65,23 +65,23 @@ class AWD_facebook_likebox
 	 * template 
 	 * template to use, xfbml, html5, or iframe
 	 */
-	protected $template;
+	protected $type;
 	
 	/**
 	 * Construct
 	 */
-	public function __construct($href,$width,$height,$colorscheme,$show_faces,$stream,$header,$border_color,$force_wall,$template)
+	public function __construct($options)
 	{
-		$this->setHref($href);
-		$this->setWidth($width);
-		$this->setHeight($height);
-		$this->setColorscheme($colorscheme);
-		$this->setShowFaces($show_faces);
-		$this->setStream($stream);
-		$this->setHeader($header);
-		$this->setBorderColor($border_color);
-		$this->setForceWall($force_wall);
-		$this->setTemplate($template);
+		$this->setHref($options['href']);
+		$this->setWidth($options['width']);
+		$this->setHeight($options['height']);
+		$this->setColorscheme($options['colorscheme']);
+		$this->setShowFaces($options['show_faces']);
+		$this->setStream($options['stream']);
+		$this->setHeader($options['header']);
+		$this->setBorderColor($options['border_color']);
+		$this->setForceWall($options['force_wall']);
+		$this->setType($options['type']);
 	}
 
 	/**
@@ -177,13 +177,13 @@ class AWD_facebook_likebox
 	}
 	
 	/**
-	 * Setter: template
-	 * @param String $template
+	 * Setter: type
+	 * @param String $type
 	 * @return void
 	 */
-	public function setTemplate($template)
+	public function setType($type)
 	{
-		$this->template = $template;
+		$this->type = $type;
 	}
 	
 	/**
@@ -268,12 +268,12 @@ class AWD_facebook_likebox
 	}
 	
 	/**
-	 * Getter: template
+	 * Getter: type
 	 * @return String
 	 */
-	public function getTemplate()
+	public function getType()
 	{
-		return $this->template;
+		return $this->type;
 	}
 	
 	/**
@@ -282,15 +282,15 @@ class AWD_facebook_likebox
 	 */
 	public function get()
 	{	
-		if($this->template == 'iframe')
+		if($this->type == 'iframe')
 		{
 			return $this->likeboxIframe();
 		}
-		else if($this->template == 'html5')
+		else if($this->type == 'html5')
 		{
 			return $this->likeboxHtml5();
 		}
-		else if($this->template == 'xfbml')
+		else if($this->type == 'xfbml')
 		{
 			return $this->likeboxXfbml();
 		}

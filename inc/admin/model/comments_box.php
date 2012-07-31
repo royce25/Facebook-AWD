@@ -6,7 +6,7 @@
 * Hermann.alexandre@ahwebdev.fr
 *
 */
-$fields['comments_box'] = array(
+$fields['box'] = array(
 	'title_config' => array(
 		'type'=>'html',
 		'html'=> '
@@ -21,7 +21,7 @@ $fields['comments_box'] = array(
 		'
 	),
 	
-	'comments_url'=> array(
+	'url'=> array(
 		'type'=> 'text',
 		'label'=> __('Default Url',$this->plugin_text_domain),
 		'class'=>'span4',
@@ -44,7 +44,7 @@ $fields['comments_box'] = array(
 		'
 	),
 	
-	'comments_type'=> array(
+	'type'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'xfbml', 'label'=>__('Xfbml',$this->plugin_text_domain)),							
@@ -56,14 +56,14 @@ $fields['comments_box'] = array(
 	),
 	
 	
-	'comments_nb'=> array(
+	'num_posts'=> array(
 		'type'=> 'text',
 		'label'=> __('Nb of comments',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'comments_mobile'=> array(
+	'mobile'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -88,7 +88,7 @@ $fields['comments_box'] = array(
 		'
 	),
 	
-	'comments_on_pages'=> array(
+	'on_pages'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -99,7 +99,7 @@ $fields['comments_box'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'comments_on_posts'=> array(
+	'on_posts'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -110,7 +110,7 @@ $fields['comments_box'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'comments_on_custom_post_types'=> array(
+	'on_custom_post_types'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -135,21 +135,21 @@ $fields['comments_box'] = array(
 		'
 	),
 	
-	'comments_exclude_post_id'=> array(
+	'exclude_post_id'=> array(
 		'type'=> 'text',
 		'label'=> __('Exclude Posts or Pages ID (example: 12,46,234)',$this->plugin_text_domain),
 		'class'=>'span4',
 		'attr'=> array('class'=>'span4')
 	),
 	
-	'comments_width'=> array(
+	'width'=> array(
 		'type'=> 'text',
 		'label'=> __('Width',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'comments_colorscheme'=> array(
+	'colorscheme'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'light', 'label'=>__('light',$this->plugin_text_domain)),
@@ -171,7 +171,7 @@ $fields['comments_box'] = array(
 		'type'=>'html',
 		'html'=> '
 			<h1>'.__('Preview',$this->plugin_text_domain).'</h1>			
-			<div class="well">'.$this->get_the_comments_box("",array("comments_width"=>"420")).'</div> 
+			<div class="well">'.$this->get_the_comments_box("",array("width"=>"420")).'</div> 
 			<h1>'.__('Options List',$this->plugin_text_domain).'</h1>
 			<table class="table table-bordered table-condensed table-striped">
 				<thead>

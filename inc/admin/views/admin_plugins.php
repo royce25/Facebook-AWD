@@ -50,7 +50,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 					<p class="alert alert-info"><?php _e('Settings are defaults, you can redefine them in shortcodes, widgets, and themes functions',$this->plugin_text_domain); ?></p>
 					<?php 
 					if(isset($fields['like_button']) && is_array($fields['like_button'])){
-						echo $form->proccessFields($fields['like_button']);
+						echo $form->proccessFields('like_button',$fields['like_button']);
 					}
 					?>
 				</div>
@@ -59,7 +59,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 					<p class="alert alert-info"><?php _e('The like box is added via shortcodes, widgets, and themes functions',$this->plugin_text_domain); ?></p>
 					<?php 
 					if(isset($fields['like_box']) && is_array($fields['like_box'])){
-						echo $form->proccessFields($fields['like_box']); 
+						echo $form->proccessFields('like_box',$fields['like_box']); 
 					}
 					?>
 				</div>
@@ -68,7 +68,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 					<p class="alert alert-info"><?php _e('The activity box is added via shortcodes, widgets, and themes functions',$this->plugin_text_domain); ?></p>
 					<?php 
 					if(isset($fields['activity_box']) && is_array($fields['activity_box'])){
-						echo $form->proccessFields($fields['activity_box']);
+						echo $form->proccessFields('activity_box',$fields['activity_box']);
 					}
 					?>
 				</div>
@@ -78,7 +78,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 					<?php 
 					if($this->options['connect_enable'] == 1){
 						if(isset($fields['login_button']) && is_array($fields['login_button'])){
-							echo $form->proccessFields($fields['login_button']);
+							echo $form->proccessFields('login_button',$fields['login_button']);
 						}
 					}else{
 						echo '<p class="alert alert-warning">'.__('You must enable FB Connect and set parameters in settings of the plugins',$this->plugin_text_domain).'</p>';
@@ -95,7 +95,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 					
 					<?php
 					if(isset($fields['comments_box']) && is_array($fields['comments_box'])){
-						echo $form->proccessFields($fields['comments_box']);
+						echo $form->proccessFields('comments_box',$fields['comments_box']);
 					}
 					?>
 				</div>
@@ -114,7 +114,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 					<div id="<?php echo $plugin ?>_settings" class="tab-pane">
 						<?php
 						if(isset($fields) && is_array($fields)){
-							echo $form->proccessFields($fields);
+							echo $form->proccessFields($plugin,$fields);
 						}
 						?>
 					</div>
@@ -134,17 +134,3 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 	<?php echo $form->end(); ?>
 
 </div>
-<?php
-/**
-* Javascript for admin
-*/
-?>
-<script type="text/javascript">
-	jQuery(document).ready( function($){
-        $('#plugins_menu a:first').tab('show');
-		$('#submit_settings').click(function(){
-			$('#<?php echo $this->plugin_slug; ?>_form_settings').submit();
-			return false;
-		});
-	});
-</script>

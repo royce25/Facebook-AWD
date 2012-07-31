@@ -21,7 +21,7 @@ $fields['activity_box'] = array(
 		'
 	),
 	
-	'activity_domain'=> array(
+	'domain'=> array(
 		'type'=> 'text',
 		'label'=> __('Domain',$this->plugin_text_domain),
 		'class'=>'span4',
@@ -42,7 +42,7 @@ $fields['activity_box'] = array(
 		'
 	),
 	
-	'activity_type'=> array(
+	'type'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'iframe', 'label'=>__('Iframe',$this->plugin_text_domain)),
@@ -54,21 +54,21 @@ $fields['activity_box'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'activity_filter'=> array(
+	'filter'=> array(
 		'type'=> 'text',
 		'label'=> __('Filter',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'activity_ref'=> array(
+	'ref'=> array(
 		'type'=> 'text',
 		'label'=> __('Ref',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'activity_max_age'=> array(
+	'max_age'=> array(
 		'type'=> 'text',
 		'label'=> __('Max Age',$this->plugin_text_domain),
 		'class'=>'span2',
@@ -76,7 +76,7 @@ $fields['activity_box'] = array(
 	),
 	
 	
-	'activity_linktarget'=> array(
+	'linktarget'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'_blank', 'label'=>__('Blank',$this->plugin_text_domain)),
@@ -88,7 +88,7 @@ $fields['activity_box'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'activity_width'=> array(
+	'width'=> array(
 		'type'=> 'text',
 		'label'=> __('Width of box',$this->plugin_text_domain),
 		'class'=>'span2',
@@ -96,14 +96,14 @@ $fields['activity_box'] = array(
 	),
 	
 	
-	'activity_height'=> array(
+	'height'=> array(
 		'type'=> 'text',
 		'label'=> __('Height of box',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'activity_header'=> array(
+	'header'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -114,7 +114,7 @@ $fields['activity_box'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'activity_recommendation'=> array(
+	'recommendations'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -125,7 +125,7 @@ $fields['activity_box'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'activity_colorscheme'=> array(
+	'colorscheme'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'light', 'label'=>__('light',$this->plugin_text_domain)),
@@ -136,7 +136,7 @@ $fields['activity_box'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'activity_font'=> array(
+	'font'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'arial', 'label'=>__('Arial',$this->plugin_text_domain)),
@@ -151,7 +151,7 @@ $fields['activity_box'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'activity_border_color'=> array(
+	'border_color'=> array(
 		'type'=> 'text',
 		'label'=> __('Border color',$this->plugin_text_domain),
 		'class'=>'span2',

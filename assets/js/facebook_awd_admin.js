@@ -22,9 +22,10 @@ function AWDFacebookAdmin($){
 	{
 		var $button = $(button);
 		var $data = $button.data();
+		var post_id = $data.postId ? $data.postId : 0;
 		var $field = $button.prev();
 		var formfieldName =  $field.attr('name');
-		tb_show($data.title, 'media-upload.php?type='+$data.type+'&amp;TB_iframe=true');
+		tb_show($data.title, 'media-upload.php?post_id='+post_id+'&type='+$data.type+'&amp;TB_iframe=true');
 		window.send_to_editor = function(html){
 			var imgurl = jQuery('img',html).attr('src');
 			$field.val(imgurl);
@@ -279,9 +280,7 @@ function AWDFacebookAdmin($){
 	
 	this.init = function()
 	{
-		$.fn.button.defaults = {
-			loadingText: 'Loading...'
-		}
+		$.fn.button.defaults = {loadingText: 'Loading...'};
 		$('.AWD_profile').wrap('<div class="well">');
 		$('.AWD_logout a').addClass('btn btn-danger').css('marginTop','5px');
 		$('.AWD_profile_image').addClass('pull-left').css('marginRight','10px');		

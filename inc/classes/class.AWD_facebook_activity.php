@@ -12,11 +12,11 @@
 class AWD_facebook_activity
 {
 	/**
-	 * site 
+	 * domain 
 	 * a comma separated list of domains to show activity for.
 	 * The XFBML version defaults to the current domain
 	 */
-	protected $site;
+	protected $domain;
 	
 	/**
 	 * width 
@@ -67,9 +67,9 @@ class AWD_facebook_activity
 	 * The plugin will only include URLs which contain the filter string in the first two path parameters of the URL.
 	 * If nothing in the first two path parameters of the URL matches the filter,
 	 * the URL will not be included. 
-	 * For example, if the 'site' parameter is set to 'www.example.com' and the 'filter' parameter was set to '/section1/section2' 
+	 * For example, if the 'domain' parameter is set to 'www.example.com' and the 'filter' parameter was set to '/section1/section2' 
 	 * then only pages which matched 'http://www.example.com/section1/section2/*' would be included in the activity feed section of this plugin.
-	 * The filter parameter does not apply to any recommendations which may appear in this plugin (see above); Recommendations are based only on 'site' parameter
+	 * The filter parameter does not apply to any recommendations which may appear in this plugin (see above); Recommendations are based only on 'domain' parameter
 	 */
 	protected $filter;
 	
@@ -85,7 +85,7 @@ class AWD_facebook_activity
 	/**
 	 * ref 
 	 * must be a comma separated list, consisting of at most 5 distinct items, each of length at least 1 and at most 15 characters drawn from the set '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_'.
-	 * Specifying a value for the ref attribute adds the 'fb_ref' parameter to the any links back to your site which are clicked from within the plugin.
+	 * Specifying a value for the ref attribute adds the 'fb_ref' parameter to the any links back to your domain which are clicked from within the plugin.
 	 * Using different values for the ref parameter for different positions and configurations of this plugin within your pages allows you to track which instances are performing the best.
 	 */
 	protected $ref;
@@ -100,43 +100,43 @@ class AWD_facebook_activity
 	protected $max_age;
 	
 	/**
-	 * template 
-	 * template to use, xfbml, html5, or iframe
+	 * type 
+	 * type to use, xfbml, html5, or iframe
 	 */
-	protected $template;
+	protected $type;
 
 	
 	/**
 	 * Construct
 	 */
- 	public function __construct($site,$width,$height,$header,$colorscheme,$font,$border_color,$recommendations,$filter,$linktarget,$ref,$max_age,$template)
+ 	public function __construct($options)
  	{
-		$this->setSite($site);
-		$this->setWidth($width);
-		$this->setHeight($height);
-		$this->setHeader($header);
-		$this->setColorscheme($colorscheme);
-		$this->setFont($font);
-		$this->setBorderColor($border_color);
-		$this->setRecommendations($recommendations);
-		$this->setFilter($filter);
-		$this->setLinktarget($linktarget);
-		$this->setRef($ref);
-		$this->setMaxAge($max_age);
-		$this->setTemplate($template);
+		$this->setDomain($options['domain']);
+		$this->setWidth($options['width']);
+		$this->setHeight($options['height']);
+		$this->setHeader($options['header']);
+		$this->setColorscheme($options['colorscheme']);
+		$this->setFont($options['font']);
+		$this->setBorderColor($options['border_color']);
+		$this->setRecommendations($options['recommendations']);
+		$this->setFilter($options['filter']);
+		$this->setLinktarget($options['linktarget']);
+		$this->setRef($options['ref']);
+		$this->setMaxAge($options['max_age']);
+		$this->setType($options['type']);
  	}
 	
 	
 	/**
-	 * Setter: site
-	 * @param String $site
+	 * Setter: domain
+	 * @param String $domain
 	 * @return void
 	 */
-	public function setSite( $site )
+	public function setDomain( $domain )
 	{
-		if(empty($site))
+		if(empty($domain))
 			throw new Exception('Url for Activity box can not be empty');
-		$this->site = $site;
+		$this->domain = $domain;
 	}
 	
 	/**
@@ -250,22 +250,22 @@ class AWD_facebook_activity
 	}
 	
 	/**
-	 * Setter: template
-	 * @param String $template
+	 * Setter: type
+	 * @param String $type
 	 * @return void
 	 */
-	public function setTemplate( $template )
+	public function setType( $type )
 	{
-		$this->template = $template;
+		$this->type = $type;
 	}
 	
 	/**
-	 * Getter: site
+	 * Getter: domain
 	 * @return String
 	 */
-	public function getSite()
+	public function getDomain()
 	{
-		return $this->site;
+		return $this->domain;
 	}
 	
 	/**
@@ -368,12 +368,12 @@ class AWD_facebook_activity
 	}
 	
 	/**
-	 * Getter: template
+	 * Getter: type
 	 * @return String
 	 */
-	public function getTemplate()
+	public function getType()
 	{
-		return $this->template;
+		return $this->type;
 	}
 	
 	/**
@@ -382,15 +382,15 @@ class AWD_facebook_activity
 	 */
 	public function get()
 	{	
-		if($this->template == 'iframe')
+		if($this->type == 'iframe')
 		{
 			return $this->activityIframe();
 		}
-		else if($this->template == 'html5')
+		else if($this->type == 'html5')
 		{
 			return $this->activityHtml5();
 		}
-		else if($this->template == 'xfbml')
+		else if($this->type == 'xfbml')
 		{
 			return $this->activityXfbml();
 		}
@@ -402,15 +402,15 @@ class AWD_facebook_activity
 	//******VIEWS******//
 	public function activityHtml5()
 	{
-		return '<div class="fb-activity" data-site="'.$this->site.'" data-width="'.$this->width.'" data-height="'.$this->height.'" data-header="'.$this->header.'" data-colorscheme="'.$this->colorscheme.'" data-linktarget="'.$this->linktarget.'" data-border-color="'.$this->border_color.'" data-font="'.$this->font.'" data-recommendations="'.$this->recommendations.'" data-max_age="'.$this->max_age.'" data-ref="'.$this->ref.'" data-filter="'.$this->filter.'"></div>';
+		return '<div class="fb-activity" data-domain="'.$this->domain.'" data-width="'.$this->width.'" data-height="'.$this->height.'" data-header="'.$this->header.'" data-colorscheme="'.$this->colorscheme.'" data-linktarget="'.$this->linktarget.'" data-border-color="'.$this->border_color.'" data-font="'.$this->font.'" data-recommendations="'.$this->recommendations.'" data-max_age="'.$this->max_age.'" data-ref="'.$this->ref.'" data-filter="'.$this->filter.'"></div>';
 	}
 	public function activityXfbml()
 	{
-		return '<fb:activity site="'.$this->site.'" width="'.$this->width.'" height="'.$this->height.'" header="'.$this->header.'" colorscheme="'.$this->colorscheme.'" linktarget="'.$this->linktarget.'" border-color="'.$this->border_color.'" font="'.$this->font.'" recommendations="'.$this->recommendations.'" max_age="'.$this->max_age.'" ref="'.$this->ref.'" filter="'.$this->filter.'"></fb:activity>';
+		return '<fb:activity domain="'.$this->domain.'" width="'.$this->width.'" height="'.$this->height.'" header="'.$this->header.'" colorscheme="'.$this->colorscheme.'" linktarget="'.$this->linktarget.'" border-color="'.$this->border_color.'" font="'.$this->font.'" recommendations="'.$this->recommendations.'" max_age="'.$this->max_age.'" ref="'.$this->ref.'" filter="'.$this->filter.'"></fb:activity>';
 	}
 	public function activityIframe()
 	{
-		return '<iframe src="http://www.facebook.com/plugins/activity.php?site='.$this->site.'&amp;width='.$this->width.'&amp;height='.$this->height.'&amp;header='.$this->header.'&amp;colorscheme='.$this->colorscheme.'&amp;border_color='.urlencode($this->border_color).'&amp;recommendations='.$this->recommendations.'&amp;linktarget='.$this->linktarget.'&amp;max_age='.$this->max_age.'&amp;ref='.$this->ref.'&amp;filter='.$this->filter.'" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:'.$this->width.'px; height:'.$this->height.'px;" allowTransparency="true"></iframe>';
+		return '<iframe src="http://www.facebook.com/plugins/activity.php?domain='.$this->domain.'&amp;width='.$this->width.'&amp;height='.$this->height.'&amp;header='.$this->header.'&amp;colorscheme='.$this->colorscheme.'&amp;border_color='.urlencode($this->border_color).'&amp;recommendations='.$this->recommendations.'&amp;linktarget='.$this->linktarget.'&amp;max_age='.$this->max_age.'&amp;ref='.$this->ref.'&amp;filter='.$this->filter.'" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:'.$this->width.'px; height:'.$this->height.'px;" allowTransparency="true"></iframe>';
 	}
 }
 ?>

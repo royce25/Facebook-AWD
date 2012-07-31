@@ -22,7 +22,7 @@ $fields['login_button'] = array(
 		'
 	),
 	
-	'login_button_display_on_login_page'=> array(
+	'display_on_login_page'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -33,28 +33,28 @@ $fields['login_button'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'login_button_login_url'=> array(
+	'login_redirect_url'=> array(
 		'type'=> 'text',
 		'label'=> __('Width of button',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'login_button_logout_url'=> array(
+	'logout_redirect_url'=> array(
 		'type'=> 'text',
 		'label'=> __('Url after login',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'login_button_logout_value'=> array(
+	'logout_label'=> array(
 		'type'=> 'text',
 		'label'=> __('Url after logout',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'login_button_profile_picture'=> array(
+	'show_profile_picture'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -65,7 +65,7 @@ $fields['login_button'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'login_button_faces'=> array(
+	'show_faces'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -76,21 +76,21 @@ $fields['login_button'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'login_button_maxrow'=> array(
+	'maxrow'=> array(
 		'type'=> 'text',
 		'label'=> __('Max faces row',$this->plugin_text_domain),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['login_button_faces'] == "0" ? 'disabled' : ''))
+		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['login_button']['show_faces'] == "0" ? 'disabled' : ''))
 	),
 	
-	'login_button_width'=> array(
+	'width'=> array(
 		'type'=> 'text',
 		'label'=> __('Width of button',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'login_button_image'=> array(
+	'image'=> array(
 		'type'=> 'media',
 		'label'=> __('Button Image',$this->plugin_text_domain),
 		'class'=> 'span8',

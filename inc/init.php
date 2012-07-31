@@ -37,6 +37,7 @@ add_action("AWD_facebook_save_settings",array(&$this,'hook_post_from_plugin_opti
 add_action('admin_footer',array(&$this,'debug_content'));
 
 //DISPLAY FRONT
+add_filter('language_attributes',  array($this,'ogp_language_attributes'),10,1);
 add_action('after_setup_theme',array(&$this,'add_theme_support'));
 add_action('wp_head',array(&$this,'define_ogp_objects'));
 add_action('wp_footer',array(&$this,'load_sdj_js'));
@@ -87,15 +88,11 @@ do_action("AWD_facebook_save_settings");
 * save settings
 * refresh options from bdd.
 /****************************************************/
+$this->plugins = array();
 do_action("AWD_facebook_plugins_init");
 //UPDATES OPTIONS FOR PLUGINS
 do_action("AWD_facebook_save_settings");
 /****************************************************/
-
-
-
-
-
 $this->optionsManager->load();
 $this->options = $this->optionsManager->getOptions();
 

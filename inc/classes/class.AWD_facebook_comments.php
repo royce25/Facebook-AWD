@@ -35,21 +35,21 @@ class AWD_facebook_comments
      */
     protected $mobile;
     /**
-	 * template 
-	 * template to use, xfbml, html5, or iframe
+	 * type 
+	 * type to use, xfbml, html5, or iframe
 	 */
-	protected $template;
+	protected $type;
 	
 	/**
 	 * construct
 	 */     
-	 public function __construct($href,$width,$colorscheme,$num_posts,$mobile,$template){
-	 	$this->setHref($href);
-	 	$this->setWidth($width);
-	 	$this->setColorscheme($colorscheme);
-	 	$this->setNumPosts($num_posts);
-	 	$this->setMobile($mobile);
-	 	$this->setTemplate($template);
+	 public function __construct($options){
+	 	$this->setHref($options['href']);
+	 	$this->setWidth($options['width']);
+	 	$this->setColorscheme($options['colorscheme']);
+	 	$this->setNumPosts($options['num_posts']);
+	 	$this->setMobile($options['mobile']);
+	 	$this->setType($options['type']);
 	 }
 	 
 	/**
@@ -105,13 +105,13 @@ class AWD_facebook_comments
 	}
 	
 	/**
-	 * Setter: template
-	 * @param String $template
+	 * Setter: type
+	 * @param String $type
 	 * @return void
 	 */
-	public function setTemplate( $template )
+	public function setType( $type )
 	{
-		$this->template = $template;
+		$this->type = $type;
 	}
 	
 	/**
@@ -160,12 +160,12 @@ class AWD_facebook_comments
 	}
 	
 	/**
-	 * Getter: template
+	 * Getter: type
 	 * @return String
 	 */
-	public function getTemplate()
+	public function getType()
 	{
-		return $this->template;
+		return $this->type;
 	}
 
 	/**
@@ -174,11 +174,11 @@ class AWD_facebook_comments
 	 */
 	public function get()
 	{	
-		if($this->template == 'xfbml')
+		if($this->type == 'xfbml')
 		{
 			return $this->commentsXfbml();
 		}
-		else if($this->template == 'html5')
+		else if($this->type == 'html5')
 		{
 			return $this->commentsHtml5();
 		}

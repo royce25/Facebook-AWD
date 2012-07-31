@@ -21,7 +21,7 @@ $fields['like_box'] = array(
 		'
 	),
 	
-	'like_button_url'=> array(
+	'href'=> array(
 		'type'=> 'text',
 		'label'=> __('Url of the page',$this->plugin_text_domain),
 		'class'=>'span4',
@@ -42,7 +42,7 @@ $fields['like_box'] = array(
 		'
 	),
 	
-	'like_box_type'=> array(
+	'type'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'iframe', 'label'=>__('Iframe',$this->plugin_text_domain)),
@@ -54,7 +54,7 @@ $fields['like_box'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_box_colorscheme'=> array(
+	'colorscheme'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'light', 'label'=>__('light',$this->plugin_text_domain)),
@@ -65,7 +65,7 @@ $fields['like_box'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_box_faces'=> array(
+	'show_faces'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -76,7 +76,7 @@ $fields['like_box'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 
-	'like_box_stream'=> array(
+	'stream'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -87,7 +87,7 @@ $fields['like_box'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_box_header'=> array(
+	'header'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -98,7 +98,7 @@ $fields['like_box'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_box_force_wall'=> array(
+	'force_wall'=> array(
 		'type'=> 'select',
 		'options' => array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
@@ -109,21 +109,21 @@ $fields['like_box'] = array(
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_box_width'=> array(
+	'width'=> array(
 		'type'=> 'text',
 		'label'=> __('Width of box',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_box_height'=> array(
+	'height'=> array(
 		'type'=> 'text',
 		'label'=> __('Height of box',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
-	'like_box_border_color'=> array(
+	'border_color'=> array(
 		'type'=> 'text',
 		'label'=> __('Border color',$this->plugin_text_domain),
 		'class'=>'span2',

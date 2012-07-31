@@ -68,27 +68,27 @@ class AWD_facebook_likebutton
 	 */
 	protected $ref;
 	/**
-	 * template 
+	 * type 
 	 * template to use, xfbml, html5, or iframe
 	 */
-	protected $template;
+	protected $type;
 	
 	/**
 	 * Construct
 	 */
- 	public function __construct($href,$send,$layout,$show_faces,$width,$height,$action,$font,$colorscheme,$ref,$template)
+ 	public function __construct($options)
  	{
-		$this->setHref($href);
-		$this->setSend($send);
-		$this->setLayout($layout);
-		$this->setShowFaces($show_faces);
-		$this->setWidth($width);
-		$this->setHeight($height);
-		$this->setAction($action);
-		$this->setFont($font);
-		$this->setColorscheme($colorscheme);
-		$this->setRef($ref);
-		$this->setTemplate($template);
+		$this->setHref($options['href']);
+		$this->setSend($options['send']);
+		$this->setLayout($options['layout']);
+		$this->setShowFaces($options['show_faces']);
+		$this->setWidth($options['width']);
+		$this->setHeight($options['height']);
+		$this->setAction($options['action']);
+		$this->setFont($options['font']);
+		$this->setColorscheme($options['colorscheme']);
+		$this->setRef($options['ref']);
+		$this->setType($options['type']);
  	}
 
 	/**
@@ -198,9 +198,9 @@ class AWD_facebook_likebutton
 	 * @param String $template
 	 * @return void
 	 */
-	public function setTemplate( $template )
+	public function setType( $type )
 	{
-		$this->template = $template;
+		$this->template = $type;
 	}
 
 	/**
@@ -294,12 +294,12 @@ class AWD_facebook_likebutton
 	}
 	 
 	/**
-	 * Getter: template
+	 * Getter: type
 	 * @return String
 	 */
-	public function getTemplate()
+	public function getType()
 	{
-		return $this->template;
+		return $this->type;
 	}
 
 	
@@ -309,33 +309,31 @@ class AWD_facebook_likebutton
 	 */
 	public function get()
 	{	
-		if($this->template == 'iframe')
+		if($this->type == 'iframe')
 		{
 			return $this->likeButtonIframe();
 		}
-		else if($this->template == 'html5')
+		else if($this->type == 'html5')
 		{
 			return $this->likeButtonHtml5();
 		}
-		else if($this->template == 'xfbml')
+		else if($this->type == 'xfbml')
 		{
 			return $this->likeButtonXfbml();
 		}
 		return false;
-
 	}
-	
 	
 	//******VIEWS******//
-	public function likeButtonHtml5()
+	protected function likeButtonHtml5()
 	{
-		return '<div class="fb-like" data-href="'.urlencode($this->href).'" data-send="'.$this->send.'" data-layout="'.$this->layout.'" data-width="'.$this->width.'" data-show-faces="'.$this->show_faces.'" data-action="'.$this->action.'" data-colorscheme="'.$this->colorscheme.'" data-font="'.$fonts.'" data-ref="'.$this->ref.'"></div>';
+		return '<div class="fb-like" data-href="'.urlencode($this->href).'" data-send="'.$this->send.'" data-layout="'.$this->layout.'" data-width="'.$this->width.'" data-show-faces="'.$this->show_faces.'" data-action="'.$this->action.'" data-colorscheme="'.$this->colorscheme.'" data-font="'.$this->font.'" data-ref="'.$this->ref.'"></div>';
 	}
-	public function likeButtonXfbml()
+	protected function likeButtonXfbml()
 	{
 		return '<fb:like href="'.$this->href.'" send="'.$this->send.'" width="'.$this->width.'" colorscheme="'.$this->colorscheme.'" layout='.$this->layout.' show_faces="'.$this->show_faces.'" font="'.$this->font.'" action="'.$this->action.'" ref="'.$this->ref.'"></fb:like>';
 	}
-	public function likeButtonIframe()
+	protected function likeButtonIframe()
 	{
 		return '<iframe src="http://www.facebook.com/plugins/like.php?href='.urlencode($this->href).'&amp;send='.$this->send.'&amp;layout='.$this->layout.'&amp;width='.$this->width.'&amp;show_faces='.$this->show_faces.'&amp;action='.$this->action.'&amp;colorscheme='.$this->colorscheme.'&amp;font='.$this->fonts.'&amp;height='.$this->height.'&ref='.urlencode($this->ref).'" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:'.$this->width.'px; height:'.$this->height.'px;" allowTransparency="true"></iframe>';
 	}

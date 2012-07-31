@@ -122,7 +122,7 @@ class AWD_facebook_form
 	}
 	
 	
-	public function proccessFields($fields)
+	public function proccessFields($fieldset_id,$fields)
 	{
 		global $AWD_facebook;
 		$html = '';
@@ -132,16 +132,16 @@ class AWD_facebook_form
 				switch($field['type'])
 				{
 					case 'select':
-						$html.= $this->addSelect($field['label'].' '.$AWD_facebook->get_the_help($id), $id, $field['options'], $AWD_facebook->options[$id], $field['class'], $field['attr']);
+						$html.= $this->addSelect($field['label'].' '.$AWD_facebook->get_the_help($id), $fieldset_id.'['.$id.']', $field['options'], $AWD_facebook->options[$fieldset_id][$id], $field['class'], $field['attr']);
 					break;
 					case 'text':
-						$html.= $this->addInputText($field['label'].' '.$AWD_facebook->get_the_help($id), $id, $AWD_facebook->options[$id], $field['class'], $field['attr']); 
+						$html.= $this->addInputText($field['label'].' '.$AWD_facebook->get_the_help($id), $fieldset_id.'['.$id.']', $AWD_facebook->options[$fieldset_id][$id], $field['class'], $field['attr']); 
 					break;	
 					case 'html':
 						$html.= $field['html']; 
 					break;	
 					case 'media':
-						$html.= $this->addMediaButton($field['label'].' '.$AWD_facebook->get_the_help($id), $id, $AWD_facebook->options[$id], $field['class'], $field['attr']); 
+						$html.= $this->addMediaButton($field['label'].' '.$AWD_facebook->get_the_help($id), $fieldset_id.'['.$id.']', $AWD_facebook->options[$fieldset_id][$id], $field['class'], $field['attr']); 
 					break;
 				}
 			}

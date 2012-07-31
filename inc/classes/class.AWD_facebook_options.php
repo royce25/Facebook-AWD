@@ -54,8 +54,7 @@ class AWD_facebook_options
 	 */
 	public function setDefaultValue($options_name, $default_value)
 	{
-	    if($this->options[$options_name] == '')
-	        $this->options[$options_name] = $default_value;
+		$this->options[$options_name] = $default_value;
 	}
 	
 	/**
@@ -68,9 +67,8 @@ class AWD_facebook_options
     {
 		global $AWD_facebook;
 		$this->options = $options;
-		$this->setDefaultValue('timeout', 10);
 		
-		//langs
+		//Languages
 		if($this->options['locale']==''){
 		    if(defined('WPLANG')){
 		        if(WPLANG==''){
@@ -80,98 +78,133 @@ class AWD_facebook_options
 		        }
 		    }
 		}
-
-		//Define default object
-		$this->setDefaultValue('opengraph_objects', array());
-
-		//Define Default Vars if not set
+		
+		//Permissions
+		$perms = '';
+		$perms_admin = '';
+		$array_perms = explode(",",$this->options['perms']);
+		if(!in_array('email',$array_perms))
+			$perms = 'email,'.$this->options['perms'];  
+		if(current_user_can('manage_options'))
+			if(!in_array('manage_pages',$array_perms))
+				$perms_admin = 'manage_pages,';
+		if($AWD_facebook->current_facebook_user_can('publish_stream'))
+        	if(!in_array('publish_stream',$array_perms))
+				$perms_admin .= 'publish_stream,';
+		$perms = str_replace(' ','',rtrim($this->options['perms'],','));
+		$perms_admin = str_replace(' ','',rtrim($this->options['perms_admin'],','));
+		$this->setDefaultValue('perms', $perms);
+		$this->setDefaultValue('perms_admin', $perms.' '.$perms_admin);
+		
+		//Plugin and options
 		$this->setDefaultValue('connect_enable', 0);
 		$this->setDefaultValue('open_graph_enable', 1);
 		$this->setDefaultValue('connect_fbavatar', 0);
 		$this->setDefaultValue('debug_enable', 0);
-
-
-		//like button
-		$this->setDefaultValue('like_button_on_pages', 0);
-		$this->setDefaultValue('like_button_place_on_pages', 'top');
-		$this->setDefaultValue('like_button_on_posts', 0);
-		$this->setDefaultValue('like_button_place_on_posts', 'top');
-		$this->setDefaultValue('like_button_on_custom_post_types', 0);
-		$this->setDefaultValue('like_button_place_on_custom_post_types', 'top');
-		$this->setDefaultValue('like_button_colorscheme', 'light');
-		$this->setDefaultValue('like_button_send', 0);
-		$this->setDefaultValue('like_button_height', 35);
-		$this->setDefaultValue('like_button_width', 300);
-		$this->setDefaultValue('like_button_faces', 0);
-		$this->setDefaultValue('like_button_type', 'iframe');
-		$this->setDefaultValue('like_button_action', 'like');
-		$this->setDefaultValue('like_button_layout', 'standard');
-		$this->setDefaultValue('like_button_url', home_url());
-		
-		//like box
-		$this->setDefaultValue('like_box_colorscheme', 'light');
-		$this->setDefaultValue('like_box_width', 292);
-		$this->setDefaultValue('like_box_height', 427);
-		$this->setDefaultValue('like_box_faces', 1);
-		$this->setDefaultValue('like_box_stream', 1);
-		$this->setDefaultValue('like_box_header', 1);
-		$this->setDefaultValue('like_box_type', 'iframe');	
-		$this->setDefaultValue('like_box_force_wall', 0);	
-
-		//activity box
-		$url = parse_url(home_url());
-		$this->setDefaultValue('activity_domain', $url['host']);
-		$this->setDefaultValue('activity_linktarget', '_blank');
-		$this->setDefaultValue('activity_colorscheme', 'light');
-		$this->setDefaultValue('activity_width', 292);
-		$this->setDefaultValue('activity_height', 427);
-		$this->setDefaultValue('activity_recommendations', 0);
-		$this->setDefaultValue('activity_header', 1);
-		$this->setDefaultValue('activity_type', 'iframe');
-		
-		//login button
-		$this->setDefaultValue('login_button_display_on_login_page', 0);
-		$this->setDefaultValue('login_button_width', 200);
-		$this->setDefaultValue('login_button_maxrow', 1);
-		$this->setDefaultValue('login_button_faces', 0);
-		$this->setDefaultValue('login_button_logout_value', __('Logout',$AWD_facebook->plugin_text_domain));
-		$this->setDefaultValue('login_button_image', $AWD_facebook->plugin_url_images.'f-connect.png');
-		$this->setDefaultValue('login_button_profile_picture', 0);
-
-		//comments
-		$this->setDefaultValue('comments_url', get_bloginfo('url'));
-		$this->setDefaultValue('comments_colorscheme', 'light');
-		$this->setDefaultValue('comments_width', 500);
-		$this->setDefaultValue('comments_nb', 10);
-		$this->setDefaultValue('comments_type', 'html5');
-		$this->setDefaultValue('comments_mobile', 0);
-		$this->setDefaultValue('comments_on_pages', 0);
-		$this->setDefaultValue('comments_on_posts', 0);
-		$this->setDefaultValue('comments_on_custom_post_types', 0);
-
-		//publish
 		$this->setDefaultValue('publish_to_profile', 0);
 		$this->setDefaultValue('publish_to_pages', 0);
 		$this->setDefaultValue('publish_message_text', '');
 		$this->setDefaultValue('publish_read_more_text', __('Read More',$AWD_facebook->plugin_text_domain));
 		
-		//Define the perms with always email
-		$array_perms = explode(",",$this->options['perms']);
-		if(!in_array('email',$array_perms))
-			$this->options['perms'] = 'email,'.$this->options['perms'];  
-			
-		//Define default options for admin users.
-		if(current_user_can('manage_options'))
-			if(!in_array('manage_pages',$array_perms))
-				$this->options['perms_admin'] = 'manage_pages,';
-		if($AWD_facebook->current_facebook_user_can('publish_stream'))
-        	if(!in_array('publish_stream',$array_perms))
-				$this->options['perms_admin'] .= 'publish_stream,';
-		
-		$this->options['perms'] = str_replace(' ','',rtrim($this->options['perms'],','));
-		$this->options['perms_admin'] = str_replace(' ','',rtrim($this->options['perms_admin'],','));
-		$this->options['perms_admin'] = $this->options['perms'].','.$this->options['perms_admin'];
+		//API
+		$this->setDefaultValue('app_id', '');
+		$this->setDefaultValue('app_secret_key', '');
+		$this->setDefaultValue('admins', '');
+		$this->setDefaultValue('timeout', 10);
+		$this->setDefaultValue('app_infos', array());
 
+		//OPENGRAPH
+		$this->setDefaultValue('opengraph_objects', array());
+
+		//Plugins options	
+		$like_button = array
+		(
+			'href' 							=> home_url(),
+			'send' 							=> 0,
+			'width' 						=> 300,
+			'height' 						=> 35,
+			'colorscheme'					=> 'light',
+			'show_faces' 					=> 0,
+			'font' 							=> 'arial',
+			'action' 						=> 'like',
+			'layout' 						=> 'standard',
+			'type' 							=> 'html5',
+			'ref' 							=> '',
+			'on_pages' 						=> 0,
+			'place_on_pages'				=> 'top',
+			'on_posts' 						=> 0,
+			'place_on_posts' 				=> 'top',
+			'on_custom_post_types'			=> 0,
+			'place_on_custom_post_types'	=> 'top',
+			'exclude_post_type'				=> '',
+			'exclude_terms_slug'			=> '',
+			'exclude_post_id'				=> ''
+		);
+		$this->setDefaultValue('like_button', $like_button);
+		
+		$like_box = array
+		(
+			'href' 							=> home_url(),
+			'width' 						=> 292,
+			'height' 						=> 300,
+			'colorscheme'					=> 'light',
+			'show_faces' 					=> 0,
+			'stream' 						=> 0,
+			'type' 							=> 'html5',
+			'border_color' 					=> '',
+			'force_wall' 					=> '',
+			'header' 						=> 0,
+		);
+		$this->setDefaultValue('like_box', $like_box);
+		
+		$url = parse_url(home_url());
+		$activity_box = array
+		(
+			'domain' 						=> $url['host'],
+			'width' 						=> 292,
+			'height' 						=> 300,
+			'colorscheme'					=> 'light',
+			'font' 							=> 'arial',
+			'show_faces' 					=> 0,
+			'type' 							=> 'html5',
+			'border_color' 					=> '',
+			'recommendations' 				=> 0,
+			'header' 						=> 0,
+			'filter' 						=> '',
+			'linktarget' 					=> '_blank',
+			'ref' 							=> '',
+			'max_age' 						=> '',
+		);
+		$this->setDefaultValue('activity_box', $activity_box);
+		
+		$login_button = array
+		(
+			'display_on_login_page' 		=> 0,
+			'login_redirect_url' 			=> '',
+			'logout_redirect_url' 			=> '',
+			'logout_label' 					=> __('Logout', $AWD_facebook->plugin_text_domain),
+			'show_profile_picture'			=> 1,
+			'show_faces'					=> 0,
+			'maxrow'						=> 1,
+			'width'							=> 200,
+			'image'							=> $AWD_facebook->plugin_url_images.'f-connect.png'
+		);
+		$this->setDefaultValue('login_button', $login_button);
+		
+		$comments_box = array
+		(
+			'href' 							=> home_url(),
+			'colorscheme' 					=> 'light',
+			'width' 						=> 500,
+			'num_posts' 							=> 10,
+			'type'							=> 'html5',
+			'mobile'						=> 0,
+			'on_pages'						=> 0,
+			'on_posts'						=> 0,
+			'exclude_post_id'				=> ''
+		);
+		$this->setDefaultValue('comments_box', $comments_box);
+		
         return $this->options;
     }
 	
@@ -232,7 +265,6 @@ class AWD_facebook_options
 		if($flush === true)
 			$this->save();
 	}
-	
 	
 	/**
 	 * reset
