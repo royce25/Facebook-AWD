@@ -10,12 +10,12 @@
 <?php 
 $fields = array();
 $list_menu_plugins = array();
-require_once(dirname(dirname(__FILE__)).'/model/plugins_menu.php');
-require_once(dirname(dirname(__FILE__)).'/model/like_button.php');
-require_once(dirname(dirname(__FILE__)).'/model/like_box.php');
-require_once(dirname(dirname(__FILE__)).'/model/activity_box.php');
-require_once(dirname(dirname(__FILE__)).'/model/login_button.php');
-require_once(dirname(dirname(__FILE__)).'/model/comments_box.php');
+require(dirname(dirname(__FILE__)).'/model/plugins_menu.php');
+require(dirname(dirname(__FILE__)).'/model/like_button.php');
+require(dirname(dirname(__FILE__)).'/model/like_box.php');
+require(dirname(dirname(__FILE__)).'/model/activity_box.php');
+require(dirname(dirname(__FILE__)).'/model/login_button.php');
+require(dirname(dirname(__FILE__)).'/model/comments_box.php');
 
 $fields = apply_filters('AWD_facebook_plugins_form', $fields);
 if(!is_array($fields)){
@@ -58,7 +58,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 				<div id="like_box_settings" class="tab-pane">
 					<p class="alert alert-info"><?php _e('The like box is added via shortcodes, widgets, and themes functions',$this->plugin_text_domain); ?></p>
 					<?php 
-					if(isset($fields['like_box']) && is_array($fields['like_box'])){
+					if(isset($fields['like_box']) && is_array($fields['like_box'])){						
 						echo $form->proccessFields('like_box',$fields['like_box']); 
 					}
 					?>

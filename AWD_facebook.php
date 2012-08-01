@@ -242,19 +242,16 @@ Class AWD_facebook
 	 */
 	public function wp_init()
 	{		
-		//add script and styles in the plugin and editos pages.
+		//Js
 		wp_register_script($this->plugin_slug.'-bootstrap-js',$this->plugin_url.'/assets/bootstrap/js/bootstrap.js',array('jquery'));
 		wp_register_script($this->plugin_slug.'-google-code-prettify',$this->plugin_url.'/assets/js/google-code-prettify/prettify.js',array('jquery'));
 		wp_register_script($this->plugin_slug.'-admin-js',$this->plugin_url.'/assets/js/facebook_awd_admin.js',array('jquery','jquery-ui-tabs','jquery-ui-accordion',$this->plugin_slug.'-google-code-prettify'));
 		wp_register_script($this->plugin_slug,$this->plugin_url.'/assets/js/facebook_awd.js',array('jquery'));
 		
-		wp_register_style($this->plugin_slug.'-admin-css', $this->plugin_url.'/assets/css/facebook_awd_admin.css');
-		
-		wp_register_style($this->plugin_slug.'-google-code-prettify-css',$this->plugin_url.'/assets/js/google-code-prettify/prettify.css');
-
-		//Css framework bootstrap
+		//Css
 		wp_register_style($this->plugin_slug.'-ui-bootstrap', $this->plugin_url.'/assets/css/bootstrap.css');
-		wp_register_style($this->plugin_slug.'-ui-bootstrap-responsive', $this->plugin_url.'/assets/bootstrap/css/bootstrap-responsive.min.css', array($this->plugin_slug.'-ui-bootstrap'));
+		wp_register_style($this->plugin_slug.'-ui-bootstrap-responsive', $this->plugin_url.'/assets/css/bootstrap-responsive.min.css');
+		wp_register_style($this->plugin_slug.'-google-code-prettify-css',$this->plugin_url.'/assets/js/google-code-prettify/prettify.css');
 	}
 	
 	/**
@@ -526,20 +523,22 @@ Class AWD_facebook
 		//add_action( "load-".$this->blog_admin_support_hook, array(&$this,'admin_initialisation'));
 		add_action( "load-".$this->blog_admin_plugins_hook, array(&$this,'admin_initialisation'));
 		add_action( "load-".$this->blog_admin_opengraph_hook, array(&$this,'admin_initialisation'));
-		
-		add_action( 'admin_print_styles-'.$this->blog_admin_page_hook, array(&$this,'admin_enqueue_css'));
+		add_action( 'admin_print_styles-'.$this->blog_admin_page_hook, array(&$this,'admin_enqueue_css'));		
 		//add_action( 'admin_print_styles-'.$this->blog_admin_support_hook, array(&$this,'admin_enqueue_css'));
 		add_action( 'admin_print_styles-'.$this->blog_admin_plugins_hook, array(&$this,'admin_enqueue_css'));
 		add_action( 'admin_print_styles-'.$this->blog_admin_opengraph_hook, array(&$this,'admin_enqueue_css'));
 		add_action( 'admin_print_styles-post-new.php', array(&$this,'admin_enqueue_css'));
 		add_action( 'admin_print_styles-post.php', array(&$this,'admin_enqueue_css'));
-		
 		add_action( 'admin_print_scripts-'.$this->blog_admin_page_hook, array(&$this,'admin_enqueue_js'));
 		//add_action( 'admin_print_scripts-'.$this->blog_admin_support_hook, array(&$this,'admin_enqueue_js'));
 		add_action( 'admin_print_scripts-'.$this->blog_admin_plugins_hook, array(&$this,'admin_enqueue_js'));
 		add_action( 'admin_print_scripts-'.$this->blog_admin_opengraph_hook, array(&$this,'admin_enqueue_js'));
 		add_action( 'admin_print_scripts-post-new.php', array(&$this,'admin_enqueue_js'));
 		add_action( 'admin_print_scripts-post.php', array(&$this,'admin_enqueue_js'));
+		
+		//test-widgets.php
+		add_action( 'admin_print_styles-widgets.php', array(&$this,'admin_enqueue_css'));
+
 		
 		//enqueue here the library facebook connect
 		$this->add_js_options();
@@ -638,6 +637,7 @@ Class AWD_facebook
 	 */
 	public function admin_enqueue_css()
 	{
+		wp_enqueue_style($this->plugin_slug.'-ui-bootstrap-responsive');
 		wp_enqueue_style($this->plugin_slug.'-ui-bootstrap');
 		wp_enqueue_style($this->plugin_slug.'-google-code-prettify-css');
 		wp_enqueue_style('thickbox');
@@ -1124,7 +1124,7 @@ Class AWD_facebook
 		$type = $_POST['type'];
 		$name = $_POST['name'];
 		$form = new AWD_facebook_form('form_media_field', 'POST', '', $this->plugin_option_pref);
-		echo $form->addMediaButton($label, $name, '','span8', array('class'=>'span6'), array('data-title'=> $label2, 'data-type'=> $type), true);
+		echo $form->addMediaButton($name, $name, $label, '','span8', array('class'=>'span6'), array('data-title'=> $label2, 'data-type'=> $type), true);
 		exit();
 	}
 	
@@ -1351,7 +1351,7 @@ Class AWD_facebook
 					$options[] = array('value'=>$ogp_object['id'], 'label'=> $ogp_object['object_title']);
 				}
 				
-				$html.= $form->addSelect(__('Choose Opengraph object for',$this->plugin_text_domain).' '.$context, 'opengraph_object_link['.$key.']', $options, $linked_object, 'span4', array('class'=>'span4'));
+				$html.= $form->addSelect('opengraph_object_link_'.$key, 'opengraph_object_link['.$key.']', __('Choose Opengraph object for',$this->plugin_text_domain).' '.$context, $options, $linked_object, 'span4', array('class'=>'span4'));
 			}
 		}else{
 			$html.= '<p class="alert alert-warning">'.__('No Object found',$this->plugin_text_domain).'</p></td>';
@@ -1550,9 +1550,9 @@ Class AWD_facebook
 	public function the_content($content)
 	{
 		global $post;
-		$exclude_post_type = explode(",",$this->options['like_button_exclude_post_type']);
-		$exclude_post_page_id = explode(",",$this->options['like_button_exclude_post_id']);
-		$exclude_terms_slug = explode(",",$this->options['like_button_exclude_terms_slug']);
+		$exclude_post_type = explode(",",$this->options['like_button']['exclude_post_type']);
+		$exclude_post_page_id = explode(",",$this->options['like_button']['exclude_post_id']);
+		$exclude_terms_slug = explode(",",$this->options['like_button']['exclude_terms_slug']);
 		
 		//get the all terms for the post
 		$args = array();
@@ -1595,27 +1595,27 @@ Class AWD_facebook
 			}
 		}elseif(!in_array($post->post_type,$exclude_post_type) && !in_array($post->ID,$exclude_post_page_id) && !$is_term_to_exclude && $custom[$this->plugin_option_pref.'like_button_enabled'][0] == 1 OR $custom[$this->plugin_option_pref.'like_button_enabled'][0] == ''){
 			$like_button = $this->get_the_like_button($post);
-			if($post->post_type == 'page' && $this->options['like_button_on_pages']){
-				if($this->options['like_button_place_on_pages'] == 'bottom')
+			if($post->post_type == 'page' && $this->options['like_button']['on_pages']){
+				if($this->options['like_button']['place_on_pages'] == 'bottom')
 					return $content.$like_button;
-				elseif($this->options['like_button_place_on_pages'] == 'both')
+				elseif($this->options['like_button']['place_on_pages'] == 'both')
 					return $like_button.$content.$like_button;
-				elseif($this->options['like_button_place_on_pages'] == 'top')
+				elseif($this->options['like_button']['place_on_pages'] == 'top')
 				    return $like_button.$content;
-	        }elseif($post->post_type == 'post' && $this->options['like_button_on_posts']){
-			    if($this->options['like_button_place_on_posts'] == 'bottom')
+	        }elseif($post->post_type == 'post' && $this->options['like_button']['on_posts']){
+			    if($this->options['like_button']['place_on_posts'] == 'bottom')
 					return $content.$like_button;
-				elseif($this->options['like_button_place_on_posts'] == 'both')
+				elseif($this->options['like_button']['place_on_posts'] == 'both')
 					return $like_button.$content.$like_button;
-				elseif($this->options['like_button_place_on_posts'] == 'top')
+				elseif($this->options['like_button']['place_on_posts'] == 'top')
 				    return $like_button.$content;
-			}elseif(in_array($post->post_type,get_post_types(array('public'=> true,'_builtin' => false))) && $this->options['like_button_on_custom_post_types']){     
+			}elseif(in_array($post->post_type,get_post_types(array('public'=> true,'_builtin' => false))) && $this->options['like_button']['on_custom_post_types']){     
 				//for other custom post type
-				if($this->options['like_button_place_on_custom_post_types'] == 'bottom')
+				if($this->options['like_button']['place_on_custom_post_types'] == 'bottom')
 					return $content.$like_button;
-				elseif($this->options['like_button_place_on_custom_post_types'] == 'both')
+				elseif($this->options['like_button']['place_on_custom_post_types'] == 'both')
 					return $like_button.$content.$like_button;
-				elseif($this->options['like_button_place_on_custom_post_types'] == 'top')
+				elseif($this->options['like_button']['place_on_custom_post_types'] == 'top')
 				    return $like_button.$content;
 			}
 		}
@@ -2639,8 +2639,22 @@ Class AWD_facebook
 	public function register_AWD_facebook_widgets()
 	{	
 		 global $wp_widget_factory;
+		 //Dev mode
+		 require_once(dirname(__FILE__).'/inc/admin/model/like_box.php');
+		 $wp_widget_factory->widgets['AWD_facebook_widget_likebox'] = new AWD_facebook_widget(
+		 	array(
+		 		'id_base'		=> 'like_box',
+		 		'name'			=> $this->plugin_name.' '.__('Like Box',$this->plugin_text_domain),
+		 		'description' 	=> __('Add a Facebook Like Box' , $this->plugin_text_domain),
+		 		'model' 		=> $fields['like_box'],
+		 		'self_callback' => array($this, 'shortcode_like_box'),
+				'scope' 		=> $this,
+				'text_domain' 	=> $this->plugin_text_domain
+		 	)
+		 );
+
+		 //$wp_widget_factory->widgets['AWD_facebook_widget_likebox'] = new AWD_facebook_widget_likebox();
 		 $wp_widget_factory->widgets['AWD_facebook_widget_likebutton'] = new AWD_facebook_widget_likebutton();
-		 $wp_widget_factory->widgets['AWD_facebook_widget_likebox'] = new AWD_facebook_widget_likebox();
 		 $wp_widget_factory->widgets['AWD_facebook_widget_loginbutton'] = new AWD_facebook_widget_loginbutton();
 		 $wp_widget_factory->widgets['AWD_facebook_widget_activity'] = new AWD_facebook_widget_activity();
 		 $wp_widget_factory->widgets['AWD_facebook_widget_comments'] = new AWD_facebook_widget_comments();
@@ -2708,7 +2722,7 @@ $AWD_facebook = new AWD_facebook();
 //****************************************************************************************
 //	WIDGET LIKE BOX include
 //****************************************************************************************
-require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_likebox.php');
+require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget.php');
 require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_loginbutton.php');
 require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_likebutton.php');
 require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_activity.php');

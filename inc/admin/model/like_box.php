@@ -71,7 +71,7 @@ $fields['like_box'] = array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
 			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
 		),
-		'label'=> __('Colors',$this->plugin_text_domain),
+		'label'=> __('Show faces',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -82,7 +82,7 @@ $fields['like_box'] = array(
 			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
 			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
 		),
-		'label'=> __('Show Stream ?',$this->plugin_text_domain),
+		'label'=> __('Show Stream',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -166,7 +166,8 @@ $fields['like_box'] = array(
 					<th colspan="2">[AWD_likebutton option="value"]</th>
 				</tfoot>
 			</table>
-		'
+		',
+		'widget_no_display' => true
 	)
 );
 ?>
