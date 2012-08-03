@@ -10,12 +10,12 @@
 <?php 
 $fields = array();
 $list_menu_plugins = array();
-require(dirname(dirname(__FILE__)).'/model/plugins_menu.php');
-require(dirname(dirname(__FILE__)).'/model/like_button.php');
-require(dirname(dirname(__FILE__)).'/model/like_box.php');
-require(dirname(dirname(__FILE__)).'/model/activity_box.php');
-require(dirname(dirname(__FILE__)).'/model/login_button.php');
-require(dirname(dirname(__FILE__)).'/model/comments_box.php');
+require(dirname(dirname(__FILE__)).'/forms/plugins_menu.php');
+require(dirname(dirname(__FILE__)).'/forms/like_button.php');
+require(dirname(dirname(__FILE__)).'/forms/like_box.php');
+require(dirname(dirname(__FILE__)).'/forms/activity_box.php');
+require(dirname(dirname(__FILE__)).'/forms/login_button.php');
+require(dirname(dirname(__FILE__)).'/forms/comments_box.php');
 
 $fields = apply_filters('AWD_facebook_plugins_form', $fields);
 if(!is_array($fields)){

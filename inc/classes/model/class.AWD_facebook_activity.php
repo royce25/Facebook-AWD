@@ -402,15 +402,15 @@ class AWD_facebook_activity
 	//******VIEWS******//
 	public function activityHtml5()
 	{
-		return '<div class="fb-activity" data-domain="'.$this->domain.'" data-width="'.$this->width.'" data-height="'.$this->height.'" data-header="'.$this->header.'" data-colorscheme="'.$this->colorscheme.'" data-linktarget="'.$this->linktarget.'" data-border-color="'.$this->border_color.'" data-font="'.$this->font.'" data-recommendations="'.$this->recommendations.'" data-max_age="'.$this->max_age.'" data-ref="'.$this->ref.'" data-filter="'.$this->filter.'"></div>';
+		return '<div class="fb-activity" data-site="'.$this->domain.'" data-width="'.$this->width.'" data-height="'.$this->height.'" data-header="'.$this->header.'" data-colorscheme="'.$this->colorscheme.'" data-linktarget="'.$this->linktarget.'" data-border-color="'.$this->border_color.'" data-font="'.$this->font.'" data-recommendations="'.$this->recommendations.'" data-max_age="'.$this->max_age.'" data-ref="'.$this->ref.'" data-filter="'.$this->filter.'"></div>';
 	}
 	public function activityXfbml()
 	{
-		return '<fb:activity domain="'.$this->domain.'" width="'.$this->width.'" height="'.$this->height.'" header="'.$this->header.'" colorscheme="'.$this->colorscheme.'" linktarget="'.$this->linktarget.'" border-color="'.$this->border_color.'" font="'.$this->font.'" recommendations="'.$this->recommendations.'" max_age="'.$this->max_age.'" ref="'.$this->ref.'" filter="'.$this->filter.'"></fb:activity>';
+		return '<fb:activity site="'.$this->domain.'" width="'.$this->width.'" height="'.$this->height.'" header="'.$this->header.'" colorscheme="'.$this->colorscheme.'" linktarget="'.$this->linktarget.'" border-color="'.$this->border_color.'" font="'.$this->font.'" recommendations="'.$this->recommendations.'" max_age="'.$this->max_age.'" ref="'.$this->ref.'" filter="'.$this->filter.'"></fb:activity>';
 	}
 	public function activityIframe()
 	{
-		return '<iframe src="http://www.facebook.com/plugins/activity.php?domain='.$this->domain.'&amp;width='.$this->width.'&amp;height='.$this->height.'&amp;header='.$this->header.'&amp;colorscheme='.$this->colorscheme.'&amp;border_color='.urlencode($this->border_color).'&amp;recommendations='.$this->recommendations.'&amp;linktarget='.$this->linktarget.'&amp;max_age='.$this->max_age.'&amp;ref='.$this->ref.'&amp;filter='.$this->filter.'" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:'.$this->width.'px; height:'.$this->height.'px;" allowTransparency="true"></iframe>';
+		return '<iframe src="http://www.facebook.com/plugins/activity.php?site='.$this->domain.'&amp;width='.$this->width.'&amp;height='.$this->height.'&amp;header='.$this->header.'&amp;colorscheme='.$this->colorscheme.'&amp;border_color='.urlencode($this->border_color).'&amp;recommendations='.$this->recommendations.'&amp;linktarget='.$this->linktarget.'&amp;max_age='.$this->max_age.'&amp;ref='.$this->ref.'&amp;filter='.$this->filter.'" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:'.$this->width.'px; height:'.$this->height.'px;" allowTransparency="true"></iframe>';
 	}
 }
 ?>

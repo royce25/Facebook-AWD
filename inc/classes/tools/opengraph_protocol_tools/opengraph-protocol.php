@@ -606,7 +606,4 @@ class OpenGraphProtocol {
 		return get_object_vars($this);
 	}
 }
-
-include_once dirname(__FILE__) . '/media.php';  // image, video, audio
-include_once dirname(__FILE__) . '/objects.php'; // global objects: profile, article
 ?>
