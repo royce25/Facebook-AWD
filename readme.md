@@ -12,4 +12,4 @@ All in one for wordpress
 [See the Facebook AWD website for more informations](http://facebook-awd.ahwebdev.fr "Facebook AWD all in one")
 
 
-[logo]: http://facebook-awd.ahwebdev.fr/wp-content/themes/flare-child-theme/images/facebook-awd-logo-n.png "Facebook AWD Logo"
+[logo]: http://www.ahwebdev.fr/wp-content/uploads/2011/06/facebook_awd_all_in_one_556x180.png "Facebook AWD Logo"
