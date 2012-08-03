@@ -1499,8 +1499,8 @@ Class AWD_facebook
 	public function plugins_content()
 	{
 		include_once(dirname(__FILE__).'/inc/admin/views/admin_plugins.php');
-		include_once(dirname(__FILE__).'/inc/admin/help/help_settings.php');
-		include_once(dirname(__FILE__).'/inc/admin/help/help_plugins.php');
+		include_once(dirname(__FILE__).'/inc/admin/views/help/settings.php');
+		include_once(dirname(__FILE__).'/inc/admin/views/help/plugins.php');
 	}
 	
 	/**
@@ -1510,8 +1510,8 @@ Class AWD_facebook
 	public function settings_content()
 	{
 		include_once(dirname(__FILE__).'/inc/admin/views/admin_settings.php');
-		include_once(dirname(__FILE__).'/inc/admin/help/help_settings.php');
-		include_once(dirname(__FILE__).'/inc/admin/help/help_plugins.php');
+		include_once(dirname(__FILE__).'/inc/admin/views/help/settings.php');
+		include_once(dirname(__FILE__).'/inc/admin/views/help/plugins.php');
 	}
 	
 	/**
