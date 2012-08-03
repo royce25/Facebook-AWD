@@ -6,12 +6,13 @@
 * Hermann.alexandre@ahwebdev.fr
 *
 */
-$fields['box'] = array(
+$fields['comments_box'] = array(
 	'title_config' => array(
 		'type'=>'html',
 		'html'=> '
 			<h1>'.__('Configure the comments box',$this->plugin_text_domain).'</h1>
-		'
+		',
+		'widget_no_display' => true
 	),
 	
 	'before_url' => array(
@@ -21,7 +22,7 @@ $fields['box'] = array(
 		'
 	),
 	
-	'url'=> array(
+	'href'=> array(
 		'type'=> 'text',
 		'label'=> __('Default Url',$this->plugin_text_domain),
 		'class'=>'span4',
@@ -85,7 +86,8 @@ $fields['box'] = array(
 		'type'=>'html',
 		'html'=> '
 			<div class="row">
-		'
+		',
+		'widget_no_display' => true
 	),
 	
 	'on_pages'=> array(
@@ -96,7 +98,8 @@ $fields['box'] = array(
 		),
 		'label'=> __('Add Comments to pages',$this->plugin_text_domain),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2')
+		'attr'=> array('class'=>'span2'),
+		'widget_no_display' => true
 	),
 	
 	'on_posts'=> array(
@@ -107,7 +110,8 @@ $fields['box'] = array(
 		),
 		'label'=> __('Add Comments to posts',$this->plugin_text_domain),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2')
+		'attr'=> array('class'=>'span2'),
+		'widget_no_display' => true
 	),
 	
 	'on_custom_post_types'=> array(
@@ -118,14 +122,16 @@ $fields['box'] = array(
 		),
 		'label'=> __('Add Comments to custom posts',$this->plugin_text_domain),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2')
+		'attr'=> array('class'=>'span2'),
+		'widget_no_display' => true
 	),
 	
 	'after_on_posts' => array(
 		'type'=>'html',
 		'html'=> '
 			</div>
-		'
+		',
+		'widget_no_display' => true
 	),
 	
 	'before_config2' => array(
@@ -139,7 +145,8 @@ $fields['box'] = array(
 		'type'=> 'text',
 		'label'=> __('Exclude Posts or Pages ID (example: 12,46,234)',$this->plugin_text_domain),
 		'class'=>'span4',
-		'attr'=> array('class'=>'span4')
+		'attr'=> array('class'=>'span4'),
+		'widget_no_display' => true
 	),
 	
 	'width'=> array(
@@ -164,7 +171,7 @@ $fields['box'] = array(
 		'type'=>'html',
 		'html'=> '
 			</div>
-		'
+		',
 	),
 	
 	'preview' => array(
@@ -192,7 +199,8 @@ $fields['box'] = array(
 					<th colspan="2">[AWD_comments option="value"]</th>
 				</tfoot>
 			</table>  
-		'
+		',
+		'widget_no_display' => true
 	)
 );
 ?>

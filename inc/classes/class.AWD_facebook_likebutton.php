@@ -200,7 +200,7 @@ class AWD_facebook_likebutton
 	 */
 	public function setType( $type )
 	{
-		$this->template = $type;
+		$this->type = $type;
 	}
 
 	/**
@@ -335,7 +335,7 @@ class AWD_facebook_likebutton
 	}
 	protected function likeButtonIframe()
 	{
-		return '<iframe src="http://www.facebook.com/plugins/like.php?href='.urlencode($this->href).'&amp;send='.$this->send.'&amp;layout='.$this->layout.'&amp;width='.$this->width.'&amp;show_faces='.$this->show_faces.'&amp;action='.$this->action.'&amp;colorscheme='.$this->colorscheme.'&amp;font='.$this->fonts.'&amp;height='.$this->height.'&ref='.urlencode($this->ref).'" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:'.$this->width.'px; height:'.$this->height.'px;" allowTransparency="true"></iframe>';
+		return '<iframe src="http://www.facebook.com/plugins/like.php?href='.urlencode($this->href).'&amp;send='.$this->send.'&amp;layout='.$this->layout.'&amp;width='.$this->width.'&amp;show_faces='.$this->show_faces.'&amp;action='.$this->action.'&amp;colorscheme='.$this->colorscheme.'&amp;font='.$this->font.'&amp;height='.$this->height.'&ref='.urlencode($this->ref).'" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:'.$this->width.'px; height:'.$this->height.'px;" allowTransparency="true"></iframe>';
 	}
 }
 ?>

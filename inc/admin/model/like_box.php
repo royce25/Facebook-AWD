@@ -11,7 +11,8 @@ $fields['like_box'] = array(
 		'type'=>'html',
 		'html'=> '
 			<h1>'.__('Configure the box',$this->plugin_text_domain).'</h1>
-		'
+		',
+		'widget_no_display' => true
 	),
 	
 	'start_url' => array(

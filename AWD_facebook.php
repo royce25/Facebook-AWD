@@ -2639,8 +2639,8 @@ Class AWD_facebook
 	public function register_AWD_facebook_widgets()
 	{	
 		 global $wp_widget_factory;
-		 //Dev mode
-		 require_once(dirname(__FILE__).'/inc/admin/model/like_box.php');
+		 
+		 require(dirname(__FILE__).'/inc/admin/model/like_box.php');
 		 $wp_widget_factory->widgets['AWD_facebook_widget_likebox'] = new AWD_facebook_widget(
 		 	array(
 		 		'id_base'		=> 'like_box',
@@ -2648,17 +2648,61 @@ Class AWD_facebook
 		 		'description' 	=> __('Add a Facebook Like Box' , $this->plugin_text_domain),
 		 		'model' 		=> $fields['like_box'],
 		 		'self_callback' => array($this, 'shortcode_like_box'),
-				'scope' 		=> $this,
-				'text_domain' 	=> $this->plugin_text_domain
+				'text_domain' 	=> $this->plugin_text_domain,
+				'preview'		=> true
 		 	)
 		 );
-
-		 //$wp_widget_factory->widgets['AWD_facebook_widget_likebox'] = new AWD_facebook_widget_likebox();
-		 $wp_widget_factory->widgets['AWD_facebook_widget_likebutton'] = new AWD_facebook_widget_likebutton();
-		 $wp_widget_factory->widgets['AWD_facebook_widget_loginbutton'] = new AWD_facebook_widget_loginbutton();
-		 $wp_widget_factory->widgets['AWD_facebook_widget_activity'] = new AWD_facebook_widget_activity();
-		 $wp_widget_factory->widgets['AWD_facebook_widget_comments'] = new AWD_facebook_widget_comments();
 		 
+		 require(dirname(__FILE__).'/inc/admin/model/like_button.php');
+		 $wp_widget_factory->widgets['AWD_facebook_widget_like_button'] = new AWD_facebook_widget(
+		 	array(
+		 		'id_base'		=> 'like_button',
+		 		'name'			=> $this->plugin_name.' '.__('Like Button',$this->plugin_text_domain),
+		 		'description' 	=> __('Add a Facebook Like Button' , $this->plugin_text_domain),
+		 		'model' 		=> $fields['like_button'],
+		 		'self_callback' => array($this, 'shortcode_like_button'),
+				'text_domain' 	=> $this->plugin_text_domain,
+				'preview'		=> true
+		 	)
+		 );
+		 
+		 require(dirname(__FILE__).'/inc/admin/model/login_button.php');
+		 $wp_widget_factory->widgets['AWD_facebook_widget_login_button'] = new AWD_facebook_widget(
+		 	array(
+		 		'id_base'		=> 'login_button',
+		 		'name'			=> $this->plugin_name.' '.__('Login Button',$this->plugin_text_domain),
+		 		'description' 	=> __('Add a Facebook Login Button' , $this->plugin_text_domain),
+		 		'model' 		=> $fields['login_button'],
+		 		'self_callback' => array($this, 'shortcode_login_button'),
+				'text_domain' 	=> $this->plugin_text_domain
+			)
+		 );
+		 
+		 require(dirname(__FILE__).'/inc/admin/model/activity_box.php');
+		 $wp_widget_factory->widgets['AWD_facebook_widget_activity_box'] = new AWD_facebook_widget(
+		 	array(
+		 		'id_base'		=> 'activity_box',
+		 		'name'			=> $this->plugin_name.' '.__('Activity Box',$this->plugin_text_domain),
+		 		'description' 	=> __('Add a Facebook Activity Box' , $this->plugin_text_domain),
+		 		'model' 		=> $fields['activity_box'],
+		 		'self_callback' => array($this, 'shortcode_activity_box'),
+				'text_domain' 	=> $this->plugin_text_domain,
+				'preview'		=> true
+		 	)
+		 );
+		 
+		 require(dirname(__FILE__).'/inc/admin/model/comments_box.php');
+		 $wp_widget_factory->widgets['AWD_facebook_widget_comments_box'] = new AWD_facebook_widget(
+		 	array(
+		 		'id_base'		=> 'comments_box',
+		 		'name'			=> $this->plugin_name.' '.__('Comments Box',$this->plugin_text_domain),
+		 		'description' 	=> __('Add a Facebook Comments Box' , $this->plugin_text_domain),
+		 		'model' 		=> $fields['comments_box'],
+		 		'self_callback' => array($this, 'shortcode_comments_box'),
+				'text_domain' 	=> $this->plugin_text_domain,
+		 	)
+		 );
+		 		 
 		 do_action('AWD_facebook_register_widgets');
 	}
 

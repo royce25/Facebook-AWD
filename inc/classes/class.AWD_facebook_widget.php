@@ -46,6 +46,7 @@ class AWD_facebook_widget extends WP_Widget {
 			'description' 	=> '',
 			'model' 		=> array(),
 			'self_callback' => array($this, 'content'),
+			'preview'		=> false,
 			'text_domain' 	=> ''
 		);
 		$options = array_replace($default, $options);
@@ -56,6 +57,8 @@ class AWD_facebook_widget extends WP_Widget {
 		$this->model = $options['model'];
 		$this->self_callback = $options['self_callback'];
 		$this->plugin_text_domain = $options['text_domain'];
+		$this->plugin_text_domain = $options['text_domain'];
+		$this->preview = $options['preview'];
 		
 		//load_plugin_textdomain($this->plugin_text_domain, false, dirname(dirname( plugin_basename( __FILE__ ) ) ) . '/langs/');
 		
@@ -67,16 +70,22 @@ class AWD_facebook_widget extends WP_Widget {
 	 */
 	public function form($instance)
 	{
+	
 		$form = new AWD_facebook_form($this);
 		$instance = $this->default_instance($instance);
 		$html = '<div class="AWD_facebook_wrap">';
 		$html .= $form->proccessFields($this->id_base, $this->model, $instance);
 		$html .= '</div>';
+		//hack for css classes bootstrap.
+		$html = str_replace(array('span1','span2','span3','span4','span5','span6','span7','span8','span9','span10','span11'),'span3', $html);
 		
-		//redefine the style to feet in the widget area
-		$html = str_replace('<div class="row">','<div class="row-fluid">', $html);
-		$html = str_replace(array('span1','span2','span3','span4','span5','span6','span7','span8','span9','span10','span11'),'span12', $html);
-		
+		if($this->preview){
+			//adjust settings to fit widget size.
+			$html .= '<h2>Preview</h2>';
+			$instance['width'] = 218;
+			$instance['type'] = 'iframe';
+			$html .= call_user_func_array($this->self_callback, array($instance));
+		}
 		echo $html;
 	}
 	
@@ -84,7 +93,7 @@ class AWD_facebook_widget extends WP_Widget {
 	 * Update
 	 */
 	public function update($new_instance, $old_instance)
-	{
+	{	
 		return stripslashes_deep($new_instance);
 	}
 	
@@ -110,7 +119,9 @@ class AWD_facebook_widget extends WP_Widget {
      */
     public function default_instance($instance)
     {
-    	return array_replace($instance, $this->AWD_facebook->options[$this->id_base]);		
+    	if(!is_array($instance))
+    		$instance = array();
+    	return array_replace($this->AWD_facebook->options[$this->id_base], $instance);	
     }
     
     /**

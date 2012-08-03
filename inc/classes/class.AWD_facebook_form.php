@@ -141,17 +141,24 @@ class AWD_facebook_form
 	
 	public function getFieldId($fieldname)
 	{
-		return $this->prefix.rtrim(str_replace('[', '_', $fieldname),']');	
+		return $this->prefix.rtrim(str_replace(array('[',']','__'), '_', $fieldname),'_');	
 	}
 	
 	public function proccessFields($fieldset_id, $fields, $widget_instance = null)
 	{
 		global $AWD_facebook;
-		
 		$html = '';
 		if(count($fields)>0){
 			foreach($fields as $id=>$field)
 			{	
+				//if we are in a widget, check if we need to display html or not.
+				if($this->isWidget() && isset($field['widget_no_display'])){
+					if($field['widget_no_display'] == true){
+						continue;
+					}
+				}
+				
+				
 				//get the value of the field only if it's not a html content
 				if($field['type'] != 'html'){
 					$fieldname = $fieldset_id.'['.$id.']';
@@ -162,25 +169,22 @@ class AWD_facebook_form
 						$value = $widget_instance[$id];
 					}
 				}
+				$help = !$this->isWidget() ? $AWD_facebook->get_the_help($id) : '';
+				
 				switch($field['type'])
 				{
+					
 					case 'select':
-						$html.= $this->addSelect($field['label'].' '.$AWD_facebook->get_the_help($id), $fieldname, $field['options'], $value, $field['class'], $field['attr']);
+						$html.= $this->addSelect($field['label'].' '.$help, $fieldname, $field['options'], $value, $field['class'], $field['attr']);
 					break;
 					case 'text':
-						$html.= $this->addInputText($field['label'].' '.$AWD_facebook->get_the_help($id), $fieldname, $value, $field['class'], $field['attr']); 
+						$html.= $this->addInputText($field['label'].' '.$help, $fieldname, $value, $field['class'], $field['attr']); 
 					break;	
 					case 'html':
-						//if we are in a widget, check if we need to display html or not.
-						if($this->isWidget() && isset($field['widget_no_display'])){
-							if($field['widget_no_display'] == true){
-								break;
-							}
-						}
 						$html.= $field['html'];
 					break;	
 					case 'media':
-						$html.= $this->addMediaButton($field['label'].' '.$AWD_facebook->get_the_help($id), $fieldname, $value, $field['class'], $field['attr']); 
+						$html.= $this->addMediaButton($field['label'].' '.$help, $fieldname, $value, $field['class'], $field['attr']); 
 					break;
 				}
 			}

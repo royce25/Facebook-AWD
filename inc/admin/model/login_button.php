@@ -12,7 +12,8 @@ $fields['login_button'] = array(
 		'type'=>'html',
 		'html'=> '
 			<h1>'.__('Configure the button',$this->plugin_text_domain).'</h1>
-		'
+		',
+		'widget_no_display' => true
 	),
 	
 	'start_config' => array(
@@ -30,7 +31,8 @@ $fields['login_button'] = array(
 		),		
 		'label'=> __('Logout Label',$this->plugin_text_domain),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2')
+		'attr'=> array('class'=>'span2'),
+		'widget_no_display' => true
 	),
 	
 	'login_redirect_url'=> array(
@@ -78,7 +80,7 @@ $fields['login_button'] = array(
 	
 	'maxrow'=> array(
 		'type'=> 'text',
-		'label'=> __('Max faces row',$this->plugin_text_domain),
+		'label'=> __('Max row',$this->plugin_text_domain),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['login_button']['show_faces'] == "0" ? 'disabled' : ''))
 	),
@@ -130,7 +132,8 @@ $fields['login_button'] = array(
 					<th colspan="2">[AWD_likebutton option="value"]</th>
 				</tfoot>
 			</table>
-		'
+		',
+		'widget_no_display' => true
 	)
 );
 ?>
