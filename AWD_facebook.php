@@ -220,11 +220,6 @@ Class AWD_facebook
 		if(!class_exists('Facebook'))
 			require_once(dirname(__FILE__).'/inc/classes/facebook/facebook.php');
 
-		//Opengraph Tools
-		require_once(dirname(__FILE__).'/inc/classes/opengraph-protocol-tools/media.php');
-		require_once(dirname(__FILE__).'/inc/classes/opengraph-protocol-tools/objects.php');
-		require_once(dirname(__FILE__).'/inc/classes/opengraph-protocol-tools/opengraph-protocol.php');
-
 		//init the plugin and action
 		add_action('plugins_loaded',array(&$this,'initial'));
 		//like box widget register
@@ -2640,7 +2635,7 @@ Class AWD_facebook
 	{	
 		 global $wp_widget_factory;
 		 
-		 require(dirname(__FILE__).'/inc/admin/model/like_box.php');
+		 require(dirname(__FILE__).'/inc/admin/forms/like_box.php');
 		 $wp_widget_factory->widgets['AWD_facebook_widget_likebox'] = new AWD_facebook_widget(
 		 	array(
 		 		'id_base'		=> 'like_box',
@@ -2653,7 +2648,7 @@ Class AWD_facebook
 		 	)
 		 );
 		 
-		 require(dirname(__FILE__).'/inc/admin/model/like_button.php');
+		 require(dirname(__FILE__).'/inc/admin/forms/like_button.php');
 		 $wp_widget_factory->widgets['AWD_facebook_widget_like_button'] = new AWD_facebook_widget(
 		 	array(
 		 		'id_base'		=> 'like_button',
@@ -2666,7 +2661,7 @@ Class AWD_facebook
 		 	)
 		 );
 		 
-		 require(dirname(__FILE__).'/inc/admin/model/login_button.php');
+		 require(dirname(__FILE__).'/inc/admin/forms/login_button.php');
 		 $wp_widget_factory->widgets['AWD_facebook_widget_login_button'] = new AWD_facebook_widget(
 		 	array(
 		 		'id_base'		=> 'login_button',
@@ -2678,7 +2673,7 @@ Class AWD_facebook
 			)
 		 );
 		 
-		 require(dirname(__FILE__).'/inc/admin/model/activity_box.php');
+		 require(dirname(__FILE__).'/inc/admin/forms/activity_box.php');
 		 $wp_widget_factory->widgets['AWD_facebook_widget_activity_box'] = new AWD_facebook_widget(
 		 	array(
 		 		'id_base'		=> 'activity_box',
@@ -2691,7 +2686,7 @@ Class AWD_facebook
 		 	)
 		 );
 		 
-		 require(dirname(__FILE__).'/inc/admin/model/comments_box.php');
+		 require(dirname(__FILE__).'/inc/admin/forms/comments_box.php');
 		 $wp_widget_factory->widgets['AWD_facebook_widget_comments_box'] = new AWD_facebook_widget(
 		 	array(
 		 		'id_base'		=> 'comments_box',
@@ -2753,22 +2748,17 @@ Class AWD_facebook
 //****************************************************************************************
 //	LIBRARY FACEBOOK AWD
 //****************************************************************************************
-require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_form.php');
-require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_options.php');
-require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_likebutton.php');
-require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_activity.php');
-require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_likebox.php');
-require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_comments.php');
+require_once(dirname(__FILE__).'/inc/classes/model/class.AWD_facebook_likebutton.php');
+require_once(dirname(__FILE__).'/inc/classes/model/class.AWD_facebook_activity.php');
+require_once(dirname(__FILE__).'/inc/classes/model/class.AWD_facebook_likebox.php');
+require_once(dirname(__FILE__).'/inc/classes/model/class.AWD_facebook_comments.php');
+require_once(dirname(__FILE__).'/inc/classes/tools/class.AWD_facebook_widget.php');
+require_once(dirname(__FILE__).'/inc/classes/tools/class.AWD_facebook_form.php');
+require_once(dirname(__FILE__).'/inc/classes/tools/class.AWD_facebook_options.php');
+require_once(dirname(__FILE__).'/inc/classes/tools/opengraph_protocol_tools/media.php');
+require_once(dirname(__FILE__).'/inc/classes/tools/opengraph_protocol_tools/objects.php');
+require_once(dirname(__FILE__).'/inc/classes/tools/opengraph_protocol_tools/opengraph-protocol.php');
 
 //Object Plugin.
 $AWD_facebook = new AWD_facebook();
-
-//****************************************************************************************
-//	WIDGET LIKE BOX include
-//****************************************************************************************
-require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget.php');
-require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_loginbutton.php');
-require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_likebutton.php');
-require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_activity.php');
-require_once(dirname(__FILE__).'/inc/classes/class.AWD_facebook_widget_comments.php');
 ?>
