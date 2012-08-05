@@ -58,7 +58,7 @@ class AWD_facebook_form
 	public function addInputHidden($id, $value, $class='', $attrs = array())
 	{
 		$field_id = $this->getFieldId($id);
-		$html .= '<input type="hidden" id="'.$field_id.'" name="'.$this->prefix.$id.'" value="'.$value.'" '.$this->processAttr($attrs).' />';
+		$html = '<input type="hidden" id="'.$field_id.'" name="'.$this->prefix.$id.'" value="'.$value.'" '.$this->processAttr($attrs).' />';
 		return $html;
 	}
 

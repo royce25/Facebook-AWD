@@ -162,7 +162,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 	echo $form_reset->end();
 	?>
 </div>
-<div class="alert alert-error alert_reset_settings hidden alert-block">
+<div class="alert alert-error alert_reset_settings alert-block dn">
 	<a href="#" class="close reset_settings_dismiss">&times;</a>      
 	<?php _e("Do you really want to reset all settings (AWD plugins and openGraph settings will be reset) ?",$this->plugin_text_domain); ?>
 	<a href="#" class="btn btn-danger reset_settings_confirm"><?php _e("Restore", $this->plugin_text_domain); ?></a>  

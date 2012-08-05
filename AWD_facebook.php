@@ -158,13 +158,11 @@ Class AWD_facebook
     }
   
     /**
-
+	 *
      * Getter
      * the first image displayed in a post.
-
      * @param string $post_content
      * @return the image found.
-
      */                      
 	public function catch_that_image($post_content="")
 	{
@@ -245,7 +243,7 @@ Class AWD_facebook
 		
 		//Css
 		wp_register_style($this->plugin_slug.'-ui-bootstrap', $this->plugin_url.'/assets/css/bootstrap.css');
-		wp_register_style($this->plugin_slug.'-ui-bootstrap-responsive', $this->plugin_url.'/assets/css/bootstrap-responsive.min.css');
+		//wp_register_style($this->plugin_slug.'-ui-bootstrap-responsive', $this->plugin_url.'/assets/css/bootstrap-responsive.min.css');
 		wp_register_style($this->plugin_slug.'-google-code-prettify-css',$this->plugin_url.'/assets/js/google-code-prettify/prettify.css');
 	}
 	
@@ -306,7 +304,7 @@ Class AWD_facebook
 		if($this->options['app_id'] =='' OR $this->options['app_secret_key'] =='' OR $this->options['admins'] ==''){
 			?>
 			<div class="alert alert-error">
-				<p><?php printf( __('Facebook AWD is almost ready... Go to settings and set your FB app Id, youe FB Secret Key and your FB User ID', $this->plugin_text_domain), admin_url( 'admin.php?page='.$this->plugin_slug)); ?></p>
+				<p><?php printf( __('Facebook AWD is almost ready... Go to settings and set your FB app Id, your FB Secret Key and your FB User ID', $this->plugin_text_domain), admin_url( 'admin.php?page='.$this->plugin_slug)); ?></p>
 			</div>
 			<?php	
 		}
@@ -632,7 +630,7 @@ Class AWD_facebook
 	 */
 	public function admin_enqueue_css()
 	{
-		wp_enqueue_style($this->plugin_slug.'-ui-bootstrap-responsive');
+		//wp_enqueue_style($this->plugin_slug.'-ui-bootstrap-responsive');
 		wp_enqueue_style($this->plugin_slug.'-ui-bootstrap');
 		wp_enqueue_style($this->plugin_slug.'-google-code-prettify-css');
 		wp_enqueue_style('thickbox');
@@ -1162,8 +1160,9 @@ Class AWD_facebook
 	 */
 	public function ajax_get_open_graph_object_form()
 	{
+	
 		$object_id = $_POST['object_id'];
-		$copy = $_POST['copy'];
+		$copy = isset($_POST['copy']) ? $_POST['copy'] : false;
 		echo $this->get_open_graph_object_form($object_id, $copy);
 		exit();
 	}
@@ -1193,38 +1192,36 @@ Class AWD_facebook
 	public function save_ogp_object()
 	{
 		if(isset($_POST[$this->plugin_option_pref.'_nonce_options_save_ogp_object']) && wp_verify_nonce($_POST[$this->plugin_option_pref.'_nonce_options_save_ogp_object'],$this->plugin_slug.'_save_ogp_object')){
-			if($_POST){
-				$opengraph_object = array();
-				foreach($_POST[$this->plugin_option_pref.'awd_ogp'] as $option=>$value){
-					$option_name = str_ireplace($this->plugin_option_pref,"",$option);
-					$opengraph_object[$option_name] = $value;
-				}
-				
-				//verification submitted value
-				if($opengraph_object['object_title'] == '')
-					$opengraph_object['object_title'] = __('Default Opengraph Object', $this->plugin_text_domain);
-				
-				//Check if the id  of the object was supplied
-				if($opengraph_object['id'] == '')
-					$opengraph_object['id'] = rand(0,9999).'_'.time();
-					
-				if(isset($this->options['opengraph_objects'][$opengraph_object['id']])){
-					$this->options['opengraph_objects'][$opengraph_object['id']] = $opengraph_object;
-				//if no object existing, create a new object reference and save it.
-				}else{
-					$this->options['opengraph_objects'][$opengraph_object['id']] = $opengraph_object;
-				}
-				//save with option manager
-				$this->optionsManager->update_option('opengraph_objects',$this->options['opengraph_objects'], true);
-				$this->options = $this->optionsManager->getOptions();
-				echo json_encode(array(
-					'success'=>1, 
-					'item'=> $this->get_open_graph_object_list_item($opengraph_object),
-					'item_id'=> $opengraph_object['id'],
-					'links_form' => $this->get_open_graph_object_links_form()
-				));
-				exit();
+			$opengraph_object = array();
+			foreach($_POST[$this->plugin_option_pref.'awd_ogp'] as $option=>$value){
+				$option_name = str_ireplace($this->plugin_option_pref,"",$option);
+				$opengraph_object[$option_name] = $value;
 			}
+			
+			//verification submitted value
+			if($opengraph_object['object_title'] == '')
+				$opengraph_object['object_title'] = __('Default Opengraph Object', $this->plugin_text_domain);
+			
+			//Check if the id  of the object was supplied
+			if($opengraph_object['id'] == '')
+				$opengraph_object['id'] = rand(0,9999).'_'.time();
+				
+			if(isset($this->options['opengraph_objects'][$opengraph_object['id']])){
+				$this->options['opengraph_objects'][$opengraph_object['id']] = $opengraph_object;
+			//if no object existing, create a new object reference and save it.
+			}else{
+				$this->options['opengraph_objects'][$opengraph_object['id']] = $opengraph_object;
+			}
+			//save with option manager
+			$this->optionsManager->update_option('opengraph_objects',$this->options['opengraph_objects'], true);
+			$this->options = $this->optionsManager->getOptions();
+			echo json_encode(array(
+				'success'=>1, 
+				'item'=> $this->get_open_graph_object_list_item($opengraph_object),
+				'item_id'=> $opengraph_object['id'],
+				'links_form' => $this->get_open_graph_object_links_form()
+			));
+			exit();
 		}
 		return false;
 	}
@@ -1340,13 +1337,12 @@ Class AWD_facebook
 		if(is_array($ogp_objects) && count($ogp_objects)){
 			foreach($page_contexts as $key=>$context){
 				$options = array();
-				$linked_object = $this->options['opengraph_object_links'][$key];
-				$options[] = array(0=>'');
+				$options[] = array('value'=>'', 'label'=> __('Disabled', $this->plugin_text_domain));
+				$linked_object = isset($this->options['opengraph_object_links'][$key]) ? $this->options['opengraph_object_links'][$key] : '';
 				foreach($ogp_objects as $ogp_object){
 					$options[] = array('value'=>$ogp_object['id'], 'label'=> $ogp_object['object_title']);
 				}
-				
-				$html.= $form->addSelect('opengraph_object_link_'.$key, 'opengraph_object_link['.$key.']', __('Choose Opengraph object for',$this->plugin_text_domain).' '.$context, $options, $linked_object, 'span4', array('class'=>'span4'));
+				$html.= $form->addSelect( __('Choose Opengraph object for',$this->plugin_text_domain).' '.$context, 'opengraph_object_link['.$key.']', $options, $linked_object, 'span4', array('class'=>'span4'));
 			}
 		}else{
 			$html.= '<p class="alert alert-warning">'.__('No Object found',$this->plugin_text_domain).'</p></td>';
@@ -1359,7 +1355,7 @@ Class AWD_facebook
 	
 	public function render_ogp_tags($ogp)
 	{
-		$prefix .= $ogp::PREFIX . ': ' . $ogp::NS . ' ';
+		$prefix = $ogp::PREFIX . ': ' . $ogp::NS . ' ';
 		return '<pre class="prettyprint linenums lang-html">'."\n"
 			.htmlentities('<html prefix="'.rtrim( $prefix,' ' ).'">')."\n"
 			.htmlentities('<head>')."\n"

@@ -54,7 +54,9 @@ class AWD_facebook_options
 	 */
 	public function setDefaultValue($options_name, $default_value)
 	{
-		$this->options[$options_name] = $default_value;
+		if(empty($this->options[$options_name])){
+			$this->options[$options_name] = $default_value;
+		}
 	}
 	
 	/**
@@ -115,6 +117,7 @@ class AWD_facebook_options
 
 		//OPENGRAPH
 		$this->setDefaultValue('opengraph_objects', array());
+		$this->setDefaultValue('opengraph_object_links', array());
 
 		//Plugins options	
 		$like_button = array

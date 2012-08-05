@@ -8,9 +8,12 @@ else{
 }
 if($copy == 'true')
 	unset($object['id']);
-
+if(!isset($object['object_title']))
+	$object['object_title'] = '';
+	
 $ogp = $this->opengraph_array_to_object($object);
 $form = new AWD_facebook_form('form_create_opengraph_object', 'POST', '', $this->plugin_option_pref);
+
 echo $form->start();
 	?>
 	<div class="row">
@@ -64,6 +67,8 @@ echo $form->start();
 	<div class="row">
 		<div class="awd_ogp_fields_image">
 			<?php
+			if(!isset($object['images']))
+				$object['images'] = array();
 			$images = $object['images'];
 			if(count($images))
 			{
@@ -74,7 +79,7 @@ echo $form->start();
 					echo $form->addMediaButton('Image url', 'awd_ogp[images][]', $image,'span8', array('class'=>'span6'), array('data-title'=>__('Upload an Image',$this->plugin_text_domain), 'data-type'=> 'image'), true);
 				}
 			}else{
-				echo $form->addMediaButton('Image url', 'awd_ogp[images][]', $images[0],'span8', array('class'=>'span6'), array('data-title'=>__('Upload an Image',$this->plugin_text_domain), 'data-type'=> 'image'), false);
+				echo $form->addMediaButton('Image url', 'awd_ogp[images][]', '','span8', array('class'=>'span6'), array('data-title'=>__('Upload an Image',$this->plugin_text_domain), 'data-type'=> 'image'), false);
 			}
 			?>
 		</div>
@@ -94,7 +99,7 @@ echo $form->start();
 	
 	<div class="form-actions">
 		<div class="btn-group pull-right">
-			<button class="btn btn-primary awd_submit_ogp"><i class="icon-ok icon-white"></i> <?php _e('Save',$this->plugin_text_domain); ?></button>
+			<button class="btn btn-primary awd_submit_ogp"><i class="icon-ok icon-white"></i> <?php _e('Save this object',$this->plugin_text_domain); ?></button>
 			<button class="btn btn-danger pull-right hide_ogp_form"><i class="icon-remove icon-white"></i> <?php _e('Cancel',$this->plugin_text_domain); ?></button>
 		</div>
 	</div>
