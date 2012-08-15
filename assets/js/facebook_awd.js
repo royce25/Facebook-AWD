@@ -25,10 +25,10 @@ var AWD_facebook = {
 		var redirect = '';
 		if(response.authResponse){
 			if(!redirect_url){
-				window.location.href = awd_fcbk.loginUrl;
+				window.location.replace(awd_fcbk.loginUrl);
 			}else{
 				redirect = "?redirect_to="+redirect_url;
-				window.location.href = awd_fcbk.loginUrl+redirect;
+				window.location.replace(awd_fcbk.loginUrl+redirect);
 			}
 		}
 	},
@@ -61,3 +61,12 @@ var AWD_facebook = {
 		return connected;		
 	},
 };
+
+jQuery(document).ready(function($){
+	//add usefull tool for creating connect button by hand.
+	$('.AWD_facebook_connect_button').live('click',function(e){
+		e.preventDefault();
+		var redirect = $(this).data('redirect');
+		AWD_facebook.connect(redirect);
+	});
+});
