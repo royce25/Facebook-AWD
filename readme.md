@@ -9,7 +9,7 @@ Add Socials plugins, OpenGraph tags, Comments and FB connect. (Use Iframe or Xfb
 Publish your content to all your FB pages and on your personnal wall on Facebook.
 Widgets and Shortcodes available for each Facebook socials plugins.
 Works in Facebook as website, Facebook Tabs and Facebook App!
-Use both SDK's PHP v.3.1.1 AND JS v3
+Use both SDK's PHP v.3.2 AND JS v3
 Easy to install and setup.
 jQuery 1.7.2 reuired.
 [Read more...](http://facebook-awd.ahwebdev.fr/features/ "Features of Facebook AWD")
