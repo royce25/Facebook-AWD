@@ -11,7 +11,7 @@ $fields['login_button'] = array(
 	'title_config' => array(
 		'type'=>'html',
 		'html'=> '
-			<h1>'.__('Configure the button',$this->plugin_text_domain).'</h1>
+			<h1>'.__('Configure the button',$this->ptd).'</h1>
 		',
 		'widget_no_display' => true
 	),
@@ -26,10 +26,10 @@ $fields['login_button'] = array(
 	'display_on_login_page'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
-			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
+			array('value'=>'0', 'label'=>__('No',$this->ptd)),
+			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),		
-		'label'=> __('Logout Label',$this->plugin_text_domain),
+		'label'=> __('Logout Label',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2'),
 		'widget_no_display' => true
@@ -37,21 +37,21 @@ $fields['login_button'] = array(
 	
 	'login_redirect_url'=> array(
 		'type'=> 'text',
-		'label'=> __('Width of button',$this->plugin_text_domain),
+		'label'=> __('Width of button',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
 	'logout_redirect_url'=> array(
 		'type'=> 'text',
-		'label'=> __('Url after login',$this->plugin_text_domain),
+		'label'=> __('Url after login',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
 	'logout_label'=> array(
 		'type'=> 'text',
-		'label'=> __('Url after logout',$this->plugin_text_domain),
+		'label'=> __('Url after logout',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -59,10 +59,10 @@ $fields['login_button'] = array(
 	'show_profile_picture'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
-			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
+			array('value'=>'0', 'label'=>__('No',$this->ptd)),
+			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),		
-		'label'=> __('Show profile picture',$this->plugin_text_domain),
+		'label'=> __('Show profile picture',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -70,31 +70,31 @@ $fields['login_button'] = array(
 	'show_faces'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
-			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
+			array('value'=>'0', 'label'=>__('No',$this->ptd)),
+			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),		
-		'label'=> __('Show faces',$this->plugin_text_domain),
+		'label'=> __('Show faces',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
 	'maxrow'=> array(
 		'type'=> 'text',
-		'label'=> __('Max row',$this->plugin_text_domain),
+		'label'=> __('Max row',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['login_button']['show_faces'] == "0" ? 'disabled' : ''))
 	),
 	
 	'width'=> array(
 		'type'=> 'text',
-		'label'=> __('Width of button',$this->plugin_text_domain),
+		'label'=> __('Width of button',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
 	'image'=> array(
 		'type'=> 'media',
-		'label'=> __('Button Image',$this->plugin_text_domain),
+		'label'=> __('Button Image',$this->ptd),
 		'class'=> 'span8',
 		'attr'=> array('class'=>'span6')
 	),
@@ -109,9 +109,9 @@ $fields['login_button'] = array(
 	'preview' => array(
 		'type'=>'html',
 		'html'=> '
-			<h1>'.__('Preview',$this->plugin_text_domain).'</h1>
+			<h1>'.__('Preview',$this->ptd).'</h1>
 			<div class="well">'.$this->get_the_login_button().'</div>
-			<h1>'.__('Options List',$this->plugin_text_domain).'</h1>
+			<h1>'.__('Options List',$this->ptd).'</h1>
 			<table class="table table-bordered table-condensed table-striped">
 				<thead>
 					<tr>

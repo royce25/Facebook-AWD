@@ -25,10 +25,10 @@ var AWD_facebook = {
 		var redirect = '';
 		if(response.authResponse){
 			if(!redirect_url){
-				window.location.href = awd_fcbk.loginUrl;
+				window.location.replace(awd_fcbk.loginUrl);
 			}else{
 				redirect = "?redirect_to="+redirect_url;
-				window.location.href = awd_fcbk.loginUrl+redirect;
+				window.location.replace(awd_fcbk.loginUrl+redirect);
 			}
 		}
 	},

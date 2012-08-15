@@ -54,14 +54,22 @@ $current_screen = get_current_screen();
     			<ul class="nav">
 					<?php
 					global $submenu;
-					foreach($submenu[$this->plugin_slug] as $page){
-						if (current_user_can($page[1])){
-							echo '
-							<li '.($_GET['page'] == $page[2] ? 'class="active"': '').'><a href="'.admin_url('admin.php?page='.$page[2]).'" title="'.$page[3].'">'.$page[0].'</a></li>
-							';
+					if(isset($submenu[$this->plugin_slug] )){
+						foreach($submenu[$this->plugin_slug] as $page){
+							if (current_user_can($page[1])){
+								echo '
+								<li '.($_GET['page'] == $page[2] ? 'class="active"': '').'><a href="'.admin_url('admin.php?page='.$page[2]).'" title="'.$page[3].'">'.$page[0].'</a></li>
+								';
+							}
 						}
-					}
+					} 
 					?>
+					<?php if(current_user_can('manage_facebook_awd_settings')){ ?>
+						<li><a href="http://facebook-awd.ahwebdev.fr/plugins/" target="blank" title="Facebook AWD plugins">Facebook AWD plugins</a></li>
+					<?php } ?>
+					<li><a href="http://facebook-awd.ahwebdev.fr/documentation/" target="blank" title="Documentation">Documentation</a></li>
+					<li><a href="http://facebook-awd.ahwebdev.fr/support/" target="blank" title="Support">Support</a></li>
+					<?php ?>
     			</ul>
     			<form class="navbar-search pull-right" action="http://facebook-awd.ahwebdev.fr/" method="GET" target="_blank">
     				<input type="text" name="s" class="search-query span2" placeholder="Search">

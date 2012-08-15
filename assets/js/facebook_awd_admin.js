@@ -151,8 +151,7 @@ function AWDFacebookAdmin($){
 			FB.login(function(response)
 			{
 				if(response.authResponse) {
-					console.log(response);
-				    $('#awd_fcbk_form_settings').submit();
+				    $('#awd_fcbk_option_form_settings').submit();
 				}
 			},{scope: scope});
 		});

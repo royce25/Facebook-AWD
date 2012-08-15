@@ -10,7 +10,7 @@ $fields['like_button'] = array(
 	'title_config' => array(
 		'type'=>'html',
 		'html'=> '
-			<h1>'.__('Configure the button',$this->plugin_text_domain).'</h1>
+			<h1>'.__('Configure the button',$this->ptd).'</h1>
 		',
 		'widget_no_display' => true
 	),
@@ -25,14 +25,14 @@ $fields['like_button'] = array(
 	'font'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'arial', 'label'=>__('Arial',$this->plugin_text_domain)),
-			array('value'=>'lucida grande', 'label'=>__('Lucida grande',$this->plugin_text_domain)),
-			array('value'=>'segoe ui', 'label'=>__('Segoe ui',$this->plugin_text_domain)),
-			array('value'=>'tahoma', 'label'=>__('Tahoma',$this->plugin_text_domain)),
-			array('value'=>'trebuchet ms', 'label'=>__('Trebuchet ms',$this->plugin_text_domain)),
-			array('value'=>'verdana', 'label'=>__('Verdana',$this->plugin_text_domain))							
+			array('value'=>'arial', 'label'=>__('Arial',$this->ptd)),
+			array('value'=>'lucida grande', 'label'=>__('Lucida grande',$this->ptd)),
+			array('value'=>'segoe ui', 'label'=>__('Segoe ui',$this->ptd)),
+			array('value'=>'tahoma', 'label'=>__('Tahoma',$this->ptd)),
+			array('value'=>'trebuchet ms', 'label'=>__('Trebuchet ms',$this->ptd)),
+			array('value'=>'verdana', 'label'=>__('Verdana',$this->ptd))							
 		),
-		'label'=> __('Fonts',$this->plugin_text_domain),
+		'label'=> __('Fonts',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -40,10 +40,10 @@ $fields['like_button'] = array(
 	'action'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'like', 'label'=>__('Like',$this->plugin_text_domain)),
-			array('value'=>'recommend', 'label'=>__('Recommend',$this->plugin_text_domain))						
+			array('value'=>'like', 'label'=>__('Like',$this->ptd)),
+			array('value'=>'recommend', 'label'=>__('Recommend',$this->ptd))						
 		),
-		'label'=> __('Action',$this->plugin_text_domain),
+		'label'=> __('Action',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -51,11 +51,11 @@ $fields['like_button'] = array(
 	'layout'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'standard', 'label'=>__('Standard',$this->plugin_text_domain)),
-			array('value'=>'button_count', 'label'=>__('Button Count',$this->plugin_text_domain)),							
-			array('value'=>'box_count', 'label'=>__('Box Count',$this->plugin_text_domain))					
+			array('value'=>'standard', 'label'=>__('Standard',$this->ptd)),
+			array('value'=>'button_count', 'label'=>__('Button Count',$this->ptd)),							
+			array('value'=>'box_count', 'label'=>__('Box Count',$this->ptd))					
 		),
-		'label'=> __('Layout style',$this->plugin_text_domain),
+		'label'=> __('Layout style',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -63,11 +63,11 @@ $fields['like_button'] = array(
 	'type'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'iframe', 'label'=>__('Iframe',$this->plugin_text_domain)),
-			array('value'=>'xfbml', 'label'=>__('Xfbml',$this->plugin_text_domain)),							
-			array('value'=>'html5', 'label'=>__('html5',$this->plugin_text_domain)),				
+			array('value'=>'iframe', 'label'=>__('Iframe',$this->ptd)),
+			array('value'=>'xfbml', 'label'=>__('Xfbml',$this->ptd)),							
+			array('value'=>'html5', 'label'=>__('html5',$this->ptd)),				
 		),
-		'label'=> __('Type',$this->plugin_text_domain),
+		'label'=> __('Type',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -75,10 +75,10 @@ $fields['like_button'] = array(
 	'send'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
-			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
+			array('value'=>'0', 'label'=>__('No',$this->ptd)),
+			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),
-		'label'=> __('Send button ?',$this->plugin_text_domain),
+		'label'=> __('Send button ?',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2','disabled'=>($this->options['like_button']['type'] == "iframe" ? 'disabled' : ''))
 	),
@@ -86,10 +86,10 @@ $fields['like_button'] = array(
 	'colorscheme'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'light', 'label'=>__('light',$this->plugin_text_domain)),
-			array('value'=>'dark', 'label'=>__('Dark',$this->plugin_text_domain)),							
+			array('value'=>'light', 'label'=>__('light',$this->ptd)),
+			array('value'=>'dark', 'label'=>__('Dark',$this->ptd)),							
 		),
-		'label'=> __('Colors',$this->plugin_text_domain),
+		'label'=> __('Colors',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -97,31 +97,31 @@ $fields['like_button'] = array(
 	'show_faces'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
-			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
+			array('value'=>'0', 'label'=>__('No',$this->ptd)),
+			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),
-		'label'=> __('Show Faces ?',$this->plugin_text_domain),
+		'label'=> __('Show Faces ?',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
 	'width'=> array(
 		'type'=> 'text',
-		'label'=> __('Width of button',$this->plugin_text_domain),
+		'label'=> __('Width of button',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
 	'height'=> array(
 		'type'=> 'text',
-		'label'=> __('Height of button',$this->plugin_text_domain),
+		'label'=> __('Height of button',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
 	'ref'=> array(
 		'type'=> 'text',
-		'label'=> __('Ref',$this->plugin_text_domain),
+		'label'=> __('Ref',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -136,7 +136,7 @@ $fields['like_button'] = array(
 	'title_usage' => array(
 		'type'=>'html',
 		'html'=> '
-			<h1>'.__('Define a default usage',$this->plugin_text_domain).'</h1>
+			<h1>'.__('Define a default usage',$this->ptd).'</h1>
 		',
 		'widget_no_display' => true
 		
@@ -151,7 +151,7 @@ $fields['like_button'] = array(
 	
 	'href'=> array(
 		'type'=> 'text',
-		'label'=> __('Default Url to like',$this->plugin_text_domain),
+		'label'=> __('Default Url to like',$this->ptd),
 		'class'=>'span4',
 		'attr'=> array('class'=>'span4')
 	),
@@ -174,10 +174,10 @@ $fields['like_button'] = array(
 	'on_pages'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
-			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
+			array('value'=>'0', 'label'=>__('No',$this->ptd)),
+			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),
-		'label'=> __('Display on pages ?',$this->plugin_text_domain),
+		'label'=> __('Display on pages ?',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2'),
 		'widget_no_display' => true
@@ -187,11 +187,11 @@ $fields['like_button'] = array(
 	'place_on_pages'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'top', 'label'=>__('Top',$this->plugin_text_domain)),
-			array('value'=>'bottom', 'label'=>__('Bottom',$this->plugin_text_domain)),							
-			array('value'=>'both', 'label'=>__('Both',$this->plugin_text_domain)),							
+			array('value'=>'top', 'label'=>__('Top',$this->ptd)),
+			array('value'=>'bottom', 'label'=>__('Bottom',$this->ptd)),							
+			array('value'=>'both', 'label'=>__('Both',$this->ptd)),							
 		),
-		'label'=> __('Where ?',$this->plugin_text_domain),
+		'label'=> __('Where ?',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['like_button']['on_pages'] == "0" ? 'disabled' : '')),
 		'widget_no_display' => true
@@ -216,10 +216,10 @@ $fields['like_button'] = array(
 	'on_posts'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
-			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
+			array('value'=>'0', 'label'=>__('No',$this->ptd)),
+			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),
-		'label'=> __('Display on posts ?',$this->plugin_text_domain),
+		'label'=> __('Display on posts ?',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2'),
 		'widget_no_display' => true
@@ -228,11 +228,11 @@ $fields['like_button'] = array(
 	'place_on_posts'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'top', 'label'=>__('Top',$this->plugin_text_domain)),
-			array('value'=>'bottom', 'label'=>__('Bottom',$this->plugin_text_domain)),							
-			array('value'=>'both', 'label'=>__('Both',$this->plugin_text_domain)),							
+			array('value'=>'top', 'label'=>__('Top',$this->ptd)),
+			array('value'=>'bottom', 'label'=>__('Bottom',$this->ptd)),							
+			array('value'=>'both', 'label'=>__('Both',$this->ptd)),							
 		),
-		'label'=> __('Where ?',$this->plugin_text_domain),
+		'label'=> __('Where ?',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['like_button']['on_posts'] == "0" ? 'disabled' : '')),
 		'widget_no_display' => true
@@ -257,10 +257,10 @@ $fields['like_button'] = array(
 	'on_custom_post_types'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
-			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
+			array('value'=>'0', 'label'=>__('No',$this->ptd)),
+			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),
-		'label'=> __('On custom posts ?',$this->plugin_text_domain),
+		'label'=> __('On custom posts ?',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2'),
 		'widget_no_display' => true
@@ -269,11 +269,11 @@ $fields['like_button'] = array(
 	'place_on_custom_post_types'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'top', 'label'=>__('Top',$this->plugin_text_domain)),
-			array('value'=>'bottom', 'label'=>__('Bottom',$this->plugin_text_domain)),							
-			array('value'=>'both', 'label'=>__('Both',$this->plugin_text_domain)),							
+			array('value'=>'top', 'label'=>__('Top',$this->ptd)),
+			array('value'=>'bottom', 'label'=>__('Bottom',$this->ptd)),							
+			array('value'=>'both', 'label'=>__('Both',$this->ptd)),							
 		),
-		'label'=> __('Where ?',$this->plugin_text_domain),
+		'label'=> __('Where ?',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['like_button']['on_custom_post_types'] == "0" ? 'disabled' : '')),
 		'widget_no_display' => true
@@ -297,7 +297,7 @@ $fields['like_button'] = array(
 
 	'exclude_post_type'=> array(
 		'type'=> 'text',
-		'label'=> __('Exclude Post types',$this->plugin_text_domain),
+		'label'=> __('Exclude Post types',$this->ptd),
 		'class'=>'span4',
 		'attr'=> array('class'=>'span4'),
 		'widget_no_display' => true
@@ -305,7 +305,7 @@ $fields['like_button'] = array(
 	
 	'exclude_terms_slug'=> array(
 		'type'=> 'text',
-		'label'=> __('Exclude Categories or other terms',$this->plugin_text_domain),
+		'label'=> __('Exclude Categories or other terms',$this->ptd),
 		'class'=>'span4',
 		'attr'=> array('class'=>'span4'),
 		'widget_no_display' => true
@@ -313,7 +313,7 @@ $fields['like_button'] = array(
 	
 	'exclude_post_id'=> array(
 		'type'=> 'text',
-		'label'=> __('Exclude Posts or Pages ID',$this->plugin_text_domain),
+		'label'=> __('Exclude Posts or Pages ID',$this->ptd),
 		'class'=>'span4',
 		'attr'=> array('class'=>'span4'),
 		'widget_no_display' => true
@@ -330,9 +330,9 @@ $fields['like_button'] = array(
 	'preview' => array(
 		'type'=>'html',
 		'html'=> '
-			<h1>'.__('Preview',$this->plugin_text_domain).'</h1>			
+			<h1>'.__('Preview',$this->ptd).'</h1>			
 			<div class="well">'.$this->get_the_like_button().'</div> 
-			<h1>'.__('Options List',$this->plugin_text_domain).'</h1>
+			<h1>'.__('Options List',$this->ptd).'</h1>
 			<table class="table table-bordered table-condensed table-striped">
 				<thead>
 					<tr>

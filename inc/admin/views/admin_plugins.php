@@ -47,8 +47,9 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 			<div class="tab-content">
 			
 				<div id="like_button_settings" class="tab-pane">
-					<p class="alert alert-info"><?php _e('Settings are defaults, you can redefine them in shortcodes, widgets, and themes functions',$this->plugin_text_domain); ?></p>
 					<?php 
+					$this->display_messages(__('Settings are defaults, you can redefine them in shortcodes, widgets, and themes functions',$this->ptd), 'info');
+					
 					if(isset($fields['like_button']) && is_array($fields['like_button'])){
 						echo $form->proccessFields('like_button',$fields['like_button']);
 					}
@@ -56,17 +57,19 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 				</div>
 				
 				<div id="like_box_settings" class="tab-pane">
-					<p class="alert alert-info"><?php _e('The like box is added via shortcodes, widgets, and themes functions',$this->plugin_text_domain); ?></p>
 					<?php 
+					$this->display_messages(__('The like box is added via shortcodes, widgets, and themes functions',$this->ptd), 'info');
+					
 					if(isset($fields['like_box']) && is_array($fields['like_box'])){						
 						echo $form->proccessFields('like_box',$fields['like_box']); 
 					}
 					?>
 				</div>
 				
-				<div id="activity_settings" class="tab-pane">
-					<p class="alert alert-info"><?php _e('The activity box is added via shortcodes, widgets, and themes functions',$this->plugin_text_domain); ?></p>
+				<div id="activity_settings" class="tab-pane">				
 					<?php 
+					$this->display_messages(__('The activity box is added via shortcodes, widgets, and themes functions',$this->ptd), 'info');
+
 					if(isset($fields['activity_box']) && is_array($fields['activity_box'])){
 						echo $form->proccessFields('activity_box',$fields['activity_box']);
 					}
@@ -81,19 +84,17 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 							echo $form->proccessFields('login_button',$fields['login_button']);
 						}
 					}else{
-						echo '<p class="alert alert-warning">'.__('You must enable FB Connect and set parameters in settings of the plugins',$this->plugin_text_domain).'</p>';
+						$this->display_messages(__('You must enable FB Connect and set parameters in settings of the plugins',$this->ptd), 'error');
 					}
 					?>
 				</div>
 				
 				<div id="comments_settings" class="tab-pane">
-					<p class="alert alert-info">
-						<?php _e('All that settings are defaults, you can redefine them in shortcodes, and themes functions',$this->plugin_text_domain); ?>
-						<br />
-						<i class="icon-warning-sign"></i> <?php _e('Your themes must use the action "do_action("comment_form_after");" or the function "commnent_form();" to work. (look in your theme, in comments.php file)',$this->plugin_text_domain); ?>
-					</p>
-					
 					<?php
+					$message = __('All that settings are defaults, you can redefine them in shortcodes, and themes functions',$this->ptd).'<br />
+					<i class="icon-warning-sign"></i> '.__('Your themes must use the action "do_action("comment_form_after");" or the function "commnent_form();" to work. (look in your theme, in comments.php file)',$this->ptd);
+					$this->display_messages($message, 'info');
+					
 					if(isset($fields['comments_box']) && is_array($fields['comments_box'])){
 						echo $form->proccessFields('comments_box',$fields['comments_box']);
 					}
@@ -127,8 +128,8 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 		<?php wp_nonce_field($this->plugin_slug.'_update_options',$this->plugin_option_pref.'_nonce_options_update_field'); ?>
 		
 		<div class="form-actions">
-			<a href="#" id="submit_settings" class="btn btn-primary" data-loading-text="<i class='icon-time icon-white'></i> <?php _e('Saving settings...',$this->plugin_text_domain); ?>"><i class="icon-cog icon-white"></i> <?php _e('Save all settings',$this->plugin_text_domain); ?></a>
-			<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZQ2VL33YXHJLC" class="awd_tooltip_donate btn pull-right" id="help_donate" target="_blank" class="btn pull-right"><i class="icon-heart"></i> <?php _e('Donate!',$this->plugin_text_domain); ?></a>
+			<a href="#" id="submit_settings" class="btn btn-primary" data-loading-text="<i class='icon-time icon-white'></i> <?php _e('Saving settings...',$this->ptd); ?>"><i class="icon-cog icon-white"></i> <?php _e('Save all settings',$this->ptd); ?></a>
+			<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZQ2VL33YXHJLC" class="awd_tooltip_donate btn pull-right" id="help_donate" target="_blank" class="btn pull-right"><i class="icon-heart"></i> <?php _e('Donate!',$this->ptd); ?></a>
 		</div>
 
 	<?php echo $form->end(); ?>

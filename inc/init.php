@@ -14,7 +14,7 @@ $this->plugin_url = plugins_url($plugin_directory);
 $this->plugin_url_images = $this->plugin_url."/assets/img/";
 
 //TRANSLATION
-load_plugin_textdomain($this->plugin_text_domain,false,dirname( plugin_basename( __FILE__ ) ) . '/langs/');
+load_plugin_textdomain($this->ptd,false,dirname( plugin_basename( __FILE__ ) ) . '/langs/');
 
 //init
 add_action("init",array(&$this,'wp_init'));
@@ -22,8 +22,10 @@ add_action('admin_init', array(&$this,'admin_initialisation'));
 
 //DISPLAY ADMIN
 add_action('admin_bar_init', array(&$this,'admin_bar_init'));
+
 add_action('AWD_facebook_admin_notices',array(&$this,'missing_config'));
-add_action('AWD_facebook_admin_notices',array(&$this,'display_errors'));
+add_action('AWD_facebook_admin_notices',array(&$this,'display_all_errors'));
+add_action('AWD_facebook_admin_notices',array(&$this,'display_messages'));
 
 add_action('admin_menu', array(&$this,'admin_menu'));
 add_action('network_admin_menu', array(&$this,'add_js_options'));
@@ -40,8 +42,8 @@ add_action('admin_footer',array(&$this,'debug_content'));
 add_filter('language_attributes',  array($this,'ogp_language_attributes'),10,1);
 add_action('after_setup_theme',array(&$this,'add_theme_support'));
 add_action('wp_head',array(&$this,'define_ogp_objects'));
-add_action('wp_footer',array(&$this,'load_sdj_js'));
-add_action('admin_print_footer_scripts',array(&$this,'load_sdj_js'));
+add_action('wp_footer',array(&$this,'load_sdk_js'));
+add_action('admin_print_footer_scripts',array(&$this,'load_sdk_js'));
 add_filter('the_content', array(&$this,'the_content'));
 add_action('comment_form_after', array(&$this,'the_comments_form'));
 add_action('wp_enqueue_scripts',array(&$this,'front_enqueue_js'));
@@ -79,9 +81,9 @@ if(!empty($this->options['app_id'])  && !empty($this->options['app_secret_key'])
 	//add_action('wp_loaded', array(&$this,'php_sdk_init'));
 	$this->php_sdk_init();
 }
+
 //UPDATES OPTIONS
 do_action("AWD_facebook_save_settings");
-
 /****************************************************
 * load subplugins AWD
 * save settings
@@ -102,7 +104,7 @@ if($this->options['connect_enable'] == 1 && $this->options['app_id'] !='' && $th
 	add_action('admin_print_footer_scripts',array(&$this,'js_sdk_init'));
 	
 	//add action to add the login button on the wp-login.php page...
-	if($this->options['login_button_display_on_login_page'] == 1)
+	if($this->options['login_button']['display_on_login_page'] == 1)
 		add_action('login_form',array(&$this,'the_login_button_wp_login'));
 	//Add avatar functions
 	if($this->options['connect_fbavatar'] == 1){

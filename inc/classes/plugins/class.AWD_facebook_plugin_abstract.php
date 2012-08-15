@@ -53,7 +53,7 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 	{	
 		$this->plugin_url = plugins_url(basename(dirname(dirname(dirname($this->file)))));
 		$this->plugin_url_images = $this->plugin_url."/assets/css/images/";
-		load_plugin_textdomain($this->plugin_text_domain,false,dirname(plugin_basename($this->file)).'/langs/');
+		load_plugin_textdomain($this->ptd,false,dirname(plugin_basename($this->file)).'/langs/');
 		
 		if($this->AWD_facebook->options['connect_enable'] != 1 && $this->deps['connect'] == 1){
 			add_action('AWD_facebook_admin_notices',array(&$this,'missing_facebook_connect'));
@@ -81,15 +81,15 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 
 	public function missing_facebook_connect()
 	{
-		echo '<div class="alert alert-error"><p>'.$this->plugin_name.' '.__("can not be activated: Facebook AWD All in One - Facebook Connect plugin must be activated",$this->plugin_text_domain).'</p></div>';
+		$AWD_facebook->display_messages($this->plugin_name.' '.__("can not be activated: Facebook AWD All in One - Facebook Connect plugin must be activated",$this->ptd), 'error');
 	}
 	public function old_parent()
 	{
-		echo '<div class="alert alert-error"><p>'.$this->plugin_name.' '.__("can not be activated: Facebook AWD All in One plugin is out to date... You can download the last version or update it from the Wordpress plugin directory",$this->plugin_text_domain).'</p></div>';
+		$AWD_facebook->display_messages($this->plugin_name.' '.__("can not be activated: Facebook AWD All in One plugin is out to date... You can download the last version or update it from the Wordpress plugin directory",$this->ptd), 'error');
 	}
 	public function missing_parent()
 	{
-		echo '<div class="alert alert-error"><p>'.$this->plugin_name.' '.__("can not be activated: Facebook AWD All in One plugin must be installed... you can download it from the Wordpress plugin directory",$this->plugin_text_domain).'</p></div>';
+		$AWD_facebook->display_messages($this->plugin_name.' '.__("can not be activated: Facebook AWD All in One plugin must be installed... you can download it from the Wordpress plugin directory",$this->ptd), 'error');
 	}
 	public function deactivation(){}
 	public function activation(){}

@@ -39,7 +39,7 @@ class AWD_facebook_options
 		$this->wpdb = $wpdb;
 		$this->prefix = $prefix;
 		//call filter for undefined vars
-		add_filter($this->filterName, array($this,'defaultOptions'), 10, 1);
+		add_filter($this->filterName, array($this,'checkConfig'), 10, 1);
 		//ban hosts
 		$this->ban_hosts = array('Y2l0eXZpbGxlY2hhdC5jb20=');
 	}
@@ -54,7 +54,20 @@ class AWD_facebook_options
 	 */
 	public function setDefaultValue($options_name, $default_value)
 	{
-		if(empty($this->options[$options_name])){
+		
+		if(isset($this->options[$options_name])){
+			if(is_array($default_value)){
+				if(count($this->options[$options_name]) == 0){
+					$this->options[$options_name] = $default_value;
+				}else{
+					$this->options[$options_name] = array_merge($default_value, $this->options[$options_name]);
+				}
+			}else{
+				if($this->options[$options_name] == ''){
+					$this->options[$options_name] = $default_value;
+				}
+			}
+		}else{
 			$this->options[$options_name] = $default_value;
 		}
 	}
@@ -65,13 +78,13 @@ class AWD_facebook_options
 	 * @param   object   wpdb instance
 	 * @return  void
 	 */
-    public function defaultOptions($options)
+    public function checkConfig($options)
     {
 		global $AWD_facebook;
 		$this->options = $options;
 		
 		//Languages
-		if($this->options['locale']==''){
+		if(!isset($this->options['locale'])){
 		    if(defined('WPLANG')){
 		        if(WPLANG==''){
 		            $this->setDefaultValue('locale', 'en_US');
@@ -82,22 +95,21 @@ class AWD_facebook_options
 		}
 		
 		//Permissions
-		$perms = '';
-		$perms_admin = '';
-		$array_perms = explode(",",$this->options['perms']);
+		$perms = $perms_admin = isset($this->options['perms']) ? $this->options['perms'] : '';
+		$array_perms = explode(",",$perms);
 		if(!in_array('email',$array_perms))
-			$perms = 'email,'.$this->options['perms'];  
+			$perms = rtrim('email,'.$perms,',');
+			
 		if(current_user_can('manage_options'))
 			if(!in_array('manage_pages',$array_perms))
-				$perms_admin = 'manage_pages,';
-		if($AWD_facebook->current_facebook_user_can('publish_stream'))
-        	if(!in_array('publish_stream',$array_perms))
-				$perms_admin .= 'publish_stream,';
-		$perms = str_replace(' ','',rtrim($this->options['perms'],','));
-		$perms_admin = str_replace(' ','',rtrim($this->options['perms_admin'],','));
+				$perms_admin = 'manage_pages,publish_stream';
+		$perms = str_replace(' ','',rtrim($perms,','));
 		$this->setDefaultValue('perms', $perms);
-		$this->setDefaultValue('perms_admin', $perms.' '.$perms_admin);
-		
+
+		//always reset perms admin as we can't manage them
+		$perms_admin = str_replace(' ','',rtrim($perms.','.$perms_admin,','));
+		$this->options['perms_admin'] =  $perms.' '.$perms_admin;
+				
 		//Plugin and options
 		$this->setDefaultValue('connect_enable', 0);
 		$this->setDefaultValue('open_graph_enable', 1);
@@ -105,8 +117,10 @@ class AWD_facebook_options
 		$this->setDefaultValue('debug_enable', 0);
 		$this->setDefaultValue('publish_to_profile', 0);
 		$this->setDefaultValue('publish_to_pages', 0);
-		$this->setDefaultValue('publish_message_text', '');
-		$this->setDefaultValue('publish_read_more_text', __('Read More',$AWD_facebook->plugin_text_domain));
+		$this->setDefaultValue('publish_message_text', null);
+		$this->setDefaultValue('publish_read_more_text', __('Read More',$AWD_facebook->ptd));
+		$this->setDefaultValue('fb_publish_to_pages', null);
+
 		
 		//API
 		$this->setDefaultValue('app_id', '');
@@ -118,7 +132,14 @@ class AWD_facebook_options
 		//OPENGRAPH
 		$this->setDefaultValue('opengraph_objects', array());
 		$this->setDefaultValue('opengraph_object_links', array());
-
+		$this->setDefaultValue('opengraph_contexts', array(
+			'frontpage' => __('Frontpage',$AWD_facebook->ptd),
+			'page' => __('Pages',$AWD_facebook->ptd),
+			'post' => __('Posts',$AWD_facebook->ptd),
+			'archive' => __('Archives',$AWD_facebook->ptd),
+			'author' => __('Authors',$AWD_facebook->ptd)		
+		));
+		
 		//Plugins options	
 		$like_button = array
 		(
@@ -185,7 +206,7 @@ class AWD_facebook_options
 			'display_on_login_page' 		=> 0,
 			'login_redirect_url' 			=> '',
 			'logout_redirect_url' 			=> '',
-			'logout_label' 					=> __('Logout', $AWD_facebook->plugin_text_domain),
+			'logout_label' 					=> __('Logout', $AWD_facebook->ptd),
 			'show_profile_picture'			=> 1,
 			'show_faces'					=> 0,
 			'maxrow'						=> 1,
@@ -204,9 +225,27 @@ class AWD_facebook_options
 			'mobile'						=> 0,
 			'on_pages'						=> 0,
 			'on_posts'						=> 0,
+			'on_custom_post_types'          => 0,
 			'exclude_post_id'				=> ''
 		);
 		$this->setDefaultValue('comments_box', $comments_box);
+		
+		$this->setDefaultValue('content_manager', array(
+			'like_button' 	=> array(
+				'redefine'	=>0,
+				'enabled'	=>1,
+				'place'		=>'top'
+			),
+			'fbpublish' => array(
+				'to_pages' 		=> $this->options['publish_to_pages'],
+				'to_profile'	=> $this->options['publish_to_profile'],
+				'message_text'	=> $this->options['publish_message_text'],
+				'read_more_text'=> $this->options['publish_read_more_text']
+			),
+			'opengraph' => array(
+				'object_link' => ''
+			),
+		));
 		
         return $this->options;
     }
@@ -229,7 +268,9 @@ class AWD_facebook_options
 	 */
 	public function setOptions($options)
 	{
-		$this->options = $options;
+		//merge old options with new one
+		$old_options = get_option($this->filterName);
+		$this->options = array_replace_recursive($old_options, $options);
 	}
 	
 	/**
@@ -248,25 +289,20 @@ class AWD_facebook_options
 	 */
 	public function save()
 	{
-		$old_options = get_option($this->filterName);
-		//create new options
-		$this->options = is_array($old_options) ? array_merge($old_options, $this->options) : $this->options;
-		
-		//verify default value
-		$this->defaultOptions($this->options);
-		update_option($this->filterName, $this->options);
-		$this->load();
+		update_option($this->filterName, $this->checkConfig($this->options));
 	}
 	
 	/**
 	 * Add option
 	 * Save options in options table wp
 	 */
-	public function update_option($name,$value,$flush=false)
+	public function updateOption($name,$value,$flush=false)
 	{
 		$this->options[$name] = $value;
 		if($flush === true)
 			$this->save();
+			
+		return $this->options[$name];
 	}
 	
 	/**

@@ -10,7 +10,7 @@ $fields['activity_box'] = array(
 	'title_config' => array(
 		'type'=>'html',
 		'html'=> '
-			<h1>'.__('Configure the box',$this->plugin_text_domain).'</h1>
+			<h1>'.__('Configure the box',$this->ptd).'</h1>
 		',
 		'widget_no_display' => true
 	),
@@ -24,7 +24,7 @@ $fields['activity_box'] = array(
 	
 	'domain'=> array(
 		'type'=> 'text',
-		'label'=> __('Domain',$this->plugin_text_domain),
+		'label'=> __('Domain',$this->ptd),
 		'class'=>'span4',
 		'attr'=> array('class'=>'span4')
 	),
@@ -46,32 +46,32 @@ $fields['activity_box'] = array(
 	'type'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'iframe', 'label'=>__('Iframe',$this->plugin_text_domain)),
-			array('value'=>'xfbml', 'label'=>__('Xfbml',$this->plugin_text_domain)),							
-			array('value'=>'html5', 'label'=>__('html5',$this->plugin_text_domain)),				
+			array('value'=>'iframe', 'label'=>__('Iframe',$this->ptd)),
+			array('value'=>'xfbml', 'label'=>__('Xfbml',$this->ptd)),							
+			array('value'=>'html5', 'label'=>__('html5',$this->ptd)),				
 		),
-		'label'=> __('Type',$this->plugin_text_domain),
+		'label'=> __('Type',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
 	'filter'=> array(
 		'type'=> 'text',
-		'label'=> __('Filter',$this->plugin_text_domain),
+		'label'=> __('Filter',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
 	'ref'=> array(
 		'type'=> 'text',
-		'label'=> __('Ref',$this->plugin_text_domain),
+		'label'=> __('Ref',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
 	'max_age'=> array(
 		'type'=> 'text',
-		'label'=> __('Max Age',$this->plugin_text_domain),
+		'label'=> __('Max Age',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -80,18 +80,18 @@ $fields['activity_box'] = array(
 	'linktarget'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'_blank', 'label'=>__('Blank',$this->plugin_text_domain)),
-			array('value'=>'_top', 'label'=>__('Top',$this->plugin_text_domain)),							
-			array('value'=>'_parent', 'label'=>__('Parent',$this->plugin_text_domain)),				
+			array('value'=>'_blank', 'label'=>__('Blank',$this->ptd)),
+			array('value'=>'_top', 'label'=>__('Top',$this->ptd)),							
+			array('value'=>'_parent', 'label'=>__('Parent',$this->ptd)),				
 		),
-		'label'=> __('Links Target',$this->plugin_text_domain),
+		'label'=> __('Links Target',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
 	'width'=> array(
 		'type'=> 'text',
-		'label'=> __('Width of box',$this->plugin_text_domain),
+		'label'=> __('Width of box',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -99,7 +99,7 @@ $fields['activity_box'] = array(
 	
 	'height'=> array(
 		'type'=> 'text',
-		'label'=> __('Height of box',$this->plugin_text_domain),
+		'label'=> __('Height of box',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -107,10 +107,10 @@ $fields['activity_box'] = array(
 	'header'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
-			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
+			array('value'=>'0', 'label'=>__('No',$this->ptd)),
+			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),
-		'label'=> __('Show Header ?',$this->plugin_text_domain),
+		'label'=> __('Show Header ?',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -118,10 +118,10 @@ $fields['activity_box'] = array(
 	'recommendations'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
-			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
+			array('value'=>'0', 'label'=>__('No',$this->ptd)),
+			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),
-		'label'=> __('Recommendations',$this->plugin_text_domain),
+		'label'=> __('Recommendations',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -129,10 +129,10 @@ $fields['activity_box'] = array(
 	'colorscheme'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'light', 'label'=>__('light',$this->plugin_text_domain)),
-			array('value'=>'dark', 'label'=>__('Dark',$this->plugin_text_domain)),							
+			array('value'=>'light', 'label'=>__('light',$this->ptd)),
+			array('value'=>'dark', 'label'=>__('Dark',$this->ptd)),							
 		),
-		'label'=> __('Colors',$this->plugin_text_domain),
+		'label'=> __('Colors',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -140,21 +140,21 @@ $fields['activity_box'] = array(
 	'font'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'arial', 'label'=>__('Arial',$this->plugin_text_domain)),
-			array('value'=>'lucida grande', 'label'=>__('Lucida grande',$this->plugin_text_domain)),
-			array('value'=>'segoe ui', 'label'=>__('Segoe ui',$this->plugin_text_domain)),
-			array('value'=>'tahoma', 'label'=>__('Tahoma',$this->plugin_text_domain)),
-			array('value'=>'trebuchet ms', 'label'=>__('Trebuchet ms',$this->plugin_text_domain)),
-			array('value'=>'verdana', 'label'=>__('Verdana',$this->plugin_text_domain))							
+			array('value'=>'arial', 'label'=>__('Arial',$this->ptd)),
+			array('value'=>'lucida grande', 'label'=>__('Lucida grande',$this->ptd)),
+			array('value'=>'segoe ui', 'label'=>__('Segoe ui',$this->ptd)),
+			array('value'=>'tahoma', 'label'=>__('Tahoma',$this->ptd)),
+			array('value'=>'trebuchet ms', 'label'=>__('Trebuchet ms',$this->ptd)),
+			array('value'=>'verdana', 'label'=>__('Verdana',$this->ptd))							
 		),
-		'label'=> __('Fonts',$this->plugin_text_domain),
+		'label'=> __('Fonts',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
 	'border_color'=> array(
 		'type'=> 'text',
-		'label'=> __('Border color',$this->plugin_text_domain),
+		'label'=> __('Border color',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -170,9 +170,9 @@ $fields['activity_box'] = array(
 	'preview' => array(
 		'type'=>'html',
 		'html'=> '
-			<h1>'.__('Preview',$this->plugin_text_domain).'</h1>
+			<h1>'.__('Preview',$this->ptd).'</h1>
 			<div class="well">'.$this->get_the_activity_box().'</div>
-			<h1>'.__('Options List',$this->plugin_text_domain).'</h1>
+			<h1>'.__('Options List',$this->ptd).'</h1>
 			<table class="table table-bordered table-condensed table-striped">
 				<thead>
 					<tr>

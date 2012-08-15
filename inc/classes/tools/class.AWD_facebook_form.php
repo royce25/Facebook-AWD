@@ -55,21 +55,40 @@ class AWD_facebook_form
 		return $html;
 	}
 	
+	public function addInputCheckBox($id, $value, $class='', $attrs = array())
+	{
+		$field_id = $this->getFieldId($id);
+		$html = '<input type="checkbox" id="'.$field_id.'" '.($value == 1 ? 'checked="checked"' : '').'name="'.$this->prefix.$id.'" value="1" '.$this->processAttr($attrs).' />';
+		return $html;
+	}
+
 	public function addInputHidden($id, $value, $class='', $attrs = array())
 	{
 		$field_id = $this->getFieldId($id);
 		$html = '<input type="hidden" id="'.$field_id.'" name="'.$this->prefix.$id.'" value="'.$value.'" '.$this->processAttr($attrs).' />';
 		return $html;
 	}
-
-
+	
+	public function addInputTextArea($label, $id, $value, $class='', $attrs = array())
+	{
+		$field_id = $this->getFieldId($id);
+		$html ='
+		<div class="'.$class.'">
+			<label for="'.$field_id.'">'.$label.'</label>
+			<textarea id="'.$field_id.'" name="'.$this->prefix.$id.'" '.$this->processAttr($attrs).'>'.$value.'</textarea>
+		</div>';
+		return $html;
+	}
 	
 	public function addInputText($label, $id, $value, $class='', $attrs = array(), $prepend = '',$append ='')
 	{
 		$field_id = $this->getFieldId($id);
 		$html ='
-		<div class="'.$class.'">
-			<label for="'.$field_id.'">'.$label.'</label>';
+		<div class="'.$class.'">';
+			if($label != ''){
+				$html .='
+				<label for="'.$field_id.'">'.$label.'</label>';
+			}
 			if($prepend != '' OR $append){
 				$html .= '
 				<div class="'.($append != '' ? 'input-append' : '').' '.($prepend != '' ? 'input-prepend' : '').' ">';

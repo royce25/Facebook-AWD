@@ -56,11 +56,11 @@ class AWD_facebook_widget extends WP_Widget {
 		$this->id_base = $options['id_base'];
 		$this->model = $options['model'];
 		$this->self_callback = $options['self_callback'];
-		$this->plugin_text_domain = $options['text_domain'];
-		$this->plugin_text_domain = $options['text_domain'];
+		$this->ptd = $options['text_domain'];
+		$this->ptd = $options['text_domain'];
 		$this->preview = $options['preview'];
 		
-		//load_plugin_textdomain($this->plugin_text_domain, false, dirname(dirname( plugin_basename( __FILE__ ) ) ) . '/langs/');
+		//load_plugin_textdomain($this->ptd, false, dirname(dirname( plugin_basename( __FILE__ ) ) ) . '/langs/');
 		
         parent::WP_Widget($this->id_base, $this->name , $options);
     }

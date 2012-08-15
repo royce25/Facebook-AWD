@@ -10,7 +10,7 @@ $fields['comments_box'] = array(
 	'title_config' => array(
 		'type'=>'html',
 		'html'=> '
-			<h1>'.__('Configure the comments box',$this->plugin_text_domain).'</h1>
+			<h1>'.__('Configure the comments box',$this->ptd).'</h1>
 		',
 		'widget_no_display' => true
 	),
@@ -24,7 +24,7 @@ $fields['comments_box'] = array(
 	
 	'href'=> array(
 		'type'=> 'text',
-		'label'=> __('Default Url',$this->plugin_text_domain),
+		'label'=> __('Default Url',$this->ptd),
 		'class'=>'span4',
 		'attr'=> array('class'=>'span4')
 	),
@@ -48,10 +48,10 @@ $fields['comments_box'] = array(
 	'type'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'xfbml', 'label'=>__('Xfbml',$this->plugin_text_domain)),							
-			array('value'=>'html5', 'label'=>__('html5',$this->plugin_text_domain)),				
+			array('value'=>'xfbml', 'label'=>__('Xfbml',$this->ptd)),							
+			array('value'=>'html5', 'label'=>__('html5',$this->ptd)),				
 		),
-		'label'=> __('Type',$this->plugin_text_domain),
+		'label'=> __('Type',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -59,7 +59,7 @@ $fields['comments_box'] = array(
 	
 	'num_posts'=> array(
 		'type'=> 'text',
-		'label'=> __('Nb of comments',$this->plugin_text_domain),
+		'label'=> __('Nb of comments',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -67,10 +67,10 @@ $fields['comments_box'] = array(
 	'mobile'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
-			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
+			array('value'=>'0', 'label'=>__('No',$this->ptd)),
+			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),
-		'label'=> __('Mobile version',$this->plugin_text_domain),
+		'label'=> __('Mobile version',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -93,10 +93,10 @@ $fields['comments_box'] = array(
 	'on_pages'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
-			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
+			array('value'=>'0', 'label'=>__('No',$this->ptd)),
+			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),
-		'label'=> __('Add Comments to pages',$this->plugin_text_domain),
+		'label'=> __('Add Comments to pages',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2'),
 		'widget_no_display' => true
@@ -105,10 +105,10 @@ $fields['comments_box'] = array(
 	'on_posts'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
-			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
+			array('value'=>'0', 'label'=>__('No',$this->ptd)),
+			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),
-		'label'=> __('Add Comments to posts',$this->plugin_text_domain),
+		'label'=> __('Add Comments to posts',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2'),
 		'widget_no_display' => true
@@ -117,10 +117,10 @@ $fields['comments_box'] = array(
 	'on_custom_post_types'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'0', 'label'=>__('No',$this->plugin_text_domain)),
-			array('value'=>'1', 'label'=>__('Yes',$this->plugin_text_domain)),							
+			array('value'=>'0', 'label'=>__('No',$this->ptd)),
+			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),
-		'label'=> __('Add Comments to custom posts',$this->plugin_text_domain),
+		'label'=> __('Add Comments to custom posts',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2'),
 		'widget_no_display' => true
@@ -143,7 +143,7 @@ $fields['comments_box'] = array(
 	
 	'exclude_post_id'=> array(
 		'type'=> 'text',
-		'label'=> __('Exclude Posts or Pages ID (example: 12,46,234)',$this->plugin_text_domain),
+		'label'=> __('Exclude Posts or Pages ID (example: 12,46,234)',$this->ptd),
 		'class'=>'span4',
 		'attr'=> array('class'=>'span4'),
 		'widget_no_display' => true
@@ -151,7 +151,7 @@ $fields['comments_box'] = array(
 	
 	'width'=> array(
 		'type'=> 'text',
-		'label'=> __('Width',$this->plugin_text_domain),
+		'label'=> __('Width',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -159,10 +159,10 @@ $fields['comments_box'] = array(
 	'colorscheme'=> array(
 		'type'=> 'select',
 		'options' => array(
-			array('value'=>'light', 'label'=>__('light',$this->plugin_text_domain)),
-			array('value'=>'dark', 'label'=>__('Dark',$this->plugin_text_domain)),							
+			array('value'=>'light', 'label'=>__('light',$this->ptd)),
+			array('value'=>'dark', 'label'=>__('Dark',$this->ptd)),							
 		),
-		'label'=> __('Colors',$this->plugin_text_domain),
+		'label'=> __('Colors',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
@@ -177,9 +177,9 @@ $fields['comments_box'] = array(
 	'preview' => array(
 		'type'=>'html',
 		'html'=> '
-			<h1>'.__('Preview',$this->plugin_text_domain).'</h1>			
+			<h1>'.__('Preview',$this->ptd).'</h1>			
 			<div class="well">'.$this->get_the_comments_box("",array("width"=>"420")).'</div> 
-			<h1>'.__('Options List',$this->plugin_text_domain).'</h1>
+			<h1>'.__('Options List',$this->ptd).'</h1>
 			<table class="table table-bordered table-condensed table-striped">
 				<thead>
 					<tr>
