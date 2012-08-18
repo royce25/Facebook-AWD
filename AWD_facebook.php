@@ -288,7 +288,6 @@ Class AWD_facebook
 		}
 	}
 	
-	
 	/**
 	 * Display Error in admin Facebook AWD area
 	 * @return void
@@ -888,7 +887,7 @@ Class AWD_facebook
 		$type = $_POST['type'];
 		$name = $_POST['name'];
 		$form = new AWD_facebook_form('form_media_field', 'POST', '', $this->plugin_option_pref);
-		echo $form->addMediaButton($name, $name, $label, '','span8', array('class'=>'span6'), array('data-title'=> $label2, 'data-type'=> $type), true);
+		echo $form->addMediaButton($label, $name, '', 'span8', array('class'=>'span6'), array('data-title'=> $label2, 'data-type'=> $type), true);
 		exit();
 	}
 	
@@ -1114,11 +1113,33 @@ Class AWD_facebook
 		
 		if(isset($object['images'])){
 			if(is_array($object['images']) && count($object['images'])){
-				foreach($object['images'] as $image){
-					if($image !=''){
+				foreach($object['images'] as $image_url){
+					//add image
+					if($image_url !=''){
 						$ogp_img = new OpenGraphProtocolImage();
-						$ogp_img->setURL($image);
-						//Calcul with and height here ?
+						$ogp_img->setURL($image_url);	
+						
+						//check if we want file under ssl
+						$url_info = parse_url($image_url);
+						if($url_info){
+							if($url_info['scheme'] == 'https'){
+								$secure_url = $image_url;
+								$image_url = str_replace('https://','http://', $image_url);
+								$ogp_img->setSecureURL($secure_url);
+								$ogp_img->setURL($image_url );	
+							}
+						}
+						
+						//add infos to image
+						$image_size = @getimagesize($image_url);
+						if(is_array($image_size)){
+							if(isset($image_size['mime']))
+								$ogp_img->setType($image_size['mime']);
+							if(isset($image_size[0]))
+								$ogp_img->setWidth($image_size[0]);
+							if(isset($image_size[1]))
+								$ogp_img->setHeight($image_size[1]);
+						}
 						$ogp->addImage($ogp_img);
 					}
 				}
@@ -1281,17 +1302,17 @@ Class AWD_facebook
 			break;
 		}
 		
-		//redefine object type from post if value is set
-		$set_from_post = 0;
+		//redefine object template from post if value is set
+		$from_post = 0;
 		if(is_object($post)){
 			$custom = get_post_meta($post->ID, $this->plugin_slug, true);
 			if(!is_string($custom) AND isset($custom['opengraph']['object_link'])){
-				$set_from_post = 1;
+				$from_post = 1;
 				$linked_object = $custom['opengraph']['object_link'];
 			}
-		}		
+		}
 		
-		return $this->render_ogp_tags($array_replace, $linked_object);
+		return $this->render_ogp_tags($array_replace, $linked_object, $from_post);
 	}
 	
 	/**
@@ -1300,8 +1321,9 @@ Class AWD_facebook
 	 * @param array $linked_object
 	 * @return string $html
 	 */
-	public function render_ogp_tags($array_replace, $linked_object)
+	public function render_ogp_tags($array_replace, $linked_object, $from_post = 0)
 	{
+
 		$array_pattern = array("%BLOG_TITLE%","%BLOG_DESCRIPTION%","%BLOG_URL%","%TITLE%","%DESCRIPTION%","%IMAGE%","%URL%");
 		//define object value depending on object
 		$object_template = isset($this->options['opengraph_objects'][$linked_object]) ? $this->options['opengraph_objects'][$linked_object] : null;
@@ -1309,11 +1331,11 @@ Class AWD_facebook
 		if(is_array($object_template)){
 			foreach($object_template as $field=>$value){
 				$value = str_replace($array_pattern, $array_replace, $value);
-				$object_template[$field]= $value;
+				$object_template[$field] = $value;
 			}
 			//construct related ogp object
 			$ogp = $this->opengraph_array_to_object($object_template);
-			$html = '<!-- '.$this->plugin_name.' Opengraph [v'.$this->get_version().'] (object reference: "'.$object_template['object_title'].'" '.($set_from_post == 1 ? 'Defined from post' : '').') -->'."\n";
+			$html = '<!-- '.$this->plugin_name.' Opengraph [v'.$this->get_version().'] (object reference: "'.$object_template['object_title'].'" '.($from_post == 1 ? 'Defined from post' : '').') -->'."\n";
 			$html .= $ogp->toHTML();
 			$html .= "\n".'<!-- '.$this->plugin_name.' END Opengraph -->'."\n";
 		}

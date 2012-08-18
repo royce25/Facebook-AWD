@@ -117,5 +117,5 @@ if(false === ($object_id instanceof AWD_facebook_form))
 ?>
 <h2><?php _e('Preview',$this->ptd); ?></h2>
 <?php
-echo $this->render_ogp_tags($ogp);
+echo 'Disabled for the moment...';//$this->render_ogp_tags($ogp);
 ?>
