@@ -41,7 +41,7 @@ add_action('admin_footer',array(&$this,'debug_content'));
 //DISPLAY FRONT
 add_filter('language_attributes',  array($this,'ogp_language_attributes'),10,1);
 add_action('after_setup_theme',array(&$this,'add_theme_support'));
-add_action('wp_head',array(&$this,'define_ogp_objects'));
+add_action('wp_head',array(&$this,'display_ogp_objects'));
 add_action('wp_footer',array(&$this,'load_sdk_js'));
 add_action('admin_print_footer_scripts',array(&$this,'load_sdk_js'));
 add_filter('the_content', array(&$this,'the_content'));
