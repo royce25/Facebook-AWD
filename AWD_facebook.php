@@ -1453,11 +1453,13 @@ Class AWD_facebook
 		$publish_to_pages = array();
 		foreach($this->me['pages'] as $fb_page){
 			//if pages are in the array of option to publish on,
-			if($this->options['fb_publish_to_pages'][$fb_page['id']] == 1){
-				$new_page = array();
-				$new_page['id'] = $fb_page['id'];
-				$new_page['access_token'] = $fb_page['access_token'];
-				$publish_to_pages[] = $new_page;
+			if(isset($this->options['fb_publish_to_pages'][$fb_page['id']])){
+				if($this->options['fb_publish_to_pages'][$fb_page['id']] == 1){
+					$new_page = array();
+					$new_page['id'] = $fb_page['id'];
+					$new_page['access_token'] = $fb_page['access_token'];
+					$publish_to_pages[] = $new_page;
+				}
 			}
 		}
 		return $publish_to_pages;
