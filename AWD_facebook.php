@@ -611,11 +611,6 @@ Class AWD_facebook
 				add_meta_box($this->plugin_slug."_activity_metabox",  __('Activity on your site',$this->ptd), array(&$this,'activity_content'),  $this->blog_admin_plugins_hook , 'side', 'core');
 			}
 		}
-		//OpenGraph And post edito pages
-		if($this->blog_admin_opengraph_hook != ''){
-			if($this->options['open_graph_enable'] == 1){
-			}
-		}
 		$post_types = get_post_types();
 		foreach($post_types as $type){
 			//Like button manager on post page type
@@ -1036,6 +1031,7 @@ Class AWD_facebook
 		if(isset($_POST[$this->plugin_option_pref.'_nonce_options_object_links']) && wp_verify_nonce($_POST[$this->plugin_option_pref.'_nonce_options_object_links'],$this->plugin_slug.'_update_object_links')){
 			if($_POST){
 				$opengraph_object_links = array();
+				print_r($_POST[$this->plugin_option_pref.'opengraph_object_link']);
 				foreach($_POST[$this->plugin_option_pref.'opengraph_object_link'] as $context=>$object_id){
 					$opengraph_object_links[$context] = $object_id;
 				}
@@ -1132,8 +1128,8 @@ Class AWD_facebook
 				$options = array();
 				$options[] = array('value'=>'', 'label'=> __('Disabled', $this->ptd));
 				$linked_object = isset($this->options['opengraph_object_links'][$key]) ? $this->options['opengraph_object_links'][$key] : '';
-				foreach($ogp_objects as $key=>$ogp_object){
-					$options[] = array('value'=> $key, 'label'=> $ogp_object['object_title']);
+				foreach($ogp_objects as $value=>$ogp_object){
+					$options[] = array('value'=> $value, 'label'=> $ogp_object['object_title']);
 				}
 				$html.= $form->addSelect( __('Choose Opengraph object for',$this->ptd).' '.$context, 'opengraph_object_link['.$key.']', $options, $linked_object, 'span4', array('class'=>'span4'));
 			}
@@ -1238,7 +1234,7 @@ Class AWD_facebook
 				$linked_object = $custom['opengraph']['object_link'];
 			}
 		}
-
+		
 		//define object value depending on object
 		$object_template = isset($this->options['opengraph_objects'][$linked_object]) ? $this->options['opengraph_objects'][$linked_object] : null;
 		
