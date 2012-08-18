@@ -558,6 +558,10 @@ Class AWD_facebook
 		add_action( 'admin_print_scripts-'.$this->blog_admin_plugins_hook, array(&$this,'admin_enqueue_js'));
 		add_action( 'admin_print_scripts-post-new.php', array(&$this,'admin_enqueue_js'));
 		add_action( 'admin_print_scripts-post.php', array(&$this,'admin_enqueue_js'));
+		add_action( 'admin_print_scripts-link-add.php', array(&$this,'admin_enqueue_js'));
+		add_action( 'admin_print_scripts-link.php', array(&$this,'admin_enqueue_js'));
+		add_action( 'admin_print_styles-link-add.php', array(&$this,'admin_enqueue_css'));
+		add_action( 'admin_print_styles-link.php', array(&$this,'admin_enqueue_css'));
 		
 		//test-widgets.php
 		add_action( 'admin_print_styles-widgets.php', array(&$this,'admin_enqueue_css'));
@@ -617,6 +621,8 @@ Class AWD_facebook
 			//Like button manager on post page type
 			add_meta_box($this->plugin_slug."_awd_mini_form_metabox", __('Facebook AWD Manager',$this->ptd).' <img style="vertical-align:middle;" style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'post_manager_content'),  $type , 'side', 'core');
 		}
+		//add_meta_box($this->plugin_slug."_awd_mini_form_metabox", __('Facebook AWD Manager',$this->ptd).' <img style="vertical-align:middle;" style="vertical-align:middle;" src="'.$this->plugin_url_images.'facebook-mini.png" alt="facebook logo"/>', array(&$this,'post_manager_content'),  'link' , 'side', 'core');
+
 		if($this->blog_admin_opengraph_hook != ''){
 			if($this->options['open_graph_enable'] == 1){	
 				add_meta_box($this->plugin_slug."_open_graph_metabox", __('Open Graph',$this->ptd).' <img style="vertical-align:middle;" src="'.$this->plugin_url_images.'ogp-logo.png" />', array(&$this,'open_graph_content'),  $this->blog_admin_opengraph_hook, 'normal', 'core');
@@ -1484,10 +1490,10 @@ Class AWD_facebook
 				try{
 					//try to post batch request to publish on all pages asked + profile at one time
 					$post_id = $this->fcbk->api($feed_dir, 'POST', $params);
+					return $post_id;
 				}catch (FacebookApiException $e) { 
-					$this->errors[] = new WP_Error($e->getCode(), $e->getMessage());
-					$this->optionsManager->setOptions($this->options);
-					$this->optionsManager->save();
+					$error = new WP_Error($e->getCode(), $e->getMessage());
+					return $error;
 				}
 			}
 		}else if(is_int(absint($to_pages))){
@@ -1503,11 +1509,10 @@ Class AWD_facebook
 			try{
 				//try to post batch request to publish on all pages asked + profile at one time
 				$post_id = $this->fcbk->api($feed_dir, 'POST', $params);
+				return $post_id;
 			}catch (FacebookApiException $e) { 
-				error_log("Facebook AWD Publish to Facebook Error:  ".$e->getMessage());
-				$this->error[] = new WP_Error($e->getCode(), $e->getMessage());
-				$this->optionsManager->setOptions($this->options);
-				$this->optionsManager->save();
+				$error = new WP_Error($e->getCode(), $e->getMessage());
+				return $error;
 			}
 		}
 		return $result;
@@ -2237,11 +2242,25 @@ Class AWD_facebook
 	 * @return void
 	 */
 	public function post_manager_content($post){
-	 	$custom = get_post_meta($post->ID, $this->plugin_slug, true);
+	 	
+	 	//Prepare manager for link publish or post.
+	 	if(isset($post->link_url)){
+	 		$id = null;
+	 		$url = $post->link_url;
+	 		$link_visible = $post->link_visible == 'Y' ? true : false;
+	 	}else{
+	 		$id = $post->ID;
+	 		$url = $post->link_url;
+	 		$link_visible = true;
+	 	}	 		
+	 	
+	 	$custom = get_post_meta($id, $this->plugin_slug, true);
 	 	$options = array();
 	 	if(isset($custom)){
 			$options = $custom;
 	 	}
+	 	
+	 	
 		$options = wp_parse_args($options, $this->options['content_manager']);	
 		$form = new AWD_facebook_form('form_posts_settings', 'POST', '', $this->plugin_option_pref);	
 		?>
@@ -2249,11 +2268,11 @@ Class AWD_facebook
 			<?php do_action('AWD_facebook_admin_notices'); ?>
 
 			<h2><?php _e('Like Button',$this->ptd); ?></h2>
-			<div class="alert alert-info">
-			<?php
-			echo do_shortcode('[AWD_likebutton width="250" href="'.get_permalink($post->ID).'"]');
-			?>
-			</div>
+			<?php if($url != ''){ ?>
+				<div class="alert alert-info">
+					<?php echo do_shortcode('[AWD_likebutton width="250" href="'.$url.'"]'); ?>
+				</div>
+			<?php } ?>
 			<div class="row">
 				<?php 
 				echo $form->addSelect(__('Redefine globals settings ?',$this->ptd), 'like_button[redefine]', array(

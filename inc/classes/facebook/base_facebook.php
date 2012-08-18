@@ -949,18 +949,20 @@ abstract class BaseFacebook
     // the case, curl will try IPv4 first and if that fails, then it will
     // fall back to IPv6 and the error EHOSTUNREACH is returned by the
     // operating system.
-    if ($result === false && empty($opts[CURLOPT_IPRESOLVE])) {
-        $matches = array();
-        $regex = '/Failed to connect to ([^:].*): Network is unreachable/';
-        if (preg_match($regex, curl_error($ch), $matches)) {
-          if (strlen(@inet_pton($matches[1])) === 16) {
-            self::errorLog('Invalid IPv6 configuration on server, '.
-                           'Please disable or get native IPv6 on your server.');
-            self::$CURL_OPTS[CURLOPT_IPRESOLVE] = CURL_IPRESOLVE_V4;
-            curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-            $result = curl_exec($ch);
-          }
-        }
+    if(defined('CURLOPT_IPRESOLVE')){
+		if ($result === false && empty($opts[CURLOPT_IPRESOLVE])) {
+			$matches = array();
+			$regex = '/Failed to connect to ([^:].*): Network is unreachable/';
+			if (preg_match($regex, curl_error($ch), $matches)) {
+			  if (strlen(@inet_pton($matches[1])) === 16) {
+				self::errorLog('Invalid IPv6 configuration on server, '.
+							   'Please disable or get native IPv6 on your server.');
+				self::$CURL_OPTS[CURLOPT_IPRESOLVE] = CURL_IPRESOLVE_V4;
+				curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+				$result = curl_exec($ch);
+			  }
+			}
+		}
     }
 
     if ($result === false) {
