@@ -18,7 +18,7 @@ abstract class OpenGraphProtocolObject {
 	 * @return string HTML meta element string
 	 */
 	public function toHTML() {
-		return rtrim( OpenGraphProtocol::buildHTML( get_object_vars($this), static::PREFIX ), PHP_EOL );
+		return rtrim( OpenGraphProtocol::buildHTML( get_object_vars($this), self::PREFIX ), PHP_EOL );
 	}
 
 	/**
@@ -128,7 +128,7 @@ class OpenGraphProtocolArticle extends OpenGraphProtocolObject {
 	 */
 	public function setPublishedTime( $pubdate ) {
 		if ( $pubdate instanceof DateTime )
-			$this->published_time = static::datetime_to_iso_8601($pubdate);
+			$this->published_time = self::datetime_to_iso_8601($pubdate);
 		else if ( is_string($pubdate) && strlen($pubdate) >= 10 ) // at least YYYY-MM-DD
 			$this->published_time = $pubdate;
 		return $this;
@@ -148,7 +148,7 @@ class OpenGraphProtocolArticle extends OpenGraphProtocolObject {
 	 */
 	public function setModifiedTime( $updated ) {
 		if ( $updated instanceof DateTime )
-			$this->modified_time = static::datetime_to_iso_8601($updated);
+			$this->modified_time = self::datetime_to_iso_8601($updated);
 		else if ( is_string($updated) && strlen($updated) >= 10 ) // at least YYYY-MM-DD
 			$this->modified_time = $updated;
 		return $this;
@@ -168,7 +168,7 @@ class OpenGraphProtocolArticle extends OpenGraphProtocolObject {
 	 */
 	public function setExpirationTime( $expires ) {
 		if ( $expires instanceof DateTime )
-			$this->expiration_time = static::datetime_to_iso_8601($expires);
+			$this->expiration_time = self::datetime_to_iso_8601($expires);
 		else if ( is_string($expires) && strlen($expires) >= 10 )
 			$this->expiration_time = $expires;
 		return $this;
@@ -187,7 +187,7 @@ class OpenGraphProtocolArticle extends OpenGraphProtocolObject {
 	 * @param string $author_uri Author URI
 	 */
 	public function addAuthor( $author_uri ) {
-		if ( static::is_valid_url($author_uri) && !in_array($author_uri, $this->author))
+		if ( self::is_valid_url($author_uri) && !in_array($author_uri, $this->author))
 			$this->author[] = $author_uri;
 		return $this;
 	}
@@ -396,7 +396,7 @@ class OpenGraphProtocolBook extends OpenGraphProtocolObject {
 	 * @param string $author_uri
 	 */
 	public function addAuthor( $author_uri ) {
-		if ( static::is_valid_url($author_uri) && !in_array($author_uri, $this->author))
+		if ( self::is_valid_url($author_uri) && !in_array($author_uri, $this->author))
 			$this->author[] = $author_uri;
 		return $this;
 	}
@@ -457,7 +457,7 @@ class OpenGraphProtocolBook extends OpenGraphProtocolObject {
 	 */
 	public function setReleaseDate( $release_date ) {
 		if ( $release_date instanceof DateTime )
-			$this->release_date = static::datetime_to_iso_8601($release_date);
+			$this->release_date = self::datetime_to_iso_8601($release_date);
 		else if ( is_string($release_date) && strlen($release_date) >= 10 ) // at least YYYY-MM-DD
 			$this->release_date = $release_date;
 		return $this;
@@ -562,7 +562,7 @@ class OpenGraphProtocolVideoObject extends OpenGraphProtocolObject {
 	 * @param string $role The role the given actor played in this video work.
 	 */
 	public function addActor( $url, $role='' ) {
-		if ( static::is_valid_url($url) && !in_array($url, $this->actor) ) {
+		if ( self::is_valid_url($url) && !in_array($url, $this->actor) ) {
 			if ( !empty($role) && is_string($role) )
 				$this->actor[] = array( $url, 'role' => $role );
 			else
@@ -586,7 +586,7 @@ class OpenGraphProtocolVideoObject extends OpenGraphProtocolObject {
 	 * @param string $url director profile URL
 	 */
 	public function addDirector( $url ) {
-		if ( static::is_valid_url($url) && !in_array($url, $this->director) )
+		if ( self::is_valid_url($url) && !in_array($url, $this->director) )
 			$this->director[] = $url;
 		return $this;
 	}
@@ -606,7 +606,7 @@ class OpenGraphProtocolVideoObject extends OpenGraphProtocolObject {
 	 * @param string $url writer profile URL
 	 */
 	public function addWriter( $url ) {
-		if ( static::is_valid_url($url) && !in_array($url, $this->writer) )
+		if ( self::is_valid_url($url) && !in_array($url, $this->writer) )
 			$this->writer[] = $url;
 	}
 
@@ -646,7 +646,7 @@ class OpenGraphProtocolVideoObject extends OpenGraphProtocolObject {
 	 */
 	public function setReleaseDate( $release_date ) {
 		if ( $release_date instanceof DateTime )
-			$this->release_date = static::datetime_to_iso_8601($release_date);
+			$this->release_date = self::datetime_to_iso_8601($release_date);
 		else if ( is_string($release_date) && strlen($release_date) >= 10 ) // at least YYYY-MM-DD
 			$this->release_date = $release_date;
 		return $this;
@@ -696,7 +696,7 @@ class OpenGraphProtocolVideoEpisode extends OpenGraphProtocolVideoObject {
 	 * @param string $url URL of a video.tv_show
 	 */
 	public function setSeries( $url ) {
-		if ( static::is_valid_url($url) )
+		if ( self::is_valid_url($url) )
 			$this->series = $url;
 		return $this;
 	}

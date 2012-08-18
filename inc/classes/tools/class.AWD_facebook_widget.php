@@ -49,8 +49,8 @@ class AWD_facebook_widget extends WP_Widget {
 			'preview'		=> false,
 			'text_domain' 	=> ''
 		);
-		$options = array_replace($default, $options);
-		
+		$options = wp_parse_args($options, $default);
+
 		$this->AWD_facebook = $AWD_facebook;
 		$this->name = $options['name'];
 		$this->id_base = $options['id_base'];

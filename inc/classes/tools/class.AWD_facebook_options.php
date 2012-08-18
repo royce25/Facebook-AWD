@@ -60,7 +60,7 @@ class AWD_facebook_options
 				if(count($this->options[$options_name]) == 0){
 					$this->options[$options_name] = $default_value;
 				}else{
-					$this->options[$options_name] = array_merge($default_value, $this->options[$options_name]);
+					$this->options[$options_name] = wp_parse_args($this->options[$options_name], $default_value);
 				}
 			}else{
 				if($this->options[$options_name] == ''){
@@ -269,8 +269,8 @@ class AWD_facebook_options
 	public function setOptions($options)
 	{
 		//merge old options with new one
-		$old_options = get_option($this->filterName);
-		$this->options = array_replace_recursive($old_options, $options);
+		$default = get_option($this->filterName);
+		$this->options = wp_parse_args($options, $default);
 	}
 	
 	/**

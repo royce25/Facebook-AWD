@@ -317,7 +317,7 @@ Class AWD_facebook
 	 * Display Error in admin Facebook AWD area
 	 * @return void
 	 */
-	public function display_all_errors()
+	public function display_all_errors($echo=1)
 	{
 		$html = '';
 		if(isset($this->errors) && count($this->errors) > 0 AND is_array($this->errors)){
@@ -820,7 +820,8 @@ Class AWD_facebook
 				$this->options['app_infos'] = $this->optionsManager->updateOption('app_infos', $app_info, true);
 			}catch(Exception $e){
 				$this->options['app_infos'] = $this->optionsManager->updateOption('app_infos', array(), true);
-				return new WP_Error($e->getCode(), $e->getMessage());
+				$error = new WP_Error($e->getCode(), $e->getMessage());
+				$this->display_messages($error->get_error_message(), 'error', false);
 			}
 		}
 		return false;
@@ -927,7 +928,7 @@ Class AWD_facebook
 	public function ogp_language_attributes($language_attributes)
 	{
 		$ogp = new OpenGraphProtocol();
-		$language_attributes .= ' prefix="'.$ogp::PREFIX .': '.$ogp::NS.'" xmlns:fb="http://ogp.me/ns/fb#"';
+		$language_attributes .= ' prefix="'.OpenGraphProtocol::PREFIX .': '.OpenGraphProtocol::NS.'" xmlns:fb="http://ogp.me/ns/fb#"';
 		return $language_attributes;
 	}
 	
@@ -1141,7 +1142,7 @@ Class AWD_facebook
 	
 	public function render_ogp_tags($ogp)
 	{
-		$prefix = $ogp::PREFIX . ': ' . $ogp::NS . ' ';
+		$prefix = $ogp->PREFIX . ': ' . $ogp->NS . ' ';
 		return '<pre class="prettyprint linenums lang-html">'."\n"
 			.htmlentities('<html prefix="'.rtrim( $prefix,' ' ).'">')."\n"
 			.htmlentities('<head>')."\n"
@@ -2139,7 +2140,8 @@ Class AWD_facebook
 	public function get_the_login_button($options=array())
 	{
 		//we set faces options to false, if user not connected
-		$options = array_replace($this->options['login_button'], $options);	
+		$options = wp_parse_args($options, $this->options['login_button']);
+
 		$html = '';
 
 		switch(1){
@@ -2219,9 +2221,8 @@ Class AWD_facebook
 		if(!isset($options['href']) OR empty($options['href']))
 			if(is_object($post))
 				$options['href'] = get_permalink($post->ID);
-	
-		$options = array_replace($this->options['like_button'], $options);	
-		
+
+		$options = wp_parse_args($options, $this->options['like_button']);
 		try {
 			$AWD_facebook_likebutton = new AWD_facebook_likebutton($options);
 			return '<div class="AWD_facebook_likebutton">'.$AWD_facebook_likebutton->get().'</div>';
@@ -2359,8 +2360,7 @@ Class AWD_facebook
 			if(is_object($post))
 				$options['href'] = get_permalink($post->ID);
 
-		$options = array_replace($this->options['comments_box'], $options);	
-		
+		$options = wp_parse_args($options, $this->options['comments_box']);
 		try {
 			$AWD_facebook_comments = new AWD_facebook_comments($options);
 			return '<div class="AWD_facebook_comments">'.$AWD_facebook_comments->get().'</div>';
@@ -2409,7 +2409,7 @@ Class AWD_facebook
 	 */
 	public function get_the_like_box($options=array())
 	{
-		$options = array_replace($this->options['like_box'], $options);
+		$options = wp_parse_args($options, $this->options['like_box']);
 		try {
 			$AWD_facebook_likebox = new AWD_facebook_likebox($options);
 			return '<div class="AWD_facebook_likebox">'.$AWD_facebook_likebox->get().'</div>';
@@ -2439,7 +2439,7 @@ Class AWD_facebook
 	 */
 	public function get_the_activity_box($options=array())
 	{
-		$options = array_replace($this->options['activity_box'], $options);
+		$options = wp_parse_args($options, $this->options['activity_box']);
 		try {
 			$AWD_facebook_activity = new AWD_facebook_activity($options);
 			return '<div class="AWD_facebook_activity">'.$AWD_facebook_activity->get().'</div>';

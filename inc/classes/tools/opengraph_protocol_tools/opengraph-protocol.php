@@ -150,9 +150,9 @@ class OpenGraphProtocol {
 				if ( is_object( $content ) )
 					$content = $content->toArray();
 				if ( empty($property) || !is_string($property) )
-					$s .= static::buildHTML( $content, $prefix );
+					$s .= self::buildHTML( $content, $prefix );
 				else
-					$s .= static::buildHTML( $content, $prefix . ':' . $property );
+					$s .= self::buildHTML( $content, $prefix . ':' . $property );
 			} elseif ( !empty($content) ) {
 				$s .= '<meta ' . self::META_ATTR . '="' . $prefix;
 				if ( is_string($property) && !empty($property) )
@@ -389,7 +389,7 @@ class OpenGraphProtocol {
 	 * @return string meta elements
 	 */
 	public function toHTML() {
-		return rtrim( static::buildHTML( get_object_vars($this) ), PHP_EOL );
+		return rtrim( self::buildHTML( get_object_vars($this) ), PHP_EOL );
 	}
 
 	/**
@@ -518,7 +518,7 @@ class OpenGraphProtocol {
 	 * @var string $locale locale in the format language_TERRITORY
 	 */
 	public function setLocale( $locale ) {
-		if ( is_string($locale) && in_array($locale, static::supported_locales(true)) )
+		if ( is_string($locale) && in_array($locale, self::supported_locales(true)) )
 			$this->locale = $locale;
 		return $this;
 	}
