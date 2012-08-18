@@ -121,7 +121,7 @@ class AWD_facebook_widget extends WP_Widget {
     {
     	if(!is_array($instance))
     		$instance = array();
-    	return array_replace($this->AWD_facebook->options[$this->id_base], $instance);	
+    	return wp_parse_args($instance, $this->AWD_facebook->options[$this->id_base]);	
     }
     
     /**
