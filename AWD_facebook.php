@@ -238,7 +238,7 @@ Class AWD_facebook
 	public function wp_init()
 	{		
 		//Js
-		wp_register_script($this->plugin_slug.'-bootstrap-js',$this->plugin_url.'/assets/bootstrap/js/bootstrap.js',array('jquery'));
+		wp_register_script($this->plugin_slug.'-bootstrap-js',$this->plugin_url.'/assets/js/bootstrap.js',array('jquery'));
 		wp_register_script($this->plugin_slug.'-google-code-prettify',$this->plugin_url.'/assets/js/google-code-prettify/prettify.js',array('jquery'));
 		wp_register_script($this->plugin_slug.'-admin-js',$this->plugin_url.'/assets/js/facebook_awd_admin.js',array('jquery','jquery-ui-tabs','jquery-ui-accordion',$this->plugin_slug.'-google-code-prettify'));
 		wp_register_script($this->plugin_slug,$this->plugin_url.'/assets/js/facebook_awd.js',array('jquery'));
@@ -317,7 +317,7 @@ Class AWD_facebook
 	 * Display Error in admin Facebook AWD area
 	 * @return void
 	 */
-	public function display_all_errors($echo=1)
+	public function display_all_errors()
 	{
 		$html = '';
 		if(isset($this->errors) && count($this->errors) > 0 AND is_array($this->errors)){
@@ -1227,7 +1227,7 @@ Class AWD_facebook
 		$set_from_post = 0;
 		if(is_object($post)){
 			$custom = get_post_meta($post->ID, $this->plugin_slug, true);
-			if(isset($custom['opengraph']['object_link'])){
+			if(!is_string($custom) AND isset($custom['opengraph']['object_link'])){
 				$set_from_post = 1;
 				$linked_object = $custom['opengraph']['object_link'];
 			}
@@ -2242,7 +2242,7 @@ Class AWD_facebook
 	 	if(isset($custom)){
 			$options = $custom;
 	 	}
-		$options = array_merge($this->options['content_manager'], $options);	
+		$options = wp_parse_args($options, $this->options['content_manager']);	
 		$form = new AWD_facebook_form('form_posts_settings', 'POST', '', $this->plugin_option_pref);	
 		?>
 	 	<div class="AWD_facebook_wrap">
@@ -2274,37 +2274,36 @@ Class AWD_facebook
 			
 			<?php if(current_user_can('manage_facebook_awd_publish_to_pages')){ ?>
 				<h2><?php _e('Publish to Facebook',$this->ptd); ?></h2>
-				<div class="row">
-					<?php 
-					if($this->is_user_logged_in_facebook()){
-						if($this->current_facebook_user_can('publish_stream')){
-							if($this->current_facebook_user_can('manage_pages')){
-								echo $form->addSelect(__('Publish to pages ?',$this->ptd), 'fbpublish[to_pages]', array(
-									array('value'=>0, 'label'=>__('No',$this->ptd)),
-									array('value'=>1, 'label'=>__('Yes',$this->ptd))									
-								), $options['fbpublish']['to_pages'], 'span3', array('class'=>'span3'));
-								echo $form->addSelect(__('Publish to profile ?',$this->ptd), 'fbpublish[to_profile]', array(
-									array('value'=>0, 'label'=>__('No',$this->ptd)),
-									array('value'=>1, 'label'=>__('Yes',$this->ptd))
-								), $options['fbpublish']['to_profile'], 'span3', array('class'=>'span3'));
-								
-								echo $form->addInputText(__('Custom Action Label',$this->ptd), 'fbpublish[read_more_text]', $options['fbpublish']['read_more_text'], 'span3', array('class'=>'span3'));
-	
-								echo $form->addInputTextArea(__('Add a message to the post ?',$this->ptd), 'fbpublish[message_text]', $options['fbpublish']['message_text'], 'span3', array('class'=>'span3'));
-								
-							}else{
-								$this->warnings[] =  new WP_Error('AWD_facebook_pages_auth', __('You must authorize manage_pages permission in the settings of the plugin', $this->ptd));
-								$this->display_all_errors();
-							}
+				<?php 
+				if($this->is_user_logged_in_facebook()){
+					if($this->current_facebook_user_can('publish_stream')){
+						if($this->current_facebook_user_can('manage_pages')){
+							echo '<div class="row">';
+							echo $form->addSelect(__('Publish to pages ?',$this->ptd), 'fbpublish[to_pages]', array(
+								array('value'=>0, 'label'=>__('No',$this->ptd)),
+								array('value'=>1, 'label'=>__('Yes',$this->ptd))									
+							), $options['fbpublish']['to_pages'], 'span3', array('class'=>'span3'));
+							echo $form->addSelect(__('Publish to profile ?',$this->ptd), 'fbpublish[to_profile]', array(
+								array('value'=>0, 'label'=>__('No',$this->ptd)),
+								array('value'=>1, 'label'=>__('Yes',$this->ptd))
+							), $options['fbpublish']['to_profile'], 'span3', array('class'=>'span3'));
+							
+							echo $form->addInputText(__('Custom Action Label',$this->ptd), 'fbpublish[read_more_text]', $options['fbpublish']['read_more_text'], 'span3', array('class'=>'span3'));
+
+							echo $form->addInputTextArea(__('Add a message to the post ?',$this->ptd), 'fbpublish[message_text]', $options['fbpublish']['message_text'], 'span3', array('class'=>'span3'));
+							echo '</div>';
 						}else{
-							$this->warnings[] = new WP_Error('AWD_facebook_pages_auth_publish_stream', __('You must authorize publish_stream permission in the settings of the plugin', $this->ptd));
+							$this->warnings[] =  new WP_Error('AWD_facebook_pages_auth', __('You must authorize manage_pages permission in the settings of the plugin', $this->ptd));
 							$this->display_all_errors();
 						}
 					}else{
-						echo '<p>'.do_shortcode('[AWD_loginbutton]').'</p>';
+						$this->warnings[] = new WP_Error('AWD_facebook_pages_auth_publish_stream', __('You must authorize publish_stream permission in the settings of the plugin', $this->ptd));
+						$this->display_all_errors();
 					}
-					?>
-				</div>
+				}else{
+					echo '<p>'.do_shortcode('[AWD_loginbutton]').'</p>';
+				}
+				?>
 			<?php } ?>
 			<?php if(current_user_can('manage_facebook_awd_opengraph')){ ?>
 				<?php if($this->options['open_graph_enable'] == 1){ ?>
