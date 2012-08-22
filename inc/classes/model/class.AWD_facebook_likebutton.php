@@ -74,8 +74,9 @@ class AWD_facebook_likebutton
 	protected $type;
 	
 	/**
-	 * Construct
-	 */
+	 * Constructor
+	 * @param array $options
+	 */ 
  	public function __construct($options)
  	{
 		$this->setHref($options['href']);

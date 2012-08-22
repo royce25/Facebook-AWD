@@ -41,8 +41,9 @@ class AWD_facebook_comments
 	protected $type;
 	
 	/**
-	 * construct
-	 */     
+	 * Constructor
+	 * @param array $options
+	 */ 
 	 public function __construct($options){
 	 	$this->setHref($options['href']);
 	 	$this->setWidth($options['width']);

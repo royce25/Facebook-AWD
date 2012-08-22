@@ -152,6 +152,7 @@ abstract class OpenGraphProtocolVisualMedia extends OpenGraphProtocolMedia {
 	 * @param int $width width in pixels
 	 */
 	public function setWidth( $width ) {
+		
 		if ( is_int($width) && $width >  0 )
 			$this->width = $width;
 		return $this;

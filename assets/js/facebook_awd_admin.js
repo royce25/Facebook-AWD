@@ -24,11 +24,16 @@ function AWDFacebookAdmin($){
 		var $data = $button.data();
 		var post_id = $data.postId ? $data.postId : 0;
 		var $field = $button.prev();
+		var url = null;
 		var formfieldName =  $field.attr('name');
 		tb_show($data.title, 'media-upload.php?post_id='+post_id+'&type='+$data.type+'&amp;TB_iframe=true');
 		window.send_to_editor = function(html){
-			var imgurl = jQuery('img',html).attr('src');
-			$field.val(imgurl);
+			url = jQuery('img',html).attr('src');
+			if(url == '' || typeof(url) == 'undefined'){
+				url = jQuery(html).attr('href');
+			}
+			console.log("url: ",url)
+			$field.val(url);
 			tb_remove();
 		}
 		return false;

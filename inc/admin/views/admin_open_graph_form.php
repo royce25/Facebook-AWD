@@ -1,19 +1,25 @@
 <h1><?php _e('1. Define Object',$this->ptd); ?></h1>
 
 <?php
+$object = array(
+	'id'=>'',
+	'title'=>'%TITLE%',
+	'auto_load_videos_attachment' => 0,
+	'auto_load_images_attachment' => 0,
+	'auto_load_audios_attachment' => 0
+);
+
 if(true === ($object_id instanceof AWD_facebook_form)){
-	$object = array('id'=>'','title'=>'%TITLE%');
 	$form = $object_id;
 }else if($object_id == ''){
-	$object = array('id'=>'','title'=>'%TITLE%');
 	$form = new AWD_facebook_form('form_create_opengraph_object', 'POST', '', $this->plugin_option_pref);
 }else{
-	$object = $this->options['opengraph_objects'][$object_id];
+	$object = wp_parse_args($this->options['opengraph_objects'][$object_id], $object);
 	$form = new AWD_facebook_form('form_create_opengraph_object', 'POST', '', $this->plugin_option_pref);
 }
 
 if($copy == 'true')
-	unset($object['id']);
+	$object['id'] = '';
 if(!isset($object['object_title']))
 	$object['object_title'] = '';
 	
@@ -70,7 +76,15 @@ if(false === ($object_id instanceof AWD_facebook_form))
 		?>
 	</div>
 	<h1><?php _e('2. Add Media to Object',$this->ptd); ?></h1>
-	<h2><?php _e('Images',$this->ptd); ?> <button class="btn btn-mini awd_add_media_field" data-label="<?php _e('Image url',$this->ptd); ?>" data-label2="<?php _e('Upload an Image',$this->ptd); ?>" data-type="image" data-name="awd_ogp[images][]"><i class="icon-picture"></i> Add an image</button></h2>
+	<h2><?php _e('Images',$this->ptd); ?> <button class="btn btn-mini awd_add_media_field" data-label="<?php _e('Image url',$this->ptd); ?>" data-label2="<?php _e('Upload an Image',$this->ptd); ?>" data-type="image" data-name="awd_ogp[images][]"><i class="icon-picture"></i><?php _e('Add a custom image', $this->ptd); ?></button></h2>
+	<div class="row">
+		<?php 
+		echo $form->addSelect(__('Auto load images attachments ?',$this->ptd), 'awd_ogp[auto_load_images_attachment]', array(
+			array('value'=>0, 'label'=>__('No',$this->ptd)),
+			array('value'=>1, 'label'=>__('Yes',$this->ptd))									
+		), $object['auto_load_images_attachment'], 'span3', array('class'=>'span2'));
+		?>
+	</div>
 	<div class="row">
 		<div class="awd_ogp_fields_image">
 			<?php
@@ -91,16 +105,62 @@ if(false === ($object_id instanceof AWD_facebook_form))
 			?>
 		</div>
 	</div>
-	<h2><?php _e('Videos',$this->ptd); ?> <button class="btn btn-mini awd_add_media_field" data-label="<?php _e('Video url',$this->ptd); ?>" data-label2="<?php _e('Upload an Image',$this->ptd); ?>" data-type="video" data-name="awd_ogp[videos][]"><i class="icon-film"></i> Add a video</button></h2>
+	<h2><?php _e('Videos',$this->ptd); ?> <button class="btn btn-mini awd_add_media_field" data-label="<?php _e('Video url',$this->ptd); ?>" data-label2="<?php _e('Upload an Image',$this->ptd); ?>" data-type="video" data-name="awd_ogp[videos][]"><i class="icon-film"></i> <?php _e('Add a custom video', $this->ptd); ?></button></h2>
+	<div class="row">
+		<?php 
+		echo $form->addSelect(__('Auto load videos attachments ?',$this->ptd), 'awd_ogp[auto_load_videos_attachment]', array(
+			array('value'=>0, 'label'=>__('No',$this->ptd)),
+			array('value'=>1, 'label'=>__('Yes',$this->ptd))									
+		), $object['auto_load_videos_attachment'], 'span3', array('class'=>'span2'));
+		?>
+	</div>
 	<div class="row">
 		<div class="awd_ogp_fields_video">
-			<?php echo $form->addMediaButton('Video url', 'awd_ogp[videos][]', '','span8', array('class'=>'span6'), array('data-title'=>__('Upload a Video',$this->ptd), 'data-type'=> 'video'), false); ?>
+			<?php
+			if(!isset($object['videos']))
+				$object['videos'] = array();
+			$videos = $object['videos'];
+			if(count($videos))
+			{
+				echo $form->addMediaButton('Video url', 'awd_ogp[videos][]', $videos[0],'span8', array('class'=>'span6'), array('data-title'=>__('Upload a Video',$this->ptd), 'data-type'=> 'video'), false);
+				unset($videos[0]);
+				foreach($videos as $video)
+				{
+					echo $form->addMediaButton('Video url', 'awd_ogp[videos][]', $video,'span8', array('class'=>'span6'), array('data-title'=>__('Upload a Video',$this->ptd), 'data-type'=> 'video'), true);
+				}
+			}else{
+				echo $form->addMediaButton('Video url', 'awd_ogp[videos][]', '','span8', array('class'=>'span6'), array('data-title'=>__('Upload a Video',$this->ptd), 'data-type'=> 'video'), false);
+			}
+			?>		
 		</div>
 	</div>
-	<h2><?php _e('Audios',$this->ptd); ?> <button class="btn btn-mini awd_add_media_field" data-label="<?php _e('Audio url',$this->ptd); ?>" data-label2="<?php _e('Upload an Image',$this->ptd); ?>" data-type="audio" data-name="awd_ogp[audios][]"><i class="icon-music"></i> Add a song</button></h2>
+	<h2><?php _e('Audios',$this->ptd); ?> <button class="btn btn-mini awd_add_media_field" data-label="<?php _e('Audio url',$this->ptd); ?>" data-label2="<?php _e('Upload an Image',$this->ptd); ?>" data-type="audio" data-name="awd_ogp[audios][]"><i class="icon-music"></i> <?php _e('Add a custom audio', $this->ptd); ?></button></h2>
+	<div class="row">
+		<?php 
+		echo $form->addSelect(__('Auto load audios attachments ?',$this->ptd), 'awd_ogp[auto_load_audios_attachment]', array(
+			array('value'=>0, 'label'=>__('No',$this->ptd)),
+			array('value'=>1, 'label'=>__('Yes',$this->ptd))									
+		), $object['auto_load_audios_attachment'], 'span3', array('class'=>'span2'));
+		?>
+	</div>
 	<div class="row">
 		<div class="awd_ogp_fields_audio">
-			<?php echo $form->addMediaButton('Audio url', 'awd_ogp[audios][]', '','span8', array('class'=>'span6'), array('data-title'=>__('Upload a Song',$this->ptd), 'data-type'=> 'audio'), false); ?>
+			<?php
+			if(!isset($object['audios']))
+				$object['audios'] = array();
+			$audios = $object['audios'];
+			if(count($audios))
+			{
+				echo $form->addMediaButton('Audio url', 'awd_ogp[audios][]', $audios[0],'span8', array('class'=>'span6'), array('data-title'=>__('Upload Audio',$this->ptd), 'data-type'=> 'audio'), false);
+				unset($audios[0]);
+				foreach($audios as $audio)
+				{
+					echo $form->addMediaButton('Audio url', 'awd_ogp[audios][]', $audio,'span8', array('class'=>'span6'), array('data-title'=>__('Upload Audio',$this->ptd), 'data-type'=> 'audio'), true);
+				}
+			}else{
+				echo $form->addMediaButton('Audio url', 'awd_ogp[audios][]', '','span8', array('class'=>'span6'), array('data-title'=>__('Upload Audio',$this->ptd), 'data-type'=> 'audio'), false);
+			}
+			?>		
 		</div>
 	</div>
 	<?php if(false === ($object_id instanceof AWD_facebook_form)){ ?>

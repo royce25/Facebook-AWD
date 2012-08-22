@@ -1,39 +1,39 @@
 <?php
 /**
  * 
+ * @author alexhermann
  *
- * @author Alexandre Hermann
- * @version 1.4
- * @copyright AHWEBDEV, 6 June, 2012
- * @package Facebook AWD
- **/
+ */
 class AWD_facebook_options
 {
 	/**
-	 * Protected Option var
+	 * 
+	 * @var array
 	 */
 	protected $options = array();
 	
 	/**
-	 * Protected Wpdb instance WP database
+	 * 
+	 * @var WPDB object
 	 */
 	protected $wpdb;
 	
 	/**
-	 * Protected prefix
+	 * 
+	 * @var string
 	 */
 	protected $prefix;
 	
 	/**
-	 * Protected filterName
+	 * 
+	 * @var string
 	 */
 	protected $filterName = "AWD_facebook_options";
 	
 	/**
-	 * Construct
-	 * @param   string   Prefix (recommend use $AWD_facebook->plugin_option_pref)
-	 * @param   object   wpdb instance
-	 * @return  void
+	 * 
+	 * @param string $prefix
+	 * @param WPDB Object $wpdb
 	 */
 	public function __construct($prefix,$wpdb){
 		$this->wpdb = $wpdb;
@@ -313,16 +313,5 @@ class AWD_facebook_options
 	{
 		update_option($this->filterName, array());
 	}
-	
-	/**
-	 * Debug
-	 */
-	public function debug()
-	{
-		echo '<pre>';
-		var_dump($this->options);
-		echo '</pre>';
-	}
-	
 }
 ?>
