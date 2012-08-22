@@ -1,11 +1,8 @@
-/*
-*
-* JS AWD FCBK
-* (C) 2012 AH WEB DEV
-* Hermann.alexandre@ahwebdev.fr
-*
-*/
-
+/**
+ * 
+ * @author alexhermann
+ *
+ */
 var AWD_facebook = {
 	
 	FBEventHandler : function ()

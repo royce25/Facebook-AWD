@@ -1,11 +1,9 @@
 <?php
-/*
-*
-* init AWD FCBK
-* (C) 2011 AH WEB DEV
-* Hermann.alexandre@ahwebdev.fr
-*
-*/
+/**
+ * 
+ * @author alexhermann
+ *
+ */
 
 //NEEDED VARS
 $plugin_directory = array_pop(explode(DIRECTORY_SEPARATOR, dirname(dirname(__FILE__))));
@@ -78,7 +76,6 @@ $this->options = $this->optionsManager->getOptions();
 
 //Init the SDK PHP
 if(!empty($this->options['app_id'])  && !empty($this->options['app_secret_key'])){
-	//add_action('wp_loaded', array(&$this,'php_sdk_init'));
 	$this->php_sdk_init();
 }
 

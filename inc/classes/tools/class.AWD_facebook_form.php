@@ -1,12 +1,9 @@
 <?php 
 /**
  * 
+ * @author alexhermann
  *
- * @author Alexandre Hermann
- * @version 1.4
- * @copyright AHWEBDEV, 6 June, 2012
- * @package Facebook AWD
- **/
+ */
 class AWD_facebook_form
 {
 
@@ -176,16 +173,22 @@ class AWD_facebook_form
 						continue;
 					}
 				}
+				if(!$this->isWidget() && isset($field['widget_only'])){
+					if($field['widget_only'] == true){
+						continue;
+					}
+				}
 				
 				
 				//get the value of the field only if it's not a html content
 				if($field['type'] != 'html'){
-					$fieldname = $fieldset_id.'['.$id.']';
-					$value = $AWD_facebook->options[$fieldset_id][$id];
-					//if we are in widget mode, we must redefine the name of field, and the associated values 
+					//if we are in widget mode, we must redefine the name of field, and the associated values
 					if($this->isWidget()){
 						$fieldname = $this->widget->get_field_name($id);
 						$value = $widget_instance[$id];
+					}else{
+						$fieldname = $fieldset_id.'['.$id.']';
+						$value = $AWD_facebook->options[$fieldset_id][$id];
 					}
 				}
 				$help = !$this->isWidget() ? $AWD_facebook->get_the_help($id) : '';

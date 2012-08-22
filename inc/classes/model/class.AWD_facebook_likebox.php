@@ -1,11 +1,9 @@
 <?php 
 /**
  * 
- * @author Alexandre Hermann
- * @version 1.4
- * @copyright AHWEBDEV, 6 June, 2012
- * @package Facebook AWD
- **/
+ * @author alexhermann
+ *
+ */
 class AWD_facebook_likebox
 {
 	/**

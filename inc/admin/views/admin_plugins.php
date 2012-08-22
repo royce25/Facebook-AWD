@@ -1,13 +1,10 @@
 <?php
-/*
-*
-* Options Admin AWD FCBK
-* (C) 2011 AH WEB DEV
-* Hermann.alexandre@ahwebdev.fr
-*
-*/
-?>
-<?php 
+/**
+ * 
+ * @author alexhermann
+ *
+ */
+
 $fields = array();
 $list_menu_plugins = array();
 require(dirname(dirname(__FILE__)).'/forms/plugins_menu.php');

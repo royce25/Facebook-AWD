@@ -1,12 +1,9 @@
 <?php
-/*
-*
-* Options Admin AWD FCBK
-* (C) 2011 AH WEB DEV
-* Hermann.alexandre@ahwebdev.fr
-*
-*/
-
+/**
+ * 
+ * @author alexhermann
+ *
+ */
 ?>
 <div id="div_options_content">
 	<div id="settings_ogp" class="tabbable tabs-left">

@@ -126,6 +126,12 @@ Class AWD_facebook
 	 * @var string
 	 */
 	public $_unsync_url;
+	
+	/**
+	 * Contains the list of Plugins AWD_facebook_plugin_interface
+	 * @var array
+	 */
+	public $plugins;
 
 	//****************************************************************************************
 	//	GLOBALS FUNCTIONS

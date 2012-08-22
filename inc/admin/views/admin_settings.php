@@ -1,12 +1,3 @@
-<?php
-/*
-*
-* Options Admin AWD FCBK
-* (C) 2011 AH WEB DEV
-* Hermann.alexandre@ahwebdev.fr
-*
-*/
-?>
 <?php 
 $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_pref);
 ?>

@@ -1,3 +1,10 @@
+<?php
+/**
+ *
+ * @author alexhermann
+ *
+ */
+?>
 <h1><?php _e('1. Define Object',$this->ptd); ?></h1>
 
 <?php

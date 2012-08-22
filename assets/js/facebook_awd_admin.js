@@ -1,6 +1,8 @@
-/*
-*
-* JS AWD FCBK
+/**
+ * 
+ * @author alexhermann
+ *
+ */
 * (C) 2012 AH WEB DEV
 * Hermann.alexandre@ahwebdev.fr
 *

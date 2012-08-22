@@ -1,19 +1,14 @@
 <?php 
 /**
  * 
+ * @author alexhermann
  *
- * @author Alexandre Hermann
- * @version 1.4
- * @copyright AHWEBDEV, 6 June, 2012
- * @package Facebook AWD
- **/
+ */
 
 interface AWD_facebook_plugin_interface{
 	public function __construct($file,$AWD_facebook);
 	public function init();
 	public function get_version();
-	public function deactivation();
-	public function activation();
 	public function old_parent();
 	public function missing_parent();
 	public function missing_facebook_connect();
@@ -28,8 +23,12 @@ interface AWD_facebook_plugin_interface{
 	public function plugin_settings_form($fields);
 	
 	public function front_enqueue_js();
-	public function admin_enqueue_js();
 	public function front_enqueue_css();
+	public function admin_enqueue_js();
 	public function admin_enqueue_css();
+	public function global_enqueue_js();
+	public function global_enqueue_css();
+	public function js_vars($vars);
+	
 }
 ?>

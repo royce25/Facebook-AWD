@@ -1,11 +1,9 @@
 <?php
 /**
- * Class AWD_facebook_widget
- * @author Alexandre Hermann
- * @version 1.0
- * @copyright AHWEBDEV, 01/08/2012
- * @package Facebook AWD
- **/
+ * 
+ * @author alexhermann
+ *
+ */
 class AWD_facebook_widget extends WP_Widget {
 	
 	/**
@@ -57,11 +55,8 @@ class AWD_facebook_widget extends WP_Widget {
 		$this->model = $options['model'];
 		$this->self_callback = $options['self_callback'];
 		$this->ptd = $options['text_domain'];
-		$this->ptd = $options['text_domain'];
 		$this->preview = $options['preview'];
-		
-		//load_plugin_textdomain($this->ptd, false, dirname(dirname( plugin_basename( __FILE__ ) ) ) . '/langs/');
-		
+				
         parent::WP_Widget($this->id_base, $this->name , $options);
     }
     
@@ -94,6 +89,7 @@ class AWD_facebook_widget extends WP_Widget {
 	 */
 	public function update($new_instance, $old_instance)
 	{	
+		print_r($new_instance);
 		return stripslashes_deep($new_instance);
 	}
 	
@@ -103,9 +99,7 @@ class AWD_facebook_widget extends WP_Widget {
 	public function widget($args, $instance)
 	{
 		extract($args);
-		$instance = $this->default_instance($instance);
-		$instance['widget_title'] = apply_filters('widget_title', !isset($instance['widget_title']) ? '' : $instance['widget_title']);
-		
+		$instance = $this->default_instance($instance);		
 		echo $before_widget;
 		if($instance['widget_title']){
 			echo $before_title . $instance['widget_title'] . $after_title;
@@ -121,7 +115,13 @@ class AWD_facebook_widget extends WP_Widget {
     {
     	if(!is_array($instance))
     		$instance = array();
-    	return wp_parse_args($instance, $this->AWD_facebook->options[$this->id_base]);	
+    	if(isset($this->AWD_facebook->options[$this->id_base])){
+    		if(!isset($this->AWD_facebook->options[$this->id_base]['widget_title'])){
+    			$this->AWD_facebook->options[$this->id_base]['widget_title'] = '';
+    		}
+    		$instance = wp_parse_args($instance, $this->AWD_facebook->options[$this->id_base]);
+    	}
+    	return $instance;
     }
     
     /**

@@ -1,4 +1,9 @@
 <?php
+/**
+ *
+ * @author alexhermann
+ *
+ */
 global $screen_layout_columns;
 $page = $_GET['page'];
 if($page == $this->plugin_slug)

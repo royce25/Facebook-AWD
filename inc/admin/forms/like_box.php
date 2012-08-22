@@ -1,11 +1,9 @@
 <?php
-/*
-*
-* Fields Like button Admin AWD FCBK
-* (C) 2011 AH WEB DEV
-* Hermann.alexandre@ahwebdev.fr
-*
-*/
+/**
+ * 
+ * @author alexhermann
+ *
+ */
 $fields['like_box'] = array(
 	'title_config' => array(
 		'type'=>'html',
@@ -20,6 +18,14 @@ $fields['like_box'] = array(
 		'html'=> '
 			<div class="row">
 		'
+	),
+		
+	'widget_title'=> array(
+		'type'=> 'text',
+		'label'=> __('Title',$this->ptd),
+		'class'=>'span4',
+		'attr'=> array('class'=>'span4'),
+		'widget_only' => true
 	),
 	
 	'href'=> array(
