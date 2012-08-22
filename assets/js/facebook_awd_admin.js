@@ -3,10 +3,6 @@
  * @author alexhermann
  *
  */
-* (C) 2012 AH WEB DEV
-* Hermann.alexandre@ahwebdev.fr
-*
-*/
 function AWDFacebookAdmin($){
 
 	this.reloadAppInfos = function(button)

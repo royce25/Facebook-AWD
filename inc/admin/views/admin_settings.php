@@ -1,4 +1,9 @@
-<?php 
+<?php
+/**
+ *
+ * @author alexhermann
+ *
+ */
 $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_pref);
 ?>
 <div id="div_options_content">
