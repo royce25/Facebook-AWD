@@ -1621,6 +1621,7 @@ Class AWD_facebook
 				public function update_options_from_post()
 				{
 					if ($_POST) {
+						$new_options = array();
 						foreach ($_POST as $option => $value) {
 							$option_name = str_ireplace($this->plugin_option_pref, "", $option);
 							$new_options[$option_name] = $value;
@@ -1644,13 +1645,12 @@ Class AWD_facebook
 						//do custom action for sub plugins or other exec.
 						do_action('AWD_facebook_save_custom_settings');
 						//unset submit to not be stored
-						unset($_POST[$this->plugin_option_pref . 'submit']);
 						unset($_POST[$this->plugin_option_pref . '_nonce_options_update_field']);
 						unset($_POST['_wp_http_referer']);
 						if ($this->update_options_from_post()) {
 							$this->get_facebook_user_data();
-							$this->get_app_info();
 							$this->save_facebook_user_data($this->get_current_user()->ID);
+							$this->get_app_info();
 							$this->messages['success'] = __('Options updated', $this->ptd);
 						} else {
 							$this->errors[] = new WP_Error('AWD_facebook_save_option', __('Options not updated there is an error...', $this->ptd));
@@ -1886,7 +1886,6 @@ Class AWD_facebook
 								}
 							}
 						}
-						$this->me = $me;
 					} else {
 						$error = new WP_Error($me['error']['code'], $this->plugin_name . ' Error: (#' . $me['error']['code'] . ') ' . $me['error']['message']);
 						wp_die($error);
@@ -1908,7 +1907,6 @@ Class AWD_facebook
 			public function save_facebook_user_data($user_id)
 			{
 				if ($this->is_user_logged_in_facebook()) {
-					$this->get_facebook_user_data();
 					update_user_meta($user_id, 'fb_email', $this->me['email']);
 					update_user_meta($user_id, 'fb_user_infos', $this->me);
 					update_user_meta($user_id, 'fb_uid', $this->uid);

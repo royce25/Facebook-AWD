@@ -12,7 +12,7 @@ function AWDFacebookAdmin($){
 			if(data)
 				jQuery('#awd_fcbk_app_infos_metabox.postbox .inside').html(data);
 				
-			$(button).button('reset')
+			$(button).button('reset');
 		});
 	};
 	

@@ -65,7 +65,7 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 			add_action('AWD_facebook_admin_menu', array(&$this,'admin_menu'));
 			//to enqueue style only on front end
 			add_action('wp_enqueue_scripts',array(&$this,'front_enqueue_js'));
-			add_action('wp_enqueue_styles',array(&$this,'front_enqueue_css'));
+			add_action('wp_enqueue_scripts',array(&$this,'front_enqueue_css'));
 			//to enqueue global scripts everywhere
 			add_action('admin_print_scripts', array(&$this,'global_enqueue_js'));
 			add_action('admin_print_style', array(&$this,'global_enqueue_css'));

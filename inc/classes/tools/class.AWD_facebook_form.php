@@ -106,7 +106,7 @@ class AWD_facebook_form
 		return $html;
 	}
 	
-	public function addSelect($label, $id, $values, $value ,$class='', $attrs = array())
+	public function addSelect($label, $id, $options, $value ,$class='', $attrs = array())
 	{
 		$field_id = $this->getFieldId($id);
 		$html ='
@@ -116,7 +116,7 @@ class AWD_facebook_form
 			$html .= $this->processAttr($attrs);
 			$html .= '>
 			';
-			foreach($values as $option=>$info){
+			foreach($options as $option=>$info){
 				$html .='<option value="'.$info['value'].'" '.($info['value'] == $value ? 'selected="selected"' : '').' >'.$info['label'].'</option>';
 			}
 			$html .='
