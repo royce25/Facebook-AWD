@@ -234,6 +234,20 @@ function AWDFacebookAdmin($){
 			}, 'json');
 		});
 		
+		
+		//Pattern template vars in opengraph
+		var id_focused="";
+		$(":input").live('focus',function () {
+			id_focused = $(this).attr('id');
+		});
+		$(".opengraph_placeholder button").live('click', function(e){
+			e.preventDefault();
+			var b = $(this);
+			var value = $("#"+id_focused).val();
+			$("#"+id_focused).val(value + b.text());
+			
+		});
+		
 		//submit the form to update/save the object
 		$('#awd_fcbk_option_form_create_opengraph_object').live('submit',function(e){
 			e.preventDefault();

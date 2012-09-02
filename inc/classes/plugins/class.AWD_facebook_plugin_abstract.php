@@ -61,7 +61,6 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 			add_action('AWD_facebook_admin_notices',array(&$this,'missing_facebook_connect'));
 			deactivate_plugins($this->file);
 		}else{
-			add_filter('AWD_facebook_options', array($this,'default_options'));
 			add_action('AWD_facebook_admin_menu', array(&$this,'admin_menu'));
 			//to enqueue style only on front end
 			add_action('wp_enqueue_scripts',array(&$this,'front_enqueue_js'));
@@ -77,7 +76,9 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 			add_filter('AWD_facebook_plugins_menu',array(&$this,'plugin_settings_menu'), 10, 1);
 			add_filter('AWD_facebook_plugins_form',array(&$this,'plugin_settings_form'), 10, 1);
 		}
+		add_filter('AWD_facebook_options', array($this,'default_options'));
 		$this->AWD_facebook->options = apply_filters('AWD_facebook_options', $this->AWD_facebook->options);
+		
 		$this->AWD_facebook->plugins[$this->plugin_slug] = $this;
 	}
 

@@ -11,6 +11,7 @@
 $object = array(
 	'id'=>'',
 	'title'=>'%TITLE%',
+	'description'=>'%DESCRIPTION%',
 	'auto_load_videos_attachment' => 0,
 	'auto_load_images_attachment' => 0,
 	'auto_load_audios_attachment' => 0
@@ -34,8 +35,19 @@ $ogp = $this->opengraph_array_to_object($object);
 
 if(false === ($object_id instanceof AWD_facebook_form))
 	echo $form->start();
-	
 	?>
+	<div class="alert alert-info">
+		<p><?php _e('Template Values: you can use those values in each field of the form, select the input where you want to place a variable then click on the button of your choice.',$this->ptd); ?></p>
+		<div class="btn-group opengraph_placeholder">
+			<button class="btn btn-mini">%BLOG_TITLE%</button>
+			<button class="btn btn-mini">%BLOG_DESCRIPTION%</button>
+			<button class="btn btn-mini">%BLOG_URL%</button>
+			<button class="btn btn-mini">%TITLE%</button>
+			<button class="btn btn-mini">%DESCRIPTION%</button>
+			<button class="btn btn-mini">%IMAGE%</button>
+			<button class="btn btn-mini">%URL%</button>
+		</div>
+	</div>
 	<div class="row">
 		<?php
 		//id of object
