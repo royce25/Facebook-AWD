@@ -1886,6 +1886,7 @@ Class AWD_facebook
 								}
 							}
 						}
+						$this->me = $me;
 					} else {
 						$error = new WP_Error($me['error']['code'], $this->plugin_name . ' Error: (#' . $me['error']['code'] . ') ' . $me['error']['message']);
 						wp_die($error);
