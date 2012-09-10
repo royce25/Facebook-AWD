@@ -2,8 +2,8 @@
 /*
 Plugin Name: Facebook AWD All in One
 Plugin URI: http://facebook-awd.ahwebdev.fr
-Description: This plugin integrates Facebook open graph, Plugins from facebook, and FB connect, with SDK JS AND SDK PHP 3.2 Facebook
-Version: 1.4 Beta
+Description: Adds extensions from facebook on wordpress easily. Like button, Like Box, Activity box, Fb comments, OpenGraph and more.
+Version: 1.4
 Author: AHWEBDEV
 Author URI: http://www.ahwebdev.fr
 License: Copywrite AHWEBDEV
@@ -883,8 +883,11 @@ Class AWD_facebook
 				
 				public function ogp_language_attributes($language_attributes)
 				{
+					if(isset($this->options['app_infos']['namespace'])){
+						$namespace_url = $this->options['app_infos']['namespace'].': http://ogp.me/ns/fb/'.$this->options['app_infos']['namespace'];
+					}
 					$ogp = new OpenGraphProtocol();
-					$language_attributes .= ' prefix="' . OpenGraphProtocol::PREFIX . ': ' . OpenGraphProtocol::NS . ' fb:http://ogp.me/ns/fb# '.$this->options['app_infos']['namespace'].': http://ogp.me/ns/fb/'.$this->options['app_infos']['namespace'].'"';
+					$language_attributes .= ' prefix="' . OpenGraphProtocol::PREFIX . ': ' . OpenGraphProtocol::NS . ' fb:http://ogp.me/ns/fb# '.$namespace_url.'"';
 					return $language_attributes;
 				}
 

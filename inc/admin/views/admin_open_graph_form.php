@@ -12,7 +12,8 @@ $object = array(
 	'id'=>'',
 	'title'=>'%TITLE%',
 	'description'=>'%DESCRIPTION%',
-	'custom_type'=> $this->options['app_infos']['namespace'].':your_custom_type',
+	'custom_type'=> isset($this->options['app_infos']['namespace']) ? $this->options['app_infos']['namespace'].':' : ''.'Your_custom_type',
+	'type'=> 'article',
 	'url'=>'%URL%',
 	'site_name'=>'%BLOG_TITLE%',
 	'auto_load_videos_attachment' => 0,
@@ -202,8 +203,3 @@ if(false === ($object_id instanceof AWD_facebook_form))
 		<?php 
 		echo $form->end();
 	}
-?>
-<h2><?php _e('Preview',$this->ptd); ?></h2>
-<?php
-echo 'Disabled for the moment...';//$this->render_ogp_tags($ogp);
-?>

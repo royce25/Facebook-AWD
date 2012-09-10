@@ -4,24 +4,22 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: facebook, facebook tab, like button, open graph, comments, fbconnect, likebox, activity box, all in one, fb connect, fb comments, facebook comments, register
 Requires at least: 3.3
 Tested up to: 3.3.2
-Stable tag: 1.3.1.4
+Stable tag: 1.4
 
 Facebook AWD is an all in one Facebook capabilities for wordpress.
-Add like button, like box, activity box, FB Comments, Open Graph and FB connect
+Add like button, like box, activity box, FB Comments, Open Graph and FB connect, you can add sub plugins to extend features.
 
 == Description ==
+
 [Facebook AWD](http://facebook-awd.ahwebdev.fr/ "") is an all in one Facebook capabilities for wordpress.
-Add Socials plugins, OpenGraph, Comments and FB connect. 
+Easy to install.
+Add Socials plugins, OpenGraph, Comments, FB connect and more.
 Publish your content to all your FB pages and on your personnal wall on Facebook
-Easy to install and setup. Use Iframe or Xfbml or HTML5
 Add Like button and comments to pages, posts and custom posts types, at top, bottom or both.
 Widgets and Shortcodes available for each Facebook socials plugins.
-Use post thumbnail for openGraph, Fix like button with url linter, use pattern to defined custom openGraph meta, etc...
 Works in Facebook Tabs and Facebook Canvas!
-Use both SDK's PHP v.3.1.1 AND JS v3
+Use both SDK's PHP AND Javascript
  
-= Sub Plugins =
-*   [Sub plugins list](http://facebook-awd.ahwebdev.fr/plugins/ "See all plugins of Facebook AWD")
 
 = Socials plugins Iframe or Xfbml or Html5: =
 
@@ -32,22 +30,23 @@ Use both SDK's PHP v.3.1.1 AND JS v3
 *   [Comments](http://trac.ahwebdev.fr/projects/facebook-awd/wiki/How_to_use_Comments_Box "")
 *   [Facebook Actions with new OpenGraph](http://trac.ahwebdev.fr/projects/facebook-awd/wiki/How_to_use_Custom_OpenGraph_Objects_and_OpenGraph_Objects_Actions "")
 
+= Get More Features =
+*   [Sub plugins list](http://facebook-awd.ahwebdev.fr/plugins/ "See all plugins of Facebook AWD")
+
 = Langs: =
 
 *   EN (en_US)
-*   FR (fr_FR)
-*   RO (ro_RO by Alexander Ovsov)
-*   TR (tr_TR Turkish by Tolga Kaprol)
 
 = OpenGraph protocol: =
-Customise Open Graph Tags for each type of posts (custom post support), archives, categories and taxonomies, attachements  
-You can redefine global settings for all posts or pages or custom post type
+Customise Open Graph Tags for each type of posts (custom post type support), archives, categories and taxonomies, attachements  
+You can redefine settings individually for all posts or pages or custom post type
 Add your own meta and create custom objects.
 
 = FB connect: =
-if FB connect enable, you can ask special permissions, and link Facebook user with your site. Use avatars from Facebook instead defaults.
-When a user logging in to your site using Facebook, this plugin will auto register user. If user unregister from Facebook, his account will be not remove.
-If you are a developer you can use the API of facebook and opengraph api directly from your themes and plugins. Simply use defined objects set by this plugin. (Javascript SDK AND PHP SDK)
+If FB connect enable, you can ask special permissions, and link Facebook user with your site. Use avatars from Facebook instead defaults.
+When a user is logging in to your site using Facebook, this plugin will auto register user. If user unregister from Facebook, his account will be not remove.
+If you are a developer you can use the API of facebook and opengraph api directly from your themes and plugins.
+Simply use defined objects that were set by this plugin.
 
 = Widget And Shortcodes: =
 You can use widgets and shotcodes to display Facebook socials plugins
@@ -57,26 +56,29 @@ You can use widgets and shotcodes to display Facebook socials plugins
 * Activity Box [AWD_activitybox]
 * Login Button [AWD_loginbutton]
 * Comments Box [AWD_comments]
-* OpenGraph custom Actions Box [AWD_custom_action]
-
 
 = Multisite compatible: =
 This plugin is compatible with Wordpress multisite.
-
-[Support and Bug Tracker](http://facebook-awd.ahwebdev.fr/support/ "")
-
+[Support](http://facebook-awd.ahwebdev.fr/support/ "")
 [Documentation](http://facebook-awd.ahwebdev.fr/documentation/ "")
 
 == Installation ==
+
 [How to install](http://facebook-awd.ahwebdev.fr/documentation/install/ "")
 
 == Frequently Asked Questions ==
 
-[Support and Bug Tracker](http://facebook-awd.ahwebdev.fr/support/ "")
-
+[F.A.Q](http://facebook-awd.ahwebdev.fr/support/faq/ "")
 [Documentation](http://facebook-awd.ahwebdev.fr/documentation/ "")
-
 [FAQ](http://facebook-awd.ahwebdev.fr/support/faq/ "")
 
 == Changelog ==
-[View Roadmap](http://trac.ahwebdev.fr/projects/facebook-awd/roadmap)
+
+[Browse changes](https://github.com/AHWEBDEV/Facebook-AWD/commits/master "")
+
+== Upgrade Notice ==
+
+= 1.4 =
+Version 1.4 of "Facebook AWD" includes major changes.
+Options have been updated, you must be careful when updating. You will require to reconfigure the plugin "Facebook AWD"
+
