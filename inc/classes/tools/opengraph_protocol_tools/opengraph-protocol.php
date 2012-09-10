@@ -404,7 +404,8 @@ class OpenGraphProtocol {
 	 * @param String type slug
 	 */
 	public function setType( $type ) {
-		if ( is_string($type) && in_array( $type, self::supported_types(true), true ) )
+		if ( is_string($type) //&& in_array( $type, self::supported_types(true), true )
+		)
 			$this->type = $type;
 		return $this;
 	}

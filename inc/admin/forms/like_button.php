@@ -87,7 +87,7 @@ $fields['like_button'] = array(
 		),
 		'label'=> __('Send button ?',$this->ptd),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2','disabled'=>($this->options['like_button']['type'] == "iframe" ? 'disabled' : ''))
+		'attr'=> array('class'=>'span2 depend_like_button_xfbml','disabled'=>($this->options['like_button']['type'] != "xfbml" ? 'disabled' : ''))
 	),
 	
 	'colorscheme'=> array(
@@ -200,7 +200,7 @@ $fields['like_button'] = array(
 		),
 		'label'=> __('Where ?',$this->ptd),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['like_button']['on_pages'] == "0" ? 'disabled' : '')),
+		'attr'=> array('class'=>'span2 depend_like_button_on_pages', 'disabled'=>($this->options['like_button']['on_pages'] == "0" ? 'disabled' : '')),
 		'widget_no_display' => true
 	),
 	
@@ -241,7 +241,7 @@ $fields['like_button'] = array(
 		),
 		'label'=> __('Where ?',$this->ptd),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['like_button']['on_posts'] == "0" ? 'disabled' : '')),
+		'attr'=> array('class'=>'span2 depend_like_button_on_posts', 'disabled'=>($this->options['like_button']['on_posts'] == "0" ? 'disabled' : '')),
 		'widget_no_display' => true
 	),
 	
@@ -282,7 +282,7 @@ $fields['like_button'] = array(
 		),
 		'label'=> __('Where ?',$this->ptd),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['like_button']['on_custom_post_types'] == "0" ? 'disabled' : '')),
+		'attr'=> array('class'=>'span2 depend_like_button_on_custom_post_types', 'disabled'=>($this->options['like_button']['on_custom_post_types'] == "0" ? 'disabled' : '')),
 		'widget_no_display' => true
 	),
 	
@@ -361,7 +361,7 @@ $fields['like_button'] = array(
 					<tr><td>ref</td><td>string</td></tr>
 				</tbody>
 				<tfoot>
-					<th colspan="2">[AWD_likebutton option="value"]</th>
+					<tr><th colspan="2">[AWD_likebutton option="value"]</th></tr>
 				</tfoot>
 			</table>  
 		',

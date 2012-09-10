@@ -884,7 +884,7 @@ Class AWD_facebook
 				public function ogp_language_attributes($language_attributes)
 				{
 					$ogp = new OpenGraphProtocol();
-					$language_attributes .= ' prefix="' . OpenGraphProtocol::PREFIX . ': ' . OpenGraphProtocol::NS . '" xmlns:fb="http://ogp.me/ns/fb#"';
+					$language_attributes .= ' prefix="' . OpenGraphProtocol::PREFIX . ': ' . OpenGraphProtocol::NS . ' fb:http://ogp.me/ns/fb# '.$this->options['app_infos']['namespace'].': http://ogp.me/ns/fb/'.$this->options['app_infos']['namespace'].'"';
 					return $language_attributes;
 				}
 
@@ -1032,8 +1032,12 @@ Class AWD_facebook
 						$ogp->setTitle($object['title']);
 					if (isset($object['description']))
 						$ogp->setDescription($object['description']);
-					if (isset($object['type']))
-						$ogp->setType($object['type']);
+					if (isset($object['type'])){
+						if($object['type'] == 'custom' && isset($object['custom_type']))
+							$ogp->setType($object['custom_type']);
+						else
+							$ogp->setType($object['type']);
+					}
 					if (isset($object['url']))
 						$ogp->setURL($object['url']);
 					if (isset($object['determiner']))

@@ -202,7 +202,7 @@ $fields['comments_box'] = array(
 					<tr><td>type</td><td>xfbml or iframe or html5</td></tr>
 				</tbody>
 				<tfoot>
-					<th colspan="2">[AWD_comments option="value"]</th>
+					<tr><th colspan="2">[AWD_comments option="value"]</th></tr>
 				</tfoot>
 			</table>  
 		',

@@ -80,6 +80,18 @@ function AWDFacebookAdmin($){
 		$('#settings_ogp_menu li:eq(0) a').tab('show');
 	};
 	
+	this.dependListener = function(master, depend, value)
+	{
+		$(master).change(function(){
+			if($(this).val() == value){
+				$(depend).attr('disabled', false);
+			}else{
+				$(depend).attr('disabled', true);
+			}
+		});
+		$(master).trigger('change');
+	};
+	
 	this.bindEvents = function()
 	{	
 		var $awd = this;
@@ -98,6 +110,15 @@ function AWDFacebookAdmin($){
 		});
 		
 		//Forms
+		$awd.dependListener('#awd_fcbk_option_connect_enable','.depend_fb_connect', 1);
+		$awd.dependListener('#awd_fcbk_option_like_button_type','.depend_like_button_xfbml', 'xfbml');
+		$awd.dependListener('#awd_fcbk_option_like_button_on_pages','.depend_like_button_on_pages', 1);
+		$awd.dependListener('#awd_fcbk_option_like_button_on_posts','.depend_like_button_on_posts', 1);
+		$awd.dependListener('#awd_fcbk_option_like_button_on_custom_post_types','.depend_like_button_on_custom_post_types', 1);
+		$awd.dependListener('#awd_fcbk_option_login_button_show_faces','.depend_login_button_show_faces', 1);
+		
+		
+		
 		$(".AWD_button_media").live('click',function(e){
 			e.preventDefault();
 			$awd.showUploadDialog(this);
@@ -129,24 +150,7 @@ function AWDFacebookAdmin($){
 			$(this).button('loading');
 			$('#awd_fcbk_option_reset_settings').submit();
 		});
-		$('#awd_fcbk_option_connect_enable').change(function(){
-			if($(this).val() == 1){
-				$('.depend_fb_connect').attr('disabled', false);
-			}else{
-				$('.depend_fb_connect').attr('disabled', true);
-			}
-		});
-		$('#awd_fcbk_option_like_button_type').change(function(){
-			if($(this).val() == 'iframe'){
-				$('#awd_fcbk_option_like_button_send').attr('disabled', true);
-			}else{
-				$('#awd_fcbk_option_like_button_send').attr('disabled', false);
-			}
-		});
 		
-		
-		
-		//FB events
 		$('.get_permissions').live('click',function(e){
 			e.preventDefault();
 			var $this = $(this);
@@ -159,9 +163,19 @@ function AWDFacebookAdmin($){
 			},{scope: scope});
 		});
 		
-		
 		//Open graph form
 		$('.show_ogp_form').button('reset');
+		
+		
+		$('#awd_fcbk_option_awd_ogp_type').live('change',function(){
+			if($(this).val() == 'custom'){
+				$('.depend_opengraph_custom_type').slideDown();
+			}else{
+				$('.depend_opengraph_custom_type').slideUp();
+			}
+		});
+		$('#awd_fcbk_option_awd_ogp_type').trigger('change');
+		
 		
 		$('.awd_add_media_field').live('click',function(e){
 			e.preventDefault();
@@ -178,7 +192,6 @@ function AWDFacebookAdmin($){
 			});
 		});
 		
-		
 		//show an empty form
 		$('.show_ogp_form').live('click',function(e){
 			e.preventDefault();
@@ -190,6 +203,7 @@ function AWDFacebookAdmin($){
 				$('.awd_ogp_form').html(data).slideDown();
 				$awd.initToolTip();
 				prettyPrint();
+				$('#awd_fcbk_option_awd_ogp_type').trigger('change');
 			});
 		});
 		
@@ -206,6 +220,7 @@ function AWDFacebookAdmin($){
 				$awd.initToolTip();
 				$button.button('reset');
 				prettyPrint();
+				$('#awd_fcbk_option_awd_ogp_type').trigger('change');
 			});
 		});
 		
@@ -281,9 +296,6 @@ function AWDFacebookAdmin($){
 			});
 		});
 		
-		
-		
-		
 		$('.awd_debug .page-header').each(function(){
 			$(this).next().hide();
 			$(this).css('cursor', 'pointer');
@@ -291,6 +303,8 @@ function AWDFacebookAdmin($){
 				$(this).next().slideToggle();
 			});
 		});
+		
+	
 	};
 	
 	

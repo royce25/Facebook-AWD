@@ -34,6 +34,7 @@ var AWD_facebook = {
 	{
 		FB.login(
 			function(response){
+				AWD_facebook.fbConnected = true;
 				AWD_facebook.callbackLogin(response,redirect_url);
 			},
 			{ 
@@ -47,15 +48,16 @@ var AWD_facebook = {
 		window.location.href = awd_fcbk.logoutUrl;
 	},
 	
+	fbConnected : false,
+	
 	isFbConnected : function(){
-		var connected = false;
 		FB.getLoginStatus(function(response) {
 			if (response.status === 'connected') {
-				connected = true;
+				AWD_facebook.fbConnected = true;
 				AWD_facebook.access_token = response.authResponse.accessToken;
 			}
 		});
-		return connected;		
+		return AWD_facebook.fbConnected;	
 	},
 };
 

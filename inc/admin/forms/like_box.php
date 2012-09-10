@@ -170,7 +170,7 @@ $fields['like_box'] = array(
 					<tr><td>force_wall</td><td>string</td></tr>
 				</tbody>
 				<tfoot>
-					<th colspan="2">[AWD_likebutton option="value"]</th>
+					<tr><th colspan="2">[AWD_likebox option="value"]</th></tr>
 				</tfoot>
 			</table>
 		',

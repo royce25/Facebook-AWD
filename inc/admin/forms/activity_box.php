@@ -202,7 +202,7 @@ $fields['activity_box'] = array(
 					<tr><td>filter</td><td>string</td></tr>
 				</tbody>
 				<tfoot>
-					<th colspan="2">[AWD_activitybox option="value"]</th>
+					<tr><th colspan="2">[AWD_activitybox option="value"]</th></tr>
 				</tfoot>
 			</table>
 		',

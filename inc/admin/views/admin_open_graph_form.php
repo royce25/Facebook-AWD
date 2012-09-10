@@ -12,6 +12,9 @@ $object = array(
 	'id'=>'',
 	'title'=>'%TITLE%',
 	'description'=>'%DESCRIPTION%',
+	'custom_type'=> $this->options['app_infos']['namespace'].':your_custom_type',
+	'url'=>'%URL%',
+	'site_name'=>'%BLOG_TITLE%',
 	'auto_load_videos_attachment' => 0,
 	'auto_load_images_attachment' => 0,
 	'auto_load_audios_attachment' => 0
@@ -73,11 +76,17 @@ if(false === ($object_id instanceof AWD_facebook_form))
 		echo $form->addSelect(__('The determiner',$this->ptd), 'awd_ogp[determiner]', $_determiners, $ogp->getDeterminer(), 'span2', array('class'=>'span2'));					
 
 		//title of the page
-		echo $form->addInputText('Title',  'awd_ogp[title]', $ogp->getTitle(), 'span4', array('class'=>'span4'));
+		echo $form->addInputText(__('Title',$this->ptd),  'awd_ogp[title]', $ogp->getTitle(), 'span4', array('class'=>'span4'));
+		?>
+	</div>
+	<div class="row">
+		<?php
 		//type
 		$types = $ogp->supported_types(true);
+		$types[] = 'custom';
 		foreach($types as $type){ $options[] = array('value'=>$type, 'label'=> ucfirst($type)); }
-		echo $form->addSelect(__('Type',$this->ptd).' '.$this->get_the_help('type'), 'awd_ogp[type]', $options, $ogp->gettype(), 'span2', array('class'=>'span2'));
+		echo $form->addSelect(__('Type',$this->ptd).' '.$this->get_the_help('type'), 'awd_ogp[type]', $options, $object['type'], 'span2', array('class'=>'span2'));
+		echo $form->addInputText(__('Custom object type',$this->ptd),  'awd_ogp[custom_type]', $object['custom_type'], 'span3 dn depend_opengraph_custom_type', array('class'=>'span3'));
 		?>
 	</div>
 	<div class="row">

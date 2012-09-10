@@ -44,9 +44,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 			<div class="tab-content">
 			
 				<div id="like_button_settings" class="tab-pane">
-					<?php 
-					$this->display_messages(__('Settings are defaults, you can redefine them in shortcodes, widgets, and themes functions',$this->ptd), 'info');
-					
+					<?php 					
 					if(isset($fields['like_button']) && is_array($fields['like_button'])){
 						echo $form->proccessFields('like_button',$fields['like_button']);
 					}
@@ -54,9 +52,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 				</div>
 				
 				<div id="like_box_settings" class="tab-pane">
-					<?php 
-					$this->display_messages(__('The like box is added via shortcodes, widgets, and themes functions',$this->ptd), 'info');
-					
+					<?php 					
 					if(isset($fields['like_box']) && is_array($fields['like_box'])){						
 						echo $form->proccessFields('like_box',$fields['like_box']); 
 					}
@@ -65,8 +61,6 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 				
 				<div id="activity_settings" class="tab-pane">				
 					<?php 
-					$this->display_messages(__('The activity box is added via shortcodes, widgets, and themes functions',$this->ptd), 'info');
-
 					if(isset($fields['activity_box']) && is_array($fields['activity_box'])){
 						echo $form->proccessFields('activity_box',$fields['activity_box']);
 					}
@@ -88,8 +82,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 				
 				<div id="comments_settings" class="tab-pane">
 					<?php
-					$message = __('All that settings are defaults, you can redefine them in shortcodes, and themes functions',$this->ptd).'<br />
-					<i class="icon-warning-sign"></i> '.__('Your themes must use the action "do_action("comment_form_after");" or the function "commnent_form();" to work. (look in your theme, in comments.php file)',$this->ptd);
+					$message = '<i class="icon-warning-sign"></i> '.__('Your themes must use the action "do_action("comment_form_after");" or the function "commnent_form();" to work. (look in your theme, in comments.php file)',$this->ptd);
 					$this->display_messages($message, 'info');
 					
 					if(isset($fields['comments_box']) && is_array($fields['comments_box'])){

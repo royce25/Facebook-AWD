@@ -88,7 +88,7 @@ $fields['login_button'] = array(
 		'type'=> 'text',
 		'label'=> __('Max row',$this->ptd),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2', 'disabled'=>($this->options['login_button']['show_faces'] == "0" ? 'disabled' : ''))
+		'attr'=> array('class'=>'span2 depend_login_button_show_faces', 'disabled'=>($this->options['login_button']['show_faces'] == "0" ? 'disabled' : ''))
 	),
 	
 	'width'=> array(
@@ -135,7 +135,7 @@ $fields['login_button'] = array(
 					<tr><td>image</td><td>url</td></tr>
 				</tbody>
 				<tfoot>
-					<th colspan="2">[AWD_likebutton option="value"]</th>
+					<tr><th colspan="2">[AWD_loginbutton option="value"]</th></tr>
 				</tfoot>
 			</table>
 		',
