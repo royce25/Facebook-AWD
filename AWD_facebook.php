@@ -883,6 +883,7 @@ Class AWD_facebook
 				
 				public function ogp_language_attributes($language_attributes)
 				{
+					$namespace_url = '';
 					if(isset($this->options['app_infos']['namespace'])){
 						$namespace_url = $this->options['app_infos']['namespace'].': http://ogp.me/ns/fb/'.$this->options['app_infos']['namespace'];
 					}
@@ -2414,12 +2415,11 @@ Class AWD_facebook
 										}
 										echo '
 						<div class="row">
-							' . $form->addSelect(__('Redefine Opengraph object for this post', $this->ptd), 'opengraph[object_link]', $select_objects_options, $options['opengraph']['object_link'], 'span4', array('class' => 'span4')) . '
+							' . $form->addSelect(__('Redefine Opengraph object for this post', $this->ptd), 'opengraph[object_link]', $select_objects_options, $options['opengraph']['object_link'], 'span3', array('class' => 'span3')) . '
 						</div>
 						' . $add_link;
 									} else {
-										$this
-												->display_messages(
+										$this->display_messages(
 														sprintf(__('No Object found.', $this->ptd) . ' ' . $add_link, '<a href="' . admin_url('admin.php?page=' . $this->plugin_slug . '_open_graph') . '" target="_blank">', '</a>'), 'warning');
 									}
 								}
