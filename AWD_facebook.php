@@ -1449,9 +1449,9 @@ Class AWD_facebook
 					$ogp = $this->opengraph_array_to_object($object_template);
 					$html = '<!-- ' . $this->plugin_name . ' Opengraph [v' . $this->get_version() . '] (object reference: "' . $object_template['object_title'] . '" ' . ($from_post == 1 ? 'Defined from post' : '') . ') -->' . "\n";
 					if($this->options['app_id'] != '')
-						$html .= '<meta property="fb:app_id" content="'.$this->options['app_id'].'" />';
+						$html .= '<meta property="fb:app_id" content="'.$this->options['app_id'].'" />'."\n";
 					if($this->options['admins'] != '')
-						$html .= '<meta property="fb:admins" content="'.$this->options['admins'].'" />';
+						$html .= '<meta property="fb:admins" content="'.$this->options['admins'].'" />'."\n";
 					$html .= $ogp->toHTML();
 					$html .= "\n" . '<!-- ' . $this->plugin_name . ' END Opengraph -->' . "\n";
 					return $html;
