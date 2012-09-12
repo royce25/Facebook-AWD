@@ -6,14 +6,11 @@
  */
 global $screen_layout_columns;
 $page = $_GET['page'];
-if($page == $this->plugin_slug)
-	$page_hook = $this->blog_admin_page_hook;
-elseif($page == $this->plugin_slug.'_open_graph')
+$page_hook = $this->blog_admin_page_hook;
+if($page == $this->plugin_slug.'_open_graph')
 	$page_hook = $this->blog_admin_opengraph_hook;
 elseif($page == $this->plugin_slug.'_plugins')
 	$page_hook = $this->blog_admin_plugins_hook;
-elseif($page == $this->plugin_slug.'_support')
-	$page_hook = $this->blog_admin_support_hook;
 //Try to find meta box for each plugins
 else{
 	$plugins = $this->plugins;

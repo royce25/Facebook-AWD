@@ -24,6 +24,13 @@
 	?>
 	</p>
 </div>
+<div id="lightbox_help_admins" class="hidden">
+	<p>
+	<?php
+	_e("This is Your facebook user id.",$this->ptd);
+	?>
+	</p>
+</div>
 <div id="lightbox_help_app_secret_key" class="hidden">
 	<p>
 	<?php

@@ -124,6 +124,7 @@ class AWD_facebook_options
 		
 		//API
 		$this->setDefaultValue('app_id', '');
+		$this->setDefaultValue('admins', '');
 		$this->setDefaultValue('app_secret_key', '');
 		$this->setDefaultValue('admins', '');
 		$this->setDefaultValue('timeout', 10);

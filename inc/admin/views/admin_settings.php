@@ -26,6 +26,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 							<?php 
 							echo $form->addInputText(__('App ID (facebook)',$this->ptd).' '.$this->get_the_help('app_id'), 'app_id', $this->options['app_id'], 'span4', array('class'=>'span3'), 'icon-barcode');
 							echo $form->addInputText(__('App SECRET KEY',$this->ptd).' '.$this->get_the_help('app_secret_key'), 'app_secret_key', $this->options['app_secret_key'], 'span4', array('class'=>'span3'), 'icon-barcode'); 
+							echo $form->addInputText(__('Admin IDs',$this->ptd).' '.$this->get_the_help('admins'), 'admins', $this->options['admins'], 'span4', array('class'=>'span3'), 'icon-barcode'); 
 							?>
 							<div class="span4">
 								<div class="row">
@@ -41,9 +42,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 								), $this->options['debug_enable'], 'span4', array('class'=>'span1'));
 							?>
 						</div>
-						
 					</div>
-			
 					<div id="opengraph" class="tab-pane">							
 						<div class="row">
 							<?php 

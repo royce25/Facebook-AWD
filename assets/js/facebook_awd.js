@@ -5,8 +5,11 @@
  */
 var AWD_facebook = {
 	
-	FBEventHandler : function ()
+	FB : null,
+	
+	FBEventHandler : function (SDK)
 	{
+		FB = SDK;
 		if(awd_fcbk.FBEventHandler.callbacks){
 			jQuery.each(awd_fcbk.FBEventHandler.callbacks,function(index,value){
 				var AWD_actions_callback = window[this];

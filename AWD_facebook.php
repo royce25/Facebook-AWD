@@ -3,7 +3,7 @@
 Plugin Name: Facebook AWD All in One
 Plugin URI: http://facebook-awd.ahwebdev.fr
 Description: Adds extensions from facebook on wordpress easily. Like button, Like Box, Activity box, Fb comments, OpenGraph and more.
-Version: 1.4
+Version: 1.4.1
 Author: AHWEBDEV
 Author URI: http://www.ahwebdev.fr
 License: Copywrite AHWEBDEV
@@ -501,7 +501,6 @@ Class AWD_facebook
 	 */
 	public function admin_menu()
 	{
-		$this->set_admin_roles();
 		add_action('save_post', array(&$this, 'save_options_post_editor'));
 		//admin hook
 		$this->blog_admin_page_hook = add_menu_page($this->plugin_page_admin_name, __($this->plugin_name, $this->ptd), 'manage_facebook_awd_publish_to_pages', $this->plugin_slug, array($this, 'admin_content'), $this->plugin_url_images . 'facebook-mini.png', $this->blog_admin_hook_position);
@@ -515,6 +514,7 @@ Class AWD_facebook
 		}
 		add_action("load-" . $this->blog_admin_page_hook, array(&$this, 'admin_initialisation'));
 		add_action("load-" . $this->blog_admin_plugins_hook, array(&$this, 'admin_initialisation'));
+		
 		add_action('admin_print_styles-' . $this->blog_admin_page_hook, array(&$this, 'admin_enqueue_css'));
 		add_action('admin_print_styles-' . $this->blog_admin_plugins_hook, array(&$this, 'admin_enqueue_css'));
 		add_action('admin_print_styles-post-new.php', array(&$this, 'admin_enqueue_css'));
@@ -542,6 +542,7 @@ Class AWD_facebook
 	{
 		//add 2 column screen
 		add_screen_option('layout_columns', array('max' => 2, 'default' => 2));
+		$this->set_admin_roles();
 	}
 
 	/**
@@ -1998,7 +1999,7 @@ Class AWD_facebook
 			{
 				$html = '';
 				if ($this->options['connect_enable'] == 1) {
-					$html = "\n" . '<script type="text/javascript">window.fbAsyncInit = function(){ FB.init({ appId : awd_fcbk.app_id, cookie : true, status: true, xfbml : true, oauth : true }); AWD_facebook.FBEventHandler(); };</script>' . "\n";
+					$html = "\n" . '<script type="text/javascript">window.fbAsyncInit = function(){ FB.init({ appId : awd_fcbk.app_id, cookie : true, status: true, xfbml : true, oauth : true }); AWD_facebook.FBEventHandler(FB); };</script>' . "\n";
 				}
 				echo $html;
 			}
@@ -2251,7 +2252,7 @@ Class AWD_facebook
 				$html = '';
 
 				switch (1) {
-				case ($this->is_user_logged_in_facebook() && $this->options['connect_enable'] && is_user_logged_in() && count($this->me)):
+				case ($this->is_user_logged_in_facebook() && $this->options['connect_enable'] && is_user_logged_in()):
 					$html .= '<div class="AWD_profile">' . "\n";
 					if ($options['show_profile_picture'] == 1 && $options['show_faces'] == 0) {
 						$html .= '<div class="AWD_profile_image"><a href="' . $this->me['link'] . '" target="_blank" class="thumbnail"> ' . get_avatar($this->get_current_user()->ID, '50') . '</a></div>' . "\n";
@@ -2263,10 +2264,7 @@ Class AWD_facebook
 					} else {
 						$html .= '<div class="AWD_name"><a href="' . $this->me['link'] . '" target="_blank">' . $this->me['name'] . '</a></div>' . "\n";
 					}
-					//display logout button only if we are not in facebook tab.
-					if ($this->facebook_page_url == '') {
-						$html .= '<div class="AWD_logout"><a href="' . wp_logout_url($options['logout_redirect_url']) . '">' . $options['logout_label'] . '</a></div>' . "\n";
-					}
+					$html .= '<div class="AWD_logout"><a href="' . wp_logout_url($options['logout_redirect_url']) . '">' . $options['logout_label'] . '</a></div>' . "\n";
 					$html .= '</div>' . "\n";
 					$html .= '<div class="clear"></div>' . "\n";
 					$html .= '</div>' . "\n";
