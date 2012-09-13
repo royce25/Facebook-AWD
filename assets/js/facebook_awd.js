@@ -61,7 +61,7 @@ var AWD_facebook = {
 			}
 		});
 		return AWD_facebook.fbConnected;	
-	},
+	}
 };
 
 jQuery(document).ready(function($){
