@@ -1930,7 +1930,7 @@ Class AWD_facebook
 					if(is_wp_error($return))
 						return $return;
 					
-					if($this->current_facebook_user_can('manages_pages')){
+					if($return['manage_pages'] == 1){
 						$return = $this->fb_get_pages();
 						if(is_wp_error($return))
 							return $return;
@@ -2119,8 +2119,8 @@ Class AWD_facebook
 				$this->connect_the_user($wp_user_id);
 				
 				//if we are in an iframe or a canvas page, redirect to
-				$facebook_page_url = $this->get_facebook_page_url()
-				if (!empty($facebook_page_url)) {
+				$facebook_page_url = $this->get_facebook_page_url();
+				if (!empty($facebook_page_url)){
 					echo '<script>top.location.href="'.$facebook_page_url.'"</script>';
 					
 				//check if the Request contains the redirect_to
@@ -2164,7 +2164,7 @@ Class AWD_facebook
 				wp_logout();
 				do_action('wp_logout');
 				//if we are in an iframe or a canvas page, redirect to
-				$facebook_page_url = $this->get_facebook_page_url()
+				$facebook_page_url = $this->get_facebook_page_url();
 				if (!empty($facebook_page_url)) {
 					echo '<script>top.location.href="'.$facebook_page_url.'"</script>';
 				} elseif (!empty($redirect_url)) {
