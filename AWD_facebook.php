@@ -1301,6 +1301,9 @@ Class AWD_facebook
 							$img = $this->catch_that_image(get_the_post_thumbnail($post->ID, 'AWD_facebook_ogimage'));
 						}
 					}
+					if(empty($img))
+						$img = $this->catch_that_image($post->post_content);
+						
 					if (empty($img)) {
 						if (isset($this->options['app_infos']['logo_url']))
 							$img = $this->options['app_infos']['logo_url'];
@@ -2008,6 +2011,9 @@ Class AWD_facebook
 				$this->fcbk = new AWD_facebook_api($this->options);
 				try {
 					$this->uid = $this->fcbk->getUser();
+					$login_options = array('scope' => current_user_can("manage_options") ? $this->options["perms_admin"] : $this->options["perms"], 'redirect_uri' => $this->_login_url . (get_option('permalink_structure') != '' ? '?' : '&') . 'redirect_to=' . $this->get_current_url());
+					$this->_oauth_url = $this->fcbk->getLoginUrl($login_options);
+					$this->facebook_page_url = $this->get_facebook_page_url();
 				} catch (FacebookApiException $e) {
 					$this->uid = null;
 				}
@@ -2119,9 +2125,8 @@ Class AWD_facebook
 				$this->connect_the_user($wp_user_id);
 				
 				//if we are in an iframe or a canvas page, redirect to
-				$facebook_page_url = $this->get_facebook_page_url();
-				if (!empty($facebook_page_url)){
-					echo '<script>top.location.href="'.$facebook_page_url.'"</script>';
+				if (!empty($this->facebook_page_url)){
+					echo '<script>top.location.href="'.$this->facebook_page_url.'"</script>';
 					
 				//check if the Request contains the redirect_to
 				}else if(isset($_REQUEST['redirect_to'])){
@@ -2164,9 +2169,8 @@ Class AWD_facebook
 				wp_logout();
 				do_action('wp_logout');
 				//if we are in an iframe or a canvas page, redirect to
-				$facebook_page_url = $this->get_facebook_page_url();
-				if (!empty($facebook_page_url)) {
-					echo '<script>top.location.href="'.$facebook_page_url.'"</script>';
+				if (!empty($this->facebook_page_url)) {
+					echo '<script>top.location.href="'.$this->facebook_page_url.'"</script>';
 				} elseif (!empty($redirect_url)) {
 					wp_redirect($redirect_url);
 				} elseif (!empty($referer)) {
