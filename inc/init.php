@@ -10,7 +10,7 @@ $plugin_directory = array_pop(explode(DIRECTORY_SEPARATOR, dirname(dirname(__FIL
 $this->wpdb = $wpdb;
 $this->plugin_url = plugins_url($plugin_directory);
 $this->plugin_url_images = $this->plugin_url."/assets/img/";
-
+$this->set_admin_roles();
 //TRANSLATION
 load_plugin_textdomain($this->ptd,false,dirname( plugin_basename( __FILE__ ) ) . '/langs/');
 

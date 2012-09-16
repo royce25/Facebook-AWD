@@ -5,11 +5,8 @@
  */
 var AWD_facebook = {
 	
-	FB : null,
-	
-	FBEventHandler : function (SDK)
+	FBEventHandler : function ($)
 	{
-		FB = SDK;
 		if(awd_fcbk.FBEventHandler.callbacks){
 			jQuery.each(awd_fcbk.FBEventHandler.callbacks,function(index,value){
 				var AWD_actions_callback = window[this];
@@ -17,6 +14,12 @@ var AWD_facebook = {
 					AWD_actions_callback(this);
 			});
 		}
+		
+		$('.AWD_facebook_connect_button').live('click',function(e){
+			e.preventDefault();
+			var redirect = $(this).data('redirect');
+			AWD_facebook.connect(redirect);
+		});
 	},
 	
 	callbackLogin : function(response,redirect_url)
@@ -63,12 +66,3 @@ var AWD_facebook = {
 		return AWD_facebook.fbConnected;	
 	}
 };
-
-jQuery(document).ready(function($){
-	//add usefull tool for creating connect button by hand.
-	$('.AWD_facebook_connect_button').live('click',function(e){
-		e.preventDefault();
-		var redirect = $(this).data('redirect');
-		AWD_facebook.connect(redirect);
-	});
-});

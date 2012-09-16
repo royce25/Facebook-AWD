@@ -35,7 +35,7 @@ $fields['login_button'] = array(
 			array('value'=>'0', 'label'=>__('No',$this->ptd)),
 			array('value'=>'1', 'label'=>__('Yes',$this->ptd)),							
 		),		
-		'label'=> __('Logout Label',$this->ptd),
+		'label'=> __('Display on Login',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2'),
 		'widget_no_display' => true
@@ -43,21 +43,21 @@ $fields['login_button'] = array(
 	
 	'login_redirect_url'=> array(
 		'type'=> 'text',
-		'label'=> __('Width of button',$this->ptd),
+		'label'=> __('Url after login',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
 	'logout_redirect_url'=> array(
 		'type'=> 'text',
-		'label'=> __('Url after login',$this->ptd),
+		'label'=> __('Url after lgout',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
 	
 	'logout_label'=> array(
 		'type'=> 'text',
-		'label'=> __('Url after logout',$this->ptd),
+		'label'=> __('Logout Label',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),

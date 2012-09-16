@@ -4,6 +4,7 @@
  * @author alexhermann
  *
  */
+
 global $screen_layout_columns;
 $page = $_GET['page'];
 $page_hook = $this->blog_admin_page_hook;
