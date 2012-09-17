@@ -55,7 +55,7 @@ function AWDFacebookAdmin($){
 			}
 		});
 		$('.awd_tooltip').popover({
-			placement: 'top',
+			placement: 'right',
 			title : function(){
 				return $(".header_lightbox_help_title").html();
 			},

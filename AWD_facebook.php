@@ -3,7 +3,7 @@
 Plugin Name: Facebook AWD All in One
 Plugin URI: http://facebook-awd.ahwebdev.fr
 Description: Adds extensions from facebook on wordpress easily. Like button, Like Box, Activity box, Fb comments, OpenGraph and more.
-Version: 1.4.1
+Version: 1.4.2
 Author: AHWEBDEV
 Author URI: http://www.ahwebdev.fr
 License: Copywrite AHWEBDEV
@@ -173,10 +173,12 @@ Class AWD_facebook
 	public function catch_that_image($post_content = "")
 	{
 		global $post;
+		$first_img = '';
 		if ($post_content == "" && is_object($post))
 			$post_content = $post->post_content;
 		$output = preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $post_content, $matches);
-		$first_img = $matches[1][0];
+		if(isset($matches[1][0]))
+			$first_img = $matches[1][0];
 		return $first_img;
 	}
 
@@ -1669,9 +1671,10 @@ Class AWD_facebook
 				 */
 				public function hook_post_from_plugin_options()
 				{
-					if (isset($_POST[$this->plugin_option_pref . '_nonce_options_update_field']) && wp_verify_nonce($_POST[$this->plugin_option_pref . '_nonce_options_update_field'], $this->plugin_slug . '_update_options')) {
+					if (isset($_POST[$this->plugin_option_pref . '_nonce_options_update_field']) && wp_verify_nonce($_POST[$this->plugin_option_pref . '_nonce_options_update_field'], $this->plugin_slug . '_update_options')) {						
 						//do custom action for sub plugins or other exec.
 						do_action('AWD_facebook_save_custom_settings');
+						
 						//unset submit to not be stored
 						unset($_POST[$this->plugin_option_pref . '_nonce_options_update_field']);
 						unset($_POST['_wp_http_referer']);
@@ -1778,6 +1781,11 @@ Class AWD_facebook
 				}
 			}
 
+			public function get_all_facebook_users()
+			{
+				$existings_users = $this->wpdb->get_results('SELECT DISTINCT `u`.`ID`,`u`.`display_name`,`m`.`meta_value`   FROM `'.$this->wpdb->users.'` `u` JOIN `'.$this->wpdb->usermeta.'` `m` ON `u`.`ID` = `m`.`user_id`  WHERE (`m`.`meta_key` = "fb_uid" AND `m`.`meta_value` !="" )');
+				return $existings_users;
+			}
 			/**
 			 * Load the javascript sdk Facebook
 			 * @return void
@@ -2014,6 +2022,7 @@ Class AWD_facebook
 					$login_options = array('scope' => current_user_can("manage_options") ? $this->options["perms_admin"] : $this->options["perms"], 'redirect_uri' => $this->_login_url . (get_option('permalink_structure') != '' ? '?' : '&') . 'redirect_to=' . $this->get_current_url());
 					$this->_oauth_url = $this->fcbk->getLoginUrl($login_options);
 					$this->facebook_page_url = $this->get_facebook_page_url();
+					
 				} catch (FacebookApiException $e) {
 					$this->uid = null;
 				}
@@ -2123,7 +2132,6 @@ Class AWD_facebook
 					wp_die($wp_user_id);
 				}
 				$this->connect_the_user($wp_user_id);
-				
 				//if we are in an iframe or a canvas page, redirect to
 				if (!empty($this->facebook_page_url)){
 					echo '<script>top.location.href="'.$this->facebook_page_url.'"</script>';

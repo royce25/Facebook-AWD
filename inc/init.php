@@ -61,6 +61,9 @@ add_filter('query_vars',array(&$this,'insert_query_vars' ));
 add_action('wp_loaded',array(&$this,'flush_rules' ));
 add_action('parse_query',array(&$this,'parse_request' ));
 add_filter('logout_url',array(&$this,'logout_url' ));
+//remove frame security header to allow the website admin to work in iframe
+remove_action( 'login_init', 'send_frame_options_header');
+remove_action( 'admin_init', 'send_frame_options_header');
 
 //SHORTCODES
 add_shortcode('AWD_likebutton', array(&$this,'shortcode_like_button'));

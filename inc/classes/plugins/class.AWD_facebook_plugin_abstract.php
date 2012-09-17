@@ -37,6 +37,7 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 			deactivate_plugins($this->file);
 		}else{
 			add_action('AWD_facebook_plugins_init',array(&$this,'initialisation'));
+			add_action('AWD_facebook_save_custom_settings', array(&$this, 'hook_post_from_custom_options'));
 			add_action('AWD_facebook_register_widgets', array(&$this, 'register_widgets'));
 		}
 		$this->AWD_facebook = $AWD_facebook;
@@ -53,7 +54,7 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 		$this->AWD_facebook->options = $this->AWD_facebook->optionsManager->getOptions();
 		
 		$this->plugin_url = plugins_url(basename(dirname(dirname(dirname($this->file)))));
-		$this->plugin_url_images = $this->plugin_url."/assets/css/images/";
+		$this->plugin_url_images = $this->plugin_url."/assets/img/";
 		
 		load_plugin_textdomain($this->ptd,false,dirname(plugin_basename($this->file)).'/langs/');
 
@@ -74,7 +75,7 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 			add_filter('AWD_facebook_js_vars', array($this,'js_vars'));
 			//Add action to create custom menu and custom form in plugin
 			add_filter('AWD_facebook_plugins_menu',array(&$this,'plugin_settings_menu'), 10, 1);
-			add_filter('AWD_facebook_plugins_form',array(&$this,'plugin_settings_form'), 10, 1);
+			add_filter('AWD_facebook_plugins_form',array(&$this,'plugin_settings_form'), 10, 1);				
 		}
 		add_filter('AWD_facebook_options', array($this,'default_options'));
 		$this->AWD_facebook->options = apply_filters('AWD_facebook_options', $this->AWD_facebook->options);
@@ -138,6 +139,7 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 		//$vars['FBEventHandler']['callbacks'][$this->plugin_slug][] = 'nameOfcallbackinitFunction';
 		return $vars;
 	}
+	public function hook_post_from_custom_options(){}
 	public function admin_form(){}
 	public function global_enqueue_js(){}
 	public function global_enqueue_css(){}

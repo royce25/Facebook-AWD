@@ -28,6 +28,7 @@ interface AWD_facebook_plugin_interface{
 	public function admin_enqueue_css();
 	public function global_enqueue_js();
 	public function global_enqueue_css();
+	public function hook_post_from_custom_options();
 	public function js_vars($vars);
 	
 }

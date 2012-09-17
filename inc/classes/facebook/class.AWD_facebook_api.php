@@ -29,5 +29,9 @@ class AWD_facebook_api extends Facebook
 		
 		$this->setExtendedAccessToken();
 	}
+	
+	public function getApplicationAccessToken() {
+    	return $this->appId.'|'.$this->appSecret;
+  	}
 }
 ?>
