@@ -24,7 +24,6 @@ var AWD_facebook = {
 	
 	callbackLogin : function(response,redirect_url)
 	{
-		
 		var redirect = '';
 		if(response.authResponse){
 			if(!redirect_url){

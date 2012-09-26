@@ -50,7 +50,7 @@ $fields['login_button'] = array(
 	
 	'logout_redirect_url'=> array(
 		'type'=> 'text',
-		'label'=> __('Url after lgout',$this->ptd),
+		'label'=> __('Url after logout',$this->ptd),
 		'class'=>'span2',
 		'attr'=> array('class'=>'span2')
 	),
