@@ -19,6 +19,7 @@ class AWD_facebook_api extends Facebook
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_TIMEOUT        => $options['timeout'],
 			CURLOPT_USERAGENT      => 'facebook-php-3.2',
+			CURLOPT_SSL_VERIFYPEER => 0
 		);
 		
 		parent::__construct(array(
@@ -27,7 +28,7 @@ class AWD_facebook_api extends Facebook
 			'timeOut' => $options['timeout'],
 		));	
 		
-		$this->setExtendedAccessToken();
+		//$this->setExtendedAccessToken();
 	}
 	
 	public function getApplicationAccessToken() {

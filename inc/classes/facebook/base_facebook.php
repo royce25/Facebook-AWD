@@ -144,7 +144,7 @@ abstract class BaseFacebook
   protected static $DROP_QUERY_PARAMS = array(
     'code',
     'state',
-    'signed_request',
+    'signed_request'
   );
 
   /**
