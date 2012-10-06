@@ -263,8 +263,10 @@ Class AWD_facebook
 	{
 		$admin_email = get_option('admin_email');
 		$admin_user = get_user_by('email', $admin_email);
-		$fbadmin_uid = get_user_meta($admin_user->ID, 'fb_uid', true);
-		return $fbadmin_uid;
+		if(isset($admin_user->fb_uid))
+			return $admin_user->fb_uid;
+		else
+			return false;
 	}
 
 	/**
@@ -795,7 +797,7 @@ Class AWD_facebook
 								echo '
 								<td>
 									<a href="#" id="reload_app_infos" class="btn btnNormal" data-loading-text="<i class=\'icon-time\'></i> Loading...">
-										<i class="icon-wrench"></i>
+										<i class="icon-wrench"></i> '.__('Test', $this->ptd).'
 									</a>
 								</td>';
 							}else{
@@ -1334,6 +1336,7 @@ Class AWD_facebook
 		$blog_description = str_replace(array("\n", "\r"), "", get_bloginfo('description'));
 		$home_url = home_url();
 		$linked_object = null;
+		$array_replace = array();
 		switch (1) {
 			case is_front_page():
 			case is_home():
@@ -1343,7 +1346,7 @@ Class AWD_facebook
 					$array_replace = array($blog_name, $blog_description, $home_url, $post->post_title, $this->get_post_description($post), $this->get_post_thumbnail($post), get_permalink($post->ID));
 				}
 				$linked_object = isset($this->options['opengraph_object_links']['frontpage']) ? $this->options['opengraph_object_links']['frontpage'] : null;
-				break;
+			break;
 
 			case is_author():
 				$linked_object = isset($this->options['opengraph_object_links']['author']) ? $this->options['opengraph_object_links']['author'] : null;
@@ -1354,28 +1357,28 @@ Class AWD_facebook
 				if (!empty($gravatar_attributes['src']))
 					$gravatar_url = $gravatar_attributes['src'];
 				$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), $current_author->description, $gravatar_url, $this->get_current_url());
-				break;
+			break;
 			case is_archive():
 				switch (1) {
 				case is_tag():
 					$linked_object = isset($this->options['opengraph_object_links']['post_tag']) ? $this->options['opengraph_object_links']['post_tag'] : null;
 					$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), '', '', $this->get_current_url());
-					break;
+				break;
 				case is_tax():
 					$taxonomy_slug = $wp_query->query_vars['taxonomy'];
 					$linked_object = isset($this->options['opengraph_object_links'][$taxonomy_slug]) ? $this->options['opengraph_object_links'][$taxonomy_slug] : null;
 					$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), term_description(), '', $this->get_current_url());
-					break;
+				break;
 				case is_category():
 					$linked_object = isset($this->options['opengraph_object_links']['category']) ? $this->options['opengraph_object_links']['category'] : null;
 					$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), category_description(), '', $this->get_current_url());
-					break;
+				break;
 				default:
 					$linked_object = isset($this->options['opengraph_object_links']['archive']) ? $this->options['opengraph_object_links']['archive'] : null;
 					$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), '', '', $this->get_current_url());
-					break;
-				}
 				break;
+				}
+			break;
 			case is_attachment():
 				$linked_object = isset($this->options['opengraph_object_links']['attachment']) ? $this->options['opengraph_object_links']['attachment'] : null;
 				$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), '', '', $this->get_current_url());
@@ -1384,7 +1387,7 @@ Class AWD_facebook
 			case is_single():
 				$linked_object = isset($this->options['opengraph_object_links'][(is_single() ? 'post' : 'page')]) ? $this->options['opengraph_object_links'][(is_single() ? 'post' : 'page')] : null;
 				$array_replace = array($blog_name, $blog_description, $home_url, $post->post_title, $this->get_post_description($post), $this->get_post_thumbnail($post), get_permalink($post->ID));
-				break;
+			break;
 		}
 
 
@@ -1803,11 +1806,11 @@ Class AWD_facebook
 		(function() {
                 var e = document.createElement("script");
                 e.src = document.location.protocol + "//connect.facebook.net/'.$this->options["locale"].'/all.js";
-				'.(($this->options['connect_enable'] != 1) ? 'e.src += "#xfbml=1";' : '
+				'.(($this->options['connect_enable'] != 1) ? 'e.src += "#xfbml=1";' : '').'
                 e.async = true;
                 document.getElementById("fb-root").appendChild(e);
               }());
-		</script>');
+		</script>';
 	}
 
 	/**
@@ -2023,12 +2026,9 @@ Class AWD_facebook
 		$this->fcbk = new AWD_facebook_api($this->options);
 		$this->uid = $this->fcbk->getUser();
 		
-		// Default provider, if user connected try to fetch informations 
-		// from query/or signedRequest
-		$user_id = $this->get_user_from_provider();
-		if(!is_wp_error($user_id) AND false !== $user_id){
-			//renew the cookie auth to live during FB session.
-			$this->authenticate($user_id);
+		//check if the user is already logged in and is logged into facebook.
+		if($this->uid && is_user_logged_in()){
+			$this->init_facebook_user_data(wp_get_current_user()->ID);
 		}
 		
 		//helpers vars.
@@ -2074,7 +2074,17 @@ Class AWD_facebook
 			$i++;
 		}
 		$username = $username . $i;
-		$userdata = array('user_pass' => wp_generate_password(), 'user_login' => $username, 'user_nicename' => $username, 'user_email' => $this->me['email'], 'display_name' => $this->me['name'], 'nickname' => $username, 'first_name' => $this->me['first_name'], 'last_name' => $this->me['last_name'], 'role' => get_option('default_role'));
+		$userdata = array(
+			'user_pass' => wp_generate_password(),
+			'user_login' => $username,
+			'user_nicename' => $username,
+			'user_email' => $this->me['email'],
+			'display_name' => $this->me['name'],
+			'nickname' => $username,
+			'first_name' => $this->me['first_name'],
+			'last_name' => $this->me['last_name'],
+			'role' => get_option('default_role'
+		));
 		$userdata = apply_filters('AWD_facebook_register_userdata', $userdata);
 		$new_user = wp_insert_user($userdata);
 		//Test the creation							
@@ -2084,8 +2094,6 @@ Class AWD_facebook
 		if (is_int($new_user)) {
 			//send email new registration
 			wp_new_user_notification($new_user, $userdata['user_pass']);
-			//call action user_register for other plugins and wordpress core
-			do_action('user_register', $new_user);
 			return $new_user;
 		}
 
@@ -2100,7 +2108,6 @@ Class AWD_facebook
 			if(is_wp_error($return)){
 				return $return;
 			}
-
 			//If user is already logged in and lauch a connect with facebook, try to change info about user account
 			if (is_user_logged_in()) {
 				$wp_user_id = $this->get_current_user()->ID;
@@ -2108,17 +2115,6 @@ Class AWD_facebook
 				//Found existing user in WP
 				$wp_user_id = $this->get_existing_user_from_facebook();
 			}
-			//No user was found we create a new one
-			if ($wp_user_id === false) {
-				$wp_user_id = $this->register_user();
-			}
-
-			$this->save_facebook_user_data($wp_user_id);
-			$this->init_facebook_user_data($wp_user_id);
-			
-			//add filter to logout the facebook connected user.
-			add_filter('logout_url',array(&$this,'logout_url'));
-
 			return $wp_user_id;
 		}
 		return false;
@@ -2127,11 +2123,18 @@ Class AWD_facebook
 	public function authenticate($user, $username='', $password='')
 	{
 		$wp_user_id = $this->get_user_from_provider();
+		//No user was found we create a new one
+		if ($wp_user_id == false && $this->uid) {
+			$wp_user_id = $this->register_user();
+		}
 		if(is_wp_error($wp_user_id)){
 			wp_die($wp_user_id);
 		}else if(false === $wp_user_id){
 			wp_die(__('Facebook AWD: You should try first to connect with Facebook.'.$this->get_the_login_button(), $this->ptd));
 		}
+
+		$this->save_facebook_user_data($wp_user_id);
+		$this->init_facebook_user_data($wp_user_id);
 		$user = new WP_User($wp_user_id);
 		//Will create the cookie authentification of the user.
 		$this->authenticate_cookie($user);
@@ -2146,15 +2149,18 @@ Class AWD_facebook
 	 */
 	public function logout_url($url)
 	{
-		$parsing = parse_url($url);
-		if (get_option('permalink_structure') != '')
-			$redirect_url = str_replace('action=logout&amp;', '', $this->_logout_url . '?' . $parsing['query']);
-		else
-			$redirect_url = str_replace('action=logout&amp;', '', $this->_logout_url . '&' . $parsing['query']);
+		if($this->is_user_logged_in_facebook()){
+			$parsing = parse_url($url);
+			if (get_option('permalink_structure') != '')
+				$redirect_url = str_replace('action=logout&amp;', '', $this->_logout_url . '?' . $parsing['query']);
+			else
+				$redirect_url = str_replace('action=logout&amp;', '', $this->_logout_url . '&' . $parsing['query']);
 
-		$logout_url = $this->fcbk->getLogoutUrl(array('next' => $redirect_url, 'access_token'=>$this->fcbk->getAccessToken()));
+			$logout_url = $this->fcbk->getLogoutUrl(array('access_token'=>$this->fcbk->getAccessToken(),'next' => $redirect_url.'/'));
 
-		return $logout_url;
+			return $logout_url;
+		}
+		return $url;
 	}
 
 	public function logout($redirect_url = '')

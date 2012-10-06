@@ -179,6 +179,14 @@ $fields['comments_box'] = array(
 			</div>
 		',
 	),
+
+	'link_manage' => array(
+		'type'=> 'html',
+		'html'=> ($this->options['app_id'] != '' ?
+			'<a class="btn" target="_blank" href="https://developers.facebook.com/tools/comments?id='.$this->options['app_id'].'">'.__('Manage comments',$this->ptd).'</a>
+		':''),
+		'widget_no_display' => true
+	),
 	
 	'preview' => array(
 		'type'=>'html',
