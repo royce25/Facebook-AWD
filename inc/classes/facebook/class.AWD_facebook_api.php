@@ -26,9 +26,8 @@ class AWD_facebook_api extends Facebook
 			'appId'  => $options['app_id'],
 			'secret' => $options['app_secret_key'],
 			'timeOut' => $options['timeout'],
-		));	
-		
-		//$this->setExtendedAccessToken();
+		));			
+		$this->setExtendedAccessToken();
 	}
 	
 	public function getApplicationAccessToken() {
