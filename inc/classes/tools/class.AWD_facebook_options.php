@@ -201,6 +201,14 @@ class AWD_facebook_options
 			'max_age' 						=> '',
 		);
 		$this->setDefaultValue('activity_box', $activity_box);
+
+		$shared_activity_box = array
+		(
+			'width' 						=> 292,
+			'height' 						=> 300,
+			'font' 							=> 'arial'
+		);
+		$this->setDefaultValue('shared_activity_box', $shared_activity_box);
 		
 		$login_button = array
 		(

@@ -234,6 +234,7 @@ Class AWD_facebook
 		$this->_login_url = get_option('permalink_structure') != '' ? home_url('facebook-awd/login') : home_url('?facebook_awd[action]=login');
 		$this->_logout_url = get_option('permalink_structure') != '' ? home_url('facebook-awd/logout') : home_url('?facebook_awd[action]=logout');
 		$this->_unsync_url = get_option('permalink_structure') != '' ? home_url('facebook-awd/unsync') : home_url('?facebook_awd[action]=unsync');
+		$this->_channel_url = get_option('permalink_structure') != '' ? home_url('facebook-awd/channel.html') : home_url('?facebook_awd[action]=channel.html');
 	}
 
 	/**
@@ -325,17 +326,20 @@ Class AWD_facebook
 		$html = '';
 		if (isset($this->errors) && count($this->errors) > 0 AND is_array($this->errors)) {
 			foreach ($this->errors as $error) {
-				if (is_wp_error($error))
-					$html .= $this->display_messages($error->get_error_message(), 'error', false);
+				if (is_wp_error($error)){
+					$html .= $error->get_error_message();
+				}
 			}
-			echo $html;
+			$this->display_messages($html, 'error');
 		}
+		$html = '';
 		if (isset($this->warnings) && count($this->warnings) > 0 AND is_array($this->warnings)) {
 			foreach ($this->warnings as $warning) {
 				if (is_wp_error($warning))
-					$html .= $this->display_messages($warning->get_error_message(), 'warning', false);
+					$html .= $warning->get_error_message();
+
 			}
-			echo $html;
+			$this->display_messages($html, 'warning', true);
 		}
 	}
 
@@ -632,7 +636,6 @@ Class AWD_facebook
 	 */
 	public function admin_enqueue_css()
 	{
-		//wp_enqueue_style($this->plugin_slug.'-ui-bootstrap-responsive');
 		wp_enqueue_style($this->plugin_slug . '-ui-bootstrap');
 		wp_enqueue_style($this->plugin_slug . '-google-code-prettify-css');
 		wp_enqueue_style('thickbox');
@@ -1589,6 +1592,7 @@ Class AWD_facebook
 	 */
 	public function front_enqueue_js()
 	{
+		wp_enqueue_style($this->plugin_slug . '-ui-bootstrap');
 		wp_register_script($this->plugin_slug, $this->plugin_url . '/assets/js/facebook_awd.js', array('jquery'));
 		$this->add_js_options();
 	}
@@ -1794,25 +1798,7 @@ Class AWD_facebook
 		$existings_users = $this->wpdb->get_results('SELECT DISTINCT `u`.`ID`,`u`.`display_name`,`m`.`meta_value`   FROM `'.$this->wpdb->users.'` `u` JOIN `'.$this->wpdb->usermeta.'` `m` ON `u`.`ID` = `m`.`user_id`  WHERE (`m`.`meta_key` = "fb_uid" AND `m`.`meta_value` !="" )');
 		return $existings_users;
 	}
-	/**
-	 * Load the javascript sdk Facebook
-	 * @return void
-	 */
-	public function load_sdk_js()
-	{
-		echo'
-		<div id="fb-root"></div>
-		<script type="text/javascript">
-		(function() {
-                var e = document.createElement("script");
-                e.src = document.location.protocol + "//connect.facebook.net/'.$this->options["locale"].'/all.js";
-				'.(($this->options['connect_enable'] != 1) ? 'e.src += "#xfbml=1";' : '').'
-                e.async = true;
-                document.getElementById("fb-root").appendChild(e);
-              }());
-		</script>';
-	}
-
+	
 	/**
 	 * Add avatar Facebook As Default
 	 * @param array $avatar_defaults
@@ -2025,12 +2011,7 @@ Class AWD_facebook
 	{
 		$this->fcbk = new AWD_facebook_api($this->options);
 		$this->uid = $this->fcbk->getUser();
-		
-		//check if the user is already logged in and is logged into facebook.
-		if($this->uid && is_user_logged_in()){
-			$this->init_facebook_user_data(wp_get_current_user()->ID);
-		}
-		
+		$this->init_facebook_user_data(wp_get_current_user()->ID);
 		//helpers vars.
 		$login_options = array('scope' => current_user_can("manage_options") ? $this->options["perms_admin"] : $this->options["perms"], 'redirect_uri' => $this->_login_url . (get_option('permalink_structure') != '' ? '?' : '&') . 'redirect_to=' . $this->get_current_url());
 		$this->_oauth_url = $this->fcbk->getLoginUrl($login_options);
@@ -2044,10 +2025,38 @@ Class AWD_facebook
 	 */
 	public function js_sdk_init()
 	{
-		$html = '';
+		$html = '
+		<div id="fb-root"></div>
+		<script type="text/javascript">
+			(function(d){
+				var js, id = "facebook-jssdk",
+				ref = d.getElementsByTagName("script")[0];
+				if (d.getElementById(id)){
+					return;
+				}
+				js = d.createElement("script"); 
+				js.id = id; js.async = true;
+				js.src = "//connect.facebook.net/en_US/all.js";
+				ref.parentNode.insertBefore(js, ref);
+			}(document));';
+
 		if ($this->options['connect_enable'] == 1) {
-			$html = "\n" . '<script type="text/javascript">window.fbAsyncInit = function(){ FB.init({ appId : awd_fcbk.app_id, cookie : true, xfbml : true, oauth : true }); AWD_facebook.FBEventHandler(jQuery); };</script>' . "\n";
+			$html .= '
+			window.fbAsyncInit = function(){
+				FB.init({
+					appId : awd_fcbk.app_id,
+					channelUrl : "'.$this->_channel_url.'",
+  					status     : true,
+  					cookie     : true,
+  					xfbml      : true,
+  					oauth      : true
+				});
+				AWD_facebook.FBEventHandler(jQuery); 
+			};
+		';
 		}
+		$html .= '
+		</script>';
 		echo $html;
 	}
 
@@ -2221,6 +2230,15 @@ Class AWD_facebook
 					}
 					exit();
 				break;
+
+				case 'channel.html':
+					$cache_expire = 60*60*24*365;
+					header("Pragma: public");
+					header("Cache-Control: max-age=".$cache_expire);
+					header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$cache_expire) . ' GMT');
+					echo '<script src="//connect.facebook.net/en_US/all.js"></script>';
+					exit();
+				break;
 			}
 		}
 	}
@@ -2232,7 +2250,7 @@ Class AWD_facebook
 	public function flush_rules()
 	{
 		$rules = get_option('rewrite_rules');
-		if (!isset($rules['facebook-awd/(login|logout|unsync)$'])) {
+		if (!isset($rules['facebook-awd/(login|logout|unsync|channel.html)$'])) {
 			global $wp_rewrite;
 			$wp_rewrite->flush_rules();
 		}
@@ -2245,7 +2263,7 @@ Class AWD_facebook
 	public function insert_rewrite_rules($rules)
 	{
 		$newrules = array();
-		$newrules['facebook-awd/(login|logout|unsync)$'] = 'index.php?facebook_awd[action]=$matches[1]';
+		$newrules['facebook-awd/(login|logout|unsync|channel.html)$'] = 'index.php?facebook_awd[action]=$matches[1]';
 		return $newrules + $rules;
 	}
 
@@ -2284,9 +2302,9 @@ Class AWD_facebook
 		$html = '';
 		switch (1) {
 			case ($this->is_user_logged_in_facebook() && $this->options['connect_enable'] && is_user_logged_in()):
-				$html .= '<div class="AWD_profile">' . "\n";
+				$html .= '<div class="AWD_profile AWD_facebook_wrap">' . "\n";
 				if ($options['show_profile_picture'] == 1 && $options['show_faces'] == 0) {
-					$html .= '<div class="AWD_profile_image"><a href="' . $this->me['link'] . '" target="_blank" class="thumbnail"> ' . get_avatar($this->get_current_user()->ID, '50') . '</a></div>' . "\n";
+					$html .= '<div class="AWD_profile_image pull-left"><a href="' . $this->me['link'] . '" target="_blank" class="thumbnail"> ' . get_avatar($this->get_current_user()->ID, '50') . '</a></div>' . "\n";
 				}
 				$html .= '<div class="AWD_right">' . "\n";
 				if ($options['show_faces'] == 1) {
@@ -2295,7 +2313,7 @@ Class AWD_facebook
 				} else {
 					$html .= '<div class="AWD_name"><a href="' . $this->me['link'] . '" target="_blank">' . $this->me['name'] . '</a></div>' . "\n";
 				}
-				$html .= '<div class="AWD_logout"><a href="' . wp_logout_url($options['logout_redirect_url']) . '">' . $options['logout_label'] . '</a></div>' . "\n";
+				$html .= '<div class="AWD_logout"><a href="' . wp_logout_url($options['logout_redirect_url']) . '" class="btn btn-mini btn-danger">' . $options['logout_label'] . '</a></div>' . "\n";
 				$html .= '</div>' . "\n";
 				$html .= '<div class="clear"></div>' . "\n";
 				$html .= '</div>' . "\n";
@@ -2329,7 +2347,6 @@ Class AWD_facebook
 		';
 		//force manual wp_localize script on login page
 		$this->add_js_options(true);
-		$this->load_sdk_js();
 		$this->js_sdk_init();
 	}
 
@@ -2451,10 +2468,40 @@ Class AWD_facebook
 	}
 
 	//****************************************************************************************
-	//	COMMENT BOX
+	//	Shared ACTIVITY BOX
 	//****************************************************************************************
 	/**
 	 * @return the like button shortcode
+	 * @param array $atts
+	 * @return string
+	 */
+	public function shortcode_shared_activity_box($atts = array())
+	{
+		 return $this->get_the_shared_activity_box($atts);
+	}
+
+	/**
+	 * @return the shared activity box
+	 * @param array $options
+	 * @return string
+	 */
+	public function get_the_shared_activity_box($options = array())
+	{
+		$options = wp_parse_args($options, $this->options['shared_activity_box']);
+		try {
+			$AWD_facebook_shared_activity = new AWD_facebook_shared_activity($options);
+			return '<div class="AWD_facebook_shared_activity">' . $AWD_facebook_shared_activity->get() . '</div>';
+		} catch (Exception $e) {
+			return $this->display_messages($e->getMessage(), 'error', false);
+		}
+	}
+
+
+	//****************************************************************************************
+	//	COMMENT BOX
+	//****************************************************************************************
+	/**
+	 * @return the comment box shortcode
 	 * @param array $atts
 	 * @return string
 	 */
@@ -2464,8 +2511,9 @@ Class AWD_facebook
 		 return $this->get_the_comments_box($post, $atts);
 	}
 
+	
 	/**
-	 * @return the like button
+	 * @return the comment box
 	 * @param WP_Post object $post
 	 * @param array $options
 	 * @return string
@@ -2635,6 +2683,18 @@ Class AWD_facebook
 			)
 		);
 
+		require(dirname(__FILE__) . '/inc/admin/forms/shared_activity_box.php');
+		$wp_widget_factory->widgets['AWD_facebook_shared_activity_box'] = new AWD_facebook_widget(
+			array(
+				'id_base' => 'shared_activity_box',
+				'name' => $this->plugin_name . ' ' . __('Shared Activity Box', $this->ptd),
+				'description' => __('Add a Facebook Shared Activity Box', $this->ptd),
+				'model' => $fields['shared_activity_box'], 
+				'self_callback' => array($this, 'shortcode_shared_activity_box'),
+				'text_domain' => $this->ptd
+			)
+		);
+
 		do_action('AWD_facebook_register_widgets');
 	}
 
@@ -2697,6 +2757,7 @@ Class AWD_facebook
 require_once(dirname(__FILE__) . '/inc/classes/facebook/class.AWD_facebook_api.php');
 require_once(dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_likebutton.php');
 require_once(dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_activity.php');
+require_once(dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_shared_activity.php');
 require_once(dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_likebox.php');
 require_once(dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_comments.php');
 require_once(dirname(__FILE__) . '/inc/classes/tools/class.AWD_facebook_widget.php');

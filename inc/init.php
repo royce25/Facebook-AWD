@@ -41,8 +41,6 @@ add_action('admin_footer',array(&$this,'debug_content'));
 add_filter('language_attributes',  array($this,'ogp_language_attributes'),10,1);
 add_action('after_setup_theme',array(&$this,'add_theme_support'));
 add_action('wp_head',array(&$this,'display_ogp_objects'));
-add_action('wp_footer',array(&$this,'load_sdk_js'));
-add_action('admin_print_footer_scripts',array(&$this,'load_sdk_js'));
 add_filter('the_content', array(&$this,'the_content'));
 add_action('comment_form_after', array(&$this,'the_comments_form'));
 add_action('wp_enqueue_scripts',array(&$this,'front_enqueue_js'));
@@ -69,8 +67,10 @@ remove_action( 'admin_init', 'send_frame_options_header');
 add_shortcode('AWD_likebutton', array(&$this,'shortcode_like_button'));
 add_shortcode('AWD_likebox', array(&$this,'shortcode_like_box'));
 add_shortcode('AWD_activitybox', array(&$this,'shortcode_activity_box'));
+add_shortcode('AWD_shared_activitybox', array(&$this,'shortcode_shared_activity_box'));
 add_shortcode('AWD_loginbutton', array(&$this,'shortcode_login_button'));
 add_shortcode('AWD_comments', array(&$this,'shortcode_comments_box'));
+
 
 //OPTIONS
 $this->optionsManager = new AWD_facebook_options($this->plugin_option_pref,$this->wpdb);
@@ -100,17 +100,19 @@ $this->options = $this->optionsManager->getOptions();
 
 
 //init the FB connect
-if($this->options['connect_enable'] == 1 && $this->options['app_id'] !='' && $this->options['app_secret_key'] !=''){
+if($this->options['app_id'] !='' && $this->options['app_secret_key'] !=''){
 	add_action('wp_print_footer_scripts',array(&$this,'js_sdk_init'));
 	add_action('admin_print_footer_scripts',array(&$this,'js_sdk_init'));
 	
-	//add action to add the login button on the wp-login.php page...
-	if($this->options['login_button']['display_on_login_page'] == 1)
-		add_action('login_form',array(&$this,'the_login_button_wp_login'));
-	//Add avatar functions
-	if($this->options['connect_fbavatar'] == 1){
-		add_filter('avatar_defaults', array($this, 'fb_addgravatar'),100, 1);
-		add_filter('get_avatar', array($this, 'fb_get_avatar'), 100, 5);//modify in last... 
+	if($this->options['connect_enable'] == 1){
+		//add action to add the login button on the wp-login.php page...
+		if($this->options['login_button']['display_on_login_page'] == 1)
+			add_action('login_form',array(&$this,'the_login_button_wp_login'));
+		//Add avatar functions
+		if($this->options['connect_fbavatar'] == 1){
+			add_filter('avatar_defaults', array($this, 'fb_addgravatar'),100, 1);
+			add_filter('get_avatar', array($this, 'fb_get_avatar'), 100, 5);//modify in last... 
+		}
 	}
 }
 ?>

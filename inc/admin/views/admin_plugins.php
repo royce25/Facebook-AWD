@@ -11,6 +11,7 @@ require(dirname(dirname(__FILE__)).'/forms/plugins_menu.php');
 require(dirname(dirname(__FILE__)).'/forms/like_button.php');
 require(dirname(dirname(__FILE__)).'/forms/like_box.php');
 require(dirname(dirname(__FILE__)).'/forms/activity_box.php');
+require(dirname(dirname(__FILE__)).'/forms/shared_activity_box.php');
 require(dirname(dirname(__FILE__)).'/forms/login_button.php');
 require(dirname(dirname(__FILE__)).'/forms/comments_box.php');
 
@@ -63,6 +64,18 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 					<?php 
 					if(isset($fields['activity_box']) && is_array($fields['activity_box'])){
 						echo $form->proccessFields('activity_box',$fields['activity_box']);
+					}
+					?>
+				</div>
+
+				<div id="shared_activity_settings" class="tab-pane">				
+					<?php 
+					if($this->options['connect_enable'] == 1){
+						if(isset($fields['shared_activity_box']) && is_array($fields['shared_activity_box'])){
+							echo $form->proccessFields('shared_activity_box',$fields['shared_activity_box']);
+						}
+					}else{
+						$this->display_messages(__('You must enable FB Connect and set parameters in settings of the plugins',$this->ptd), 'error');
 					}
 					?>
 				</div>

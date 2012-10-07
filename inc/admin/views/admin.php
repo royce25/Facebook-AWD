@@ -68,10 +68,10 @@ $current_screen = get_current_screen();
 					} 
 					?>
 					<?php if(current_user_can('manage_facebook_awd_settings')){ ?>
-						<li><a href="http://facebook-awd.ahwebdev.fr/plugins/" target="blank" title="Facebook AWD plugins">Facebook AWD plugins</a></li>
+						<!-- <li><a href="http://facebook-awd.ahwebdev.fr/plugins/" target="blank" title="Facebook AWD plugins">Facebook AWD plugins</a></li>-->
 					<?php } ?>
 					<li><a href="http://facebook-awd.ahwebdev.fr/documentation/" target="blank" title="Documentation">Documentation</a></li>
-					<li><a href="http://facebook-awd.ahwebdev.fr/support/" target="blank" title="Support">Support</a></li>
+					<!-- <li><a href="http://facebook-awd.ahwebdev.fr/support/" target="blank" title="Support">Support</a></li> -->
 					<?php ?>
     			</ul>
     			<form class="navbar-search pull-right" action="http://facebook-awd.ahwebdev.fr/" method="GET" target="_blank">
