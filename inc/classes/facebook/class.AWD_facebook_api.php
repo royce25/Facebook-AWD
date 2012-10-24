@@ -14,20 +14,15 @@ class AWD_facebook_api extends Facebook
 	
 	public function __construct($options)
 	{
-		self::$CURL_OPTS = array(
-			CURLOPT_CONNECTTIMEOUT => 10,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_TIMEOUT        => $options['timeout'],
-			CURLOPT_USERAGENT      => 'facebook-php-3.2',
-			CURLOPT_SSL_VERIFYPEER => 0
-		);
-		
+		self::$CURL_OPTS = $options['curl_options'];
 		parent::__construct(array(
 			'appId'  => $options['app_id'],
 			'secret' => $options['app_secret_key'],
 			'timeOut' => $options['timeout'],
-		));			
-		$this->setExtendedAccessToken();
+		));
+		if($options['use_extended_access_token'] == true){
+			$this->setExtendedAccessToken();
+		}
 	}
 	
 	public function getApplicationAccessToken() {

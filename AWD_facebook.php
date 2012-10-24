@@ -8,7 +8,7 @@ Author: AHWEBDEV
 Author URI: http://www.ahwebdev.fr
 License: Copywrite AHWEBDEV
 Text Domain: AWD_facebook
-Last modification: 24/03/2012
+Last modification: 24/10/2012
  */
 
 /**
@@ -1024,7 +1024,6 @@ Class AWD_facebook
 		if (isset($_POST[$this->plugin_option_pref . '_nonce_options_object_links']) && wp_verify_nonce($_POST[$this->plugin_option_pref . '_nonce_options_object_links'], $this->plugin_slug . '_update_object_links')) {
 			if ($_POST) {
 				$opengraph_object_links = array();
-				print_r($_POST[$this->plugin_option_pref . 'opengraph_object_link']);
 				foreach ($_POST[$this->plugin_option_pref . 'opengraph_object_link'] as $context => $object_id) {
 					$opengraph_object_links[$context] = $object_id;
 				}
@@ -2042,25 +2041,26 @@ Class AWD_facebook
 
 		if ($this->options['connect_enable'] == 1) {
 			$html .= '
-			window.fbAsyncInit = function(){
-				FB.init({
-					appId : awd_fcbk.app_id,
-					channelUrl : "'.$this->_channel_url.'",
-  					status     : true,
-  					cookie     : true,
-  					xfbml      : true,
-  					oauth      : true
-				});
-				AWD_facebook.FBEventHandler(jQuery); 
-			};
+			//When jquery ready, load JS SDK
+			jQuery(document).ready(function(){
+				window.fbAsyncInit = function(){
+					FB.init({
+						appId : awd_fcbk.app_id,
+						channelUrl : "'.$this->_channel_url.'",
+	  					status     : true,
+	  					cookie     : true,
+	  					xfbml      : true,
+	  					oauth      : true
+					});
+					AWD_facebook.FbEventHandler();
+				};
+			});
 		';
 		}
 		$html .= '
 		</script>';
 		echo $html;
 	}
-
-
 
 	/**
 	 * Core connect the user to wordpress.
@@ -2071,8 +2071,6 @@ Class AWD_facebook
 	{
 		wp_authenticate_cookie($user,'','');
 	}
-
-	
 
 	public function register_user()
 	{
@@ -2108,7 +2106,6 @@ Class AWD_facebook
 
 		return false;
 	}
-
 	
 	public function get_user_from_provider()
 	{
@@ -2139,7 +2136,8 @@ Class AWD_facebook
 		if(is_wp_error($wp_user_id)){
 			wp_die($wp_user_id);
 		}else if(false === $wp_user_id){
-			wp_die(__('Facebook AWD: You should try first to connect with Facebook.'.$this->get_the_login_button(), $this->ptd));
+			//TODO redirect to entry point on facebook side ?
+			wp_die(__('Facebook AWD: You should try first to connect with Facebook.', $this->ptd));
 		}
 
 		$this->save_facebook_user_data($wp_user_id);

@@ -80,7 +80,7 @@ $this->options = $this->optionsManager->getOptions();
 
 //Init the SDK PHP
 if(!empty($this->options['app_id'])  && !empty($this->options['app_secret_key'])){
-	$this->php_sdk_init();
+	$this->php_sdk_init();	
 }
 
 //UPDATES OPTIONS
@@ -101,10 +101,12 @@ $this->options = $this->optionsManager->getOptions();
 
 //init the FB connect
 if($this->options['app_id'] !='' && $this->options['app_secret_key'] !=''){
+	
 	add_action('wp_print_footer_scripts',array(&$this,'js_sdk_init'));
 	add_action('admin_print_footer_scripts',array(&$this,'js_sdk_init'));
 	
 	if($this->options['connect_enable'] == 1){
+		
 		//add action to add the login button on the wp-login.php page...
 		if($this->options['login_button']['display_on_login_page'] == 1)
 			add_action('login_form',array(&$this,'the_login_button_wp_login'));

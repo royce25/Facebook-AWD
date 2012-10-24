@@ -112,6 +112,7 @@ class AWD_facebook_options
 				
 		//Plugin and options
 		$this->setDefaultValue('connect_enable', 0);
+		$this->setDefaultValue('use_extended_access_token', 0);
 		$this->setDefaultValue('open_graph_enable', 1);
 		$this->setDefaultValue('connect_fbavatar', 0);
 		$this->setDefaultValue('debug_enable', 0);
@@ -120,7 +121,6 @@ class AWD_facebook_options
 		$this->setDefaultValue('publish_message_text', null);
 		$this->setDefaultValue('publish_read_more_text', __('Read More',$AWD_facebook->ptd));
 		$this->setDefaultValue('fb_publish_to_pages', null);
-
 		
 		//API
 		$this->setDefaultValue('app_id', '');
@@ -255,6 +255,14 @@ class AWD_facebook_options
 				'object_link' => ''
 			),
 		));
+		
+		$this->options['curl_options'] = array(
+			CURLOPT_CONNECTTIMEOUT => 10,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT        => $options['timeout'],
+			CURLOPT_USERAGENT      => 'facebook-php-3.2',
+			CURLOPT_SSL_VERIFYPEER => 0
+		);
 		
         return $this->options;
     }

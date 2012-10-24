@@ -89,7 +89,6 @@ class AWD_facebook_widget extends WP_Widget {
 	 */
 	public function update($new_instance, $old_instance)
 	{	
-		print_r($new_instance);
 		return stripslashes_deep($new_instance);
 	}
 	
@@ -129,7 +128,7 @@ class AWD_facebook_widget extends WP_Widget {
      */
     public function content($instance)
     {
-		throw new RuntimeException('You must define a valid callback');
+		throw new RuntimeException('You must define a valid callback in the widget Facebook AWD'.$this->id_base);
     }
     
 }
