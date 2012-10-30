@@ -1442,7 +1442,7 @@ Class AWD_facebook
 				if (!empty($object_template['auto_load_audios_attachment'])) {
 					$audios = array();
 					if ($object_template['auto_load_audios_attachment'] == 1) {
-						$attachments_videos = get_posts(array('post_type' => 'attachment', 'posts_per_page' => -1, 'post_parent' => $post->ID, 'post_mime_type' => array('audio/*')));
+						$attachments_audios = get_posts(array('post_type' => 'attachment', 'posts_per_page' => -1, 'post_parent' => $post->ID, 'post_mime_type' => array('audio/*')));
 						if ($attachments_audios) {
 							foreach ($attachments_audios as $attachments_audio) {
 								$audios[] = wp_get_attachment_url($attachments_audio->ID);
