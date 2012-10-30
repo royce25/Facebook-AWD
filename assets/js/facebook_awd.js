@@ -18,7 +18,7 @@ var AWD_facebook = function(){
 	
 			jQuery('.AWD_facebook_connect_button').live('click',function(e){
 				e.preventDefault();
-				var redirect = $(this).data('redirect');
+				var redirect = jQuery(this).data('redirect');
 				AWD_facebook.connect(redirect);
 			});
 		},
