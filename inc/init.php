@@ -47,7 +47,6 @@ add_action('wp_enqueue_scripts',array(&$this,'front_enqueue_js'));
 add_action('wp_footer',array(&$this,'debug_content'));
 
 //INTERNAL
-add_action("AWD_facebook_get_admin_fbuid",array(&$this,'get_admin_fbuid'));
 add_action('wp_ajax_get_media_field', array(&$this,'ajax_get_media_field'));
 add_action('wp_ajax_get_app_infos_content', array(&$this,'get_app_infos_content'));
 add_action('wp_ajax_delete_ogp_object', array(&$this,'delete_ogp_object'));

@@ -83,12 +83,12 @@ Class AWD_facebook
 	 * global message admin
 	 */
 	public $messages;
-	
+
 	/**
 	 * global message admin
 	 */
 	public $errors;
-	
+
 	/**
 	 * global message admin
 	 */
@@ -108,25 +108,25 @@ Class AWD_facebook
 	 * the ID of the current facebook user.
 	 */
 	public $uid = null;
-	
+
 	/**
 	 * the internal url to login
 	 * @var string
 	 */
 	public $_login_url;
-	
+
 	/**
 	 * the internal url to logout
 	 * @var string
 	 */
-	public$_logout_url; 
-	
+	public $_logout_url;
+
 	/**
 	 * the internal url to unsyc account
 	 * @var string
 	 */
 	public $_unsync_url;
-	
+
 	/**
 	 * Contains the list of Plugins AWD_facebook_plugin_interface
 	 * @var array
@@ -174,7 +174,7 @@ Class AWD_facebook
 		if ($post_content == "" && is_object($post))
 			$post_content = $post->post_content;
 		$output = preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $post_content, $matches);
-		if(isset($matches[1][0]))
+		if (isset($matches[1][0]))
 			$first_img = $matches[1][0];
 		return $first_img;
 	}
@@ -196,15 +196,7 @@ Class AWD_facebook
 		echo "</pre>";
 	}
 
-
-	/**
-	 * Get current URL
-	 * @return string current url
-	 */
-	public function get_current_url()
-	{
-		return (empty($_SERVER['HTTPS']) ? 'http://' : 'https://') . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-	}
+	
 
 	/**
 	 * Get the plugin path 
@@ -219,12 +211,45 @@ Class AWD_facebook
 	//****************************************************************************************
 	//	INIT
 	//****************************************************************************************
+	public function  __autoload($class_name)
+	{
+		$dependencies = array(
+			//AWD dependencies and plugins
+			'awd_fcbk_api' 					=> dirname(__FILE__) . '/inc/classes/facebook/class.AWD_facebook_api.php',
+			'awd_fcbk_likebutton' 			=> dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_likebutton.php',
+			'awd_fcbk_activity' 			=> dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_activity.php',
+			'awd_fcbk_shared_activity' 		=> dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_shared_activity.php',
+			'awd_fcbk_likebox' 				=> dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_likebox.php',
+			'awd_fcbk_comments' 			=> dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_comments.php',
+			'awd_fcbk_widgets' 				=> dirname(__FILE__) . '/inc/classes/tools/class.AWD_facebook_widget.php',
+			'awd_fcbk_forms' 				=> dirname(__FILE__) . '/inc/classes/tools/class.AWD_facebook_form.php',
+			'awd_fcbk_options' 				=> dirname(__FILE__) . '/inc/classes/tools/class.AWD_facebook_options.php',				
+			
+			//Opengraph protocol by ogp.me
+			'opengraph_media' =>  dirname(__FILE__) . '/inc/classes/tools/opengraph_protocol_tools/media.php',
+			'opengraph_objects' =>  dirname(__FILE__) . '/inc/classes/tools/opengraph_protocol_tools/objects.php',
+			'opengraph_protocol' =>  dirname(__FILE__) . '/inc/classes/tools/opengraph_protocol_tools/opengraph-protocol.php',
+			
+			//getid 3 tools for Opengraph medias.
+			'getid3' =>  dirname(__FILE__) . '/inc/classes/tools/getid3/getid3.php'
+		);
+		$dependencies = apply_filters("AWD_facebook_deps", $dependencies);
+		foreach($dependencies as $dep => $path){
+			if(file_exists($path)){
+				require_once($path);
+			}else{
+				throw new RuntimeException("Facebook AWD loader Class: ".$dep." => ".$path." was not found", 404);
+			}
+		}
+	}
+	
 	/**
 	 * plugin construct
 	 * @return void
 	 */
 	public function __construct()
 	{
+		spl_autoload_register(array(&$this, '__autoload'));
 		//init the plugin and action
 		add_action('plugins_loaded', array(&$this, 'initial'));
 		//like box widget register
@@ -253,21 +278,6 @@ Class AWD_facebook
 		wp_register_style($this->plugin_slug . '-ui-bootstrap', $this->plugin_url . '/assets/css/bootstrap.css');
 		//wp_register_style($this->plugin_slug.'-ui-bootstrap-responsive', $this->plugin_url.'/assets/css/bootstrap-responsive.min.css');
 		wp_register_style($this->plugin_slug . '-google-code-prettify-css', $this->plugin_url . '/assets/js/google-code-prettify/prettify.css');
-	}
-
-	/**
-	 * Getter
-	 * the fbuid of the admin
-	 * @return int UID Facebook
-	 */
-	public function get_admin_fbuid()
-	{
-		$admin_email = get_option('admin_email');
-		$admin_user = get_user_by('email', $admin_email);
-		if(isset($admin_user->fb_uid))
-			return $admin_user->fb_uid;
-		else
-			return false;
 	}
 
 	/**
@@ -326,7 +336,7 @@ Class AWD_facebook
 		$html = '';
 		if (isset($this->errors) && count($this->errors) > 0 AND is_array($this->errors)) {
 			foreach ($this->errors as $error) {
-				if (is_wp_error($error)){
+				if (is_wp_error($error)) {
 					$html .= $error->get_error_message();
 				}
 			}
@@ -391,8 +401,6 @@ Class AWD_facebook
 		// Is the user sufficiently leveled, or has the bar been disabled?
 		if (!is_super_admin() || !is_admin_bar_showing())
 			return;
-
-		// Good to go, lets do this!
 		add_action('admin_bar_menu', array(&$this, 'admin_bar_links'), 500);
 	}
 
@@ -482,38 +490,7 @@ Class AWD_facebook
 	{
 		return $footer_text . "  " . __('| With:', $this->ptd) . " <a href='http://www.ahwebdev.fr/plugins/facebook-awd.html'>" . $this->plugin_name . " v" . $this->get_version() . "</a>";
 	}
-
-	/**
-	 * Set Admin Roles
-	 * Add FB capabalities to default WP roles
-	 * @return void
-	 */
-	public function set_admin_roles()
-	{
-		$roles = array(
-				'administrator' => array(
-						'manage_facebook_awd_settings',
-						'manage_facebook_awd_plugins', 
-						'manage_facebook_awd_opengraph', 
-						'manage_facebook_awd_publish_to_pages'
-					),
-				'editor' => array(
-						'manage_facebook_awd_publish_to_pages', 
-						'manage_facebook_awd_opengraph'
-					), 
-				'author' => array(
-						'manage_facebook_awd_publish_to_pages'
-					)
-				);
-		$roles = apply_filters('AWD_facebook_admin_roles', $roles);
-		foreach ($roles as $role => $caps) {
-			$wp_role = get_role($role);
-			foreach ($caps as $cap) {
-				$wp_role->add_cap($cap);
-			}
-		}
-	}
-
+	
 	/**
 	 * Admin plugin init menu
 	 * call form init.php
@@ -534,7 +511,7 @@ Class AWD_facebook
 		}
 		add_action("load-" . $this->blog_admin_page_hook, array(&$this, 'admin_initialisation'));
 		add_action("load-" . $this->blog_admin_plugins_hook, array(&$this, 'admin_initialisation'));
-		
+
 		add_action('admin_print_styles-' . $this->blog_admin_page_hook, array(&$this, 'admin_enqueue_css'));
 		add_action('admin_print_styles-' . $this->blog_admin_plugins_hook, array(&$this, 'admin_enqueue_css'));
 		add_action('admin_print_styles-post-new.php', array(&$this, 'admin_enqueue_css'));
@@ -676,8 +653,6 @@ Class AWD_facebook
 		wp_localize_script($this->plugin_slug, $this->plugin_slug, $AWD_facebook_vars);
 	}
 
-	
-
 	/**
 	 * Admin Infos
 	 * @return void
@@ -755,58 +730,58 @@ Class AWD_facebook
 			echo $error->get_error_message();
 			echo '<br /><a href="#" id="reload_app_infos" class="btn btn-danger" data-loading-text="<i class=\'icon-time icon-white\'></i> Testing... "><i class="icon-refresh icon-white"></i> ' . __('Reload', $this->ptd) . '</a>';
 		} else {
-		echo '
+			echo '
 			<div id="awd_app">
 				<table class="table table-condensed">
 					<thead>
-						<th>'.__('Info', $this->ptd).'</th>
-						<th>'.__('Value', $this->ptd).'</th>
+						<th>' . __('Info', $this->ptd) . '</th>
+						<th>' . __('Value', $this->ptd) . '</th>
 					</thead>
 					<tbody>
 						<tr>
-							<th>'.__('Name', $this->ptd).':</th>
-							<td>'.$infos['name'].'</td>
+							<th>' . __('Name', $this->ptd) . ':</th>
+							<td>' . $infos['name'] . '</td>
 						</tr>
 						<tr>
 							<th>ID:</th>
-							<td>'.$infos['id'].'/td>
+							<td>' . $infos['id'] . '/td>
 						</tr>
 						<tr>
-							<th>'.__('Link', $this->ptd).':</th>
-							<td><a href="'.$infos['link'].'" target="_blank">View App</a></td>
+							<th>' . __('Link', $this->ptd) . ':</th>
+							<td><a href="' . $infos['link'] . '" target="_blank">View App</a></td>
 						</tr>
 						<tr>
-							<th>'.__('Namespace', $this->ptd).':</th>
-							<td>'.$infos['namespace'].'</td>
+							<th>' . __('Namespace', $this->ptd) . ':</th>
+							<td>' . $infos['namespace'] . '</td>
 						</tr>
 						<tr>
-							<th>'.__('Daily active users', $this->ptd).':</th>
-							<td class="app_active_users">'.(isset($infos['daily_active_users']) ? $infos['daily_active_users'] : 0).'</td>
+							<th>' . __('Daily active users', $this->ptd) . ':</th>
+							<td class="app_active_users">' . (isset($infos['daily_active_users']) ? $infos['daily_active_users'] : 0) . '</td>
 						</tr>
 						<tr>
-							<th>'.__('Weekly active users', $this->ptd).':</th>
-							<td class="app_active_users">'.(isset($infos['weekly_active_users']) ? $infos['weekly_active_users'] : 0).'</td>
+							<th>' . __('Weekly active users', $this->ptd) . ':</th>
+							<td class="app_active_users">' . (isset($infos['weekly_active_users']) ? $infos['weekly_active_users'] : 0) . '</td>
 						</tr>
 						<tr>
-							<th>'.__('Monthly active users', $this->ptd).':</th>
-							<td class="app_active_users">'.(isset($infos['monthly_active_users']) ? $infos['monthly_active_users'] : 0).'</td>
+							<th>' . __('Monthly active users', $this->ptd) . ':</th>
+							<td class="app_active_users">' . (isset($infos['monthly_active_users']) ? $infos['monthly_active_users'] : 0) . '</td>
 						</tr>
 					</tbody>
 					<tfoot>
 						<tr>
-							<th><img src="'.$infos['logo_url'].'" class="thumbnail"/></th>
+							<th><img src="' . $infos['logo_url'] . '" class="thumbnail"/></th>
 							';
-							if(current_user_can('manage_facebook_awd_settings')){
-								echo '
+			if (current_user_can('manage_facebook_awd_settings')) {
+				echo '
 								<td>
 									<a href="#" id="reload_app_infos" class="btn btnNormal" data-loading-text="<i class=\'icon-time\'></i> Loading...">
-										<i class="icon-wrench"></i> '.__('Test', $this->ptd).'
+										<i class="icon-wrench"></i> ' . __('Test', $this->ptd) . '
 									</a>
 								</td>';
-							}else{
-								echo '<td></td>';
-							}
-						echo '</tr>
+			} else {
+				echo '<td></td>';
+			}
+			echo '</tr>
 					</tfoot>
 				</table>
 			</div>';
@@ -889,24 +864,15 @@ Class AWD_facebook
 	//****************************************************************************************
 	//	OPENGRAPH
 	//****************************************************************************************
-	/**
-	 * Get the help Box
-	 * @param string $type
-	 * @return string the box in html format
-	 */
-	public function get_the_help_box($type)
-	{
-		
-	}
-				
+
 	public function ogp_language_attributes($language_attributes)
 	{
 		$namespace_url = '';
-		if(isset($this->options['app_infos']['namespace'])){
-			$namespace_url = $this->options['app_infos']['namespace'].': http://ogp.me/ns/fb/'.$this->options['app_infos']['namespace'];
+		if (isset($this->options['app_infos']['namespace'])) {
+			$namespace_url = $this->options['app_infos']['namespace'] . ': http://ogp.me/ns/fb/' . $this->options['app_infos']['namespace'];
 		}
 		$ogp = new OpenGraphProtocol();
-		$language_attributes .= ' prefix="' . OpenGraphProtocol::PREFIX . ': ' . OpenGraphProtocol::NS . ' fb:http://ogp.me/ns/fb# '.$namespace_url.'"';
+		$language_attributes .= ' prefix="' . OpenGraphProtocol::PREFIX . ': ' . OpenGraphProtocol::NS . ' fb:http://ogp.me/ns/fb# ' . $namespace_url . '"';
 		return $language_attributes;
 	}
 
@@ -1053,8 +1019,8 @@ Class AWD_facebook
 			$ogp->setTitle($object['title']);
 		if (isset($object['description']))
 			$ogp->setDescription($object['description']);
-		if (isset($object['type'])){
-			if($object['type'] == 'custom' && isset($object['custom_type']))
+		if (isset($object['type'])) {
+			if ($object['type'] == 'custom' && isset($object['custom_type']))
 				$ogp->setType($object['custom_type']);
 			else
 				$ogp->setType($object['type']);
@@ -1096,6 +1062,7 @@ Class AWD_facebook
 		return $ogp;
 	}
 
+	
 	public function create_OpenGraphProtocolImage($image_url)
 	{
 		$ogp_img = new OpenGraphProtocolImage();
@@ -1148,7 +1115,7 @@ Class AWD_facebook
 		} else {
 			//return new WP_Error('AWD_facebook_opengraphvideo_parser', __('Facebook AWD cannot parse this video file', $this->ptd));
 		}
-		
+
 		//check if we want file under ssl
 		$url_info = parse_url($video_url);
 		if ($url_info) {
@@ -1159,10 +1126,10 @@ Class AWD_facebook
 				$ogp_video->setURL($video_url);
 			}
 		}
-		
+
 		return $ogp_video;
 	}
-				
+
 	public function create_OpenGraphProtocolAudio($audio_url)
 	{
 		$ogp_audio = new OpenGraphProtocolAudio();
@@ -1190,8 +1157,7 @@ Class AWD_facebook
 		}
 		return $ogp_audio;
 	}
-				
-				
+
 	/**
 	 * Test if url return 200
 	 * @param string $url
@@ -1208,10 +1174,10 @@ Class AWD_facebook
 		$retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		if ($retcode == '200' OR $retcode == '302')
 			return true;
-	
+
 		return false;
 	}
-				
+
 	/**
 	 * Admin Form to link object to post type.
 	 * @return string $html
@@ -1315,9 +1281,9 @@ Class AWD_facebook
 				$img = $this->catch_that_image(get_the_post_thumbnail($post->ID, 'AWD_facebook_ogimage'));
 			}
 		}
-		if(empty($img))
+		if (empty($img))
 			$img = $this->catch_that_image($post->post_content);
-			
+
 		if (empty($img)) {
 			if (isset($this->options['app_infos']['logo_url']))
 				$img = $this->options['app_infos']['logo_url'];
@@ -1340,65 +1306,64 @@ Class AWD_facebook
 		$linked_object = null;
 		$array_replace = array();
 		switch (1) {
-			case is_front_page():
-			case is_home():
-				$array_replace = array($blog_name, $blog_description, $home_url);
-				//if home page is a single page add some value in pattern
-				if (is_page($post->ID)) {
-					$array_replace = array($blog_name, $blog_description, $home_url, $post->post_title, $this->get_post_description($post), $this->get_post_thumbnail($post), get_permalink($post->ID));
-				}
-				$linked_object = isset($this->options['opengraph_object_links']['frontpage']) ? $this->options['opengraph_object_links']['frontpage'] : null;
+		case is_front_page():
+		case is_home():
+			$array_replace = array($blog_name, $blog_description, $home_url);
+			//if home page is a single page add some value in pattern
+			if (is_page($post->ID)) {
+				$array_replace = array($blog_name, $blog_description, $home_url, $post->post_title, $this->get_post_description($post), $this->get_post_thumbnail($post), get_permalink($post->ID));
+			}
+			$linked_object = isset($this->options['opengraph_object_links']['frontpage']) ? $this->options['opengraph_object_links']['frontpage'] : null;
 			break;
 
-			case is_author():
-				$linked_object = isset($this->options['opengraph_object_links']['author']) ? $this->options['opengraph_object_links']['author'] : null;
-				$current_author = get_user_by('slug', $wp_query->query_vars['author_name']);
-				$avatar = get_avatar($current_author->ID, '200');
-				if ($avatar)
-					$gravatar_attributes = simplexml_load_string($avatar);
-				if (!empty($gravatar_attributes['src']))
-					$gravatar_url = $gravatar_attributes['src'];
-				$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), $current_author->description, $gravatar_url, $this->get_current_url());
+		case is_author():
+			$linked_object = isset($this->options['opengraph_object_links']['author']) ? $this->options['opengraph_object_links']['author'] : null;
+			$current_author = get_user_by('slug', $wp_query->query_vars['author_name']);
+			$avatar = get_avatar($current_author->ID, '200');
+			if ($avatar)
+				$gravatar_attributes = simplexml_load_string($avatar);
+			if (!empty($gravatar_attributes['src']))
+				$gravatar_url = $gravatar_attributes['src'];
+			$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), $current_author->description, $gravatar_url, $this->get_current_url());
 			break;
-			case is_archive():
-				switch (1) {
-				case is_tag():
-					$linked_object = isset($this->options['opengraph_object_links']['post_tag']) ? $this->options['opengraph_object_links']['post_tag'] : null;
-					$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), '', '', $this->get_current_url());
-				break;
-				case is_tax():
-					$taxonomy_slug = $wp_query->query_vars['taxonomy'];
-					$linked_object = isset($this->options['opengraph_object_links'][$taxonomy_slug]) ? $this->options['opengraph_object_links'][$taxonomy_slug] : null;
-					$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), term_description(), '', $this->get_current_url());
-				break;
-				case is_category():
-					$linked_object = isset($this->options['opengraph_object_links']['category']) ? $this->options['opengraph_object_links']['category'] : null;
-					$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), category_description(), '', $this->get_current_url());
-				break;
-				default:
-					$linked_object = isset($this->options['opengraph_object_links']['archive']) ? $this->options['opengraph_object_links']['archive'] : null;
-					$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), '', '', $this->get_current_url());
-				break;
-				}
-			break;
-			case is_attachment():
-				$linked_object = isset($this->options['opengraph_object_links']['attachment']) ? $this->options['opengraph_object_links']['attachment'] : null;
+		case is_archive():
+			switch (1) {
+			case is_tag():
+				$linked_object = isset($this->options['opengraph_object_links']['post_tag']) ? $this->options['opengraph_object_links']['post_tag'] : null;
 				$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), '', '', $this->get_current_url());
 				break;
-			case is_page():
-			case is_single():
-				$linked_object = isset($this->options['opengraph_object_links'][(is_single() ? 'post' : 'page')]) ? $this->options['opengraph_object_links'][(is_single() ? 'post' : 'page')] : null;
-				$array_replace = array($blog_name, $blog_description, $home_url, $post->post_title, $this->get_post_description($post), $this->get_post_thumbnail($post), get_permalink($post->ID));
+			case is_tax():
+				$taxonomy_slug = $wp_query->query_vars['taxonomy'];
+				$linked_object = isset($this->options['opengraph_object_links'][$taxonomy_slug]) ? $this->options['opengraph_object_links'][$taxonomy_slug] : null;
+				$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), term_description(), '', $this->get_current_url());
+				break;
+			case is_category():
+				$linked_object = isset($this->options['opengraph_object_links']['category']) ? $this->options['opengraph_object_links']['category'] : null;
+				$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), category_description(), '', $this->get_current_url());
+				break;
+			default:
+				$linked_object = isset($this->options['opengraph_object_links']['archive']) ? $this->options['opengraph_object_links']['archive'] : null;
+				$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), '', '', $this->get_current_url());
+				break;
+			}
+			break;
+		case is_attachment():
+			$linked_object = isset($this->options['opengraph_object_links']['attachment']) ? $this->options['opengraph_object_links']['attachment'] : null;
+			$array_replace = array($blog_name, $blog_description, $home_url, trim(wp_title('', false)), '', '', $this->get_current_url());
+			break;
+		case is_page():
+		case is_single():
+			$linked_object = isset($this->options['opengraph_object_links'][(is_single() ? 'post' : 'page')]) ? $this->options['opengraph_object_links'][(is_single() ? 'post' : 'page')] : null;
+			$array_replace = array($blog_name, $blog_description, $home_url, $post->post_title, $this->get_post_description($post), $this->get_post_thumbnail($post), get_permalink($post->ID));
 			break;
 		}
-
 
 		//redefine object template from post if value is set
 		$from_post = 0;
 		if (is_object($post)) {
 			$custom = get_post_meta($post->ID, $this->plugin_slug, true);
 			if (!is_string($custom) AND isset($custom['opengraph']['object_link'])) {
-				if($custom['opengraph']['object_link'] != ''){
+				if ($custom['opengraph']['object_link'] != '') {
 					$from_post = 1;
 					$linked_object = $custom['opengraph']['object_link'];
 				}
@@ -1437,7 +1402,7 @@ Class AWD_facebook
 						$object_template['videos'] = array_merge($videos, $object_template['videos']);
 					}
 				}
-				
+
 				//auto load audios attachment
 				if (!empty($object_template['auto_load_audios_attachment'])) {
 					$audios = array();
@@ -1457,7 +1422,6 @@ Class AWD_facebook
 		return false;
 	}
 
-	
 	public function process_opengraph_pattern($array_replace, $object_template)
 	{
 		$array_pattern = array("%BLOG_TITLE%", "%BLOG_DESCRIPTION%", "%BLOG_URL%", "%TITLE%", "%DESCRIPTION%", "%IMAGE%", "%URL%");
@@ -1481,10 +1445,10 @@ Class AWD_facebook
 		//construct related ogp object
 		$ogp = $this->opengraph_array_to_object($object_template);
 		$html = '<!-- ' . $this->plugin_name . ' Opengraph [v' . $this->get_version() . '] (object reference: "' . $object_template['object_title'] . '" ' . ($from_post == 1 ? 'Defined from post' : '') . ') -->' . "\n";
-		if($this->options['app_id'] != '')
-			$html .= '<meta property="fb:app_id" content="'.$this->options['app_id'].'" />'."\n";
-		if($this->options['admins'] != '')
-			$html .= '<meta property="fb:admins" content="'.$this->options['admins'].'" />'."\n";
+		if ($this->options['app_id'] != '')
+			$html .= '<meta property="fb:app_id" content="' . $this->options['app_id'] . '" />' . "\n";
+		if ($this->options['admins'] != '')
+			$html .= '<meta property="fb:admins" content="' . $this->options['admins'] . '" />' . "\n";
 		$html .= $ogp->toHTML();
 		$html .= "\n" . '<!-- ' . $this->plugin_name . ' END Opengraph -->' . "\n";
 		return $html;
@@ -1506,7 +1470,7 @@ Class AWD_facebook
 		$exclude_post_page_id = explode(",", $this->options['like_button']['exclude_post_id']);
 		$exclude_terms_slug = explode(",", $this->options['like_button']['exclude_terms_slug']);
 
-		//get the all terms for the post
+		//get all terms for the post
 		$args = array();
 		$taxonomies = get_taxonomies($args, 'objects');
 		$terms = array();
@@ -1553,9 +1517,9 @@ Class AWD_facebook
 		//no in posts to exclude
 		!in_array($post->post_type, $exclude_post_type)
 		//no in pages to exclude
-		&& !in_array($post->ID, $exclude_post_page_id)
+ 		&& !in_array($post->ID, $exclude_post_page_id)
 		//no in terms to exclude
-		&& !$is_term_to_exclude) {
+ 		&& !$is_term_to_exclude) {
 			$like_button = $this->get_the_like_button($post);
 			if ($post->post_type == 'page' && $this->options['like_button']['on_pages']) {
 				if ($this->options['like_button']['place_on_pages'] == 'bottom')
@@ -1688,15 +1652,16 @@ Class AWD_facebook
 	 */
 	public function hook_post_from_plugin_options()
 	{
-		if (isset($_POST[$this->plugin_option_pref . '_nonce_options_update_field']) && wp_verify_nonce($_POST[$this->plugin_option_pref . '_nonce_options_update_field'], $this->plugin_slug . '_update_options')) {						
+		if (isset($_POST[$this->plugin_option_pref . '_nonce_options_update_field']) && wp_verify_nonce($_POST[$this->plugin_option_pref . '_nonce_options_update_field'], $this->plugin_slug . '_update_options')) {
 			//do custom action for sub plugins or other exec.
 			do_action('AWD_facebook_save_custom_settings');
-			
+
 			//unset submit to not be stored
 			unset($_POST[$this->plugin_option_pref . '_nonce_options_update_field']);
 			unset($_POST['_wp_http_referer']);
 			if ($this->update_options_from_post()) {
 				//$this->get_facebook_user_data();
+				//TOTO update user infos here ?
 				//$this->save_facebook_user_data($this->get_current_user()->ID);
 				$this->get_app_info();
 				$this->messages['success'] = __('Options updated', $this->ptd);
@@ -1713,7 +1678,31 @@ Class AWD_facebook
 	//****************************************************************************************
 	//	USER PROFILE
 	//****************************************************************************************
-
+	/**
+	 * Set Admin Roles
+	 * Add FB capabalities to default WP roles
+	 * @return void
+	 */
+	public function set_admin_roles()
+	{
+		$roles = array('administrator' => array('manage_facebook_awd_settings', 'manage_facebook_awd_plugins', 'manage_facebook_awd_opengraph', 'manage_facebook_awd_publish_to_pages'), 'editor' => array('manage_facebook_awd_publish_to_pages', 'manage_facebook_awd_opengraph'), 'author' => array('manage_facebook_awd_publish_to_pages'));
+		$roles = apply_filters('AWD_facebook_admin_roles', $roles);
+		foreach ($roles as $role => $caps) {
+			$wp_role = get_role($role);
+			foreach ($caps as $cap) {
+				$wp_role->add_cap($cap);
+			}
+		}
+	}
+	
+	/**
+	 * Get current URL
+	 * @return string current url
+	 */
+	public function get_current_url()
+	{
+		return (empty($_SERVER['HTTPS']) ? 'http://' : 'https://') . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+	}
 	/**
 	 * The action to add special field in user profile
 	 * @param object $WP_User
@@ -1722,29 +1711,29 @@ Class AWD_facebook
 	public function user_profile_edit($user)
 	{
 
-		if (current_user_can('read')){
+		if (current_user_can('read')) {
 			echo '
-			<h3>'.__('Facebook infos', $this->ptd).'</h3>
+			<h3>' . __('Facebook infos', $this->ptd) . '</h3>
 			<table class="form-table">
 				<tr>
-					<th><label for="fb_email">'.__('Facebook Email', $this->ptd).'</label></th>
+					<th><label for="fb_email">' . __('Facebook Email', $this->ptd) . '</label></th>
 					<td>
-						<input type="text" name="fb_email" id="fb_email" value="'.esc_attr(get_user_meta($user->ID, 'fb_email', true)).'" class="regular-text" /><br />
-						<span class="description">'.__('Enter your Facebook Email', $this->ptd).'</span>
+						<input type="text" name="fb_email" id="fb_email" value="' . esc_attr(get_user_meta($user->ID, 'fb_email', true)) . '" class="regular-text" /><br />
+						<span class="description">' . __('Enter your Facebook Email', $this->ptd) . '</span>
 					</td>
 				</tr>
 				<tr>
-					<th><label for="fb_uid">'.__('Facebook ID', $this->ptd).'</label></th>
+					<th><label for="fb_uid">' . __('Facebook ID', $this->ptd) . '</label></th>
 					<td>
-						<input type="text" name="fb_uid" id="fb_uid" value="'.esc_attr(get_user_meta($user->ID, 'fb_uid', true)).'" class="regular-text" /><br />
-						<span class="description">'.__('Enter your Facebook ID', $this->ptd).'</span>
+						<input type="text" name="fb_uid" id="fb_uid" value="' . esc_attr(get_user_meta($user->ID, 'fb_uid', true)) . '" class="regular-text" /><br />
+						<span class="description">' . __('Enter your Facebook ID', $this->ptd) . '</span>
 					</td>
 				</tr>
 				<tr>
-					<th><label for="fb_reset">'.__('Unsync Facebook Account ?', $this->ptd).'</label></th>
+					<th><label for="fb_reset">' . __('Unsync Facebook Account ?', $this->ptd) . '</label></th>
 					<td>
 						<input type="checkbox" name="fb_reset" id="fb_reset" value="1" /><br />
-						<span class="description">'.__('Note: This will clear all your facebook data linked with this account.', $this->ptd).'</span>
+						<span class="description">' . __('Note: This will clear all your facebook data linked with this account.', $this->ptd) . '</span>
 					</td>
 				</tr>
 			</table>';
@@ -1794,10 +1783,10 @@ Class AWD_facebook
 
 	public function get_all_facebook_users()
 	{
-		$existings_users = $this->wpdb->get_results('SELECT DISTINCT `u`.`ID`,`u`.`display_name`,`m`.`meta_value`   FROM `'.$this->wpdb->users.'` `u` JOIN `'.$this->wpdb->usermeta.'` `m` ON `u`.`ID` = `m`.`user_id`  WHERE (`m`.`meta_key` = "fb_uid" AND `m`.`meta_value` !="" )');
+		$existings_users = $this->wpdb->get_results('SELECT DISTINCT `u`.`ID`,`u`.`display_name`,`m`.`meta_value`   FROM `' . $this->wpdb->users . '` `u` JOIN `' . $this->wpdb->usermeta . '` `m` ON `u`.`ID` = `m`.`user_id`  WHERE (`m`.`meta_key` = "fb_uid" AND `m`.`meta_value` !="" )');
 		return $existings_users;
 	}
-	
+
 	/**
 	 * Add avatar Facebook As Default
 	 * @param array $avatar_defaults
@@ -1868,7 +1857,7 @@ Class AWD_facebook
 		}
 		return false;
 	}
-	
+
 	public function get_me()
 	{
 		try {
@@ -1880,7 +1869,7 @@ Class AWD_facebook
 			return $error;
 		}
 	}
-	
+
 	public function get_permissions()
 	{
 		try {
@@ -1893,7 +1882,7 @@ Class AWD_facebook
 			return $error;
 		}
 	}
-	
+
 	public function fb_get_pages()
 	{
 		try {
@@ -1910,7 +1899,7 @@ Class AWD_facebook
 			return $error;
 		}
 	}
-	
+
 	/**
 	 * Get all facebook Data only when. Then store them.
 	 * @throws FacebookApiException
@@ -1920,24 +1909,23 @@ Class AWD_facebook
 	{
 		if ($this->uid) {
 			$return = $this->get_me();
-			if(is_wp_error($return)){
+			if (is_wp_error($return)) {
 				return $return;
 			}
 			$return = $this->get_permissions();
-			if(is_wp_error($return))
+			if (is_wp_error($return))
 				return $return;
-			
-			if($return['manage_pages'] == 1){
+
+			if ($return['manage_pages'] == 1) {
 				$return = $this->fb_get_pages();
-				if(is_wp_error($return))
+				if (is_wp_error($return))
 					return $return;
 			}
 			return true;
 		}
 		return false;
 	}
-	
-	
+
 	/**
 	 * Set all facebook Data
 	 * @return void
@@ -1951,7 +1939,7 @@ Class AWD_facebook
 	{
 		update_user_meta($user_id, 'fb_email', $this->me['email']);
 		update_user_meta($user_id, 'fb_user_infos', $this->me);
-		update_user_meta($user_id, 'fb_uid', $this->uid); 
+		update_user_meta($user_id, 'fb_uid', $this->uid);
 	}
 
 	public function clear_facebook_user_data($user_id)
@@ -1966,10 +1954,10 @@ Class AWD_facebook
 	 * @return int
 	 */
 	public function get_existing_user_from_facebook()
-	{				
-		$existing_user = $this->wpdb->get_var('SELECT DISTINCT `u`.`ID` FROM `'.$this->wpdb->users.'` `u` JOIN `'.$this->wpdb->usermeta.'` `m` ON `u`.`ID` = `m`.`user_id`
-		WHERE (`m`.`meta_key` = "fb_uid" AND `m`.`meta_value` ="'.$this->uid.'")
-		OR (`m`.`meta_key` = "fb_email" AND `m`.`meta_value`="'.$this->me['email'].'") OR (`u`.`user_email` = "'.$this->me['email'].'")  LIMIT 1 ');
+	{
+		$existing_user = $this->wpdb->get_var('SELECT DISTINCT `u`.`ID` FROM `' . $this->wpdb->users . '` `u` JOIN `' . $this->wpdb->usermeta . '` `m` ON `u`.`ID` = `m`.`user_id`
+		WHERE (`m`.`meta_key` = "fb_uid" AND `m`.`meta_value` ="' . $this->uid . '")
+		OR (`m`.`meta_key` = "fb_email" AND `m`.`meta_value`="' . $this->me['email'] . '") OR (`u`.`user_email` = "' . $this->me['email'] . '")  LIMIT 1 ');
 		if (empty($existing_user))
 			$existing_user = false;
 		return $existing_user;
@@ -1980,8 +1968,8 @@ Class AWD_facebook
 	 * @return boolean
 	 */
 	public function is_user_logged_in_facebook()
-	{	
-		if (isset($this->uid) && $this->uid != 0 && count($this->me)){
+	{
+		if (isset($this->uid) && $this->uid != 0 && count($this->me)) {
 			return true;
 		}
 		return false;
@@ -1999,8 +1987,6 @@ Class AWD_facebook
 		return $facebook_page_url;
 	}
 
-	
-
 	/**
 	 * INIT PHP SDK 3.1.1 version Modified to Change TimeOut
 	 * Connect the user here
@@ -2010,7 +1996,7 @@ Class AWD_facebook
 	{
 		$this->fcbk = new AWD_facebook_api($this->options);
 		$this->uid = $this->fcbk->getUser();
-		$this->init_facebook_user_data(wp_get_current_user()->ID);
+		$this->init_facebook_user_data($this->get_current_user()->ID);
 		//helpers vars.
 		$login_options = array('scope' => current_user_can("manage_options") ? $this->options["perms_admin"] : $this->options["perms"], 'redirect_uri' => $this->_login_url . (get_option('permalink_structure') != '' ? '?' : '&') . 'redirect_to=' . $this->get_current_url());
 		$this->_oauth_url = $this->fcbk->getLoginUrl($login_options);
@@ -2046,7 +2032,7 @@ Class AWD_facebook
 				window.fbAsyncInit = function(){
 					FB.init({
 						appId : awd_fcbk.app_id,
-						channelUrl : "'.$this->_channel_url.'",
+						channelUrl : "' . $this->_channel_url . '",
 	  					status     : true,
 	  					cookie     : true,
 	  					xfbml      : true,
@@ -2069,7 +2055,7 @@ Class AWD_facebook
 	 */
 	public function authenticate_cookie($user)
 	{
-		wp_authenticate_cookie($user,'','');
+		wp_authenticate_cookie($user, '', '');
 	}
 
 	public function register_user()
@@ -2081,17 +2067,7 @@ Class AWD_facebook
 			$i++;
 		}
 		$username = $username . $i;
-		$userdata = array(
-			'user_pass' => wp_generate_password(),
-			'user_login' => $username,
-			'user_nicename' => $username,
-			'user_email' => $this->me['email'],
-			'display_name' => $this->me['name'],
-			'nickname' => $username,
-			'first_name' => $this->me['first_name'],
-			'last_name' => $this->me['last_name'],
-			'role' => get_option('default_role'
-		));
+		$userdata = array('user_pass' => wp_generate_password(), 'user_login' => $username, 'user_nicename' => $username, 'user_email' => $this->me['email'], 'display_name' => $this->me['name'], 'nickname' => $username, 'first_name' => $this->me['first_name'], 'last_name' => $this->me['last_name'], 'role' => get_option('default_role'));
 		$userdata = apply_filters('AWD_facebook_register_userdata', $userdata);
 		$new_user = wp_insert_user($userdata);
 		//Test the creation							
@@ -2106,12 +2082,12 @@ Class AWD_facebook
 
 		return false;
 	}
-	
+
 	public function get_user_from_provider()
 	{
 		if ($this->uid) {
 			$return = $this->get_facebook_user_data();
-			if(is_wp_error($return)){
+			if (is_wp_error($return)) {
 				return $return;
 			}
 			//If user is already logged in and lauch a connect with facebook, try to change info about user account
@@ -2125,17 +2101,17 @@ Class AWD_facebook
 		}
 		return false;
 	}
-	
-	public function authenticate($user, $username='', $password='')
+
+	public function authenticate($user, $username = '', $password = '')
 	{
 		$wp_user_id = $this->get_user_from_provider();
 		//No user was found we create a new one
 		if ($wp_user_id == false && $this->uid) {
 			$wp_user_id = $this->register_user();
 		}
-		if(is_wp_error($wp_user_id)){
+		if (is_wp_error($wp_user_id)) {
 			wp_die($wp_user_id);
-		}else if(false === $wp_user_id){
+		} else if (false === $wp_user_id) {
 			//TODO redirect to entry point on facebook side ?
 			wp_die(__('Facebook AWD: You should try first to connect with Facebook.', $this->ptd));
 		}
@@ -2156,14 +2132,14 @@ Class AWD_facebook
 	 */
 	public function logout_url($url)
 	{
-		if($this->is_user_logged_in_facebook()){
+		if ($this->is_user_logged_in_facebook()) {
 			$parsing = parse_url($url);
 			if (get_option('permalink_structure') != '')
 				$redirect_url = str_replace('action=logout&amp;', '', $this->_logout_url . '?' . $parsing['query']);
 			else
 				$redirect_url = str_replace('action=logout&amp;', '', $this->_logout_url . '&' . $parsing['query']);
 
-			$logout_url = $this->fcbk->getLogoutUrl(array('access_token'=>$this->fcbk->getAccessToken(),'next' => $redirect_url.'/'));
+			$logout_url = $this->fcbk->getLogoutUrl(array('access_token' => $this->fcbk->getAccessToken(), 'next' => $redirect_url . '/'));
 
 			return $logout_url;
 		}
@@ -2177,11 +2153,11 @@ Class AWD_facebook
 		wp_logout();
 		do_action('wp_logout');
 		//if we are in an iframe or a canvas page, redirect to
-		if(!empty($redirect_url)){
+		if (!empty($redirect_url)) {
 			wp_redirect($redirect_url);
-		}elseif(!empty($referer)){
+		} elseif (!empty($referer)) {
 			wp_redirect($referer);
-		}else{
+		} else {
 			wp_redirect(home_url());
 		}
 		exit();
@@ -2196,46 +2172,46 @@ Class AWD_facebook
 		if (!empty($query)) {
 			$action = $query['action'];
 			switch ($action) {
-				//LOGIN
-				case 'login':
-					//This filter will add the authentification process
-					add_filter('authenticate', array(&$this,'authenticate'), 10, 3);
-					//This will call the filter
-					$user = wp_signon('', is_ssl());
-					//then redirect where we need.
-					if(!empty($redirect_url)){
-						wp_redirect($redirect_url);
-					}elseif(!empty($referer)){
-						wp_redirect($referer);
-					}else{
-						wp_redirect(home_url());
-					}
-					exit();
+			//LOGIN
+			case 'login':
+			//This filter will add the authentification process
+				add_filter('authenticate', array(&$this, 'authenticate'), 10, 3);
+				//This will call the filter
+				$user = wp_signon('', is_ssl());
+				//then redirect where we need.
+				if (!empty($redirect_url)) {
+					wp_redirect($redirect_url);
+				} elseif (!empty($referer)) {
+					wp_redirect($referer);
+				} else {
+					wp_redirect(home_url());
+				}
+				exit();
 				break;
 
-				//LOGOUT
-				case 'logout':
-					$this->logout($redirect_url);
+			//LOGOUT
+			case 'logout':
+				$this->logout($redirect_url);
 				break;
 
-				//UNSYNC
-				case 'unsync':
-					if ($this->is_user_logged_in_facebook()) {
-						$this->clear_facebook_user_data($this->get_current_user()->ID);
-						wp_redirect(wp_logout_url());
-					} else {
-						wp_redirect(wp_get_referer());
-					}
-					exit();
+			//UNSYNC
+			case 'unsync':
+				if ($this->is_user_logged_in_facebook()) {
+					$this->clear_facebook_user_data($this->get_current_user()->ID);
+					wp_redirect(wp_logout_url());
+				} else {
+					wp_redirect(wp_get_referer());
+				}
+				exit();
 				break;
 
-				case 'channel.html':
-					$cache_expire = 60*60*24*365;
-					header("Pragma: public");
-					header("Cache-Control: max-age=".$cache_expire);
-					header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$cache_expire) . ' GMT');
-					echo '<script src="//connect.facebook.net/en_US/all.js"></script>';
-					exit();
+			case 'channel.html':
+				$cache_expire = 60 * 60 * 24 * 365;
+				header("Pragma: public");
+				header("Cache-Control: max-age=" . $cache_expire);
+				header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $cache_expire) . ' GMT');
+				echo '<script src="//connect.facebook.net/en_US/all.js"></script>';
+				exit();
 				break;
 			}
 		}
@@ -2299,33 +2275,33 @@ Class AWD_facebook
 		$options = wp_parse_args($options, $this->options['login_button']);
 		$html = '';
 		switch (1) {
-			case ($this->is_user_logged_in_facebook() && $this->options['connect_enable'] && is_user_logged_in()):
-				$html .= '<div class="AWD_profile AWD_facebook_wrap">' . "\n";
-				if ($options['show_profile_picture'] == 1 && $options['show_faces'] == 0) {
-					$html .= '<div class="AWD_profile_image pull-left"><a href="' . $this->me['link'] . '" target="_blank" class="thumbnail"> ' . get_avatar($this->get_current_user()->ID, '50') . '</a></div>' . "\n";
-				}
-				$html .= '<div class="AWD_right">' . "\n";
-				if ($options['show_faces'] == 1) {
-					$login_button = '<fb:login-button show-faces="1" width="' . $options['width'] . '" max-rows="' . $options['max_row'] . '" size="medium"></fb:login-button>';
-					$html .= '<div class="AWD_faces">' . $login_button . '</div>' . "\n";
-				} else {
-					$html .= '<div class="AWD_name"><a href="' . $this->me['link'] . '" target="_blank">' . $this->me['name'] . '</a></div>' . "\n";
-				}
-				$html .= '<div class="AWD_logout"><a href="' . wp_logout_url($options['logout_redirect_url']) . '" class="btn btn-mini btn-danger">' . $options['logout_label'] . '</a></div>' . "\n";
-				$html .= '</div>' . "\n";
-				$html .= '<div class="clear"></div>' . "\n";
-				$html .= '</div>' . "\n";
-				return $html;
+		case ($this->is_user_logged_in_facebook() && $this->options['connect_enable'] && is_user_logged_in()):
+			$html .= '<div class="AWD_profile AWD_facebook_wrap">' . "\n";
+			if ($options['show_profile_picture'] == 1 && $options['show_faces'] == 0) {
+				$html .= '<div class="AWD_profile_image pull-left"><a href="' . $this->me['link'] . '" target="_blank" class="thumbnail"> ' . get_avatar($this->get_current_user()->ID, '50') . '</a></div>' . "\n";
+			}
+			$html .= '<div class="AWD_right">' . "\n";
+			if ($options['show_faces'] == 1) {
+				$login_button = '<fb:login-button show-faces="1" width="' . $options['width'] . '" max-rows="' . $options['max_row'] . '" size="medium"></fb:login-button>';
+				$html .= '<div class="AWD_faces">' . $login_button . '</div>' . "\n";
+			} else {
+				$html .= '<div class="AWD_name"><a href="' . $this->me['link'] . '" target="_blank">' . $this->me['name'] . '</a></div>' . "\n";
+			}
+			$html .= '<div class="AWD_logout"><a href="' . wp_logout_url($options['logout_redirect_url']) . '" class="btn btn-mini btn-danger">' . $options['logout_label'] . '</a></div>' . "\n";
+			$html .= '</div>' . "\n";
+			$html .= '<div class="clear"></div>' . "\n";
+			$html .= '</div>' . "\n";
+			return $html;
 			break;
-			case $this->options['connect_enable']:
-				return '
+		case $this->options['connect_enable']:
+			return '
 					<div class="AWD_facebook_login">
-						<a href="#" class="AWD_facebook_connect_button" data-redirect="'.(isset($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : urlencode($options['login_redirect_url'])).'"><img src="' . $options['image'] . '" border="0" alt="Login"/></a>
+						<a href="#" class="AWD_facebook_connect_button" data-redirect="' . (isset($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : urlencode($options['login_redirect_url'])) . '"><img src="' . $options['image'] . '" border="0" alt="Login"/></a>
 					</div>' . "\n";
-				break;
-			default:
-				if (is_admin())
-					return $this->display_messages(sprintf(__('You should enable FB connect in %sApp settings%s', $this->ptd), '<a href="admin.php?page=' . $this->plugin_slug . '">', '</a>'), 'warning', false);
+			break;
+		default:
+			if (is_admin())
+				return $this->display_messages(sprintf(__('You should enable FB connect in %sApp settings%s', $this->ptd), '<a href="admin.php?page=' . $this->plugin_slug . '">', '</a>'), 'warning', false);
 			break;
 		}
 	}
@@ -2393,76 +2369,74 @@ Class AWD_facebook
 		$url = get_permalink($post->ID);
 		$custom = get_post_meta($id, $this->plugin_slug, true);
 		$options = array();
-		if (isset($custom)){
+		if (isset($custom)) {
 			$options = $custom;
 		}
 		$options = wp_parse_args($options, $this->options['content_manager']);
 		$form = new AWD_facebook_form('form_posts_settings', 'POST', '', $this->plugin_option_pref);
 		echo '
 	 	<div class="AWD_facebook_wrap">
-			'.do_action('AWD_facebook_admin_notices').'
-			<h2>'.__('Like Button', $this->ptd).'</h2>';
-			if($url != ''){
-				echo '
-				<div class="alert alert-info">
-					'.do_shortcode('[AWD_likebutton width="250" href="' . $url . '"]').'
-				</div>';
-			}
+			' . do_action('AWD_facebook_admin_notices') . '
+			<h2>' . __('Like Button', $this->ptd) . '</h2>';
+		if ($url != '') {
 			echo '
+				<div class="alert alert-info">
+					' . do_shortcode('[AWD_likebutton width="250" href="' . $url . '"]') . '
+				</div>';
+		}
+		echo '
 			<div class="row">
-				'.$form->addSelect(__('Redefine globals settings ?', $this->ptd), 'like_button[redefine]', array(array('value' => 0, 'label' => __('No', $this->ptd)), array('value' => 1, 'label' => __('Yes', $this->ptd))), $options['like_button']['redefine'], 'span3', array('class' => 'span3')).'
-				'.$form->addSelect(__('Activate ?', $this->ptd), 'like_button[enabled]', array(array('value' => 0, 'label' => __('No', $this->ptd)), array('value' => 1, 'label' => __('Yes', $this->ptd))), $options['like_button']['enabled'], 'span3', array('class' => 'span3')).'
-				'.$form->addSelect(__('Where ?', $this->ptd), 'like_button[place]', array(array('value' => 'top', 'label' => __('Top', $this->ptd)), array('value' => 'bottom', 'label' => __('Bottom', $this->ptd)), array('value' => 'both', 'label' => __('Both', $this->ptd))), $options['like_button']['place'], 'span3', array('class' => 'span3')).'
+				' . $form->addSelect(__('Redefine globals settings ?', $this->ptd), 'like_button[redefine]', array(array('value' => 0, 'label' => __('No', $this->ptd)), array('value' => 1, 'label' => __('Yes', $this->ptd))), $options['like_button']['redefine'], 'span3', array('class' => 'span3')) . '
+				' . $form->addSelect(__('Activate ?', $this->ptd), 'like_button[enabled]', array(array('value' => 0, 'label' => __('No', $this->ptd)), array('value' => 1, 'label' => __('Yes', $this->ptd))), $options['like_button']['enabled'], 'span3', array('class' => 'span3')) . '
+				' . $form->addSelect(__('Where ?', $this->ptd), 'like_button[place]', array(array('value' => 'top', 'label' => __('Top', $this->ptd)), array('value' => 'bottom', 'label' => __('Bottom', $this->ptd)), array('value' => 'both', 'label' => __('Both', $this->ptd))), $options['like_button']['place'], 'span3', array('class' => 'span3')) . '
 			</div>';
-			
 
-			if(current_user_can('manage_facebook_awd_publish_to_pages')){
-				echo '<h2>'.__('Publish to Facebook', $this->ptd).'</h2>';
-				if ($this->is_user_logged_in_facebook()) {
-					if ($this->current_facebook_user_can('publish_stream')) {
-						if ($this->current_facebook_user_can('manage_pages')) {
-							echo '<div class="row">';
-							echo $form->addSelect(__('Publish to pages ?', $this->ptd), 'fbpublish[to_pages]', array(array('value' => 0, 'label' => __('No', $this->ptd)), array('value' => 1, 'label' => __('Yes', $this->ptd))), $options['fbpublish']['to_pages'], 'span3', array('class' => 'span3'));
-							echo $form->addSelect(__('Publish to profile ?', $this->ptd), 'fbpublish[to_profile]', array(array('value' => 0, 'label' => __('No', $this->ptd)), array('value' => 1, 'label' => __('Yes', $this->ptd))), $options['fbpublish']['to_profile'], 'span3', array('class' => 'span3'));
-							echo $form->addInputText(__('Custom Action Label', $this->ptd), 'fbpublish[read_more_text]', $options['fbpublish']['read_more_text'], 'span3', array('class' => 'span3'));
-							echo $form->addInputTextArea(__('Add a message to the post ?', $this->ptd), 'fbpublish[message_text]', $options['fbpublish']['message_text'], 'span3', array('class' => 'span3'));
-							echo '</div>';
-						} else {
-							$this->warnings[] = new WP_Error('AWD_facebook_pages_auth', __('You must authorize manage_pages permission in the settings of the plugin', $this->ptd));
-							$this->display_all_errors();
-						}
+		if (current_user_can('manage_facebook_awd_publish_to_pages')) {
+			echo '<h2>' . __('Publish to Facebook', $this->ptd) . '</h2>';
+			if ($this->is_user_logged_in_facebook()) {
+				if ($this->current_facebook_user_can('publish_stream')) {
+					if ($this->current_facebook_user_can('manage_pages')) {
+						echo '<div class="row">';
+						echo $form->addSelect(__('Publish to pages ?', $this->ptd), 'fbpublish[to_pages]', array(array('value' => 0, 'label' => __('No', $this->ptd)), array('value' => 1, 'label' => __('Yes', $this->ptd))), $options['fbpublish']['to_pages'], 'span3', array('class' => 'span3'));
+						echo $form->addSelect(__('Publish to profile ?', $this->ptd), 'fbpublish[to_profile]', array(array('value' => 0, 'label' => __('No', $this->ptd)), array('value' => 1, 'label' => __('Yes', $this->ptd))), $options['fbpublish']['to_profile'], 'span3', array('class' => 'span3'));
+						echo $form->addInputText(__('Custom Action Label', $this->ptd), 'fbpublish[read_more_text]', $options['fbpublish']['read_more_text'], 'span3', array('class' => 'span3'));
+						echo $form->addInputTextArea(__('Add a message to the post ?', $this->ptd), 'fbpublish[message_text]', $options['fbpublish']['message_text'], 'span3', array('class' => 'span3'));
+						echo '</div>';
 					} else {
-						$this->warnings[] = new WP_Error('AWD_facebook_pages_auth_publish_stream', __('You must authorize publish_stream permission in the settings of the plugin', $this->ptd));
+						$this->warnings[] = new WP_Error('AWD_facebook_pages_auth', __('You must authorize manage_pages permission in the settings of the plugin', $this->ptd));
 						$this->display_all_errors();
 					}
 				} else {
-					echo '<p>' . do_shortcode('[AWD_loginbutton]') . '</p>';
+					$this->warnings[] = new WP_Error('AWD_facebook_pages_auth_publish_stream', __('You must authorize publish_stream permission in the settings of the plugin', $this->ptd));
+					$this->display_all_errors();
 				}
+			} else {
+				echo '<p>' . do_shortcode('[AWD_loginbutton]') . '</p>';
 			}
-			if (current_user_can('manage_facebook_awd_opengraph')){
-				if($this->options['open_graph_enable'] == 1){
-					echo '<h2>'.__('Opengraph', $this->ptd).'</h2>';		
-					$add_link = '<a class="btn btn btn-mini" href="'.admin_url('admin.php?page=' . $this->plugin_slug . '_open_graph') . '" target="_blank"><i class="icon-plus"></i> ' . __('Create an object', $this->ptd) . '</a>';
-					$ogp_objects = apply_filters('AWD_facebook_ogp_objects', $this->options['opengraph_objects']);
-					if (is_array($ogp_objects) && count($ogp_objects)) {
-						$linked_object = '';
-						$select_objects_options = array(array('value' => '', 'label' => __('Default', $this->ptd)));
-						foreach ($ogp_objects as $key => $ogp_object) {
-							$select_objects_options[] = array('value' => $key, 'label' => $ogp_object['object_title']);
-						}
-						echo '
-						<div class="row">
-							'.$form->addSelect(__('Redefine Opengraph object for this post', $this->ptd), 'opengraph[object_link]', $select_objects_options, $options['opengraph']['object_link'], 'span3', array('class' => 'span3')).'
-						</div>'.$add_link;
-					}else{
-						$this->display_messages(
-						sprintf(__('No Object found.', $this->ptd) . ' ' . $add_link, '<a href="' . admin_url('admin.php?page=' . $this->plugin_slug . '_open_graph') . '" target="_blank">', '</a>'), 'warning');
+		}
+		if (current_user_can('manage_facebook_awd_opengraph')) {
+			if ($this->options['open_graph_enable'] == 1) {
+				echo '<h2>' . __('Opengraph', $this->ptd) . '</h2>';
+				$add_link = '<a class="btn btn btn-mini" href="' . admin_url('admin.php?page=' . $this->plugin_slug . '_open_graph') . '" target="_blank"><i class="icon-plus"></i> ' . __('Create an object', $this->ptd) . '</a>';
+				$ogp_objects = apply_filters('AWD_facebook_ogp_objects', $this->options['opengraph_objects']);
+				if (is_array($ogp_objects) && count($ogp_objects)) {
+					$linked_object = '';
+					$select_objects_options = array(array('value' => '', 'label' => __('Default', $this->ptd)));
+					foreach ($ogp_objects as $key => $ogp_object) {
+						$select_objects_options[] = array('value' => $key, 'label' => $ogp_object['object_title']);
 					}
+					echo '
+						<div class="row">
+							' . $form->addSelect(__('Redefine Opengraph object for this post', $this->ptd), 'opengraph[object_link]', $select_objects_options, $options['opengraph']['object_link'], 'span3', array('class' => 'span3')) . '
+						</div>' . $add_link;
+				} else {
+					$this->display_messages(sprintf(__('No Object found.', $this->ptd) . ' ' . $add_link, '<a href="' . admin_url('admin.php?page=' . $this->plugin_slug . '_open_graph') . '" target="_blank">', '</a>'), 'warning');
 				}
 			}
-		
+		}
+
 		echo '
-		</div>';						
+		</div>';
 	}
 
 	//****************************************************************************************
@@ -2475,7 +2449,7 @@ Class AWD_facebook
 	 */
 	public function shortcode_shared_activity_box($atts = array())
 	{
-		 return $this->get_the_shared_activity_box($atts);
+		return $this->get_the_shared_activity_box($atts);
 	}
 
 	/**
@@ -2494,7 +2468,6 @@ Class AWD_facebook
 		}
 	}
 
-
 	//****************************************************************************************
 	//	COMMENT BOX
 	//****************************************************************************************
@@ -2505,11 +2478,10 @@ Class AWD_facebook
 	 */
 	public function shortcode_comments_box($atts = array())
 	{
-		 global $post;
-		 return $this->get_the_comments_box($post, $atts);
+		global $post;
+		return $this->get_the_comments_box($post, $atts);
 	}
 
-	
 	/**
 	 * @return the comment box
 	 * @param WP_Post object $post
@@ -2571,22 +2543,22 @@ Class AWD_facebook
 	public function get_the_like_box($options = array())
 	{
 		$options = wp_parse_args($options, $this->options['like_box']);
-	 	try {
+		try {
 			$AWD_facebook_likebox = new AWD_facebook_likebox($options);
 			return '<div class="AWD_facebook_likebox">' . $AWD_facebook_likebox->get() . '</div>';
-	 	} catch (Exception $e) {
+		} catch (Exception $e) {
 			return $this->display_messages($e->getMessage(), 'error', false);
-	 	}
+		}
 	}
 
 	//****************************************************************************************
 	//	ACTIVITY BOX 
 	//****************************************************************************************
 	/**
-	* @return the Activity Box shortcode
-	* @param array $atts
-	* @return string
-	*/
+	 * @return the Activity Box shortcode
+	 * @param array $atts
+	 * @return string
+	 */
 	public function shortcode_activity_box($atts = array())
 	{
 		return $this->get_the_activity_box($atts);
@@ -2603,7 +2575,7 @@ Class AWD_facebook
 		try {
 			$AWD_facebook_activity = new AWD_facebook_activity($options);
 			return '<div class="AWD_facebook_activity">' . $AWD_facebook_activity->get() . '</div>';
-		}catch (Exception $e){
+		} catch (Exception $e) {
 			return $this->display_messages($e->getMessage(), 'error', false);
 		}
 	}
@@ -2612,86 +2584,29 @@ Class AWD_facebook
 	//	REGISTER WIDGET
 	//****************************************************************************************
 	/**
-	* Like box register widgets
-	* @return void
-	*/
+	 * Like box register widgets
+	 * @return void
+	 */
 	public function register_AWD_facebook_widgets()
 	{
 		global $wp_widget_factory;
 		require(dirname(__FILE__) . '/inc/admin/forms/like_box.php');
-		$wp_widget_factory->widgets['AWD_facebook_widget_likebox'] = new AWD_facebook_widget(
-			array(
-				'id_base' => 'like_box',
-				'name' => $this->plugin_name . ' ' . __('Like Box', $this->ptd),
-				'description' => __('Add a Facebook Like Box', $this->ptd),
-				'model' => $fields['like_box'],
-				'self_callback' => array($this, 'shortcode_like_box'),
-				'text_domain' => $this->ptd,
-				'preview' => true
-			)
-		);
+		$wp_widget_factory->widgets['AWD_facebook_widget_likebox'] = new AWD_facebook_widget(array('id_base' => 'like_box', 'name' => $this->plugin_name . ' ' . __('Like Box', $this->ptd), 'description' => __('Add a Facebook Like Box', $this->ptd), 'model' => $fields['like_box'], 'self_callback' => array($this, 'shortcode_like_box'), 'text_domain' => $this->ptd, 'preview' => true));
 
 		require(dirname(__FILE__) . '/inc/admin/forms/like_button.php');
-		$wp_widget_factory->widgets['AWD_facebook_widget_like_button'] = new AWD_facebook_widget(
-			array(
-				'id_base' => 'like_button',
-				'name' => $this->plugin_name . ' ' . __('Like Button', $this->ptd),
-				'description' => __('Add a Facebook Like Button', $this->ptd),
-				'model' => $fields['like_button'],
-				'self_callback' => array($this, 'shortcode_like_button'),
-				'text_domain' => $this->ptd,
-				'preview' => true
-			)
-		);
+		$wp_widget_factory->widgets['AWD_facebook_widget_like_button'] = new AWD_facebook_widget(array('id_base' => 'like_button', 'name' => $this->plugin_name . ' ' . __('Like Button', $this->ptd), 'description' => __('Add a Facebook Like Button', $this->ptd), 'model' => $fields['like_button'], 'self_callback' => array($this, 'shortcode_like_button'), 'text_domain' => $this->ptd, 'preview' => true));
 
 		require(dirname(__FILE__) . '/inc/admin/forms/login_button.php');
-		$wp_widget_factory->widgets['AWD_facebook_widget_login_button'] = new AWD_facebook_widget(
-			array(
-				'id_base' => 'login_button',
-				'name' => $this->plugin_name . ' ' . __('Login Button', $this->ptd),
-				'description' => __('Add a Facebook Login Button', $this->ptd),
-				'model' => $fields['login_button'],
-				'self_callback' => array($this, 'shortcode_login_button'),
-				'text_domain' => $this->ptd
-			)
-		);
+		$wp_widget_factory->widgets['AWD_facebook_widget_login_button'] = new AWD_facebook_widget(array('id_base' => 'login_button', 'name' => $this->plugin_name . ' ' . __('Login Button', $this->ptd), 'description' => __('Add a Facebook Login Button', $this->ptd), 'model' => $fields['login_button'], 'self_callback' => array($this, 'shortcode_login_button'), 'text_domain' => $this->ptd));
 
 		require(dirname(__FILE__) . '/inc/admin/forms/activity_box.php');
-		$wp_widget_factory->widgets['AWD_facebook_widget_activity_box'] = new AWD_facebook_widget(
-			array(
-				'id_base' => 'activity_box',
-			 	'name' => $this->plugin_name . ' ' . __('Activity Box', $this->ptd),
-			 	'description' => __('Add a Facebook Activity Box', $this->ptd),
-			 	'model' => $fields['activity_box'],
-			 	'self_callback' => array($this, 'shortcode_activity_box'),
-			 	'text_domain' => $this->ptd,
-			 	'preview' => true
-			 )
-		);
+		$wp_widget_factory->widgets['AWD_facebook_widget_activity_box'] = new AWD_facebook_widget(array('id_base' => 'activity_box', 'name' => $this->plugin_name . ' ' . __('Activity Box', $this->ptd), 'description' => __('Add a Facebook Activity Box', $this->ptd), 'model' => $fields['activity_box'], 'self_callback' => array($this, 'shortcode_activity_box'), 'text_domain' => $this->ptd, 'preview' => true));
 
 		require(dirname(__FILE__) . '/inc/admin/forms/comments_box.php');
-		$wp_widget_factory->widgets['AWD_facebook_widget_comments_box'] = new AWD_facebook_widget(
-			array(
-				'id_base' => 'comments_box',
-				'name' => $this->plugin_name . ' ' . __('Comments Box', $this->ptd),
-				'description' => __('Add a Facebook Comments Box', $this->ptd),
-				'model' => $fields['comments_box'], 
-				'self_callback' => array($this, 'shortcode_comments_box'),
-				'text_domain' => $this->ptd
-			)
-		);
+		$wp_widget_factory->widgets['AWD_facebook_widget_comments_box'] = new AWD_facebook_widget(array('id_base' => 'comments_box', 'name' => $this->plugin_name . ' ' . __('Comments Box', $this->ptd), 'description' => __('Add a Facebook Comments Box', $this->ptd), 'model' => $fields['comments_box'], 'self_callback' => array($this, 'shortcode_comments_box'), 'text_domain' => $this->ptd));
 
 		require(dirname(__FILE__) . '/inc/admin/forms/shared_activity_box.php');
-		$wp_widget_factory->widgets['AWD_facebook_shared_activity_box'] = new AWD_facebook_widget(
-			array(
-				'id_base' => 'shared_activity_box',
-				'name' => $this->plugin_name . ' ' . __('Shared Activity Box', $this->ptd),
-				'description' => __('Add a Facebook Shared Activity Box', $this->ptd),
-				'model' => $fields['shared_activity_box'], 
-				'self_callback' => array($this, 'shortcode_shared_activity_box'),
-				'text_domain' => $this->ptd
-			)
-		);
+		$wp_widget_factory->widgets['AWD_facebook_shared_activity_box'] = new AWD_facebook_widget(array('id_base' => 'shared_activity_box', 'name' => $this->plugin_name . ' ' . __('Shared Activity Box', $this->ptd), 'description' => __('Add a Facebook Shared Activity Box', $this->ptd), 'model' => $fields['shared_activity_box'], 'self_callback' => array($this, 'shortcode_shared_activity_box'), 'text_domain' => $this->ptd));
 
 		do_action('AWD_facebook_register_widgets');
 	}
@@ -2700,9 +2615,9 @@ Class AWD_facebook
 	//	DEBUG AND DEV
 	//****************************************************************************************
 	/**
-	* Debug
-	* @return void
-	*/
+	 * Debug
+	 * @return void
+	 */
 	public function debug_content()
 	{
 		if ($this->options['debug_enable'] == 1) {
@@ -2716,31 +2631,31 @@ Class AWD_facebook
 				<div class="container-fluid">
 					<div class="awd_debug well">
 						<div class="page-header">
-							<h2>'.__('Facebook AWD API', $this->ptd).'</h2>
+							<h2>' . __('Facebook AWD API', $this->ptd) . '</h2>
 						</div>
 						';
-						$this->Debug($_this['fcbk']);
-						echo '
+			$this->Debug($_this['fcbk']);
+			echo '
 						<div class="page-header">
-							<h2>'.__('Facebook AWD APPLICATIONS INFOS', $this->ptd).'</h2>
+							<h2>' . __('Facebook AWD APPLICATIONS INFOS', $this->ptd) . '</h2>
 						</div>';
-						$this->Debug($_this['options']['app_infos']);
-						echo '
+			$this->Debug($_this['options']['app_infos']);
+			echo '
 						<div class="page-header">
-							<h2>'.__('Facebook AWD CURRENT USER', $this->ptd).'</h2>
+							<h2>' . __('Facebook AWD CURRENT USER', $this->ptd) . '</h2>
 						</div>';
-						$this->Debug($_this['me']);
-						echo '
+			$this->Debug($_this['me']);
+			echo '
 						<div class="page-header">
-							<h2>'.__('Facebook AWD Options', $this->ptd).'</h2>
+							<h2>' . __('Facebook AWD Options', $this->ptd) . '</h2>
 						</div>';
-						$this->Debug($_this['options']);
-						echo '
+			$this->Debug($_this['options']);
+			echo '
 						<div class="page-header">
-							<h2>'.__('Facebook AWD FULL', $this->ptd).'</h2>
+							<h2>' . __('Facebook AWD FULL', $this->ptd) . '</h2>
 						</div>';
-						$this->Debug($_this);
-					echo '
+			$this->Debug($_this);
+			echo '
 					</div>
 				</div>
 			</div>
@@ -2748,23 +2663,6 @@ Class AWD_facebook
 		}
 	}
 }
-
-//****************************************************************************************
-//	LIBRARY FACEBOOK AWD
-//****************************************************************************************
-require_once(dirname(__FILE__) . '/inc/classes/facebook/class.AWD_facebook_api.php');
-require_once(dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_likebutton.php');
-require_once(dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_activity.php');
-require_once(dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_shared_activity.php');
-require_once(dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_likebox.php');
-require_once(dirname(__FILE__) . '/inc/classes/model/class.AWD_facebook_comments.php');
-require_once(dirname(__FILE__) . '/inc/classes/tools/class.AWD_facebook_widget.php');
-require_once(dirname(__FILE__) . '/inc/classes/tools/class.AWD_facebook_form.php');
-require_once(dirname(__FILE__) . '/inc/classes/tools/class.AWD_facebook_options.php');
-require_once(dirname(__FILE__) . '/inc/classes/tools/opengraph_protocol_tools/media.php');
-require_once(dirname(__FILE__) . '/inc/classes/tools/opengraph_protocol_tools/objects.php');
-require_once(dirname(__FILE__) . '/inc/classes/tools/opengraph_protocol_tools/opengraph-protocol.php');
-require_once(dirname(__FILE__) . '/inc/classes/tools/getid3/getid3.php');
 
 //Object Plugin.
 $AWD_facebook = new AWD_facebook();
