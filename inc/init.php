@@ -58,6 +58,8 @@ add_filter('query_vars',array(&$this,'insert_query_vars' ));
 add_action('wp_loaded',array(&$this,'flush_rules' ));
 add_action('parse_query',array(&$this,'parse_request' ));
 add_filter('logout_url',array(&$this,'logout_url'));
+add_action('save_post', array(&$this, 'save_options_post_editor'));
+
 //remove frame security header to allow the website admin to work in iframe
 remove_action( 'login_init', 'send_frame_options_header');
 remove_action( 'admin_init', 'send_frame_options_header');

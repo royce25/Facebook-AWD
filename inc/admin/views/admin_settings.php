@@ -116,6 +116,8 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 										</thead>
 										<tbody>';
 										foreach($fb_pages as $fb_page){
+											if($fb_page['category'] == 'Application')
+												continue;
 											$value = isset($this->options['fb_publish_to_pages'][$fb_page['id']]) ? $this->options['fb_publish_to_pages'][$fb_page['id']] : 0;
 											$select = $form->addSelect('', 'fb_publish_to_pages['.$fb_page['id'].']', array(
 												array('value'=>0, 'label'=>__('No',$this->ptd)),

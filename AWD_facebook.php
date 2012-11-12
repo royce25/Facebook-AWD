@@ -315,6 +315,7 @@ Class AWD_facebook
 	//****************************************************************************************
 	/**
 	 * missing config notices
+	 * 
 	 * @return void
 	 */
 	public function missing_config()
@@ -329,6 +330,7 @@ Class AWD_facebook
 
 	/**
 	 * Display Error in admin Facebook AWD area
+	 * 
 	 * @return void
 	 */
 	public function display_all_errors()
@@ -355,6 +357,7 @@ Class AWD_facebook
 
 	/**
 	 * Display Message in admin Facebook AWD area
+	 * 
 	 * @return void
 	 */
 	public function display_messages($message = null, $type = 'info', $echo = true)
@@ -378,6 +381,7 @@ Class AWD_facebook
 	/**
 	 * Getter
 	 * Help in the plugin tooltip
+	 * 
 	 * @param string $elem
 	 * @param string $class
 	 * @param string $image
@@ -394,6 +398,7 @@ Class AWD_facebook
 
 	/**
 	 * Checks if we should add links to the bar.
+	 * 
 	 * @return void
 	 */
 	public function admin_bar_init()
@@ -406,6 +411,7 @@ Class AWD_facebook
 
 	/**
 	 * Add links to the Admin bar.
+	 * 
 	 * @return void
 	 */
 	public function admin_bar_links()
@@ -440,49 +446,37 @@ Class AWD_facebook
 
 	/**
 	 * Save customs fields during post edition
+	 * This will be called on sheduled post too
+	 * WARNING Sheduled posts published event is only fired when someone hit the website. 
+	 * The publish to facebook hook is anonimous as we store the pages's access token.
+	 * 
 	 * @param int $post_id
 	 * @return void
 	 */
 	public function save_options_post_editor($post_id)
 	{
-		$fb_publish_to_pages = false;
-		$fb_publish_to_user = false;
-		$post = get_post($post_id);
-		if (!wp_is_post_revision($post->ID)) {
+		if (!wp_is_post_revision($post_id)) {
+			$fb_publish_to_pages = false;
+			$fb_publish_to_user = false;
+			$post = get_post($post_id);
+			$options = get_post_meta($post_id, $this->plugin_slug, true);
 			$narray = array();
 			foreach ($_POST as $__post => $val) {
-				//should have ogtags in prefix present to be saved
 				if (preg_match('@' . $this->plugin_option_pref . '@', $__post)) {
 					$name = str_ireplace($this->plugin_option_pref, '', $__post);
-					$narray[$name] = $val;
+					$options[$name] = $val;
 				}
 			}
-			update_post_meta($post->ID, $this->plugin_slug, $narray);
-			//check if the post is published
-			if ($post->post_status == 'publish') {
-				//check if facebook user before to try to publish
-				if ($this->is_user_logged_in_facebook()) {
-					//Publish to Graph api
-					$message = $_POST[$this->plugin_option_pref . 'fbpublish']['message_text'];
-					$read_more_text = $_POST[$this->plugin_option_pref . 'fbpublish']['read_more_text'];
-					//Check if we want to publish on facebook pages and profile
-					if ($_POST[$this->plugin_option_pref . 'fbpublish']['to_pages'] == 1 && $this->current_facebook_user_can('publish_stream') && $this->current_facebook_user_can('manage_pages')) {
-						$fb_publish_to_pages = $this->get_pages_to_publish();
-						if (count($fb_publish_to_pages) > 0) {
-							$this->publish_post_to_facebook($message, $read_more_text, $fb_publish_to_pages, $post->ID);
-						}
-					}
-					//Check if we want to publish on facebook pages and profile
-					if ($_POST[$this->plugin_option_pref . 'fbpublish']['to_profile'] == 1 && $this->current_facebook_user_can('publish_stream')) {
-						$this->publish_post_to_facebook($message, $read_more_text, $this->uid, $post->ID);
-					}
-				}
-			}
+			//$options = array_merge($options, $narray);			
+			update_post_meta($post->ID, $this->plugin_slug, $options);			
+			$this->publish_post_hook($post);
 		}
 	}
-
+	
+	
 	/**
 	 * Add footer text ads Facebook AWD version
+	 * 
 	 * @param string $footer_text
 	 * @return string
 	 */
@@ -498,7 +492,6 @@ Class AWD_facebook
 	 */
 	public function admin_menu()
 	{
-		add_action('save_post', array(&$this, 'save_options_post_editor'));
 		//admin hook
 		$this->blog_admin_page_hook = add_menu_page($this->plugin_page_admin_name, __($this->plugin_name, $this->ptd), 'manage_facebook_awd_publish_to_pages', $this->plugin_slug, array($this, 'admin_content'), $this->plugin_url_images . 'facebook-mini.png', $this->blog_admin_hook_position);
 		$this->blog_admin_settings_hook = add_submenu_page($this->plugin_slug, __('Settings', $this->ptd), '<img src="' . $this->plugin_url_images . 'settings.png" /> ' . __('Settings', $this->ptd), 'manage_facebook_awd_publish_to_pages', $this->plugin_slug);
@@ -1563,15 +1556,51 @@ Class AWD_facebook
 	//****************************************************************************************
 	//	PUBLISH TO FACEBOOK
 	//****************************************************************************************
+	
+	public function publish_post_hook($post)
+	{
+		//check if the post is published
+		if ($post->post_status == 'publish') {
+			//Publish to Graph api
+			$options = get_post_meta($post->ID, "awd_fcbk", true);
+			$options_publish = $options["fbpublish"];
+			$message = $options_publish['message_text'];
+			$read_more_text = $options_publish['read_more_text'];				
+			//Check if we want to publish on facebook pages and profile as anonimous, access token  stored inside options.
+			if ($options_publish['to_pages'] == 1) {
+				$fb_publish_to_pages = $this->get_pages_to_publish($post->post_author);
+				if (count($fb_publish_to_pages) > 0){
+					$this->publish_post_to_facebook($message, $read_more_text, $fb_publish_to_pages, $post->ID);
+				}
+			}
+			//Check if we want to publish on profile
+			if ($this->is_user_logged_in_facebook()) {
+				if ($options_publish['to_profile'] == 1 && $this->current_facebook_user_can('publish_stream')) {
+					$this->publish_post_to_facebook($message, $read_more_text, $this->uid, $post->ID);
+				}
+			}
+		}
+	}
+	
+	
 	/**
 	 * All pages the user authorize to publish on.
 	 * @return array All Facebook pages linked by user
 	 */
-	public function get_pages_to_publish()
+	public function get_pages_to_publish($user_id = null)
 	{
-		//construct the array
+		//First try to get the pages of the current user.
+		if($user_id == null){
+			$me = $this->me;
+		}else{
+			$me = get_user_meta($user_id, "fb_user_infos", true);
+		}
+		$pages = array();
+		if(isset($me['pages'])){
+			$pages = $me['pages'];
+		}
 		$publish_to_pages = array();
-		foreach ($this->me['pages'] as $fb_page) {
+		foreach($pages as $fb_page) {
 			//if pages are in the array of option to publish on,
 			if (isset($this->options['fb_publish_to_pages'][$fb_page['id']])) {
 				if ($this->options['fb_publish_to_pages'][$fb_page['id']] == 1) {
@@ -1598,12 +1627,12 @@ Class AWD_facebook
 		$fb_queries = array();
 		$permalink = get_permalink($post_id);
 		if (is_array($to_pages) && count($to_pages) > 0) {
-			foreach ($to_pages as $fbpage) {
+			foreach ($to_pages as $fbpage) {				
 				$feed_dir = '/' . $fbpage['id'] . '/feed/';
 				$params = array('access_token' => $fbpage['access_token'], 'message' => stripcslashes($message), 'link' => $permalink, 'actions' => array(array('name' => stripcslashes($read_more_text), 'link' => $permalink)));
 				try {
 					//try to post batch request to publish on all pages asked + profile at one time
-					$post_id = $this->fcbk->api($feed_dir, 'POST', $params);
+					$post_id = $this->fcbk->api($feed_dir, 'POST', $params);						
 					return $post_id;
 				} catch (FacebookApiException $e) {
 					$error = new WP_Error($e->getCode(), $e->getMessage());
@@ -1624,6 +1653,8 @@ Class AWD_facebook
 		}
 		return $result;
 	}
+	
+
 
 	/**
 	 * Update options when settings are updated.
