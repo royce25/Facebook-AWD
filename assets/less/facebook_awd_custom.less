@@ -96,6 +96,8 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1B4362', endColorstr='#182E3F', GradientType=0);
 }
+.no-border-radius{border-radius:0;}
+
 .tab-content{
 	padding: 5px;
 }
@@ -112,5 +114,19 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 }
 .AWD_profile_image{
 	margin-right:10px;
+}
+
+/* Widget for admin display a block list item */
+.list_item{
+	h2{
+		margin: 0 !important;
+		.hndle;
+		border-radius: 5px 5px 0px 0px; 
+		padding: 2px 2px 2px 10px !important;
+	}
+	.thumbnail{
+		border-radius: 0px 0px 4px 4px;
+	}
+	padding: 0px;
 }
 

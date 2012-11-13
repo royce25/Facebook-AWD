@@ -2264,7 +2264,7 @@ Class AWD_facebook
 						wp_redirect(home_url());
 					}
 					exit();
-					break;
+				break;
 	
 				//LOGOUT
 				case 'logout':
@@ -2280,7 +2280,7 @@ Class AWD_facebook
 						wp_redirect(wp_get_referer());
 					}
 					exit();
-					break;
+				break;
 	
 				case 'channel.html':
 					$cache_expire = 60 * 60 * 24 * 365;
@@ -2289,7 +2289,7 @@ Class AWD_facebook
 					header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $cache_expire) . ' GMT');
 					echo '<script src="//connect.facebook.net/en_US/all.js"></script>';
 					exit();
-					break;
+				break;
 				
 				case 'deauthorize':
 					$sr = $this->fcbk->getSignedRequest();

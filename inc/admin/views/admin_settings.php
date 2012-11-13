@@ -77,19 +77,35 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 							?>
 						</div>
 						<br />
-						<h1><?php _e("Facebook Realtime API",$this->ptd); ?> <a href="https://developers.facebook.com/apps/<?php echo $this->options['app_id']; ?>/realtime" class="btn btn-info btn-mini" target="_blank"><?php _e("Manage Subscriptions",$this->ptd); ?></a></h1>						
+						<h1><?php _e("Facebook Realtime API",$this->ptd); ?></h1>						
 						
 						<div class="alert alert-info">
-							<?php _e("This plugin can keep user data sync in realtime when they datas change on the facebook side. If you want to use this feature, you must configure the realtime api in your facebook application settings, on the facebook developer website.", $this->ptd); ?>
-							<a target="_blank" href="https://developers.facebook.com/docs/reference/api/realtime/" class="btn btn-mini"><?php _e("Learn more",$this->ptd); ?></a>	
+							<?php _e("This plugin can keep user data sync in realtime when they change on the facebook side. Normally the plugin wait the user loggin action to fetch new data. If you want to use this feature, you must configure the realtime api in your facebook application settings, on the facebook developer website.", $this->ptd); ?>
+							<a target="_blank" href="https://developers.facebook.com/docs/reference/api/realtime/" class="btn btn-mini btn-info"><?php _e("Learn more",$this->ptd); ?></a>	
 						</div>
+						
+						<label><?php _e("Configure the realtime API",$this->ptd); ?></label>
+						<p><small><i class="icon-warning-sign"></i> <?php _e("The plugin only supports User fields and permissions subscriptions.",$this->ptd); ?></small></p>
+						<ol>
+							<li>
+								<a href="https://developers.facebook.com/apps/<?php echo $this->options['app_id']; ?>/realtime" class="btn btn btn-mini" target="_blank">
+									<i class="icon-cog"></i> <?php _e("Go on the Subscriptions page",$this->ptd); ?>
+								</a>
+							</li>
+							<li><?php _e("Click on the Add button and Select the subscription to create",$this->ptd); ?></li>
+							<li><?php _e("Add fields name you want to follow",$this->ptd); ?></li>
+							<li><?php _e("Set the callback url, you should use the callback url provided on this page.",$this->ptd); ?></li>
+							<li><?php _e("Set the verify token, you should use the token provided on this page.",$this->ptd); ?></li>
+							<li><?php _e("Click on Test to check the configuration, if success it's done Validate the form. If no, check your configuration again.",$this->ptd); ?></li>
+							<li><?php _e("Come back here, reload the page and check subscriptions list.",$this->ptd); ?></li>
+						</ol>
 						
 						<label><?php _e("Your Callback url",$this->ptd); ?></label>
 						<i class="icon-share"></i> <a href="<?php echo $this->_realtime_api_url; ?>"><?php echo $this->_realtime_api_url; ?></a></p>
 						
 						<label><?php _e("Verify Token",$this->ptd); ?></label>
 						<i class="icon-share"></i> <code><?php echo md5($this->options['app_id']); ?></code></p>
-						<h4><?php _e("Subscriptions:",$this->ptd); ?></h4>
+						<h4><?php _e("Subscriptions detected:",$this->ptd); ?></h4>
 						<?php
 						$subscriptions = $this->get_realtime_subscriptions(); 
 						if(!is_wp_error($subscriptions)){ ?>
@@ -102,14 +118,15 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 									if($this->_realtime_api_url != $sub['callback_url'])
 										$class="error";
 									echo '
-									<div class="thumbnail span3">
-										<h2>
-										'.ucfirst($sub['object']).'
+									<div class="span3 list_item">
+										<h2>'.ucfirst($sub['object']).'
 										'.($this->_realtime_api_url != $sub['callback_url'] ? '<span class="label label-'.$class.' pull-right">'.__("Callback url not match",$this->ptd).'</span>' :'').'
 										<span class="pull-right label label-'.($sub['active'] ? 'success' : 'error').'">'.($sub['active'] ? __("Active",$this->ptd) : __("Disabled",$this->ptd)).'</span>
 										</h2>
-										<label>'.__("Fields",$this->ptd).' <i class="icon-tags"></i>  </label><span class="badge badge-info">'.rtrim(implode('</span> <span class="badge badge-info">', $sub['fields']),', ').'</span>
-										<p><label>'.__("Callback Url",$this->ptd).' <i class="icon-share"></i> </label><small><a href="'.$sub['callback_url'].'">'.$sub['callback_url'].'"</a></small></p>
+										<div class="thumbnail">
+											<label>'.__("Fields",$this->ptd).' <i class="icon-tags"></i>  </label><span class="badge badge-info">'.rtrim(implode('</span> <span class="badge badge-info">', $sub['fields']),', ').'</span>
+											<p><label>'.__("Callback Url",$this->ptd).' <i class="icon-share"></i> </label><small><a href="'.$sub['callback_url'].'">'.$sub['callback_url'].'"</a></small></p>
+										</div>
 									</div>';
 								} ?>
 								</div>
@@ -121,7 +138,6 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 							$this->display_messages($subscriptions->get_error_message(), "warning");
 						}
 						?>
-						<p><small><i class="icon-warning-sign"></i> <?php _e("The plugin only supports User fields and permissions subscriptions.",$this->ptd); ?></small></p>
 					</div>
 				<?php } ?>
 				
