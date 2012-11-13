@@ -254,12 +254,14 @@ Class AWD_facebook
 		add_action('plugins_loaded', array(&$this, 'initial'));
 		//like box widget register
 		add_action('widgets_init', array(&$this, 'register_AWD_facebook_widgets'));
-
+		$ps = get_option('permalink_structure');
 		//Base vars
-		$this->_login_url = get_option('permalink_structure') != '' ? home_url('facebook-awd/login') : home_url('?facebook_awd[action]=login');
-		$this->_logout_url = get_option('permalink_structure') != '' ? home_url('facebook-awd/logout') : home_url('?facebook_awd[action]=logout');
-		$this->_unsync_url = get_option('permalink_structure') != '' ? home_url('facebook-awd/unsync') : home_url('?facebook_awd[action]=unsync');
-		$this->_channel_url = get_option('permalink_structure') != '' ? home_url('facebook-awd/channel.html') : home_url('?facebook_awd[action]=channel.html');
+		$this->_login_url = $ps != '' ? home_url('facebook-awd/login') : home_url('?facebook_awd[action]=login');
+		$this->_logout_url = $ps != '' ? home_url('facebook-awd/logout') : home_url('?facebook_awd[action]=logout');
+		$this->_unsync_url = $ps != '' ? home_url('facebook-awd/unsync') : home_url('?facebook_awd[action]=unsync');
+		$this->_channel_url = $ps != '' ? home_url('facebook-awd/channel.html') : home_url('?facebook_awd[action]=channel.html');
+		$this->_deauthorize_url = $ps != '' ? home_url('facebook-awd/deauthorize') : home_url('?facebook_awd[action]=deauthorize');
+		$this->_realtime_api_url = $ps != '' ? home_url('facebook-awd/realtime-update-api') : home_url('?facebook_awd[action]=realtime-update-api');
 	}
 
 	/**
@@ -389,7 +391,7 @@ Class AWD_facebook
 	 */
 	public function get_the_help($elem, $class = "help awd_tooltip", $image = 'info.png')
 	{
-		return '<a href="#" class="' . $class . '" id="help_' . $elem . '"><i class="icon-question-sign"></i></a>';
+		return '<a href="#" class="' . $class . '" id="help_' . $elem . '"><i class="icon-info-sign"></i></a>';
 	}
 
 	//****************************************************************************************
@@ -1900,8 +1902,20 @@ Class AWD_facebook
 			return $error;
 		}
 	}
+	
+	public function get_fb_user($fb_uid)
+	{
+		try {
+			$this->me = $this->fcbk->api('/'.$fb_uid, 'GET');
+			return $this->me;
+		} catch (FacebookApiException $e) {
+			$fb_error = $e->getResult();
+			$error = new WP_Error(403, $this->plugin_name . ' Error: ' . $fb_error['error']['type'] . ' ' . $fb_error['error']['message']);
+			return $error;
+		}
+	}
 
-	public function get_permissions()
+	public function get_my_permissions()
 	{
 		try {
 			$this->me['permissions'] = $this->fcbk->api('/me/permissions');
@@ -1913,7 +1927,37 @@ Class AWD_facebook
 			return $error;
 		}
 	}
-
+	
+	public function get_permissions($fb_uid)
+	{
+		$perms = array();
+		try {
+			$perms = $this->fcbk->api('/'.$fb_uid.'/permissions');
+			$perms = isset($perms['data'][0]) ? $perms['data'][0] : array();
+			return $perms; 
+		} catch (FacebookApiException $e) {
+			$fb_error = $e->getResult();
+			$error = new WP_Error(403, $this->plugin_name . ' Error: ' . $fb_error['error']['type'] . ' ' . $fb_error['error']['message']);
+			return $error;
+		}
+	}
+	
+	public function get_realtime_subscriptions()
+	{
+		$sub = array();
+		try {
+			$sub = $this->fcbk->api('/'.$this->options['app_id'].'/subscriptions', 'GET', array(
+				"access_token" => $this->fcbk->getApplicationAccessToken()
+			));
+			$sub = isset($sub['data']) ? $sub['data'] : array();
+			return $sub;
+		} catch (FacebookApiException $e) {
+			$fb_error = $e->getResult();
+			$error = new WP_Error(403, $this->plugin_name . ' Error: ' . $fb_error['error']['type'] . ' ' . $fb_error['error']['message']);
+			return $error;
+		}
+	}
+	
 	public function fb_get_pages()
 	{
 		try {
@@ -1943,14 +1987,16 @@ Class AWD_facebook
 			if (is_wp_error($return)) {
 				return $return;
 			}
-			$return = $this->get_permissions();
+			$return = $this->get_my_permissions();
 			if (is_wp_error($return))
 				return $return;
 
-			if ($return['manage_pages'] == 1) {
-				$return = $this->fb_get_pages();
-				if (is_wp_error($return))
-					return $return;
+			if(isset($return['manage_pages'])){
+				if ($return['manage_pages'] == 1) {
+					$return = $this->fb_get_pages();
+					if (is_wp_error($return))
+						return $return;
+				}
 			}
 			return true;
 		}
@@ -1966,11 +2012,11 @@ Class AWD_facebook
 		$this->me = get_user_meta($user_id, 'fb_user_infos', true);
 	}
 
-	public function save_facebook_user_data($user_id)
+	public function save_facebook_user_data($user_id, $data)
 	{
-		update_user_meta($user_id, 'fb_email', $this->me['email']);
-		update_user_meta($user_id, 'fb_user_infos', $this->me);
-		update_user_meta($user_id, 'fb_uid', $this->uid);
+		update_user_meta($user_id, 'fb_email', $data['email']);
+		update_user_meta($user_id, 'fb_uid', $data['id']);
+		update_user_meta($user_id, 'fb_user_infos', $data);
 	}
 
 	public function clear_facebook_user_data($user_id)
@@ -2147,7 +2193,7 @@ Class AWD_facebook
 			wp_die(__('Facebook AWD: You should try first to connect with Facebook.', $this->ptd));
 		}
 
-		$this->save_facebook_user_data($wp_user_id);
+		$this->save_facebook_user_data($wp_user_id, $this->me);
 		$this->init_facebook_user_data($wp_user_id);
 		$user = new WP_User($wp_user_id);
 		//Will create the cookie authentification of the user.
@@ -2203,46 +2249,138 @@ Class AWD_facebook
 		if (!empty($query)) {
 			$action = $query['action'];
 			switch ($action) {
-			//LOGIN
-			case 'login':
-			//This filter will add the authentification process
-				add_filter('authenticate', array(&$this, 'authenticate'), 10, 3);
-				//This will call the filter
-				$user = wp_signon('', is_ssl());
-				//then redirect where we need.
-				if (!empty($redirect_url)) {
-					wp_redirect($redirect_url);
-				} elseif (!empty($referer)) {
-					wp_redirect($referer);
-				} else {
-					wp_redirect(home_url());
-				}
-				exit();
+				//LOGIN
+				case 'login':
+				//This filter will add the authentification process
+					add_filter('authenticate', array(&$this, 'authenticate'), 10, 3);
+					//This will call the filter
+					$user = wp_signon('', is_ssl());
+					//then redirect where we need.
+					if (!empty($redirect_url)) {
+						wp_redirect($redirect_url);
+					} elseif (!empty($referer)) {
+						wp_redirect($referer);
+					} else {
+						wp_redirect(home_url());
+					}
+					exit();
+					break;
+	
+				//LOGOUT
+				case 'logout':
+					$this->logout($redirect_url);
 				break;
-
-			//LOGOUT
-			case 'logout':
-				$this->logout($redirect_url);
+	
+				//UNSYNC
+				case 'unsync':
+					if ($this->is_user_logged_in_facebook()) {
+						$this->clear_facebook_user_data($this->get_current_user()->ID);
+						wp_redirect(wp_logout_url());
+					} else {
+						wp_redirect(wp_get_referer());
+					}
+					exit();
+					break;
+	
+				case 'channel.html':
+					$cache_expire = 60 * 60 * 24 * 365;
+					header("Pragma: public");
+					header("Cache-Control: max-age=" . $cache_expire);
+					header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $cache_expire) . ' GMT');
+					echo '<script src="//connect.facebook.net/en_US/all.js"></script>';
+					exit();
+					break;
+				
+				case 'deauthorize':
+					$sr = $this->fcbk->getSignedRequest();
+					if(isset($sr['user_id'])){
+						$wp_user = $this->get_user_from_fbuid($sr['user_id']);
+						if($wp_user){
+							//require_once(ABSPATH.'wp-admin/includes/user.php');
+							//echo wp_delete_user($wp_user->ID);
+							//clean facebook user data
+							$this->clear_facebook_user_data($wp_user->ID);
+							exit();
+						}
+					}
+					wp_die($this->display_messages("Facebook AWD Deauthorize Error. Access denied", null, false));
 				break;
-
-			//UNSYNC
-			case 'unsync':
-				if ($this->is_user_logged_in_facebook()) {
-					$this->clear_facebook_user_data($this->get_current_user()->ID);
-					wp_redirect(wp_logout_url());
-				} else {
-					wp_redirect(wp_get_referer());
-				}
-				exit();
-				break;
-
-			case 'channel.html':
-				$cache_expire = 60 * 60 * 24 * 365;
-				header("Pragma: public");
-				header("Cache-Control: max-age=" . $cache_expire);
-				header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $cache_expire) . ' GMT');
-				echo '<script src="//connect.facebook.net/en_US/all.js"></script>';
-				exit();
+				case 'realtime-update-api':
+					$token = md5($this->options['app_id']);
+					//subscribe mode
+					if($_SERVER['REQUEST_METHOD'] == 'GET'){
+						if(!isset($_REQUEST['hub_mode']))
+							wp_die($this->display_messages("Facebook AWD Realtime Error hub_mode not set. Access denied", null, false));
+						if($_REQUEST['hub_mode'] != 'subscribe')
+							wp_die($this->display_messages("Facebook AWD Realtime Error hub_mode not match current path. Access denied", null, false));
+						if(!isset($_REQUEST['hub_challenge']))
+							wp_die($this->display_messages("Facebook AWD Realtime Error hub_challenge not set. Access denied", null, false));
+						if(!isset($_REQUEST['hub_challenge']))
+							wp_die($this->display_messages("Facebook AWD Realtime Error hub_challenge not set. Access denied", null, false));
+						if(!isset($_REQUEST['hub_verify_token']))
+							wp_die($this->display_messages("Facebook AWD Realtime Error hub_verify_token not set. Access denied", null, false));
+						if($_REQUEST['hub_verify_token'] != $token)
+							wp_die($this->display_messages("Facebook AWD Realtime Error hub_verify_token not match. Access denied", null, false));
+					
+						echo $_REQUEST['hub_challenge'];
+						exit();
+					}
+					if($_SERVER['REQUEST_METHOD'] == 'POST'){
+						$json_results = file_get_contents("php://input");
+						$sha_token = 'sha1='.hash_hmac('sha1', $json_results, $this->options['app_secret_key']);
+						error_log('Facebook AWD realtime Action connected with '.$sha_token);
+						if($_SERVER['HTTP_X_HUB_SIGNATURE'] == $sha_token){
+							$updates = json_decode($json_results, true);							
+							
+							if($updates['object'] == 'permissions'){
+								foreach($updates['entry'] as $user_changeset){
+									$wp_user = $this->get_user_from_fbuid($user_changeset['id']);
+									$return = $this->get_permissions($user_changeset['id']);										
+									if(!is_wp_error($return)){
+										//update the perms of the user
+										$old_fb_data = $wp_user->fb_user_infos;
+										if(is_array($old_fb_data)){
+											//replace the old array of perms by the new one
+											$new_fb_data = array_replace($old_fb_data, array('permissions'=>$return));
+											$this->save_facebook_user_data($wp_user->ID, $new_fb_data);
+										}
+									}else{
+										error_log("Facebook AWD ".print_r($return,true)." error perms");
+									}
+								}
+							}
+							
+							if($updates['object'] == 'user'){
+								foreach($updates['entry'] as $user_changeset){
+									$wp_user = $this->get_user_from_fbuid($user_changeset['id']);
+									if($wp_user){
+										$fb_user = $this->get_fb_user($user_changeset['id']);
+										if(!is_wp_error($fb_user)){
+											//update the user
+											$old_fb_data = $wp_user->fb_user_infos;
+											if(is_array($fb_user)){
+												//replace the old array of perms by the new one
+												$new_fb_data = array_replace($old_fb_data, $fb_user);
+												$this->save_facebook_user_data($wp_user->ID, $new_fb_data);
+												wp_update_user(array(
+													'ID' => $wp_user->ID,
+													'user_nicename' => $new_fb_data['name'],
+													'display_name ' => $new_fb_data['name'],
+													'user_email' => $new_fb_data['email'],
+													'user_firstname' => $new_fb_data['first_name'],
+													'user_lastname' => $new_fb_data['last_name']
+												));
+											}
+										}else{
+											error_log("Facebook AWD ".print_r($return,true)." error perms");
+										}
+									}
+								}
+							}
+							exit();
+						}
+					}
+					wp_die($this->display_messages("Facebook AWD Realtime Error. Access denied", null, false));
 				break;
 			}
 		}
@@ -2255,7 +2393,7 @@ Class AWD_facebook
 	public function flush_rules()
 	{
 		$rules = get_option('rewrite_rules');
-		if (!isset($rules['facebook-awd/(login|logout|unsync|channel.html)$'])) {
+		if (!isset($rules['facebook-awd/(login|logout|unsync|channel.html|deauthorize|realtime-update-api)$'])) {
 			global $wp_rewrite;
 			$wp_rewrite->flush_rules();
 		}
@@ -2268,7 +2406,7 @@ Class AWD_facebook
 	public function insert_rewrite_rules($rules)
 	{
 		$newrules = array();
-		$newrules['facebook-awd/(login|logout|unsync|channel.html)$'] = 'index.php?facebook_awd[action]=$matches[1]';
+		$newrules['facebook-awd/(login|logout|unsync|channel.html|deauthorize|realtime-update-api)$'] = 'index.php?facebook_awd[action]=$matches[1]';
 		return $newrules + $rules;
 	}
 
@@ -2304,7 +2442,7 @@ Class AWD_facebook
 	{
 		//we set faces options to false, if user not connected
 		$options = wp_parse_args($options, $this->options['login_button']);
-		$html = '';
+		$html = '';		
 		switch (1) {
 		case ($this->is_user_logged_in_facebook() && $this->options['connect_enable'] && is_user_logged_in()):
 			$html .= '<div class="AWD_profile AWD_facebook_wrap">' . "\n";
@@ -2413,6 +2551,7 @@ Class AWD_facebook
 			echo '
 				<div class="alert alert-info">
 					' . do_shortcode('[AWD_likebutton width="250" href="' . $url . '"]') . '
+					' . do_shortcode('[AWD_facebook_post_to_feed_button width="250" href="' . $url . '"]') . '
 				</div>';
 		}
 		echo '
