@@ -2550,8 +2550,10 @@ Class AWD_facebook
 		if ($url != '') {
 			echo '
 				<div class="alert alert-info">
-					' . do_shortcode('[AWD_likebutton width="250" href="' . $url . '"]') . '
-					' . do_shortcode('[AWD_facebook_post_to_feed_button width="250" href="' . $url . '"]') . '
+					' . do_shortcode('[AWD_likebutton width="250" href="' . $url . '"]');
+					if(isset($this->plugins["awd_fcbk_post_to_feed"]))
+						echo do_shortcode('[AWD_facebook_post_to_feed_button width="250" href="' . $url . '"]');
+				echo '
 				</div>';
 		}
 		echo '
