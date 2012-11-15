@@ -1953,7 +1953,6 @@ Class AWD_facebook
 			}else{
 				$error = new WP_Error(500, $this->plugin_name ." Api not configured");
 				return $error;
-				throw new Exception("Facebook AWD not set");
 			}
 			$sub = isset($sub['data']) ? $sub['data'] : array();
 			return $sub;
