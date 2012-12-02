@@ -3,12 +3,12 @@
 Plugin Name: Facebook AWD All in One
 Plugin URI: http://facebook-awd.ahwebdev.fr
 Description: Adds extensions from facebook on wordpress easily. Like button, Like Box, Activity box, Fb comments, OpenGraph and more.
-Version: 1.5.2
+Version: 1.5.3
 Author: AHWEBDEV
 Author URI: http://www.ahwebdev.fr
 License: Copywrite AHWEBDEV
 Text Domain: AWD_facebook
-Last modification: 24/10/2012
+Last modification: 02/12/2012
  */
 
 /**
@@ -2104,7 +2104,7 @@ Class AWD_facebook
 				}
 				js = d.createElement("script"); 
 				js.id = id; js.async = true;
-				js.src = "//connect.facebook.net/en_US/all.js";
+				js.src = "//connect.facebook.net/'.$this->options['locale'].'/all.js";
 				ref.parentNode.insertBefore(js, ref);
 			}(document));';
 
@@ -2291,7 +2291,7 @@ Class AWD_facebook
 					header("Pragma: public");
 					header("Cache-Control: max-age=" . $cache_expire);
 					header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $cache_expire) . ' GMT');
-					echo '<script src="//connect.facebook.net/en_US/all.js"></script>';
+					echo '<script src="//connect.facebook.net/'.$this->options['locale'].'/all.js"></script>';
 					exit();
 				break;
 				
