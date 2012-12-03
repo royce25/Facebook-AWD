@@ -112,7 +112,6 @@ if($this->options['app_id'] !='' && $this->options['app_secret_key'] !=''){
 			add_action('login_form',array(&$this,'the_login_button_wp_login'));
 		//Add avatar functions
 		if($this->options['connect_fbavatar'] == 1){
-			add_filter('avatar_defaults', array($this, 'fb_addgravatar'),100, 1);
 			add_filter('get_avatar', array($this, 'fb_get_avatar'), 100, 5);//modify in last... 
 		}
 	}

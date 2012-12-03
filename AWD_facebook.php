@@ -1843,36 +1843,32 @@ Class AWD_facebook
 	 */
 	public function fb_get_avatar($avatar, $comments_objects, $size, $default, $alt)
 	{
+		$fbuid = 0;
 		$default_avatar = get_option('avatar_default');
-		if ($default_avatar == $this->plugin_slug) {
-			//$avatar format includes the tag <img>
-			if (is_object($comments_objects)) {
-				$fbuid = get_user_meta($comments_objects->user_id, 'fb_uid', true);
-				//hack for avatar AWD comments_ plus
-				if ($fbuid == '') {
-					$fbuid = $comments_objects->user_id;//try if we directly get fbuid
-				}
-			} elseif (is_numeric($comments_objects)) {
-				$fbuid = get_user_meta($comments_objects, 'fb_uid', true);
-			} elseif ($comments_objects != '') {
-				if ($default == 'awd_fcbk') {
-					$user = get_user_by('email', $comments_objects);
-					$fbuid = get_user_meta($user->ID, 'fb_uid', true);
-				}
+		if (is_object($comments_objects)) {
+			$fbuid = get_user_meta($comments_objects->user_id, 'fb_uid', true);
+			if ($fbuid == '') {
+				$fbuid = $comments_objects->user_id;//try if we directly get fbuid
 			}
-
-			if ($fbuid != '' && $fbuid != 0) {
-				if ($size <= 64) {
-					$type = 'square';
-				} else if ($size > 64) {
-					$type = 'normal';
-				} else {
-					$type = 'large';
-				}
-				$fb_avatar_url = 'http://graph.facebook.com/' . $fbuid . '/picture' . ($type != '' ? '?type=' . $type : '');
-				$my_avatar = "<img src='" . $fb_avatar_url . "' class='avatar AWD_fbavatar' alt='" . $alt . "' height='" . $size . "' />";
-				return $my_avatar;
+		} elseif (is_numeric($comments_objects)) {
+			$fbuid = get_user_meta($comments_objects, 'fb_uid', true);
+		} elseif ($comments_objects != '') {
+			if ($default == 'awd_fcbk') {
+				$user = get_user_by('email', $comments_objects);
+				$fbuid = get_user_meta($user->ID, 'fb_uid', true);
 			}
+		}
+		if ($fbuid != '' && $fbuid != 0) {
+			if ($size <= 70) {
+				$type = 'square';
+			} else if ($size > 70) {
+				$type = 'normal';
+			} else {
+				$type = 'large';
+			}
+			$fb_avatar_url = 'http://graph.facebook.com/' . $fbuid . '/picture' . ($type != '' ? '?type=' . $type : '');
+			$my_avatar = "<img src='" . $fb_avatar_url . "' class='avatar AWD_fbavatar' alt='" . $alt . "' height='" . $size . "' />";
+			return $my_avatar;
 		}
 		return $avatar;
 	}
