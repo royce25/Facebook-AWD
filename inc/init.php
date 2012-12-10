@@ -107,9 +107,19 @@ add_action('admin_print_footer_scripts',array(&$this,'js_sdk_init'));
 //init the FB connect
 if($this->options['app_id'] !='' && $this->options['app_secret_key'] !=''){
 	if($this->options['connect_enable'] == 1){
+		$on_register = $this->options['login_button']['display_on_register_page'];
+		$on_login = $this->options['login_button']['display_on_login_page'];
+		
 		//add action to add the login button on the wp-login.php page...
-		if($this->options['login_button']['display_on_login_page'] == 1)
+		if($on_register == 1 || $on_login == 1){
+			add_action('login_enqueue_scripts',array(&$this,'login_enqueue_scripts'));
+		}
+		if($on_login == 1){
 			add_action('login_form',array(&$this,'the_login_button_wp_login'));
+		}
+		if($on_register == 1){
+			add_action('register_form',array(&$this,'the_login_button_wp_login'));
+		}
 		//Add avatar functions
 		if($this->options['connect_fbavatar'] == 1){
 			add_filter('get_avatar', array($this, 'fb_get_avatar'), 100, 5);//modify in last... 

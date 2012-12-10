@@ -273,7 +273,7 @@ Class AWD_facebook
 		//Js
 		wp_register_script($this->plugin_slug . '-bootstrap-js', $this->plugin_url . '/assets/js/bootstrap.js', array('jquery'));
 		wp_register_script($this->plugin_slug . '-google-code-prettify', $this->plugin_url . '/assets/js/google-code-prettify/prettify.js', array('jquery'));
-		wp_register_script($this->plugin_slug . '-admin-js', $this->plugin_url . '/assets/js/facebook_awd_admin.js', array('jquery', 'jquery-ui-tabs', 'jquery-ui-accordion', $this->plugin_slug . '-google-code-prettify'));
+		wp_register_script($this->plugin_slug . '-admin-js', $this->plugin_url . '/assets/js/facebook_awd_admin.js', array('jquery', $this->plugin_slug . '-google-code-prettify'));
 		wp_register_script($this->plugin_slug, $this->plugin_url . '/assets/js/facebook_awd.js', array('jquery'));
 
 		//Css
@@ -624,8 +624,6 @@ Class AWD_facebook
 		wp_enqueue_script('common');
 		wp_enqueue_script('wp-list');
 		wp_enqueue_script('postbox');
-		wp_enqueue_script('jquery-ui-accordion');
-		wp_enqueue_script($this->plugin_slug . '-js-cookie');
 		wp_enqueue_script($this->plugin_slug . '-admin-js');
 		wp_enqueue_script($this->plugin_slug . '-bootstrap-js');
 		wp_enqueue_script($this->plugin_slug . '-google-code-prettify');
@@ -2475,6 +2473,13 @@ Class AWD_facebook
 		}
 	}
 
+	
+	
+	public function login_enqueue_scripts()
+	{
+		$this->add_js_options();
+	}
+	
 	/**
 	 * Print the login button for the wp-login.php page
 	 * @return void
@@ -2487,10 +2492,7 @@ Class AWD_facebook
 		' . $this->get_the_login_button() . '
 		</div>
 		<br />
-		';
-		//force manual wp_localize script on login page
-		$this->add_js_options(true);
-		$this->js_sdk_init();
+		';		
 	}
 
 	//****************************************************************************************

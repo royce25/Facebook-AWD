@@ -40,7 +40,19 @@ $fields['login_button'] = array(
 		'attr'=> array('class'=>'span2'),
 		'widget_no_display' => true
 	),
-	
+		
+	'display_on_register_page'=> array(
+		'type'=> 'select',
+		'options' => array(
+				array('value'=>'0', 'label'=>__('No',$this->ptd)),
+				array('value'=>'1', 'label'=>__('Yes',$this->ptd)),
+		),
+		'label'=> __('Display on Register',$this->ptd),
+		'class'=>'span2',
+		'attr'=> array('class'=>'span2'),
+		'widget_no_display' => true
+	),
+		
 	'login_redirect_url'=> array(
 		'type'=> 'text',
 		'label'=> __('Url after login',$this->ptd),

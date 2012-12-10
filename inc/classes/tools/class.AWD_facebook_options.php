@@ -213,6 +213,7 @@ class AWD_facebook_options
 		$login_button = array
 		(
 			'display_on_login_page' 		=> 0,
+			'display_on_register_page' 		=> 0,
 			'login_redirect_url' 			=> '',
 			'logout_redirect_url' 			=> '',
 			'logout_label' 					=> __('Logout', $AWD_facebook->ptd),
