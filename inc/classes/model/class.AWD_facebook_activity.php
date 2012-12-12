@@ -1,108 +1,137 @@
 <?php
 /**
- * 
- * @author alexhermann
+ * AWD_facebook_activity
  *
+ * This class generate activity box for facebook.
+ *
+ * @package facebook-awd
+ * @author AHWEBDEV (Alexandre Hermann)
  */
-
 class AWD_facebook_activity
 {
 	/**
-	 * domain 
-	 * a comma separated list of domains to show activity for.
+	 * Domain
+	 *
+	 * A comma separated list of domains to show activity for.
 	 * The XFBML version defaults to the current domain
+	 * @var string
 	 */
 	protected $domain;
 
 	/**
-	 * width 
-	 * the width of the plugin in pixels. Default width: 300px
+	 * Width 
+	 * 
+	 * The width of the plugin in pixels. Default width: 300px
+	 * @var integer
 	 */
 	protected $width = 300;
 
 	/**
-	 * height 
-	 * the height of the plugin in pixels. Default height: 300px
+	 * Height 
+	 * 
+	 * The height of the plugin in pixels. Default height: 300px
+	 * @var integer
 	 */
 	protected $height = 300;
 
 	/**
-	 * header 
-	 * specifies whether to show the Facebook header
+	 * Header 
+	 * 
+	 * Specifies whether to show the Facebook header
+	 * @var boolean
 	 */
 	protected $header;
 
 	/**
-	 * colorscheme 
-	 * the color scheme for the plugin. Options: 'light', 'dark'
+	 * Colorscheme 
+	 * 
+	 * The color scheme for the plugin. Options: 'light', 'dark'
+	 * @var string
 	 */
 	protected $colorscheme;
 
 	/**
-	 * font 
+	 * Font 
+	 *
 	 * the font to display in the plugin. Options: 'arial', 'lucida grande', 'segoe ui', 'tahoma', 'trebuchet ms', 'verdana'
+	 * @var string
 	 */
 	protected $font;
 
 	/**
-	 * border_color 
+	 * Border Color
+	 *  
 	 * the border color of the plugin
+	 * @var string
 	 */
 	protected $border_color;
 
 	/**
-	 * recommendations 
+	 * Recommendations
+	 * 
 	 * specifies whether to always show recommendations in the plugin.
 	 * If recommendations is set to true, the plugin will display recommendations in the bottom half
+	 * @var string
 	 */
 	protected $recommendations;
 
 	/**
-	 * filter 
-	 * allows you to filter which URLs are shown in the plugin.
+	 * Filter 
+	 * 
+	 * Allows you to filter which URLs are shown in the plugin.
 	 * The plugin will only include URLs which contain the filter string in the first two path parameters of the URL.
 	 * If nothing in the first two path parameters of the URL matches the filter,
 	 * the URL will not be included. 
 	 * For example, if the 'domain' parameter is set to 'www.example.com' and the 'filter' parameter was set to '/section1/section2' 
 	 * then only pages which matched 'http://www.example.com/section1/section2/*' would be included in the activity feed section of this plugin.
 	 * The filter parameter does not apply to any recommendations which may appear in this plugin (see above); Recommendations are based only on 'domain' parameter
+	 * @var string
 	 */
 	protected $filter;
 
 	/**
-	 * linktarget 
+	 * Linktarget 
+	 * 
 	 * This specifies the context in which content links are opened.
 	 * By default all links within the plugin will open a new window.
 	 * If you want the content links to open in the same window, you can set this parameter to _top or _parent.
 	 * Links to Facebook URLs will always open in a new window.
+	 * @var string
 	 */
 	protected $linktarget;
 
 	/**
-	 * ref 
-	 * must be a comma separated list, consisting of at most 5 distinct items, each of length at least 1 and at most 15 characters drawn from the set '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_'.
+	 * Ref
+	 *  
+	 * Must be a comma separated list, consisting of at most 5 distinct items, each of length at least 1 and at most 15 characters drawn from the set '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_'.
 	 * Specifying a value for the ref attribute adds the 'fb_ref' parameter to the any links back to your domain which are clicked from within the plugin.
 	 * Using different values for the ref parameter for different positions and configurations of this plugin within your pages allows you to track which instances are performing the best.
+	 * @var string
 	 */
 	protected $ref;
 
 	/**
-	 * max_age 
-	 * the maximum age of a URL to show in the plugin.
+	 * Max Age 
+	 * 
+	 * The maximum age of a URL to show in the plugin.
 	 * The default is 0 (we don’t take age into account).
 	 * Otherwise the valid values are 1-180, which specifies the number of days.
 	 * For example, if you specify '7' the plugin will only show URLs which were created in the past week.
+	 * @var integer
 	 */
 	protected $max_age;
 
 	/**
-	 * type 
+	 * Type 
+	 * 
 	 * type to use, xfbml, html5, or iframe
+	 * @var string
 	 */
 	protected $type;
 
 	/**
 	 * Constructor
+	 * 
 	 * @param array $options
 	 */
 	public function __construct($options)
@@ -123,9 +152,9 @@ class AWD_facebook_activity
 	}
 
 	/**
-	 * Setter: domain
-	 * @param String $domain
-	 * @return void
+	 * Set Domain
+	 * 
+	 * @param string $domain
 	 */
 	public function setDomain($domain)
 	{
@@ -135,9 +164,9 @@ class AWD_facebook_activity
 	}
 
 	/**
-	 * Setter: width
-	 * @param String $width
-	 * @return void
+	 * Set Width
+	 * 
+	 * @param integer $width
 	 */
 	public function setWidth($width)
 	{
@@ -145,9 +174,9 @@ class AWD_facebook_activity
 	}
 
 	/**
-	 * Setter: height
-	 * @param String $height
-	 * @return void
+	 * Set Height
+	 * 
+	 * @param integer $height
 	 */
 	public function setHeight($height)
 	{
@@ -155,9 +184,9 @@ class AWD_facebook_activity
 	}
 
 	/**
-	 * Setter: header
-	 * @param String $header
-	 * @return void
+	 * Set Header
+	 * 
+	 * @param boolean $header
 	 */
 	public function setHeader($header)
 	{
@@ -165,9 +194,9 @@ class AWD_facebook_activity
 	}
 
 	/**
-	 * Setter: colorscheme
-	 * @param String $colorscheme
-	 * @return void
+	 * Set Colorscheme
+	 * 
+	 * @param string $colorscheme
 	 */
 	public function setColorscheme($colorscheme)
 	{
@@ -177,7 +206,6 @@ class AWD_facebook_activity
 	/**
 	 * Setter: font
 	 * @param String $font
-	 * @return void
 	 */
 	public function setFont($font)
 	{
@@ -187,7 +215,6 @@ class AWD_facebook_activity
 	/**
 	 * Setter: border_color
 	 * @param String $border_color
-	 * @return void
 	 */
 	public function setBorderColor($border_color)
 	{
@@ -197,7 +224,6 @@ class AWD_facebook_activity
 	/**
 	 * Setter: recommendations
 	 * @param String $recommendations
-	 * @return void
 	 */
 	public function setRecommendations($recommendations)
 	{
@@ -207,7 +233,6 @@ class AWD_facebook_activity
 	/**
 	 * Setter: filter
 	 * @param String $filter
-	 * @return void
 	 */
 	public function setFilter($filter)
 	{
@@ -217,7 +242,6 @@ class AWD_facebook_activity
 	/**
 	 * Setter: linktarget
 	 * @param String $linktarget
-	 * @return void
 	 */
 	public function setLinktarget($linktarget)
 	{
@@ -227,7 +251,6 @@ class AWD_facebook_activity
 	/**
 	 * Setter: ref
 	 * @param String $ref
-	 * @return void
 	 */
 	public function setRef($ref)
 	{
@@ -237,7 +260,6 @@ class AWD_facebook_activity
 	/**
 	 * Setter: max_age
 	 * @param String $max_age
-	 * @return void
 	 */
 	public function setMaxAge($max_age)
 	{
@@ -247,7 +269,6 @@ class AWD_facebook_activity
 	/**
 	 * Setter: type
 	 * @param String $type
-	 * @return void
 	 */
 	public function setType($type)
 	{
