@@ -12,22 +12,26 @@ Last modification: 02/12/2012
  */
 
 /**
- * 
- * @author alexhermann
+ * Facebook AWD All in One
  *
+ * @package facebook-awd
+ * @author alexhermann
  */
 Class AWD_facebook
 {
 
 	/**
 	 * The name of the plugin
+	 * 
 	 * @var unknown_type
 	 */
 	public $plugin_name = 'Facebook AWD';
 
+	
 	/**
-	 * public
-	 * slug of the plugin
+	 * The slug of the plugin
+	 * 
+	 * @var string
 	 */
 	public $plugin_slug = 'awd_fcbk';
 
@@ -2221,6 +2225,15 @@ Class AWD_facebook
 		return $url;
 	}
 
+	
+	/**
+	 * Logout handler
+	 * 
+	 * If a user is logged out on Facebook using wp logout function,
+	 * The user will be redirected here, and this method will perform the logout on the WP side.	 * 
+	 * 
+	 * @return void
+	 */
 	public function logout($redirect_url = '')
 	{
 		$referer = wp_get_referer();
@@ -2238,6 +2251,40 @@ Class AWD_facebook
 		exit();
 	}
 
+	/**
+	 * Login handler
+	 * 
+	 * This method will listen for a facebook session.
+	 * Once the user was logged in on facebook side. he should be redirected here.
+	 * This method will try to loggin or register a user found via a facebook session.
+	 * 
+	 * @return void
+	 */
+	public function login()
+	{
+		//This filter will add the authentification process
+		add_filter('authenticate', array(&$this, 'authenticate'), 10, 3);
+		//This will call the filter
+		$user = wp_signon('', is_ssl());
+		//then redirect where we need.
+		if (!empty($redirect_url)) {
+			wp_redirect($redirect_url);
+		} elseif (!empty($referer)) {
+			wp_redirect($referer);
+		} else {
+			wp_redirect(home_url());
+		}
+		exit();
+	}
+	
+	/**
+	 * Facebook AWD internal request parser
+	 *
+	 * If a user is logged out on Facebook using wp logout function,
+	 * The user will be redirected here, and this method will perform the logout on the WP side.	 *
+	 *
+	 * @return void
+	 */
 	public function parse_request()
 	{
 		global $wp_query;
@@ -2249,19 +2296,7 @@ Class AWD_facebook
 			switch ($action) {
 				//LOGIN
 				case 'login':
-				//This filter will add the authentification process
-					add_filter('authenticate', array(&$this, 'authenticate'), 10, 3);
-					//This will call the filter
-					$user = wp_signon('', is_ssl());
-					//then redirect where we need.
-					if (!empty($redirect_url)) {
-						wp_redirect($redirect_url);
-					} elseif (!empty($referer)) {
-						wp_redirect($referer);
-					} else {
-						wp_redirect(home_url());
-					}
-					exit();
+					$this->login();
 				break;
 	
 				//LOGOUT
