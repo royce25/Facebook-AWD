@@ -161,8 +161,15 @@ $fields['comments_box'] = array(
 		),
 		'label'=> __('Where ?',$this->ptd),
 		'class'=>'span4',
-		'attr'=> array('class'=>'span4'),
+		'attr'=> array('class'=>'span4 comments_box_place'),
 		'widget_no_display' => true
+	),
+	
+	'comments_template_path'=> array(
+		'type'=> 'text',
+		'label'=> __('Default comments template path (used only if replace is enabled)',$this->ptd),
+		'class'=>'span6',
+		'attr'=> array('class'=>'span6 depend_on_comments_box_place')
 	),
 	
 	'exclude_post_id'=> array(

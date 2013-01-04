@@ -237,7 +237,8 @@ class AWD_facebook_options
 			'on_posts'						=> 0,
 			'on_custom_post_types'          => 0,
 			'exclude_post_id'				=> '',
-			'place'							=> 'after'	
+			'place'							=> 'after',
+			'comments_template_path'		=> dirname(dirname(dirname(__FILE__))).'/admin/views/comments_template.php'
 		);
 		$this->setDefaultValue('comments_box', $comments_box);
 		

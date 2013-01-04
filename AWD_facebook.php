@@ -2660,7 +2660,7 @@ Class AWD_facebook
 		if (!in_array($post->ID, $exclude_post_page_id)) {
 			if($this->options['comments_box']['place'] == 'replace'){
 				//replace the form with a template.
-				$stylesheet_path = dirname(__FILE__).'/inc/admin/views/comments_template.php';
+				$stylesheet_path = $this->options['comments_box']['comments_template_path'];
 			}else{
 				add_action('comment_form_'.$this->options['comments_box']['place'] , array(&$this, 'display_the_comment_form'));	
 			}

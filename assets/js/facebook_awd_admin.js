@@ -117,6 +117,7 @@ function AWDFacebookAdmin($){
 		$awd.dependListener('#awd_fcbk_option_like_button_on_custom_post_types','.depend_like_button_on_custom_post_types', ['1']);
 		$awd.dependListener('.login_button_show_faces', '.depend_login_button_show_faces', ['1']);
 		$awd.dependListener('.like_button_type', '.depend_like_button_type', ['xfbml', 'html5']);
+		$awd.dependListener('.comments_box_place', '.depend_on_comments_box_place', ['replace']);
 		
 		
 		$(".AWD_button_media").live('click',function(e){
