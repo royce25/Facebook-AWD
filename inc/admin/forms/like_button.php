@@ -76,7 +76,7 @@ $fields['like_button'] = array(
 		),
 		'label'=> __('Type',$this->ptd),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2')
+		'attr'=> array('class'=>'span2 like_button_type')
 	),
 	
 	'send'=> array(
@@ -87,7 +87,7 @@ $fields['like_button'] = array(
 		),
 		'label'=> __('Send button ?',$this->ptd),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2 depend_like_button_xfbml','disabled'=>($this->options['like_button']['type'] != "xfbml" ? 'disabled' : ''))
+		'attr'=> array('class'=>'span2 depend_like_button_type','disabled'=>($this->options['like_button']['type'] != "xfbml" ? 'disabled' : ''))
 	),
 	
 	'colorscheme'=> array(

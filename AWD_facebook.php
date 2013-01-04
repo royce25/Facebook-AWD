@@ -496,6 +496,8 @@ Class AWD_facebook
 		add_action('admin_print_scripts-post.php', array(&$this, 'admin_enqueue_js'));
 		add_action('admin_print_scripts-link-add.php', array(&$this, 'admin_enqueue_js'));
 		add_action('admin_print_scripts-link.php', array(&$this, 'admin_enqueue_js'));
+		add_action('admin_print_scripts-widgets.php', array(&$this, 'admin_enqueue_js'));
+		
 		
 		//enqueue here the library facebook connect
 		$this->add_js_options();
