@@ -91,7 +91,6 @@ do_action("AWD_facebook_save_settings");
 * save settings
 * refresh options from bdd.
 /****************************************************/
-$this->plugins = array();
 do_action("AWD_facebook_plugins_init");
 //UPDATES OPTIONS FOR PLUGINS
 do_action("AWD_facebook_save_settings");

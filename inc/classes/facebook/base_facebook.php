@@ -120,7 +120,7 @@ abstract class BaseFacebook
   /**
    * Version.
    */
-  const VERSION = '3.2.0';
+  const VERSION = '3.2.2';
 
   /**
    * Signed Request Algorithm.
@@ -144,7 +144,7 @@ abstract class BaseFacebook
   protected static $DROP_QUERY_PARAMS = array(
     'code',
     'state',
-    'signed_request'
+    'signed_request',
   );
 
   /**
@@ -367,20 +367,20 @@ abstract class BaseFacebook
       // In any event, we don't have an access token, so say so.
       return false;
     }
-  
+
     if (empty($access_token_response)) {
       return false;
     }
-      
+
     $response_params = array();
     parse_str($access_token_response, $response_params);
-    
+
     if (!isset($response_params['access_token'])) {
       return false;
     }
-    
+
     $this->destroySession();
-    
+
     $this->setPersistentData(
       'access_token', $response_params['access_token']
     );
@@ -439,6 +439,11 @@ abstract class BaseFacebook
       // the JS SDK puts a code in with the redirect_uri of ''
       if (array_key_exists('code', $signed_request)) {
         $code = $signed_request['code'];
+        if ($code && $code == $this->getPersistentData('code')) {
+          // short-circuit if the code we have is the same as the one presented
+          return $this->getPersistentData('access_token');
+        }
+
         $access_token = $this->getAccessTokenFromCode($code, '');
         if ($access_token) {
           $this->setPersistentData('code', $code);
@@ -483,10 +488,10 @@ abstract class BaseFacebook
    */
   public function getSignedRequest() {
     if (!$this->signedRequest) {
-      if (isset($_REQUEST['signed_request'])) {
+      if (!empty($_REQUEST['signed_request'])) {
         $this->signedRequest = $this->parseSignedRequest(
           $_REQUEST['signed_request']);
-      } else if (isset($_COOKIE[$this->getSignedRequestCookieName()])) {
+      } else if (!empty($_COOKIE[$this->getSignedRequestCookieName()])) {
         $this->signedRequest = $this->parseSignedRequest(
           $_COOKIE[$this->getSignedRequestCookieName()]);
       }
@@ -935,6 +940,7 @@ abstract class BaseFacebook
 
     curl_setopt_array($ch, $opts);
     $result = curl_exec($ch);
+
     if (curl_errno($ch) == 60) { // CURLE_SSL_CACERT
       self::errorLog('Invalid or no certificate authority found, '.
                      'using bundled information');
@@ -948,20 +954,18 @@ abstract class BaseFacebook
     // the case, curl will try IPv4 first and if that fails, then it will
     // fall back to IPv6 and the error EHOSTUNREACH is returned by the
     // operating system.
-    if(defined('CURLOPT_IPRESOLVE')){
-		if ($result === false && empty($opts[CURLOPT_IPRESOLVE])) {
-			$matches = array();
-			$regex = '/Failed to connect to ([^:].*): Network is unreachable/';
-			if (preg_match($regex, curl_error($ch), $matches)) {
-			  if (strlen(@inet_pton($matches[1])) === 16) {
-				self::errorLog('Invalid IPv6 configuration on server, '.
-							   'Please disable or get native IPv6 on your server.');
-				self::$CURL_OPTS[CURLOPT_IPRESOLVE] = CURL_IPRESOLVE_V4;
-				curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-				$result = curl_exec($ch);
-			  }
-			}
-		}
+    if ($result === false && empty($opts[CURLOPT_IPRESOLVE])) {
+        $matches = array();
+        $regex = '/Failed to connect to ([^:].*): Network is unreachable/';
+        if (preg_match($regex, curl_error($ch), $matches)) {
+          if (strlen(@inet_pton($matches[1])) === 16) {
+            self::errorLog('Invalid IPv6 configuration on server, '.
+                           'Please disable or get native IPv6 on your server.');
+            self::$CURL_OPTS[CURLOPT_IPRESOLVE] = CURL_IPRESOLVE_V4;
+            curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+            $result = curl_exec($ch);
+          }
+        }
     }
 
     if ($result === false) {
@@ -1144,8 +1148,14 @@ abstract class BaseFacebook
       }
       return 'http';
     }
+    /*apache + variants specific way of checking for https*/
     if (isset($_SERVER['HTTPS']) &&
         ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1)) {
+      return 'https';
+    }
+    /*nginx way of checking for https*/
+    if (isset($_SERVER['SERVER_PORT']) &&
+        ($_SERVER['SERVER_PORT'] === '443')) {
       return 'https';
     }
     return 'http';

@@ -1,4 +1,4 @@
-Facebook AWD All in one 1.5.3
+Facebook AWD All in one 1.6BETA
 ==============
 
 ![Plugin logo][logo]

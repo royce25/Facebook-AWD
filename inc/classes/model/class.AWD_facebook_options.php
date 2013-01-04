@@ -112,7 +112,7 @@ class AWD_facebook_options
 				
 		//Plugin and options
 		$this->setDefaultValue('connect_enable', 0);
-		$this->setDefaultValue('use_extended_access_token', 0);
+		$this->setDefaultValue('use_extended_access_token', 1);
 		$this->setDefaultValue('open_graph_enable', 1);
 		$this->setDefaultValue('connect_fbavatar', 0);
 		$this->setDefaultValue('debug_enable', 0);

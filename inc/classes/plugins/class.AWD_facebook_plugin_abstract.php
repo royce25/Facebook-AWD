@@ -1,5 +1,4 @@
 <?php
-
 require_once(dirname(__FILE__).'/class.AWD_facebook_plugin_interface.php');
 /**
  * 
@@ -42,10 +41,11 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 		}
 		$this->AWD_facebook = $AWD_facebook;
 	}
+	
 	/**
 	 * Declare this function as absrat to force the declaration
 	 */
-	abstract function initialisation();
+	abstract function initialisation();	
 	
 	public function init()
 	{	
@@ -99,10 +99,12 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 	{
 		$this->AWD_facebook->display_messages($this->plugin_name.' '.__("can not be activated: Facebook Connect plugin must be activated",$this->ptd), 'error');
 	}
+	
 	public function old_parent()
 	{
 		$this->AWD_facebook->display_messages($this->plugin_name.' '.__("can not be activated: Facebook AWD is out to date... You can download the last version or update it from the Wordpress plugin directory",$this->ptd), 'error');
 	}
+	
 	public function missing_parent()
 	{
 		$this->AWD_facebook->display_messages($this->plugin_name.' '.__("can not be activated: Facebook AWD plugin must be installed... you can download it from the Wordpress plugin directory",$this->ptd), 'error');
@@ -125,7 +127,6 @@ abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_inter
 			add_action('admin_print_scripts-'.$this->plugin_admin_hook, array(&$this,'admin_enqueue_js'));
 		}
 	}
-	
 	public function plugin_settings_menu($list)
 	{
 		return $list;
