@@ -111,11 +111,11 @@ function AWDFacebookAdmin($){
 		});
 		
 		//Forms
-		$awd.dependListener('#awd_fcbk_option_connect_enable','.depend_fb_connect', [1]);
-		$awd.dependListener('#awd_fcbk_option_like_button_on_pages','.depend_like_button_on_pages', [1]);
-		$awd.dependListener('#awd_fcbk_option_like_button_on_posts','.depend_like_button_on_posts', [1]);
-		$awd.dependListener('#awd_fcbk_option_like_button_on_custom_post_types','.depend_like_button_on_custom_post_types', [1]);
-		$awd.dependListener('.login_button_show_faces', '.depend_login_button_show_faces', [1]);
+		$awd.dependListener('#awd_fcbk_option_connect_enable','.depend_fb_connect', ['1']);
+		$awd.dependListener('#awd_fcbk_option_like_button_on_pages','.depend_like_button_on_pages', ['1']);
+		$awd.dependListener('#awd_fcbk_option_like_button_on_posts','.depend_like_button_on_posts', ['1']);
+		$awd.dependListener('#awd_fcbk_option_like_button_on_custom_post_types','.depend_like_button_on_custom_post_types', ['1']);
+		$awd.dependListener('.login_button_show_faces', '.depend_login_button_show_faces', ['1']);
 		$awd.dependListener('.like_button_type', '.depend_like_button_type', ['xfbml', 'html5']);
 		
 		
