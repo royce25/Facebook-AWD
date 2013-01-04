@@ -2199,7 +2199,7 @@ Class AWD_facebook
 	 * This method will try to loggin or register a user found via a facebook session.
 	 * 
 	 */
-	public function login($redirect_url)
+	public function login($redirect_url = '')
 	{
 		//This filter will add the authentification process
 		add_filter('authenticate', array(&$this, 'authenticate'), 10, 3);
