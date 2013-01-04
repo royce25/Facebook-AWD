@@ -2199,7 +2199,7 @@ Class AWD_facebook
 	 * This method will try to loggin or register a user found via a facebook session.
 	 * 
 	 */
-	public function login()
+	public function login($redirect_url)
 	{
 		//This filter will add the authentification process
 		add_filter('authenticate', array(&$this, 'authenticate'), 10, 3);
@@ -2207,6 +2207,8 @@ Class AWD_facebook
 		$user = wp_signon('', is_ssl());
 		//then redirect where we need.
 		if (!empty($redirect_url)) {
+			if(preg_match('@%CURRENT_URL%@', $redirect_url))
+				$redirect_url = $this->get_current_url();
 			wp_redirect($redirect_url);
 		} elseif (!empty($referer)) {
 			wp_redirect($referer);
@@ -2234,7 +2236,7 @@ Class AWD_facebook
 			switch ($action) {
 				//LOGIN
 				case 'login':
-					$this->login();
+					$this->login($redirect_url);
 					break;
 
 				//LOGOUT
@@ -2402,7 +2404,6 @@ Class AWD_facebook
 	 */
 	public function get_the_login_button($options = array())
 	{
-		//we set faces options to false, if user not connected
 		$options = wp_parse_args($options, $this->options['login_button']);		
 
 		$html = '';
