@@ -132,6 +132,7 @@ $fields['comments_box'] = array(
 		'widget_no_display' => true
 	),
 	
+	
 	'after_on_posts' => array(
 		'type'=>'html',
 		'html'=> '
@@ -140,11 +141,28 @@ $fields['comments_box'] = array(
 		'widget_no_display' => true
 	),
 	
+	
 	'before_config2' => array(
 		'type'=>'html',
 		'html'=> '
 			<div class="row">
 		'
+	),
+	
+	'place'=> array(
+		'type'=> 'select',
+		'options' => array(
+			array('value'=>'before', 'label'=>__('Before comments form',$this->ptd)),
+			array('value'=>'top', 'label'=>__('Top of comments form',$this->ptd)),
+			array('value'=>'after', 'label'=>__('After comments form',$this->ptd)),
+			array('value'=>'before_fields', 'label'=>__('Before comments form fields',$this->ptd)),
+			array('value'=>'after_fields', 'label'=>__('After comments form fields',$this->ptd)),
+			array('value'=>'replace', 'label'=> __('Replace comments form',$this->ptd))
+		),
+		'label'=> __('Where ?',$this->ptd),
+		'class'=>'span4',
+		'attr'=> array('class'=>'span4'),
+		'widget_no_display' => true
 	),
 	
 	'exclude_post_id'=> array(

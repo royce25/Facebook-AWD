@@ -2640,23 +2640,32 @@ Class AWD_facebook
 			return $this->display_messages($e->getMessage(), 'error', false);
 		}
 	}
-
+	
+	/**
+	 * Display the comment form
+	 */
+	public function display_the_comment_form()
+	{
+		global $post;
+		echo $this->get_the_comments_box($post);
+	}
+	
 	/**
 	 * Filter the comment form to add fbcomments
 	 */
-	public function the_comments_form()
+	public function the_comments_form($stylesheet_path)
 	{
 		global $post;
 		$exclude_post_page_id = explode(",", $this->options['comments_box']['exclude_post_id']);
 		if (!in_array($post->ID, $exclude_post_page_id)) {
-			if ($post->post_type == 'page' && $this->options['comments_box']['on_pages']) {
-				echo '<br />' . $this->get_the_comments_box($post);
-			} elseif ($post->post_type == 'post' && $this->options['comments_box']['on_posts']) {
-				echo '<br />' . $this->get_the_comments_box($post);
-			} elseif ($post->post_type != '' && $this->options['comments_box']['on_custom_post_types']) {
-				echo '<br />' . $this->get_the_comments_box($post);
+			if($this->options['comments_box']['place'] == 'replace'){
+				//replace the form with a template.
+				$stylesheet_path = dirname(__FILE__).'/inc/admin/views/comments_template.php';
+			}else{
+				add_action('comment_form_'.$this->options['comments_box']['place'] , array(&$this, 'display_the_comment_form'));	
 			}
 		}
+		return $stylesheet_path;
 	}
 
 	//****************************************************************************************

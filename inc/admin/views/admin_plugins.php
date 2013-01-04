@@ -95,7 +95,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 				
 				<div id="comments_settings" class="tab-pane">
 					<?php
-					$message = '<i class="icon-warning-sign"></i> '.__('Your themes must use the action "do_action("comment_form_after");" or the function "commnent_form();" to work. (look in your theme, in comments.php file)',$this->ptd);
+					$message = '<i class="icon-warning-sign"></i> '.__('The form place depend on how your form theme is coded. Maybe some places will not work with your theme.',$this->ptd);
 					$this->display_messages($message, 'info');
 					
 					if(isset($fields['comments_box']) && is_array($fields['comments_box'])){

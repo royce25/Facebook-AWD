@@ -178,7 +178,7 @@ class AWD_facebook_options
 			'type' 							=> 'html5',
 			'border_color' 					=> '',
 			'force_wall' 					=> '',
-			'header' 						=> 0,
+			'header' 						=> 0
 		);
 		$this->setDefaultValue('like_box', $like_box);
 		
@@ -236,7 +236,8 @@ class AWD_facebook_options
 			'on_pages'						=> 0,
 			'on_posts'						=> 0,
 			'on_custom_post_types'          => 0,
-			'exclude_post_id'				=> ''
+			'exclude_post_id'				=> '',
+			'place'							=> 'after'	
 		);
 		$this->setDefaultValue('comments_box', $comments_box);
 		

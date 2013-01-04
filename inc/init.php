@@ -42,7 +42,7 @@ add_filter('language_attributes',  array($this,'ogp_language_attributes'),10,1);
 add_action('after_setup_theme',array(&$this,'add_theme_support'));
 add_action('wp_head',array(&$this,'display_ogp_objects'));
 add_filter('the_content', array(&$this,'the_content'));
-add_action('comment_form_after', array(&$this,'the_comments_form'));
+add_filter('comments_template', array(&$this,'the_comments_form'));
 add_action('wp_enqueue_scripts',array(&$this,'front_enqueue_js'));
 add_action('wp_footer',array(&$this,'debug_content'));
 
