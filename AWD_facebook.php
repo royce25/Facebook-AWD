@@ -2133,8 +2133,8 @@ Class AWD_facebook
 		if (is_wp_error($wp_user_id)) {
 			wp_die($wp_user_id);
 		} else if (false === $wp_user_id) {
-			//TODO redirect to entry point on facebook side ?
-			wp_die(__('Facebook AWD: You should try first to connect with Facebook.', $this->ptd));
+			wp_redirect($this->_oauth_url);
+			exit();
 		}
 
 		$this->save_facebook_user_data($wp_user_id, $this->me);
