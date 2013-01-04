@@ -486,15 +486,17 @@ Class AWD_facebook
 		add_action('admin_print_styles-' . $this->blog_admin_plugins_hook, array(&$this, 'admin_enqueue_css'));
 		add_action('admin_print_styles-post-new.php', array(&$this, 'admin_enqueue_css'));
 		add_action('admin_print_styles-post.php', array(&$this, 'admin_enqueue_css'));
+		add_action('admin_print_styles-link-add.php', array(&$this, 'admin_enqueue_css'));
+		add_action('admin_print_styles-link.php', array(&$this, 'admin_enqueue_css'));
+		add_action('admin_print_styles-widgets.php', array(&$this, 'admin_enqueue_css'));
+		
 		add_action('admin_print_scripts-' . $this->blog_admin_page_hook, array(&$this, 'admin_enqueue_js'));
 		add_action('admin_print_scripts-' . $this->blog_admin_plugins_hook, array(&$this, 'admin_enqueue_js'));
 		add_action('admin_print_scripts-post-new.php', array(&$this, 'admin_enqueue_js'));
 		add_action('admin_print_scripts-post.php', array(&$this, 'admin_enqueue_js'));
 		add_action('admin_print_scripts-link-add.php', array(&$this, 'admin_enqueue_js'));
 		add_action('admin_print_scripts-link.php', array(&$this, 'admin_enqueue_js'));
-		add_action('admin_print_styles-link-add.php', array(&$this, 'admin_enqueue_css'));
-		add_action('admin_print_styles-link.php', array(&$this, 'admin_enqueue_css'));
-		add_action('admin_print_styles-widgets.php', array(&$this, 'admin_enqueue_css'));
+		
 		//enqueue here the library facebook connect
 		$this->add_js_options();
 		//Add meta box
@@ -609,6 +611,7 @@ Class AWD_facebook
 		$AWD_facebook_vars = array('ajaxurl' => admin_url('admin-ajax.php'), 'homeUrl' => home_url(), 'loginUrl' => $this->_login_url, 'logoutUrl' => $this->_logout_url, 'scope' => current_user_can("manage_options") ? $this->options["perms_admin"] : $this->options["perms"], 'app_id' => $this->options['app_id'], 'FBEventHandler' => array('callbacks' => array()));
 		$AWD_facebook_vars = apply_filters('AWD_facebook_js_vars', $AWD_facebook_vars);
 		wp_localize_script($this->plugin_slug, $this->plugin_slug, $AWD_facebook_vars);
+		wp_enqueue_script($this->plugin_slug);
 	}
 	
 	/**
@@ -616,10 +619,7 @@ Class AWD_facebook
 	 */
 	public function front_enqueue_js()
 	{	
-		//add style here.	
 		wp_enqueue_style($this->plugin_slug . '-ui-bootstrap');
-		//Js here
-		wp_enqueue_script($this->plugin_slug);
 		$this->add_js_options();
 	}
 	

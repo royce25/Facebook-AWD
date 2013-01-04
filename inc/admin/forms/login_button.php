@@ -93,7 +93,7 @@ $fields['login_button'] = array(
 		),		
 		'label'=> __('Show faces',$this->ptd),
 		'class'=>'span2',
-		'attr'=> array('class'=>'span2')
+		'attr'=> array('class'=>'span2 login_button_show_faces')
 	),
 	
 	'maxrow'=> array(
