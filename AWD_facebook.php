@@ -819,7 +819,7 @@ Class AWD_facebook
 			echo $this->get_the_login_button($options);
 			$this->display_messages(sprintf(__("%s Facebook ID: %s", $this->ptd), '<i class="icon-user"></i> ', $this->uid));
 		} else if ($this->options['connect_enable']) {
-			echo '<a href="#" class="AWD_facebook_connect_button btn btn-info"><i class="icon-user icon-white"></i> ' . __("Login with Facebook", $this->ptd) . '</a>';
+			echo '<a href="#" class="AWD_facebook_connect_button btn btn-info" data-redirect="'.$this->get_current_url().'"><i class="icon-user icon-white"></i> ' . __("Login with Facebook", $this->ptd) . '</a>';
 		} else {
 			$this->display_messages(sprintf(__('You should enable FB connect in %sApp settings%s', $this->ptd), '<a href="admin.php?page=' . $this->plugin_slug . '">', '</a>'), 'warning');
 		}
@@ -2209,8 +2209,6 @@ Class AWD_facebook
 		$user = wp_signon('', is_ssl());
 		//then redirect where we need.
 		if (!empty($redirect_url)) {
-			if(preg_match('@%CURRENT_URL%@', $redirect_url))
-				$redirect_url = $this->get_current_url();
 			wp_redirect($redirect_url);
 		} elseif (!empty($referer)) {
 			wp_redirect($referer);
@@ -2408,6 +2406,10 @@ Class AWD_facebook
 	{
 		$options = wp_parse_args($options, $this->options['login_button']);		
 
+		//search and replace pattern for redirect url
+		$options['login_redirect_url'] = str_replace(array("%CURRENT_URL%"), array($this->get_current_url()), $options['login_redirect_url']);
+		$options['logout_redirect_url'] = str_replace(array("%CURRENT_URL%"), array($this->get_current_url()), $options['logout_redirect_url']);
+		
 		$html = '';
 		switch (1) {
 			case ($this->is_user_logged_in_facebook() && $this->options['connect_enable'] && is_user_logged_in()):

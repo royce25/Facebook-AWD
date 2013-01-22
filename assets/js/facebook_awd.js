@@ -18,8 +18,8 @@ var AWD_facebook = function(){
 	
 			jQuery('.AWD_facebook_connect_button').live('click',function(e){
 				e.preventDefault();
-				var redirect = jQuery(this).data('redirect');
-				AWD_facebook.connect(redirect);
+				var redirect_url = jQuery(this).data('redirect');
+				AWD_facebook.connect(redirect_url);
 			});
 		},
 		
