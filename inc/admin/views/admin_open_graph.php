@@ -28,7 +28,7 @@
 						  </tr>';
 					?>
 					</tbody>
-					</tfoot>
+					<tfoot>
 						<tr><td colspan="2"><button class="btn btn-success pull-right show_ogp_form" data-loading-text="<?php _e('Editing...',$this->ptd); ?>"><i class="icon-plus icon-white"></i> <?php _e('Add an object',$this->ptd); ?></button></td></tr>
 					</tfoot>
 				</table>

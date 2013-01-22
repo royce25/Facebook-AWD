@@ -167,6 +167,15 @@ function AWDFacebookAdmin($){
 		//Open graph form
 		$('.show_ogp_form').button('reset');
 		
+		$('#awd_fcbk_option_opengraph_object_link').live('change',function(){
+			if($(this).val() == 'custom'){
+				$('.opengraph_object_form').slideDown();
+			}else{
+				$('.opengraph_object_form').slideUp();
+			}
+		});
+		$('#awd_fcbk_option_opengraph_object_link').trigger('change');
+
 		
 		$('#awd_fcbk_option_awd_ogp_type').live('change',function(){
 			if($(this).val() == 'custom'){

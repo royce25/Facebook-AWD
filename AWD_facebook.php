@@ -256,7 +256,7 @@ Class AWD_facebook
 	public function wp_init()
 	{
 		//Js
-		wp_register_script($this->plugin_slug . '-bootstrap-js', $this->plugin_url . '/assets/js/bootstrap.min.js', array('jquery'),$this->get_version(), true);
+		wp_register_script($this->plugin_slug . '-bootstrap-js', $this->plugin_url . '/assets/js/bootstrap.min.js', array('jquery'), $this->get_version(), true);
 		wp_register_script($this->plugin_slug . '-google-code-prettify', $this->plugin_url . '/assets/js/google-code-prettify/prettify.js', array('jquery'));
 		wp_register_script($this->plugin_slug . '-admin-js', $this->plugin_url . '/assets/js/facebook_awd_admin.js', array('jquery', $this->plugin_slug . '-google-code-prettify'));
 		wp_register_script($this->plugin_slug, $this->plugin_url . '/assets/js/facebook_awd.js', array('jquery'), $this->get_version(), true);
@@ -489,7 +489,7 @@ Class AWD_facebook
 		add_action('admin_print_styles-link-add.php', array(&$this, 'admin_enqueue_css'));
 		add_action('admin_print_styles-link.php', array(&$this, 'admin_enqueue_css'));
 		add_action('admin_print_styles-widgets.php', array(&$this, 'admin_enqueue_css'));
-		
+
 		add_action('admin_print_scripts-' . $this->blog_admin_page_hook, array(&$this, 'admin_enqueue_js'));
 		add_action('admin_print_scripts-' . $this->blog_admin_plugins_hook, array(&$this, 'admin_enqueue_js'));
 		add_action('admin_print_scripts-post-new.php', array(&$this, 'admin_enqueue_js'));
@@ -497,8 +497,7 @@ Class AWD_facebook
 		add_action('admin_print_scripts-link-add.php', array(&$this, 'admin_enqueue_js'));
 		add_action('admin_print_scripts-link.php', array(&$this, 'admin_enqueue_js'));
 		add_action('admin_print_scripts-widgets.php', array(&$this, 'admin_enqueue_js'));
-		
-		
+
 		//enqueue here the library facebook connect
 		$this->add_js_options();
 		//Add meta box
@@ -615,16 +614,16 @@ Class AWD_facebook
 		wp_localize_script($this->plugin_slug, $this->plugin_slug, $AWD_facebook_vars);
 		wp_enqueue_script($this->plugin_slug);
 	}
-	
+
 	/**
 	 * Add javascript resources to front
 	 */
 	public function front_enqueue_js()
-	{	
+	{
 		wp_enqueue_style($this->plugin_slug . '-ui-bootstrap');
 		$this->add_js_options();
 	}
-	
+
 	/**
 	 * Admin Infos
 	 */
@@ -819,7 +818,7 @@ Class AWD_facebook
 			echo $this->get_the_login_button($options);
 			$this->display_messages(sprintf(__("%s Facebook ID: %s", $this->ptd), '<i class="icon-user"></i> ', $this->uid));
 		} else if ($this->options['connect_enable']) {
-			echo '<a href="#" class="AWD_facebook_connect_button btn btn-info" data-redirect="'.$this->get_current_url().'"><i class="icon-user icon-white"></i> ' . __("Login with Facebook", $this->ptd) . '</a>';
+			echo '<a href="#" class="AWD_facebook_connect_button btn btn-info" data-redirect="' . $this->get_current_url() . '"><i class="icon-user icon-white"></i> ' . __("Login with Facebook", $this->ptd) . '</a>';
 		} else {
 			$this->display_messages(sprintf(__('You should enable FB connect in %sApp settings%s', $this->ptd), '<a href="admin.php?page=' . $this->plugin_slug . '">', '</a>'), 'warning');
 		}
@@ -968,7 +967,7 @@ Class AWD_facebook
 	/**
 	 * This function transform an array into an OpenGraphProtocol object
 	 * @param array $object
-	 * @return OpenGraphProtocol $ogp
+	 * @return OpenGraphProtocol
 	 */
 	public function opengraph_array_to_object($object)
 	{
@@ -1026,6 +1025,10 @@ Class AWD_facebook
 		return $ogp;
 	}
 
+	/**
+	 * @param unknown $image_url
+	 * @return OpenGraphProtocolImage
+	 */
 	public function create_OpenGraphProtocolImage($image_url)
 	{
 		$ogp_img = new OpenGraphProtocolImage();
@@ -1056,6 +1059,10 @@ Class AWD_facebook
 		return $ogp_img;
 	}
 
+	/**
+	 * @param unknown $video_url
+	 * @return OpenGraphProtocolVideo
+	 */
 	public function create_OpenGraphProtocolVideo($video_url)
 	{
 		$ogp_video = new OpenGraphProtocolVideo();
@@ -1093,6 +1100,10 @@ Class AWD_facebook
 		return $ogp_video;
 	}
 
+	/**
+	 * @param unknown $audio_url
+	 * @return OpenGraphProtocolAudio
+	 */
 	public function create_OpenGraphProtocolAudio($audio_url)
 	{
 		$ogp_audio = new OpenGraphProtocolAudio();
@@ -1321,21 +1332,31 @@ Class AWD_facebook
 				break;
 		}
 
+		
+		
 		//redefine object template from post if value is set
 		$from_post = 0;
+		$object_template = null;
+		
 		if (is_object($post)) {
 			$custom = get_post_meta($post->ID, $this->plugin_slug, true);
 			if (!is_string($custom) AND isset($custom['opengraph']['object_link'])) {
-				if ($custom['opengraph']['object_link'] != '') {
+				if($custom['opengraph']['object_link'] == 'custom'){
+					$from_post = 1;
+					$object_template = $custom['awd_ogp'];
+				}else if ($custom['opengraph']['object_link'] != '') {
 					$from_post = 1;
 					$linked_object = $custom['opengraph']['object_link'];
 				}
 			}
 		}
-
-		//define object value depending on object
-		$object_template = isset($this->options['opengraph_objects'][$linked_object]) ? $this->options['opengraph_objects'][$linked_object] : null;
+		//define object template depending on object values
+		if($object_template === null)
+			$object_template = isset($this->options['opengraph_objects'][$linked_object]) ? $this->options['opengraph_objects'][$linked_object] : null;
+				
+		//Process all pattern.
 		$object_template = $this->process_opengraph_pattern($array_replace, $object_template);
+		
 		if ($object_template != null) {
 			if (is_object($post)) {
 				//auto load images attachment
@@ -1385,6 +1406,13 @@ Class AWD_facebook
 		return false;
 	}
 
+	/**
+	 * Replace all the pattern by related content
+	 * 
+	 * @param unknown $array_replace
+	 * @param unknown $object_template
+	 * @return mixed
+	 */
 	public function process_opengraph_pattern($array_replace, $object_template)
 	{
 		$array_pattern = array("%BLOG_TITLE%", "%BLOG_DESCRIPTION%", "%BLOG_URL%", "%TITLE%", "%DESCRIPTION%", "%IMAGE%", "%URL%");
@@ -2404,12 +2432,12 @@ Class AWD_facebook
 	 */
 	public function get_the_login_button($options = array())
 	{
-		$options = wp_parse_args($options, $this->options['login_button']);		
+		$options = wp_parse_args($options, $this->options['login_button']);
 
 		//search and replace pattern for redirect url
 		$options['login_redirect_url'] = str_replace(array("%CURRENT_URL%"), array($this->get_current_url()), $options['login_redirect_url']);
 		$options['logout_redirect_url'] = str_replace(array("%CURRENT_URL%"), array($this->get_current_url()), $options['logout_redirect_url']);
-		
+
 		$html = '';
 		switch (1) {
 			case ($this->is_user_logged_in_facebook() && $this->options['connect_enable'] && is_user_logged_in()):
@@ -2558,20 +2586,29 @@ Class AWD_facebook
 			if ($this->options['open_graph_enable'] == 1) {
 				echo '<h2>' . __('Opengraph', $this->ptd) . '</h2>';
 				$add_link = '<a class="btn btn btn-mini" href="' . admin_url('admin.php?page=' . $this->plugin_slug . '_open_graph') . '" target="_blank"><i class="icon-plus"></i> ' . __('Create an object', $this->ptd) . '</a>';
+
 				$ogp_objects = apply_filters('AWD_facebook_ogp_objects', $this->options['opengraph_objects']);
 				if (is_array($ogp_objects) && count($ogp_objects)) {
 					$linked_object = '';
-					$select_objects_options = array(array('value' => '', 'label' => __('Default', $this->ptd)));
+					$select_objects_options = array(
+						array('value' => '', 'label' => __('Default', $this->ptd)),
+						array('value' => 'custom', 'label' => __('Custom', $this->ptd))
+					);
 					foreach ($ogp_objects as $key => $ogp_object) {
 						$select_objects_options[] = array('value' => $key, 'label' => $ogp_object['object_title']);
 					}
 					echo '
 						<div class="row">
-							' . $form->addSelect(__('Redefine Opengraph object for this post', $this->ptd), 'opengraph[object_link]', $select_objects_options, $options['opengraph']['object_link'], 'span3', array('class' => 'span3')) . '
-						</div>' . $add_link;
+							' . $form->addSelect(__('Redefine Opengraph object for this post', $this->ptd), 'opengraph[object_link]', $select_objects_options, $options['opengraph']['object_link'], 'span3', array('class' => 'span3')) .$add_link.'
+						</div>';
 				} else {
 					$this->display_messages(sprintf(__('No Object found.', $this->ptd) . ' ' . $add_link, '<a href="' . admin_url('admin.php?page=' . $this->plugin_slug . '_open_graph') . '" target="_blank">', '</a>'), 'warning');
 				}
+				
+				$opengraph_array = isset($options['awd_ogp']) ? $options['awd_ogp'] : null;
+				echo '<div class="hidden opengraph_object_form">';
+				$this->get_open_graph_object_form($opengraph_array);
+				echo '</div>';
 			}
 		}
 
@@ -2642,7 +2679,7 @@ Class AWD_facebook
 			return $this->display_messages($e->getMessage(), 'error', false);
 		}
 	}
-	
+
 	/**
 	 * Display the comment form
 	 */
@@ -2651,7 +2688,7 @@ Class AWD_facebook
 		global $post;
 		echo $this->get_the_comments_box($post);
 	}
-	
+
 	/**
 	 * Filter the comment form to add fbcomments
 	 */
@@ -2660,11 +2697,11 @@ Class AWD_facebook
 		global $post;
 		$exclude_post_page_id = explode(",", $this->options['comments_box']['exclude_post_id']);
 		if (!in_array($post->ID, $exclude_post_page_id)) {
-			if($this->options['comments_box']['place'] == 'replace'){
+			if ($this->options['comments_box']['place'] == 'replace') {
 				//replace the form with a template.
 				$stylesheet_path = $this->options['comments_box']['comments_template_path'];
-			}else{
-				add_action('comment_form_'.$this->options['comments_box']['place'] , array(&$this, 'display_the_comment_form'));	
+			} else {
+				add_action('comment_form_' . $this->options['comments_box']['place'], array(&$this, 'display_the_comment_form'));
 			}
 		}
 		return $stylesheet_path;
