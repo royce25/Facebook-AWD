@@ -309,7 +309,7 @@ class AWD_facebook_likebox
 	}
 	public function likeboxIframe()
 	{
-		return '<iframe src="http://www.facebook.com/plugins/likebox.php?href='.$this->href.'&amp;width='.$this->width.'&amp;height='.$this->height.'&amp;show_faces='.$this->show_faces.'&amp;header='.$this->header.'&amp;colorscheme='.$this->colorscheme.'&amp;border_color='.urlencode($this->border_color).'&amp;stream='.$this->stream.'&amp;force_wall='.$this->force_wall.'" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:'.$this->width.'px; height:'.$this->height.'px;" allowTransparency="true"></iframe>';
+		return '<iframe src="http://www.facebook.com/plugins/likebox.php?href='.urlencode($this->href).'&amp;width='.$this->width.'&amp;height='.$this->height.'&amp;show_faces='.$this->show_faces.'&amp;header='.$this->header.'&amp;colorscheme='.$this->colorscheme.'&amp;border_color='.urlencode($this->border_color).'&amp;stream='.$this->stream.'&amp;force_wall='.$this->force_wall.'" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:'.$this->width.'px; height:'.$this->height.'px;" allowTransparency="true"></iframe>';
 	}
 
 }

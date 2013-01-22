@@ -325,7 +325,7 @@ class AWD_facebook_likebutton
 	//******VIEWS******//
 	protected function likeButtonHtml5()
 	{
-		return '<div class="fb-like" data-href="'.urlencode($this->href).'" data-send="'.$this->send.'" data-layout="'.$this->layout.'" data-width="'.$this->width.'" data-show-faces="'.$this->show_faces.'" data-action="'.$this->action.'" data-colorscheme="'.$this->colorscheme.'" data-font="'.$this->font.'" data-ref="'.$this->ref.'"></div>';
+		return '<div class="fb-like" data-href="'.$this->href.'" data-send="'.$this->send.'" data-layout="'.$this->layout.'" data-width="'.$this->width.'" data-show-faces="'.$this->show_faces.'" data-action="'.$this->action.'" data-colorscheme="'.$this->colorscheme.'" data-font="'.$this->font.'" data-ref="'.$this->ref.'"></div>';
 	}
 	protected function likeButtonXfbml()
 	{
