@@ -2790,7 +2790,7 @@ Class AWD_facebook
 		$wp_widget_factory->widgets['AWD_facebook_widget_comments_box'] = new AWD_facebook_widget(array('id_base' => 'comments_box', 'name' => $this->plugin_name . ' ' . __('Comments Box', $this->ptd), 'description' => __('Add a Facebook Comments Box', $this->ptd), 'model' => $fields['comments_box'], 'self_callback' => array($this, 'shortcode_comments_box'), 'text_domain' => $this->ptd));
 
 		require(dirname(__FILE__) . '/inc/admin/forms/shared_activity_box.php');
-		$wp_widget_factory->widgets['AWD_facebook_shared_activity_box'] = new AWD_facebook_widget(array('id_base' => 'shared_activity_box', 'name' => $this->plugin_name . ' ' . __('Shared Activity Box', $this->ptd), 'description' => __('Add a Facebook Shared Activity Box', $this->ptd), 'model' => $fields['shared_activity_box'], 'self_callback' => array($this, 'shortcode_shared_activity_box'), 'text_domain' => $this->ptd));
+		$wp_widget_factory->widgets['AWD_facebook_widget_shared_activity_box'] = new AWD_facebook_widget(array('id_base' => 'shared_activity_box', 'name' => $this->plugin_name . ' ' . __('Shared Activity Box', $this->ptd), 'description' => __('Add a Facebook Shared Activity Box', $this->ptd), 'model' => $fields['shared_activity_box'], 'self_callback' => array($this, 'shortcode_shared_activity_box'), 'text_domain' => $this->ptd));
 
 		do_action('AWD_facebook_register_widgets');
 	}
