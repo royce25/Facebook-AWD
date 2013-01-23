@@ -2,13 +2,13 @@
 
 Contributors: AHWEBDEV 
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZQ2VL33YXHJLC
-Tags: facebook, facebook tab, like button, open graph, comments, fbconnect, likebox, activity box, all in one, fb connect, fb comments, facebook comments, register
+Tags: facebook, facebook tab, like button, open graph, opengraph actions, comments, fbconnect, likebox, activity box, all in one, fb connect, fb comments, facebook comments, register
 Requires at least: 3.3
 Tested up to: 3.5
+License: GPLv3
+Stable tag: 1.6
 
-Facebook AWD is an all in one Facebook capabilities for wordpress.
-Add like button, like box, activity box, FB Comments, Open Graph and FB connect, you can add sub plugins to extend features.
-
+All in one Facebook capabilities for wordpress. Keep your users and your blog sync with facebook using api and plugins from facebook.
 == Description ==
 
 [Facebook AWD](http://facebook-awd.ahwebdev.fr/ "") is an all in one Facebook capabilities for wordpress.
@@ -23,12 +23,12 @@ Use both SDK's PHP AND Javascript
 
 = Socials plugins Iframe or Xfbml or Html5: =
 
-*   [Like Button](http://trac.ahwebdev.fr/projects/facebook-awd/wiki/How_to_use_Like_Button "")
-*   [Like Box](http://trac.ahwebdev.fr/projects/facebook-awd/wiki/How_to_use_Like_Box "")
-*   [Activity Box](http://trac.ahwebdev.fr/projects/facebook-awd/wiki/How_to_use_Activity_Box "")
-*   [Login Button](http://trac.ahwebdev.fr/projects/facebook-awd/wiki/How_to_use_Facebook_Connect "")
-*   [Comments](http://trac.ahwebdev.fr/projects/facebook-awd/wiki/How_to_use_Comments_Box "")
-*   [Facebook Actions with new OpenGraph](http://trac.ahwebdev.fr/projects/facebook-awd/wiki/How_to_use_Custom_OpenGraph_Objects_and_OpenGraph_Objects_Actions "")
+*   Like Button
+*   Like Box
+*   Activity Box
+*   Shared Activity
+*   Facebook Connect & Login Button 
+*   Comments
 
 = Get More Features =
 *   [Sub plugins list](http://facebook-awd.ahwebdev.fr/plugins/ "See all plugins of Facebook AWD")
@@ -42,11 +42,13 @@ Customise Open Graph Tags for each type of posts (custom post type support), arc
 You can redefine settings individually for all posts or pages or custom post type
 Add your own meta and create custom objects.
 
-= FB connect: =
+= FB connect & Realtime Api: =
 If FB connect enable, you can ask special permissions, and link Facebook user with your site. Use avatars from Facebook instead defaults.
 When a user is logging in to your site using Facebook, this plugin will auto register user. If user unregister from Facebook, his account will be not remove.
 If you are a developer you can use the API of facebook and opengraph api directly from your themes and plugins.
 Simply use defined objects that were set by this plugin.
+Optional: you can use the real time api to keep users's data sync with your database.
+
 
 = Widget And Shortcodes: =
 You can use widgets and shotcodes to display Facebook socials plugins
@@ -54,7 +56,7 @@ You can use widgets and shotcodes to display Facebook socials plugins
 * Like Button
 * Like Box [AWD_likebox]
 * Activity Box [AWD_activitybox]
-* Login Button [AWD_loginbutton]
+* Facebook Connect & Login Button [AWD_loginbutton]
 * Comments Box [AWD_comments]
 
 = Multisite compatible: =
@@ -74,11 +76,27 @@ This plugin is compatible with Wordpress multisite.
 
 == Changelog ==
 
-[Browse changes](https://github.com/AHWEBDEV/Facebook-AWD/commits/master "")
+= 1.6 =
+[See changes](https://github.com/AHWEBDEV/Facebook-AWD/issues?milestone=2&page=1&state=closed "See changes")
+
+= 1.5 =
+[See changes](https://github.com/AHWEBDEV/Facebook-AWD/issues?milestone=3&page=1&state=closed "See changes")
 
 == Upgrade Notice ==
 
-= 1.4 =
-Version 1.4 of "Facebook AWD" includes major changes.
-Options have been updated, you must be careful when updating. You will require to reconfigure the plugin "Facebook AWD"
+Do not forget to save your Database and Files before to update.
 
+== Screenshots == 
+
+1. Global settings 
+2. Opengraph settings
+3. Facebook Connect and RealTime Api
+4. Manage Pages publishing
+5. Like button settings
+6. Like box settings
+7. Activity feed settings
+8. Shared activity settings
+9. Login button settings
+10. Comments settings
+11. Widgets list
+12. Posts settings
