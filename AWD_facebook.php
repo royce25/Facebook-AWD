@@ -3,7 +3,7 @@
 Plugin Name: Facebook AWD All in One
 Plugin URI: http://facebook-awd.ahwebdev.fr
 Description: Facebook AWD will adds required extensions from facebook to your site.
-Version: 1.6
+Version: 1.7Beta
 Author: AHWEBDEV
 Author URI: http://www.ahwebdev.fr
 License: Copywrite AHWEBDEV
