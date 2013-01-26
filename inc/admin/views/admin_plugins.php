@@ -23,7 +23,7 @@ $list_menu_plugins = apply_filters('AWD_facebook_plugins_menu', $list_menu_plugi
 if(!is_array($list_menu_plugins)){
 	$list_menu_plugins = array();
 }
-$form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_pref);
+$form = new AWD_facebook_form('form_settings', 'POST', $this->get_current_url(), $this->plugin_option_pref);
 ?>
 <div id="div_options_content">
 	

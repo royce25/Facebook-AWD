@@ -316,16 +316,17 @@ Class AWD_facebook
 	 * Display Error in admin Facebook AWD area
 	 * 
 	 */
-	public function display_all_errors()
+	public function display_all_errors($echo = true)
 	{
 		$html = '';
+		$messages_html = null;
 		if (isset($this->errors) && count($this->errors) > 0 AND is_array($this->errors)) {
 			foreach ($this->errors as $error) {
 				if (is_wp_error($error)) {
 					$html .= $error->get_error_message();
 				}
 			}
-			$this->display_messages($html, 'error');
+			$messages_html .= $this->display_messages($html, 'error', $echo);
 		}
 		$html = '';
 		if (isset($this->warnings) && count($this->warnings) > 0 AND is_array($this->warnings)) {
@@ -334,8 +335,10 @@ Class AWD_facebook
 					$html .= $warning->get_error_message();
 
 			}
-			$this->display_messages($html, 'warning', true);
+			$messages_html .= $this->display_messages($html, 'warning', $echo);
 		}
+		if(!$echo)
+			return $messages_html;
 	}
 
 	/**
@@ -345,13 +348,14 @@ Class AWD_facebook
 	public function display_messages($message = null, $type = 'info', $echo = true)
 	{
 		$html = '';
+		$close = '<a class="close" href="#" data-dismiss="alert">&times;</a>';
 		if (!empty($message)) {
-			$html = '<div class="alert alert-' . $type . '">' . $message . '</div>';
+			$html = '<div class="alert alert-' . $type . ' fade in">' . $close . $message . '</div>';
 		} else if (isset($this->messages) && count($this->messages) > 0 AND is_array($this->messages)) {
 			foreach ($this->messages as $key => $message) {
-				if (is_string($type))
+				if (is_string($key))
 					$type = $key;
-				$html .= '<div class="alert alert-' . $type . '">' . $message . '</div>';
+				$html .= '<div class="alert alert-' . $type . ' fade in">'. $close . $message . '</div>';
 			}
 		}
 		if (!$echo)
@@ -700,6 +704,7 @@ Class AWD_facebook
 		} else {
 			echo '
 			<div id="awd_app">
+				<div class="alert alert-success"><i class="icon-ok icon-white"></i> '.__('API SDK Settings are ok', $this->ptd).'</div>
 				<table class="table table-condensed">
 					<thead>
 						<th>' . __('Info', $this->ptd) . '</th>
@@ -958,7 +963,8 @@ Class AWD_facebook
 				}
 				//save with option manager
 				$this->options['opengraph_object_links'] = $this->optionsManager->updateOption('opengraph_object_links', $opengraph_object_links, true);
-				echo json_encode(array('success' => 1));
+				
+				echo json_encode(array('success' => 1, 'messages' => $this->display_messages(__('Opengraph configuration updated.', $this->ptd), 'success', false)));
 				exit();
 			}
 		}
@@ -1669,16 +1675,12 @@ Class AWD_facebook
 		if (isset($_POST[$this->plugin_option_pref . '_nonce_options_update_field']) && wp_verify_nonce($_POST[$this->plugin_option_pref . '_nonce_options_update_field'], $this->plugin_slug . '_update_options')) {
 			//do custom action for sub plugins or other exec.
 			do_action('AWD_facebook_save_custom_settings');
-
 			//unset submit to not be stored
 			unset($_POST[$this->plugin_option_pref . '_nonce_options_update_field']);
 			unset($_POST['_wp_http_referer']);
 			if ($this->update_options_from_post()) {
-				//$this->get_facebook_user_data();
-				//TOTO update user infos here ?
-				//$this->save_facebook_user_data($this->get_current_user()->ID);
 				$this->get_app_info();
-				$this->messages['success'] = __('Options updated', $this->ptd);
+				$this->messages['success'] = __('Options updated', $this->ptd).' <a class="btn btn-success" href="'.wp_get_referer().'">'.__('Reload the page to see changes',$this->ptd).'</a>';
 			} else {
 				$this->errors[] = new WP_Error('AWD_facebook_save_option', __('Options not updated there is an error...', $this->ptd));
 			}
@@ -1687,6 +1689,21 @@ Class AWD_facebook
 			$this->optionsManager->reset();
 			$this->messages['success'] = __('Options were reseted', $this->ptd);
 		}
+	}
+	
+	
+	public function ajax_hook_post_from_plugin_options()
+	{
+		$this->hook_post_from_plugin_options();
+		$errors = $this->display_all_errors();
+		$messages = $this->display_messages(null, null, false);
+		$response = array(
+			'success' => $errors == null,
+			'errors' => $errors,
+			'messages' => $messages
+		);
+		echo json_encode($response);
+		exit();
 	}
 
 	//****************************************************************************************

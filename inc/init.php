@@ -20,21 +20,12 @@ add_action('admin_init', array(&$this,'admin_initialisation'));
 
 //DISPLAY ADMIN
 add_action('admin_bar_init', array(&$this,'admin_bar_init'));
-
-
 add_action('AWD_facebook_admin_notices',array(&$this,'display_messages'));
 add_action('AWD_facebook_admin_notices',array(&$this,'missing_config'));
 add_action('AWD_facebook_admin_notices',array(&$this,'display_all_errors'));
-
 add_action('admin_menu', array(&$this,'admin_menu'));
 add_action('network_admin_menu', array(&$this,'add_js_options'));
-
 add_filter("admin_footer_text", array($this,'admin_footer_text'),10,1);
-add_action('edit_user_profile', array(&$this,'user_profile_edit'));
-add_action('show_user_profile', array(&$this,'user_profile_edit'));
-add_action('personal_options_update', array(&$this,'user_profile_save'));
-add_action('edit_user_profile_update', array(&$this,'user_profile_save'));
-add_action("AWD_facebook_save_settings",array(&$this,'hook_post_from_plugin_options'));
 add_action('admin_footer',array(&$this,'debug_content'));
 
 //DISPLAY FRONT
@@ -59,6 +50,12 @@ add_action('wp_loaded',array(&$this,'flush_rules' ));
 add_action('parse_query',array(&$this,'parse_request' ));
 add_filter('logout_url',array(&$this,'logout_url'));
 add_action('save_post', array(&$this, 'save_options_post_editor'));
+add_action('edit_user_profile', array(&$this,'user_profile_edit'));
+add_action('show_user_profile', array(&$this,'user_profile_edit'));
+add_action('personal_options_update', array(&$this,'user_profile_save'));
+add_action('edit_user_profile_update', array(&$this,'user_profile_save'));
+add_action("AWD_facebook_save_settings",array(&$this,'hook_post_from_plugin_options'));
+add_action("wp_ajax_awd_fcbk_save_settings",array(&$this,'ajax_hook_post_from_plugin_options'));
 
 //remove frame security header to allow the website admin to work in iframe
 remove_action( 'login_init', 'send_frame_options_header');

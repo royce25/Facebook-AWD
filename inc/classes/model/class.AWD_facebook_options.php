@@ -262,7 +262,7 @@ class AWD_facebook_options
 		$this->options['curl_options'] = array(
 			CURLOPT_CONNECTTIMEOUT => 10,
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_TIMEOUT        => $options['timeout'],
+			CURLOPT_TIMEOUT        => $this->options['timeout'],
 			CURLOPT_USERAGENT      => 'facebook-php-3.2',
 			CURLOPT_SSL_VERIFYPEER => 0
 		);

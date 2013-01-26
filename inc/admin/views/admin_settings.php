@@ -145,7 +145,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 					<div id="managepages" class="tab-pane">
 					<?php 
 					if($this->options['connect_enable'] == 0){ 
-						$this->display_messages(__('Facebook connect is required to manage pages',$this->ptd), 'error');
+						$this->display_messages(sprintf(__('Facebook connect is required to manage pages %sRetry%s',$this->ptd),'<a class="btn btn-danger" href="'.$this->get_current_url().'">','</a>'), 'error');
 					}else{	
 						if($this->current_facebook_user_can('publish_stream')){
 							$this->display_messages(__('Publish Stream is enabled',$this->ptd), 'success');

@@ -132,9 +132,19 @@ function AWDFacebookAdmin($){
 		$('.awd_tooltip').live('click',function(e){ e.preventDefault();});
 		
 		$('#submit_settings').click(function(e){
-			$(this).button('loading');
+			var $button = $(this);
+			$button.button('loading');
 			e.preventDefault();
-			$('#awd_fcbk_option_form_settings').submit();
+			var postData = $('#awd_fcbk_option_form_settings').serialize();
+			$.post(ajaxurl, postData+'&action='+'awd_fcbk_save_settings',function(data){	
+				if(data.success){
+					$('#AWD_facebook_notices').html(data.messages);
+				}else{
+					$('#AWD_facebook_notices').html(data.errors);
+				}
+				$('#reload_app_infos').trigger('click');
+				$button.button('reset');
+			}, 'json');
 		});
 		$('#reset_settings').click(function(e){
 			$(this).button('loading');
@@ -302,8 +312,9 @@ function AWDFacebookAdmin($){
 			e.preventDefault();
 			$('#submit_ogp').button('loading');
 			$.post(ajaxurl,$(this).serialize()+'&action=save_ogp_object_links',function(data){
+				$('#AWD_facebook_notices').html(data.messages);
 				$('#submit_ogp').button('reset');
-			});
+			},'json');
 		});
 		
 		$('.awd_debug .page-header').each(function(){
@@ -314,7 +325,7 @@ function AWDFacebookAdmin($){
 			});
 		});
 		
-	
+		$(".alert").alert();
 	};
 	
 	

@@ -81,9 +81,11 @@ $current_screen = get_current_screen();
     	</div>
     </div>
 	<div class="bgshadow"></div>
-	<?php 
-	do_action('AWD_facebook_admin_notices');
-	?>
+	<div id="AWD_facebook_notices">
+		<?php 
+		do_action('AWD_facebook_admin_notices');
+		?>
+	</div>
 	<div id="poststuff" class="metabox-holder <?php echo 2 == $screen_layout_columns ? ' has-right-sidebar' : ''; ?>">
 		<?php wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false ); ?>
 		<?php wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false ); ?>
