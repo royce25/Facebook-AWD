@@ -15,4 +15,13 @@ jQuery 1.7.2 reuired.
 [Read more...](http://facebook-awd.ahwebdev.fr/features/ "Features of Facebook AWD")
 
 
+Credits:
+
+- Facebook AWD by AHWEBDEV (Alexandre Hermann)
+- Twitter bootstrap (css framework)
+- GetId3 (tools for opengraph media attributes) by James Heinrich http://www.getid3.orgJames
+- OpengraphProtocol (tools for opengraph objects) by Niall Kennedy <niall@niallkennedy.com>
+
+- Lang: Slovak SK_sk by Branco http://WebHostingGeeks.com
+
 [logo]: http://www.ahwebdev.fr/wp-content/uploads/2011/06/facebook_awd_all_in_one_556x180.png "Facebook AWD Logo"
