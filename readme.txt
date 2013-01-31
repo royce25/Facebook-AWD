@@ -65,6 +65,15 @@ This plugin is compatible with Wordpress multisite.
 [Support](http://facebook-awd.ahwebdev.fr/support/ "")
 [Documentation](http://facebook-awd.ahwebdev.fr/documentation/ "")
 
+= Credits =
+
+* Facebook AWD by AHWEBDEV (Alexandre Hermann)
+* Twitter bootstrap (css framework)
+* GetId3 (tools for opengraph media attributes) by James Heinrich http://www.getid3.orgJames
+* OpengraphProtocol (tools for opengraph objects) by Niall Kennedy <niall@niallkennedy.com>
+* Lang: US US_us by AHWEBDEV
+* Lang: Slovak SK_sk by Branco http://WebHostingGeeks.com
+
 == Installation ==
 
 [How to install](http://facebook-awd.ahwebdev.fr/documentation/install/ "")
