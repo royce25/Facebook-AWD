@@ -23,6 +23,6 @@ Credits:
 - Lang: US US_us by AHWEBDEV
 - Lang: Slovak SK_sk by Branco http://WebHostingGeeks.com
 
-[See the Facebook AWD website for more informations](http://facebook-awd.ahwebdev.fr "Facebook AWD all in one")
+[Visit the Facebook AWD website for more informations](http://facebook-awd.ahwebdev.fr "Facebook AWD all in one")
 
 [logo]: http://www.ahwebdev.fr/wp-content/uploads/2011/06/facebook_awd_all_in_one_556x180.png "Facebook AWD Logo"
