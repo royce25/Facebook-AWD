@@ -3,7 +3,7 @@ Facebook AWD All in one 1.7BETA
 
 ![Plugin logo][logo]
 
-Introduction [See the Facebook AWD website for more informations](http://facebook-awd.ahwebdev.fr "Facebook AWD all in one")
+Introduction
 --------------
 Add Socials plugins, OpenGraph tags, Comments and FB connect. (Use Iframe or Xfbml or HTML5)
 Publish your content to all your FB pages and on your personnal wall on Facebook.
@@ -22,5 +22,7 @@ Credits:
 - OpengraphProtocol (tools for opengraph objects) by Niall Kennedy <niall@niallkennedy.com>
 - Lang: US US_us by AHWEBDEV
 - Lang: Slovak SK_sk by Branco http://WebHostingGeeks.com
+
+[See the Facebook AWD website for more informations](http://facebook-awd.ahwebdev.fr "Facebook AWD all in one")
 
 [logo]: http://www.ahwebdev.fr/wp-content/uploads/2011/06/facebook_awd_all_in_one_556x180.png "Facebook AWD Logo"
