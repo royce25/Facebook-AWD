@@ -1987,7 +1987,7 @@ Class AWD_facebook
 			if (is_wp_error($return))
 				return $return;
 
-			if (isset($return['manage_pages'])) {
+			if (isset($return['manage_pages']) && is_admin()) {
 				if ($return['manage_pages'] == 1) {
 					$return = $this->fb_get_pages();
 					if (is_wp_error($return))
@@ -2714,11 +2714,23 @@ Class AWD_facebook
 		global $post;
 		$exclude_post_page_id = explode(",", $this->options['comments_box']['exclude_post_id']);
 		if (!in_array($post->ID, $exclude_post_page_id)) {
-			if ($this->options['comments_box']['place'] == 'replace') {
-				//replace the form with a template.
-				$stylesheet_path = $this->options['comments_box']['comments_template_path'];
-			} else {
-				add_action('comment_form_' . $this->options['comments_box']['place'], array(&$this, 'display_the_comment_form'));
+			$activated = false;
+			if(
+				($post->post_type == 'page' && $this->options['comments_box']['on_pages'])
+				|| 
+				($post->post_type == 'post' && $this->options['comments_box']['on_posts'])
+				||
+				(in_array($post->post_type, get_post_types(array('public' => true, '_builtin' => false))) && $this->options['comments_box']['on_custom_post_types'])
+			){
+				$activated = true;
+			}
+			if($activated){
+				if ($this->options['comments_box']['place'] == 'replace') {
+					//replace the form with a template.
+					$stylesheet_path = $this->options['comments_box']['comments_template_path'];
+				} else {
+					add_action('comment_form_' . $this->options['comments_box']['place'], array(&$this, 'display_the_comment_form'));
+				}
 			}
 		}
 		return $stylesheet_path;
