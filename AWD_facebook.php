@@ -2859,15 +2859,15 @@ Class AWD_facebook
     public function get_the_like_button($post = "", $options = array(
     ))
     {
-
         if (!isset($options['href']) OR empty($options['href']))
             if (is_object($post))
                 $options['href'] = get_permalink($post->ID);
 
         $options = wp_parse_args($options, $this->options['like_button']);
         try {
-            $AWD_facebook_likebutton = new AWD_facebook_likebutton($options);
-            return '<div class="AWD_facebook_likebutton">' . $AWD_facebook_likebutton->get() . '</div>';
+            $like_button = new AWD_facebook_likebutton($options);
+            $params = array('AWD_facebook_likebutton' => $like_button);
+            return $this->render($like_button->getTemplate(), $params, false);
         } catch (Exception $e) {
             return $this->display_messages($e->getMessage(), 'error', false);
         }
@@ -3265,7 +3265,31 @@ Class AWD_facebook
 
         do_action('AWD_facebook_register_widgets');
     }
-
+    
+    //****************************************************************************************
+    //	TEMPLATES   
+    //****************************************************************************************
+    public function render($template, $params, $echo = true)
+    {
+        $path = locate_template('facebook-awd/'.$template, false, false);
+        if(empty($path))
+            $path = dirname(__FILE__) . '/inc/templates/'.$template;
+        
+        extract($params);
+        
+        if(!$echo)
+            ob_start();
+        
+        include($path);
+        
+        if(!$echo){
+            $content = ob_get_contents();
+            ob_end_clean();
+            return $content;
+        }
+    }
+    
+    
     //****************************************************************************************
     //	DEBUG AND DEV
     //****************************************************************************************
