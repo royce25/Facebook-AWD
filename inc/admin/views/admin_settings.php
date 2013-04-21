@@ -21,41 +21,30 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
         </ul>
         <div class="tab-content">
             <?php if (current_user_can('manage_facebook_awd_settings')) { ?>
-                <div id="general" class="tab-pane">		
+                <div id="general" class="tab-pane">
                     <div class="row">
                         <?php
-                        echo $form->addInputText(__('App ID (facebook)', $this->ptd) . ' ' . $this->get_the_help('app_id'), 'app_id', $this->options['app_id'], 'span4', array(
+                        echo $form->addInputText(__('App ID (facebook)', $this->ptd), 'app_id', $this->options['app_id'], 'span4', array(
                             'class' => 'span3'), 'icon-barcode');
-                        echo $form->addInputText(__('App SECRET KEY', $this->ptd) . ' ' . $this->get_the_help('app_secret_key'), 'app_secret_key', $this->options['app_secret_key'], 'span4', array(
+                        echo $form->addInputText(__('App SECRET KEY', $this->ptd), 'app_secret_key', $this->options['app_secret_key'], 'span4', array(
                             'class' => 'span3'), 'icon-barcode');
-                        echo $form->addInputText(__('Admin IDs', $this->ptd) . ' ' . $this->get_the_help('admins'), 'admins', $this->options['admins'], 'span4', array(
+                        echo $form->addInputText(__('Admin IDs', $this->ptd), 'admins', $this->options['admins'], 'span4', array(
                             'class' => 'span3'), 'icon-barcode');
                         ?>
                         <div class="span4">
                             <div class="row">
                                 <?php
-                                echo $form->addInputText(__('Locale', $this->ptd) . ' ' . $this->get_the_help('locale'), 'locale', $this->options['locale'], 'span2', array(
+                                echo $form->addInputText(__('Locale', $this->ptd), 'locale', $this->options['locale'], 'span2', array(
                                     'class' => 'span1'), 'icon-flag');
                                 ?>
                             </div>
                         </div>
-                        <?php
-                        echo $form->addSelect(__('Mode Debug ?', $this->ptd) . ' ' . $this->get_the_help('debug_enable'), 'debug_enable', array(
-                            array(
-                                'value' => 0,
-                                'label' => __('No', $this->ptd)),
-                            array(
-                                'value' => 1,
-                                'label' => __('Yes', $this->ptd))
-                                ), $this->options['debug_enable'], 'span4', array(
-                            'class' => 'span1'));
-                        ?>
                     </div>
                 </div>
-                <div id="opengraph" class="tab-pane">							
+                <div id="opengraph" class="tab-pane">
                     <div class="row">
                         <?php
-                        echo $form->addSelect(__('Activate Open Graph ?', $this->ptd) . ' ' . $this->get_the_help('open_graph_enable'), 'open_graph_enable', array(
+                        echo $form->addSelect(__('Activate Open Graph ?', $this->ptd), 'open_graph_enable', array(
                             array(
                                 'value' => 0,
                                 'label' => __('No', $this->ptd)),
@@ -68,11 +57,11 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
                     </div>
                 </div>
 
-                <div id="fbconnect" class="tab-pane">	
-                    <h1><?php _e("Facebook Connect", $this->ptd); ?></h1>						
+                <div id="fbconnect" class="tab-pane">
+                    <h1><?php _e("Facebook Connect", $this->ptd); ?></h1>
                     <div class="row">
                         <?php
-                        echo $form->addSelect(__('Activate FB Connect ?', $this->ptd) . ' ' . $this->get_the_help('connect_enable'), 'connect_enable', array(
+                        echo $form->addSelect(__('Activate FB Connect ?', $this->ptd), 'connect_enable', array(
                             array(
                                 'value' => 0,
                                 'label' => __('No', $this->ptd)),
@@ -82,7 +71,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
                                 ), $this->options['connect_enable'], 'span3', array(
                             'class' => 'span3'));
 
-                        echo $form->addSelect(__('Add FB avatar choice ?', $this->ptd) . ' ' . $this->get_the_help('connect_fbavatar'), 'connect_fbavatar', array(
+                        echo $form->addSelect(__('Add FB avatar choice ?', $this->ptd), 'connect_fbavatar', array(
                             array(
                                 'value' => 0,
                                 'label' => __('No', $this->ptd)),
@@ -96,21 +85,21 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
                     </div>
                     <div class="row">
                         <?php
-                        echo $form->addInputText(__('Facebook Connect permissions', $this->ptd) . ' ' . $this->get_the_help('perms'), 'perms', $this->options['perms'], 'span3', array(
+                        echo $form->addInputText(__('Facebook Connect permissions', $this->ptd), 'perms', $this->options['perms'], 'span3', array(
                             'class' => 'span3 depend_fb_connect',
                             'disabled' => $this->options['connect_enable'] == '0' ? 'disabled' : ''));
 
-                        echo $form->addInputText(__('Timeout Facebook connect API', $this->ptd) . ' ' . $this->get_the_help('timeout'), 'timeout', $this->options['timeout'], 'span3', array(
+                        echo $form->addInputText(__('Timeout Facebook connect API', $this->ptd), 'timeout', $this->options['timeout'], 'span3', array(
                             'class' => 'span3 depend_fb_connect',
                             'disabled' => $this->options['connect_enable'] == '0' ? 'disabled' : ''));
                         ?>
                     </div>
                     <br />
-                    <h1><?php _e("Facebook Realtime API", $this->ptd); ?></h1>						
+                    <h1><?php _e("Facebook Realtime API", $this->ptd); ?></h1>
 
                     <div class="alert alert-info">
                         <?php _e("This plugin can keep user data sync in realtime when they change on the facebook side. Normally the plugin wait the user loggin action to fetch new data. If you want to use this feature, you must configure the realtime api in your facebook application settings, on the facebook developer website.", $this->ptd); ?>
-                        <a target="_blank" href="https://developers.facebook.com/docs/reference/api/realtime/" class="btn btn-mini btn-info"><?php _e("Learn more", $this->ptd); ?></a>	
+                        <a target="_blank" href="https://developers.facebook.com/docs/reference/api/realtime/" class="btn btn-mini btn-info"><?php _e("Learn more", $this->ptd); ?></a>
                     </div>
 
                     <label><?php _e("Configure the realtime API", $this->ptd); ?></label>
@@ -139,7 +128,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
                     $subscriptions = $this->get_realtime_subscriptions();
                     if (!is_wp_error($subscriptions)) {
                         ?>
-                        <?php if (count($subscriptions)) { ?>							
+                        <?php if (count($subscriptions)) { ?>
                             <div class="row">
                                 <?php
                                 foreach ($subscriptions as $sub) {
@@ -164,10 +153,10 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
                             </div>
                             <?php
                         }else {
-                            $this->display_messages(__("No Realtime subscription", $this->ptd), "info");
+                            $this->templateManager->displayMessage(__("No Realtime subscription", $this->ptd), "info");
                         }
                     } else {
-                        $this->display_messages($subscriptions->get_error_message(), "warning");
+                        $this->templateManager->displayMessage($subscriptions->get_error_message(), "warning");
                     }
                     ?>
                 </div>
@@ -177,17 +166,17 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
                 <div id="managepages" class="tab-pane">
                     <?php
                     if ($this->options['connect_enable'] == 0) {
-                        $this->display_messages(sprintf(__('Facebook connect is required to manage pages %sRetry%s', $this->ptd), '<a class="btn btn-danger" href="' . $this->get_current_url() . '">', '</a>'), 'error');
+                        $this->templateManager->displayMessage(sprintf(__('Facebook connect is required to manage pages %sRetry%s', $this->ptd), '<a class="btn btn-danger" href="' . $this->get_current_url() . '">', '</a>'), 'error');
                     } else {
                         if ($this->current_facebook_user_can('publish_stream')) {
-                            $this->display_messages(__('Publish Stream is enabled', $this->ptd), 'success');
+                            $this->templateManager->displayMessage(__('Publish Stream is enabled', $this->ptd), 'success');
                         } else {
                             echo '<a href="#" data-scope="email,publish_stream" class="get_permissions btn btn-info"><i class="icon-ok-sign icon-white"></i> ' . __('Authorize App to publish on your pages', $this->ptd) . '</a>';
                         }
 
                         if ($this->current_facebook_user_can('manage_pages')) {
                             $message = __('Pages can be managed', $this->ptd) . ' <a href="#" id="toogle_list_pages" class="btn btn-info"><i class="icon-check icon-white"></i> ' . __('Select pages to link with Wordpress', $this->ptd) . '</a>';
-                            $this->display_messages($message, 'success');
+                            $this->templateManager->displayMessage($message, 'success');
                         } else {
                             echo '<a href="#" data-scope="email,manage_pages" class="get_permissions btn btn-info"><i class="icon-ok-sign icon-white"></i> ' . __('Authorize App to access your pages', $this->ptd) . '</a>';
                         }
@@ -197,7 +186,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
                             <div class="toogle_fb_pages hidden well">
                                 <h2><?php _e('Check the page you want to sync with your posts.', $this->ptd); ?></h2>
                                 <?php
-                                
+
                                 $fb_pages = isset($this->me['pages']) ? $this->me['pages'] : array();
                                 if (is_array($fb_pages) AND count($fb_pages)) {
                                     echo '
@@ -244,7 +233,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
                             <div class="row">
                                 <?php
                                 if ($this->current_facebook_user_can('manage_pages')) {
-                                    echo $form->addSelect(__('Auto publish post on Facebook pages ?', $this->ptd) . ' ' . $this->get_the_help('publish_to_pages'), 'publish_to_pages', array(
+                                    echo $form->addSelect(__('Auto publish post on Facebook pages ?', $this->ptd), 'publish_to_pages', array(
                                         array(
                                             'value' => 0,
                                             'label' => __('No', $this->ptd)),
@@ -255,7 +244,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
                                         'class' => 'span3'));
                                 }
 
-                                echo $form->addSelect(__('Auto publish post on Facebook profile ?', $this->ptd) . ' ' . $this->get_the_help('publish_to_profile'), 'publish_to_profile', array(
+                                echo $form->addSelect(__('Auto publish post on Facebook profile ?', $this->ptd), 'publish_to_profile', array(
                                     array(
                                         'value' => 0,
                                         'label' => __('No', $this->ptd)),
@@ -268,7 +257,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
                             </div>
                             <div class="row">
                                 <?php
-                                echo $form->addInputText(__('Default link action Text', $this->ptd) . ' ' . $this->get_the_help('publish_read_more_text'), 'publish_read_more_text', $this->options['publish_read_more_text'], 'span3', array(
+                                echo $form->addInputText(__('Default link action Text', $this->ptd), 'publish_read_more_text', $this->options['publish_read_more_text'], 'span3', array(
                                     'class' => 'span3',
                                     'maxlengh' => '25'));
                                 ?>
@@ -303,8 +292,8 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', $this->plugin_option_
 </div>
 <?php if (current_user_can('manage_facebook_awd_settings')) { ?>
     <div class="alert alert-error alert_reset_settings alert-block dn">
-        <a href="#" class="close reset_settings_dismiss">&times;</a>      
+        <a href="#" class="close reset_settings_dismiss">&times;</a>
         <?php _e("Do you really want to reset all settings (AWD plugins and openGraph settings will be reset) ?", $this->ptd); ?>
-        <a href="#" class="btn btn-danger reset_settings_confirm"><?php _e("Restore", $this->ptd); ?></a>  
+        <a href="#" class="btn btn-danger reset_settings_confirm"><?php _e("Restore", $this->ptd); ?></a>
     </div>
 <?php } ?>

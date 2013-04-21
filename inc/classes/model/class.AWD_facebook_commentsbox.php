@@ -1,10 +1,10 @@
-<?php 
+<?php
 /**
- * 
+ *
  * @author alexhermann
  *
  */
-class AWD_facebook_comments
+class AWD_facebook_commentsbox
 {
 	/**
 	 * href
@@ -19,7 +19,7 @@ class AWD_facebook_comments
 	/**
 	 * colorscheme
 	 * the color scheme for the plugin. Options: 'light', 'dark'
-	 */ 
+	 */
    	protected $colorscheme;
    	/**
      * num_posts
@@ -32,15 +32,15 @@ class AWD_facebook_comments
      */
     protected $mobile;
     /**
-	 * type 
+	 * type
 	 * type to use, xfbml, html5, or iframe
 	 */
 	protected $type;
-	
+
 	/**
 	 * Constructor
 	 * @param array $options
-	 */ 
+	 */
 	 public function __construct($options){
 	 	$this->setHref($options['href']);
 	 	$this->setWidth($options['width']);
@@ -49,7 +49,7 @@ class AWD_facebook_comments
 	 	$this->setMobile($options['mobile']);
 	 	$this->setType($options['type']);
 	 }
-	 
+
 	/**
 	 * Setter: href
 	 * @param String $href
@@ -61,7 +61,7 @@ class AWD_facebook_comments
 			throw new Exception('Url for Comments box can not be empty');
 		$this->href = $href;
 	}
-	
+
 	/**
 	 * Setter: width
 	 * @param String $width
@@ -71,7 +71,7 @@ class AWD_facebook_comments
 	{
 		$this->width = $width;
 	}
-	
+
 	/**
 	 * Setter: colorscheme
 	 * @param String $colorscheme
@@ -81,7 +81,7 @@ class AWD_facebook_comments
 	{
 		$this->colorscheme = $colorscheme;
 	}
-	
+
 	/**
 	 * Setter: num_posts
 	 * @param String $num_posts
@@ -91,7 +91,7 @@ class AWD_facebook_comments
 	{
 		$this->num_posts = $num_posts;
 	}
-	
+
 	/**
 	 * Setter: mobile
 	 * @param String $mobile
@@ -101,7 +101,7 @@ class AWD_facebook_comments
 	{
 		$this->mobile = $mobile;
 	}
-	
+
 	/**
 	 * Setter: type
 	 * @param String $type
@@ -111,7 +111,7 @@ class AWD_facebook_comments
 	{
 		$this->type = $type;
 	}
-	
+
 	/**
 	 * Getter: href
 	 * @return String
@@ -120,7 +120,7 @@ class AWD_facebook_comments
 	{
 		return $this->href;
 	}
-	
+
 	/**
 	 * Getter: width
 	 * @return String
@@ -129,7 +129,7 @@ class AWD_facebook_comments
 	{
 		return $this->width;
 	}
-	
+
 	/**
 	 * Getter: colorscheme
 	 * @return String
@@ -138,7 +138,7 @@ class AWD_facebook_comments
 	{
 		return $this->colorscheme;
 	}
-	
+
 	/**
 	 * Getter: num_posts
 	 * @return String
@@ -147,7 +147,7 @@ class AWD_facebook_comments
 	{
 		return $this->num_posts;
 	}
-	
+
 	/**
 	 * Getter: mobile
 	 * @return String
@@ -156,7 +156,7 @@ class AWD_facebook_comments
 	{
 		return $this->mobile;
 	}
-	
+
 	/**
 	 * Getter: type
 	 * @return String
@@ -171,7 +171,7 @@ class AWD_facebook_comments
 	 * @return activity html/xfbml/iframe
 	 */
 	public function get()
-	{	
+	{
 		if($this->type == 'xfbml')
 		{
 			return $this->commentsXfbml();
@@ -182,7 +182,7 @@ class AWD_facebook_comments
 		}
 		return false;
 	}
-	
+
 
 	//******VIEWS******//
 	public function commentsHtml5()

@@ -8,12 +8,12 @@
 $fields = array();
 $list_menu_plugins = array();
 require(dirname(dirname(__FILE__)).'/forms/plugins_menu.php');
-require(dirname(dirname(__FILE__)).'/forms/like_button.php');
-require(dirname(dirname(__FILE__)).'/forms/like_box.php');
-require(dirname(dirname(__FILE__)).'/forms/activity_box.php');
-require(dirname(dirname(__FILE__)).'/forms/shared_activity_box.php');
-require(dirname(dirname(__FILE__)).'/forms/login_button.php');
-require(dirname(dirname(__FILE__)).'/forms/comments_box.php');
+require(dirname(dirname(__FILE__)).'/forms/likebutton.php');
+require(dirname(dirname(__FILE__)).'/forms/likebox.php');
+require(dirname(dirname(__FILE__)).'/forms/activitybox.php');
+require(dirname(dirname(__FILE__)).'/forms/shared_activitybox.php');
+require(dirname(dirname(__FILE__)).'/forms/loginbutton.php');
+require(dirname(dirname(__FILE__)).'/forms/commentsbox.php');
 
 $fields = apply_filters('AWD_facebook_plugins_form', $fields);
 if(!is_array($fields)){
@@ -44,26 +44,26 @@ $form = new AWD_facebook_form('form_settings', 'POST', $this->get_current_url(),
 			
 			<div class="tab-content">
 			
-				<div id="like_button_settings" class="tab-pane">
+				<div id="likebutton_settings" class="tab-pane">
 					<?php 					
-					if(isset($fields['like_button']) && is_array($fields['like_button'])){
-						echo $form->proccessFields('like_button',$fields['like_button']);
+					if(isset($fields['likebutton']) && is_array($fields['likebutton'])){
+						echo $form->proccessFields('likebutton',$fields['likebutton']);
 					}
 					?>
 				</div>
 				
-				<div id="like_box_settings" class="tab-pane">
+				<div id="likebox_settings" class="tab-pane">
 					<?php 					
-					if(isset($fields['like_box']) && is_array($fields['like_box'])){						
-						echo $form->proccessFields('like_box',$fields['like_box']); 
+					if(isset($fields['likebox']) && is_array($fields['likebox'])){						
+						echo $form->proccessFields('likebox',$fields['likebox']); 
 					}
 					?>
 				</div>
 				
 				<div id="activity_settings" class="tab-pane">				
 					<?php 
-					if(isset($fields['activity_box']) && is_array($fields['activity_box'])){
-						echo $form->proccessFields('activity_box',$fields['activity_box']);
+					if(isset($fields['activitybox']) && is_array($fields['activitybox'])){
+						echo $form->proccessFields('activitybox',$fields['activitybox']);
 					}
 					?>
 				</div>
@@ -71,24 +71,24 @@ $form = new AWD_facebook_form('form_settings', 'POST', $this->get_current_url(),
 				<div id="shared_activity_settings" class="tab-pane">				
 					<?php 
 					if($this->options['connect_enable'] == 1){
-						if(isset($fields['shared_activity_box']) && is_array($fields['shared_activity_box'])){
-							echo $form->proccessFields('shared_activity_box',$fields['shared_activity_box']);
+						if(isset($fields['shared_activitybox']) && is_array($fields['shared_activitybox'])){
+							echo $form->proccessFields('shared_activitybox',$fields['shared_activitybox']);
 						}
 					}else{
-						$this->display_messages(__('You must enable FB Connect and set parameters in settings of the plugins',$this->ptd), 'error');
+						$this->templateManager->displayMessage(__('You must enable FB Connect and set parameters in settings of the plugins',$this->ptd), 'error');
 					}
 					?>
 				</div>
 				
 				
-				<div id="login_button_settings" class="tab-pane">
+				<div id="loginbutton_settings" class="tab-pane">
 					<?php 
 					if($this->options['connect_enable'] == 1){
-						if(isset($fields['login_button']) && is_array($fields['login_button'])){
-							echo $form->proccessFields('login_button',$fields['login_button']);
+						if(isset($fields['loginbutton']) && is_array($fields['loginbutton'])){
+							echo $form->proccessFields('loginbutton',$fields['loginbutton']);
 						}
 					}else{
-						$this->display_messages(__('You must enable FB Connect and set parameters in settings of the plugins',$this->ptd), 'error');
+						$this->templateManager->displayMessage(__('You must enable FB Connect and set parameters in settings of the plugins',$this->ptd), 'error');
 					}
 					?>
 				</div>
@@ -96,10 +96,10 @@ $form = new AWD_facebook_form('form_settings', 'POST', $this->get_current_url(),
 				<div id="comments_settings" class="tab-pane">
 					<?php
 					$message = '<i class="icon-warning-sign"></i> '.__('The form place depend on how your form theme is coded. Maybe some places will not work with your theme.',$this->ptd);
-					$this->display_messages($message, 'info');
+					$this->templateManager->displayMessage($message, 'info');
 					
-					if(isset($fields['comments_box']) && is_array($fields['comments_box'])){
-						echo $form->proccessFields('comments_box',$fields['comments_box']);
+					if(isset($fields['commentsbox']) && is_array($fields['commentsbox'])){
+						echo $form->proccessFields('commentsbox',$fields['commentsbox']);
 					}
 					?>
 				</div>
@@ -107,11 +107,11 @@ $form = new AWD_facebook_form('form_settings', 'POST', $this->get_current_url(),
 				<?php
 				//Plugins sections
 				$plugin_fields = $fields;
-				unset($plugin_fields['comments_box']);
-				unset($plugin_fields['login_button']);
-				unset($plugin_fields['like_box']);
-				unset($plugin_fields['like_button']);
-				unset($plugin_fields['activity_box']);
+				unset($plugin_fields['commentsbox']);
+				unset($plugin_fields['loginbutton']);
+				unset($plugin_fields['likebox']);
+				unset($plugin_fields['likebutton']);
+				unset($plugin_fields['activitybox']);
 				foreach($plugin_fields as $plugin=>$fields)
 				{
 					?>

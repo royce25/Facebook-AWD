@@ -19,57 +19,57 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
 
-#: inc/admin/forms/activity_box.php:25
-#: inc/admin/forms/comments_box.php:25
-#: inc/admin/forms/like_box.php:25
-#: inc/admin/forms/like_button.php:26
-#: inc/admin/forms/login_button.php:26
-#: inc/admin/forms/shared_activity_box.php:25
+#: inc/admin/forms/activitybox.php:25
+#: inc/admin/forms/commentsbox.php:25
+#: inc/admin/forms/likebox.php:25
+#: inc/admin/forms/likebutton.php:26
+#: inc/admin/forms/loginbutton.php:26
+#: inc/admin/forms/shared_activitybox.php:25
 #: inc/admin/views/admin_open_graph_form.php:80
 #@ AWD_facebook
 msgid "Title"
 msgstr "Titre"
 
-#: inc/admin/forms/like_box.php:33
+#: inc/admin/forms/likebox.php:33
 #@ AWD_facebook
 msgid "Url of the page"
 msgstr "URL de la page"
 
-#: inc/admin/forms/like_button.php:65
+#: inc/admin/forms/likebutton.php:65
 #@ AWD_facebook
 msgid "Layout style"
 msgstr "Style de présentation"
 
-#: inc/admin/forms/like_button.php:61
+#: inc/admin/forms/likebutton.php:61
 #@ AWD_facebook
 msgid "Standard"
 msgstr "Standard"
 
-#: inc/admin/forms/like_button.php:62
+#: inc/admin/forms/likebutton.php:62
 #@ AWD_facebook
 msgid "Button Count"
 msgstr "Bouton Compteur"
 
-#: inc/admin/forms/like_button.php:63
+#: inc/admin/forms/likebutton.php:63
 #@ AWD_facebook
 msgid "Box Count"
 msgstr "Boîte Compteur"
 
-#: inc/admin/forms/activity_box.php:139
-#: inc/admin/forms/comments_box.php:169
-#: inc/admin/forms/like_box.php:68
-#: inc/admin/forms/like_button.php:97
+#: inc/admin/forms/activitybox.php:139
+#: inc/admin/forms/commentsbox.php:169
+#: inc/admin/forms/likebox.php:68
+#: inc/admin/forms/likebutton.php:97
 #@ AWD_facebook
 msgid "Dark"
 msgstr "Foncé"
 
-#: inc/admin/forms/like_button.php:117
-#: inc/admin/forms/login_button.php:96
+#: inc/admin/forms/likebutton.php:117
+#: inc/admin/forms/loginbutton.php:96
 #@ AWD_facebook
 msgid "Width of button"
 msgstr "Largeur du bouton"
 
-#: inc/admin/forms/like_button.php:110
+#: inc/admin/forms/likebutton.php:110
 #@ AWD_facebook
 msgid "Show Faces ?"
 msgstr "Afficher les visages?"
@@ -78,24 +78,24 @@ msgstr "Afficher les visages?"
 #: AWD_facebook.php:2416
 #: AWD_facebook.php:2427
 #: AWD_facebook.php:2428
-#: inc/admin/forms/activity_box.php:117
-#: inc/admin/forms/activity_box.php:128
-#: inc/admin/forms/comments_box.php:77
-#: inc/admin/forms/comments_box.php:103
-#: inc/admin/forms/comments_box.php:115
-#: inc/admin/forms/comments_box.php:127
-#: inc/admin/forms/like_box.php:79
-#: inc/admin/forms/like_box.php:90
-#: inc/admin/forms/like_box.php:101
-#: inc/admin/forms/like_box.php:112
-#: inc/admin/forms/like_button.php:86
-#: inc/admin/forms/like_button.php:108
-#: inc/admin/forms/like_button.php:185
-#: inc/admin/forms/like_button.php:227
-#: inc/admin/forms/like_button.php:268
-#: inc/admin/forms/login_button.php:36
-#: inc/admin/forms/login_button.php:69
-#: inc/admin/forms/login_button.php:80
+#: inc/admin/forms/activitybox.php:117
+#: inc/admin/forms/activitybox.php:128
+#: inc/admin/forms/commentsbox.php:77
+#: inc/admin/forms/commentsbox.php:103
+#: inc/admin/forms/commentsbox.php:115
+#: inc/admin/forms/commentsbox.php:127
+#: inc/admin/forms/likebox.php:79
+#: inc/admin/forms/likebox.php:90
+#: inc/admin/forms/likebox.php:101
+#: inc/admin/forms/likebox.php:112
+#: inc/admin/forms/likebutton.php:86
+#: inc/admin/forms/likebutton.php:108
+#: inc/admin/forms/likebutton.php:185
+#: inc/admin/forms/likebutton.php:227
+#: inc/admin/forms/likebutton.php:268
+#: inc/admin/forms/loginbutton.php:36
+#: inc/admin/forms/loginbutton.php:69
+#: inc/admin/forms/loginbutton.php:80
 #: inc/admin/views/admin_open_graph_form.php:113
 #: inc/admin/views/admin_open_graph_form.php:142
 #: inc/admin/views/admin_open_graph_form.php:171
@@ -114,24 +114,24 @@ msgstr "Oui"
 #: AWD_facebook.php:2416
 #: AWD_facebook.php:2427
 #: AWD_facebook.php:2428
-#: inc/admin/forms/activity_box.php:116
-#: inc/admin/forms/activity_box.php:127
-#: inc/admin/forms/comments_box.php:76
-#: inc/admin/forms/comments_box.php:102
-#: inc/admin/forms/comments_box.php:114
-#: inc/admin/forms/comments_box.php:126
-#: inc/admin/forms/like_box.php:78
-#: inc/admin/forms/like_box.php:89
-#: inc/admin/forms/like_box.php:100
-#: inc/admin/forms/like_box.php:111
-#: inc/admin/forms/like_button.php:85
-#: inc/admin/forms/like_button.php:107
-#: inc/admin/forms/like_button.php:184
-#: inc/admin/forms/like_button.php:226
-#: inc/admin/forms/like_button.php:267
-#: inc/admin/forms/login_button.php:35
-#: inc/admin/forms/login_button.php:68
-#: inc/admin/forms/login_button.php:79
+#: inc/admin/forms/activitybox.php:116
+#: inc/admin/forms/activitybox.php:127
+#: inc/admin/forms/commentsbox.php:76
+#: inc/admin/forms/commentsbox.php:102
+#: inc/admin/forms/commentsbox.php:114
+#: inc/admin/forms/commentsbox.php:126
+#: inc/admin/forms/likebox.php:78
+#: inc/admin/forms/likebox.php:89
+#: inc/admin/forms/likebox.php:100
+#: inc/admin/forms/likebox.php:111
+#: inc/admin/forms/likebutton.php:85
+#: inc/admin/forms/likebutton.php:107
+#: inc/admin/forms/likebutton.php:184
+#: inc/admin/forms/likebutton.php:226
+#: inc/admin/forms/likebutton.php:267
+#: inc/admin/forms/loginbutton.php:35
+#: inc/admin/forms/loginbutton.php:68
+#: inc/admin/forms/loginbutton.php:79
 #: inc/admin/views/admin_open_graph_form.php:112
 #: inc/admin/views/admin_open_graph_form.php:141
 #: inc/admin/views/admin_open_graph_form.php:170
@@ -146,43 +146,43 @@ msgstr "Oui"
 msgid "No"
 msgstr "Non"
 
-#: inc/admin/forms/like_button.php:53
+#: inc/admin/forms/likebutton.php:53
 #@ AWD_facebook
 msgid "Action"
 msgstr "Action"
 
-#: inc/admin/forms/like_button.php:50
+#: inc/admin/forms/likebutton.php:50
 #@ AWD_facebook
 msgid "Like"
 msgstr "J'aime"
 
-#: inc/admin/forms/like_button.php:51
+#: inc/admin/forms/likebutton.php:51
 #@ AWD_facebook
 msgid "Recommend"
 msgstr "Recommander"
 
-#: inc/admin/forms/activity_box.php:100
-#: inc/admin/forms/like_box.php:121
-#: inc/admin/forms/shared_activity_box.php:47
+#: inc/admin/forms/activitybox.php:100
+#: inc/admin/forms/likebox.php:121
+#: inc/admin/forms/shared_activitybox.php:47
 #@ AWD_facebook
 msgid "Width of box"
 msgstr "Largeur de la box"
 
-#: inc/admin/forms/activity_box.php:108
-#: inc/admin/forms/like_box.php:128
-#: inc/admin/forms/shared_activity_box.php:55
+#: inc/admin/forms/activitybox.php:108
+#: inc/admin/forms/likebox.php:128
+#: inc/admin/forms/shared_activitybox.php:55
 #@ AWD_facebook
 msgid "Height of box"
 msgstr "Hauteur de la box"
 
-#: inc/admin/forms/activity_box.php:163
-#: inc/admin/forms/like_box.php:135
+#: inc/admin/forms/activitybox.php:163
+#: inc/admin/forms/likebox.php:135
 #@ AWD_facebook
 msgid "Border color"
 msgstr "Couleur de bordure"
 
-#: inc/admin/forms/activity_box.php:119
-#: inc/admin/forms/like_box.php:103
+#: inc/admin/forms/activitybox.php:119
+#: inc/admin/forms/likebox.php:103
 #@ AWD_facebook
 msgid "Show Header ?"
 msgstr "Montrer l'entête Facebok ?"
@@ -239,57 +239,57 @@ msgstr "Like box"
 msgid "Comments"
 msgstr "Commentaires"
 
-#: inc/admin/forms/activity_box.php:130
+#: inc/admin/forms/activitybox.php:130
 #@ AWD_facebook
 msgid "Recommendations"
 msgstr "Recommandations"
 
-#: inc/admin/forms/like_button.php:161
+#: inc/admin/forms/likebutton.php:161
 #@ AWD_facebook
 msgid "Default Url to like"
 msgstr "URL par défaut à Aimer"
 
 #: AWD_facebook.php:2417
-#: inc/admin/forms/activity_box.php:90
-#: inc/admin/forms/like_button.php:197
-#: inc/admin/forms/like_button.php:238
-#: inc/admin/forms/like_button.php:279
+#: inc/admin/forms/activitybox.php:90
+#: inc/admin/forms/likebutton.php:197
+#: inc/admin/forms/likebutton.php:238
+#: inc/admin/forms/likebutton.php:279
 #@ AWD_facebook
 msgid "Top"
 msgstr "Au dessus"
 
 #: AWD_facebook.php:2417
-#: inc/admin/forms/like_button.php:198
-#: inc/admin/forms/like_button.php:239
-#: inc/admin/forms/like_button.php:280
+#: inc/admin/forms/likebutton.php:198
+#: inc/admin/forms/likebutton.php:239
+#: inc/admin/forms/likebutton.php:280
 #@ AWD_facebook
 msgid "Bottom"
 msgstr "En dessous"
 
 #: AWD_facebook.php:2417
-#: inc/admin/forms/like_button.php:199
-#: inc/admin/forms/like_button.php:240
-#: inc/admin/forms/like_button.php:281
+#: inc/admin/forms/likebutton.php:199
+#: inc/admin/forms/likebutton.php:240
+#: inc/admin/forms/likebutton.php:281
 #@ AWD_facebook
 msgid "Both"
 msgstr "Les deux"
 
-#: inc/admin/forms/comments_box.php:152
+#: inc/admin/forms/commentsbox.php:152
 #@ AWD_facebook
 msgid "Exclude Posts or Pages ID (example: 12,46,234)"
 msgstr "Exclure les Articles ou ou les Pages (exemple: 12,46,234)"
 
-#: inc/admin/forms/activity_box.php:179
-#: inc/admin/forms/comments_box.php:194
-#: inc/admin/forms/like_box.php:150
-#: inc/admin/forms/like_button.php:340
-#: inc/admin/forms/login_button.php:118
-#: inc/admin/forms/shared_activity_box.php:85
+#: inc/admin/forms/activitybox.php:179
+#: inc/admin/forms/commentsbox.php:194
+#: inc/admin/forms/likebox.php:150
+#: inc/admin/forms/likebutton.php:340
+#: inc/admin/forms/loginbutton.php:118
+#: inc/admin/forms/shared_activitybox.php:85
 #@ AWD_facebook
 msgid "Preview"
 msgstr "Aperçu"
 
-#: inc/admin/forms/activity_box.php:33
+#: inc/admin/forms/activitybox.php:33
 #@ AWD_facebook
 msgid "Domain"
 msgstr "Domaine"
@@ -362,10 +362,10 @@ msgstr "Archives"
 msgid "Authors"
 msgstr "Auteurs"
 
-#: inc/admin/forms/activity_box.php:59
-#: inc/admin/forms/comments_box.php:60
-#: inc/admin/forms/like_box.php:59
-#: inc/admin/forms/like_button.php:77
+#: inc/admin/forms/activitybox.php:59
+#: inc/admin/forms/commentsbox.php:60
+#: inc/admin/forms/likebox.php:59
+#: inc/admin/forms/likebutton.php:77
 #: inc/admin/views/admin_open_graph_form.php:89
 #@ AWD_facebook
 msgid "Type"
@@ -439,7 +439,7 @@ msgstr "Options mises à jour"
 msgid "Options not updated there is an error..."
 msgstr "Options non mises à jour, il y a une erreur ..."
 
-#: inc/admin/forms/login_button.php:103
+#: inc/admin/forms/loginbutton.php:103
 #@ AWD_facebook
 msgid "Button Image"
 msgstr "L'image du bouton"
@@ -698,9 +698,9 @@ msgid "Activate ?"
 msgstr ""
 
 #: AWD_facebook.php:2417
-#: inc/admin/forms/like_button.php:201
-#: inc/admin/forms/like_button.php:242
-#: inc/admin/forms/like_button.php:283
+#: inc/admin/forms/likebutton.php:201
+#: inc/admin/forms/likebutton.php:242
+#: inc/admin/forms/likebutton.php:283
 #@ AWD_facebook
 msgid "Where ?"
 msgstr ""
@@ -835,280 +835,280 @@ msgstr ""
 msgid "Facebook AWD FULL"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:11
-#: inc/admin/forms/like_box.php:11
-#: inc/admin/forms/shared_activity_box.php:11
+#: inc/admin/forms/activitybox.php:11
+#: inc/admin/forms/likebox.php:11
+#: inc/admin/forms/shared_activitybox.php:11
 #@ AWD_facebook
 msgid "Configure the box"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:55
-#: inc/admin/forms/like_box.php:55
-#: inc/admin/forms/like_button.php:73
+#: inc/admin/forms/activitybox.php:55
+#: inc/admin/forms/likebox.php:55
+#: inc/admin/forms/likebutton.php:73
 #@ AWD_facebook
 msgid "Iframe"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:56
-#: inc/admin/forms/comments_box.php:57
-#: inc/admin/forms/like_box.php:56
-#: inc/admin/forms/like_button.php:74
+#: inc/admin/forms/activitybox.php:56
+#: inc/admin/forms/commentsbox.php:57
+#: inc/admin/forms/likebox.php:56
+#: inc/admin/forms/likebutton.php:74
 #@ AWD_facebook
 msgid "Xfbml"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:57
-#: inc/admin/forms/comments_box.php:58
-#: inc/admin/forms/like_box.php:57
-#: inc/admin/forms/like_button.php:75
+#: inc/admin/forms/activitybox.php:57
+#: inc/admin/forms/commentsbox.php:58
+#: inc/admin/forms/likebox.php:57
+#: inc/admin/forms/likebutton.php:75
 #@ AWD_facebook
 msgid "html5"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:66
+#: inc/admin/forms/activitybox.php:66
 #@ AWD_facebook
 msgid "Filter"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:73
-#: inc/admin/forms/like_button.php:131
+#: inc/admin/forms/activitybox.php:73
+#: inc/admin/forms/likebutton.php:131
 #@ AWD_facebook
 msgid "Ref"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:80
+#: inc/admin/forms/activitybox.php:80
 #@ AWD_facebook
 msgid "Max Age"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:89
+#: inc/admin/forms/activitybox.php:89
 #@ AWD_facebook
 msgid "Blank"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:91
+#: inc/admin/forms/activitybox.php:91
 #@ AWD_facebook
 msgid "Parent"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:93
+#: inc/admin/forms/activitybox.php:93
 #@ AWD_facebook
 msgid "Links Target"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:138
-#: inc/admin/forms/comments_box.php:168
-#: inc/admin/forms/like_box.php:67
-#: inc/admin/forms/like_button.php:96
+#: inc/admin/forms/activitybox.php:138
+#: inc/admin/forms/commentsbox.php:168
+#: inc/admin/forms/likebox.php:67
+#: inc/admin/forms/likebutton.php:96
 #@ AWD_facebook
 msgid "light"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:141
-#: inc/admin/forms/comments_box.php:171
-#: inc/admin/forms/like_box.php:70
-#: inc/admin/forms/like_button.php:99
+#: inc/admin/forms/activitybox.php:141
+#: inc/admin/forms/commentsbox.php:171
+#: inc/admin/forms/likebox.php:70
+#: inc/admin/forms/likebutton.php:99
 #@ AWD_facebook
 msgid "Colors"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:149
-#: inc/admin/forms/like_button.php:35
-#: inc/admin/forms/shared_activity_box.php:63
+#: inc/admin/forms/activitybox.php:149
+#: inc/admin/forms/likebutton.php:35
+#: inc/admin/forms/shared_activitybox.php:63
 #@ AWD_facebook
 msgid "Arial"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:150
-#: inc/admin/forms/like_button.php:36
-#: inc/admin/forms/shared_activity_box.php:64
+#: inc/admin/forms/activitybox.php:150
+#: inc/admin/forms/likebutton.php:36
+#: inc/admin/forms/shared_activitybox.php:64
 #@ AWD_facebook
 msgid "Lucida grande"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:151
-#: inc/admin/forms/like_button.php:37
-#: inc/admin/forms/shared_activity_box.php:65
+#: inc/admin/forms/activitybox.php:151
+#: inc/admin/forms/likebutton.php:37
+#: inc/admin/forms/shared_activitybox.php:65
 #@ AWD_facebook
 msgid "Segoe ui"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:152
-#: inc/admin/forms/like_button.php:38
-#: inc/admin/forms/shared_activity_box.php:66
+#: inc/admin/forms/activitybox.php:152
+#: inc/admin/forms/likebutton.php:38
+#: inc/admin/forms/shared_activitybox.php:66
 #@ AWD_facebook
 msgid "Tahoma"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:153
-#: inc/admin/forms/like_button.php:39
-#: inc/admin/forms/shared_activity_box.php:67
+#: inc/admin/forms/activitybox.php:153
+#: inc/admin/forms/likebutton.php:39
+#: inc/admin/forms/shared_activitybox.php:67
 #@ AWD_facebook
 msgid "Trebuchet ms"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:154
-#: inc/admin/forms/like_button.php:40
-#: inc/admin/forms/shared_activity_box.php:68
+#: inc/admin/forms/activitybox.php:154
+#: inc/admin/forms/likebutton.php:40
+#: inc/admin/forms/shared_activitybox.php:68
 #@ AWD_facebook
 msgid "Verdana"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:156
-#: inc/admin/forms/like_button.php:42
-#: inc/admin/forms/shared_activity_box.php:70
+#: inc/admin/forms/activitybox.php:156
+#: inc/admin/forms/likebutton.php:42
+#: inc/admin/forms/shared_activitybox.php:70
 #@ AWD_facebook
 msgid "Fonts"
 msgstr ""
 
-#: inc/admin/forms/activity_box.php:181
-#: inc/admin/forms/comments_box.php:196
-#: inc/admin/forms/like_box.php:152
-#: inc/admin/forms/like_button.php:342
-#: inc/admin/forms/login_button.php:120
-#: inc/admin/forms/shared_activity_box.php:87
+#: inc/admin/forms/activitybox.php:181
+#: inc/admin/forms/commentsbox.php:196
+#: inc/admin/forms/likebox.php:152
+#: inc/admin/forms/likebutton.php:342
+#: inc/admin/forms/loginbutton.php:120
+#: inc/admin/forms/shared_activitybox.php:87
 #@ AWD_facebook
 msgid "Options List"
 msgstr ""
 
-#: inc/admin/forms/comments_box.php:11
+#: inc/admin/forms/commentsbox.php:11
 #@ AWD_facebook
 msgid "Configure the comments box"
 msgstr ""
 
-#: inc/admin/forms/comments_box.php:33
+#: inc/admin/forms/commentsbox.php:33
 #@ AWD_facebook
 msgid "Default Url"
 msgstr ""
 
-#: inc/admin/forms/comments_box.php:68
+#: inc/admin/forms/commentsbox.php:68
 #@ AWD_facebook
 msgid "Nb of comments"
 msgstr ""
 
-#: inc/admin/forms/comments_box.php:79
+#: inc/admin/forms/commentsbox.php:79
 #@ AWD_facebook
 msgid "Mobile version"
 msgstr ""
 
-#: inc/admin/forms/comments_box.php:105
+#: inc/admin/forms/commentsbox.php:105
 #@ AWD_facebook
 msgid "Add Comments to pages"
 msgstr ""
 
-#: inc/admin/forms/comments_box.php:117
+#: inc/admin/forms/commentsbox.php:117
 #@ AWD_facebook
 msgid "Add Comments to posts"
 msgstr ""
 
-#: inc/admin/forms/comments_box.php:129
+#: inc/admin/forms/commentsbox.php:129
 #@ AWD_facebook
 msgid "Add Comments to custom posts"
 msgstr ""
 
-#: inc/admin/forms/comments_box.php:160
+#: inc/admin/forms/commentsbox.php:160
 #@ AWD_facebook
 msgid "Width"
 msgstr ""
 
-#: inc/admin/forms/comments_box.php:186
+#: inc/admin/forms/commentsbox.php:186
 #@ AWD_facebook
 msgid "Manage comments"
 msgstr ""
 
-#: inc/admin/forms/like_box.php:81
-#: inc/admin/forms/login_button.php:82
+#: inc/admin/forms/likebox.php:81
+#: inc/admin/forms/loginbutton.php:82
 #@ AWD_facebook
 msgid "Show faces"
 msgstr ""
 
-#: inc/admin/forms/like_box.php:92
+#: inc/admin/forms/likebox.php:92
 #@ AWD_facebook
 msgid "Show Stream"
 msgstr ""
 
-#: inc/admin/forms/like_box.php:114
+#: inc/admin/forms/likebox.php:114
 #@ AWD_facebook
 msgid "Force Wall ?"
 msgstr ""
 
-#: inc/admin/forms/like_button.php:11
-#: inc/admin/forms/login_button.php:12
+#: inc/admin/forms/likebutton.php:11
+#: inc/admin/forms/loginbutton.php:12
 #@ AWD_facebook
 msgid "Configure the button"
 msgstr ""
 
-#: inc/admin/forms/like_button.php:88
+#: inc/admin/forms/likebutton.php:88
 #@ AWD_facebook
 msgid "Send button ?"
 msgstr ""
 
-#: inc/admin/forms/like_button.php:124
+#: inc/admin/forms/likebutton.php:124
 #@ AWD_facebook
 msgid "Height of button"
 msgstr ""
 
-#: inc/admin/forms/like_button.php:146
+#: inc/admin/forms/likebutton.php:146
 #@ AWD_facebook
 msgid "Define a default usage"
 msgstr ""
 
-#: inc/admin/forms/like_button.php:187
+#: inc/admin/forms/likebutton.php:187
 #@ AWD_facebook
 msgid "Display on pages ?"
 msgstr ""
 
-#: inc/admin/forms/like_button.php:229
+#: inc/admin/forms/likebutton.php:229
 #@ AWD_facebook
 msgid "Display on posts ?"
 msgstr ""
 
-#: inc/admin/forms/like_button.php:270
+#: inc/admin/forms/likebutton.php:270
 #@ AWD_facebook
 msgid "On custom posts ?"
 msgstr ""
 
-#: inc/admin/forms/like_button.php:307
+#: inc/admin/forms/likebutton.php:307
 #@ AWD_facebook
 msgid "Exclude Post types"
 msgstr ""
 
-#: inc/admin/forms/like_button.php:315
+#: inc/admin/forms/likebutton.php:315
 #@ AWD_facebook
 msgid "Exclude Categories or other terms"
 msgstr ""
 
-#: inc/admin/forms/like_button.php:323
+#: inc/admin/forms/likebutton.php:323
 #@ AWD_facebook
 msgid "Exclude Posts or Pages ID"
 msgstr ""
 
-#: inc/admin/forms/login_button.php:38
+#: inc/admin/forms/loginbutton.php:38
 #@ AWD_facebook
 msgid "Display on Login"
 msgstr ""
 
-#: inc/admin/forms/login_button.php:46
+#: inc/admin/forms/loginbutton.php:46
 #@ AWD_facebook
 msgid "Url after login"
 msgstr ""
 
-#: inc/admin/forms/login_button.php:53
+#: inc/admin/forms/loginbutton.php:53
 #@ AWD_facebook
 msgid "Url after logout"
 msgstr ""
 
-#: inc/admin/forms/login_button.php:60
+#: inc/admin/forms/loginbutton.php:60
 #@ AWD_facebook
 msgid "Logout Label"
 msgstr ""
 
-#: inc/admin/forms/login_button.php:71
+#: inc/admin/forms/loginbutton.php:71
 #@ AWD_facebook
 msgid "Show profile picture"
 msgstr ""
 
-#: inc/admin/forms/login_button.php:89
+#: inc/admin/forms/loginbutton.php:89
 #@ AWD_facebook
 msgid "Max row"
 msgstr ""

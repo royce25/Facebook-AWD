@@ -13,86 +13,86 @@ msgstr ""
 "X-Poedit-Language: Romanian\n"
 "X-Poedit-Country: ROMANIA\n"
 
-#: inc/widgets/widget_like_button.php:18
+#: inc/widgets/widget_likebutton.php:18
 msgid "Add a Facebook Like Button. Customise the code, or use predefined Like button in settings"
 msgstr "buton pe setări"
 
-#: inc/widgets/widget_like_button.php:41
+#: inc/widgets/widget_likebutton.php:41
 msgid "Facebook Like Button"
 msgstr "Facebook Like Button"
 
-#: inc/widgets/widget_like_button.php:45
+#: inc/widgets/widget_likebutton.php:45
 #: inc/widgets/widget_activity.php:45
-#: inc/widgets/widget_like_box.php:45
+#: inc/widgets/widget_likebox.php:45
 #: inc/admin_plugins.php:36
 msgid "Iframe Or xfbml:"
 msgstr "Sau iframe xfbml:"
 
-#: inc/widgets/widget_like_button.php:47
+#: inc/widgets/widget_likebutton.php:47
 #: inc/widgets/widget_activity.php:47
-#: inc/widgets/widget_like_box.php:47
+#: inc/widgets/widget_likebox.php:47
 msgid "Iframe Or %sxfbml%s %s(not active)%s:"
 msgstr "Sau iframe% sxfbml% s% s (nu este activ)% s:"
 
-#: inc/widgets/widget_like_button.php:52
-#: inc/widgets/widget_login_button.php:41
+#: inc/widgets/widget_likebutton.php:52
+#: inc/widgets/widget_loginbutton.php:41
 #: inc/widgets/widget_activity.php:52
-#: inc/widgets/widget_like_box.php:52
+#: inc/widgets/widget_likebox.php:52
 #: inc/init.php:27
 #: inc/init.php:105
 msgid "Title"
 msgstr "Titlu"
 
-#: inc/widgets/widget_like_button.php:61
+#: inc/widgets/widget_likebutton.php:61
 #: inc/widgets/widget_activity.php:61
-#: inc/widgets/widget_like_box.php:61
+#: inc/widgets/widget_likebox.php:61
 #: inc/admin_plugins.php:82
 #: inc/admin_plugins.php:240
 msgid "XFBML"
 msgstr "XFBML"
 
-#: inc/widgets/widget_like_button.php:62
+#: inc/widgets/widget_likebutton.php:62
 #: inc/widgets/widget_activity.php:62
-#: inc/widgets/widget_like_box.php:62
+#: inc/widgets/widget_likebox.php:62
 #: inc/admin_plugins.php:83
 #: inc/admin_plugins.php:241
 msgid "IFRAME"
 msgstr "IFRAME"
 
-#: inc/widgets/widget_like_button.php:69
-#: inc/widgets/widget_like_box.php:69
+#: inc/widgets/widget_likebutton.php:69
+#: inc/widgets/widget_likebox.php:69
 #: inc/admin_plugins.php:245
 msgid "Url of the page"
 msgstr "URL-ul paginii"
 
-#: inc/widgets/widget_like_button.php:76
+#: inc/widgets/widget_likebutton.php:76
 #: inc/admin_plugins.php:68
 msgid "Layout style"
 msgstr "Aspect stil"
 
-#: inc/widgets/widget_like_button.php:78
+#: inc/widgets/widget_likebutton.php:78
 #: inc/admin_plugins.php:70
 msgid "Standard"
 msgstr "Standard"
 
-#: inc/widgets/widget_like_button.php:79
+#: inc/widgets/widget_likebutton.php:79
 #: inc/admin_plugins.php:71
 msgid "Button Count"
 msgstr "Button Count"
 
-#: inc/widgets/widget_like_button.php:80
+#: inc/widgets/widget_likebutton.php:80
 #: inc/admin_plugins.php:72
 msgid "Box Count"
 msgstr "Caseta Count"
 
-#: inc/widgets/widget_like_button.php:87
+#: inc/widgets/widget_likebutton.php:87
 #: inc/admin_plugins.php:94
 msgid "Colorscheme of button"
 msgstr "Colorscheme de buton"
 
-#: inc/widgets/widget_like_button.php:89
+#: inc/widgets/widget_likebutton.php:89
 #: inc/widgets/widget_activity.php:78
-#: inc/widgets/widget_like_box.php:78
+#: inc/widgets/widget_likebox.php:78
 #: inc/admin_plugins.php:96
 #: inc/admin_plugins.php:251
 #: inc/admin_plugins.php:353
@@ -100,9 +100,9 @@ msgstr "Colorscheme de buton"
 msgid "Light"
 msgstr "Lumina"
 
-#: inc/widgets/widget_like_button.php:90
+#: inc/widgets/widget_likebutton.php:90
 #: inc/widgets/widget_activity.php:79
-#: inc/widgets/widget_like_box.php:79
+#: inc/widgets/widget_likebox.php:79
 #: inc/admin_plugins.php:97
 #: inc/admin_plugins.php:252
 #: inc/admin_plugins.php:354
@@ -110,35 +110,35 @@ msgstr "Lumina"
 msgid "Dark"
 msgstr "Întuneric"
 
-#: inc/widgets/widget_like_button.php:97
-#: inc/widgets/widget_login_button.php:68
+#: inc/widgets/widget_likebutton.php:97
+#: inc/widgets/widget_loginbutton.php:68
 #: inc/admin_plugins.php:108
 #: inc/admin_plugins.php:446
 msgid "Width of button"
 msgstr "Lăţimea de buton"
 
-#: inc/widgets/widget_like_button.php:104
+#: inc/widgets/widget_likebutton.php:104
 #: inc/admin_plugins.php:114
 msgid "Height of button (only for iframe)"
 msgstr "Înălţimea butonul (numai pentru iframe)"
 
-#: inc/widgets/widget_like_button.php:111
-#: inc/widgets/widget_login_button.php:48
-#: inc/widgets/widget_like_box.php:100
+#: inc/widgets/widget_likebutton.php:111
+#: inc/widgets/widget_loginbutton.php:48
+#: inc/widgets/widget_likebox.php:100
 #: inc/admin_plugins.php:101
 #: inc/admin_plugins.php:269
 #: inc/admin_plugins.php:432
 msgid "Show Faces ?"
 msgstr "Arată Faces?"
 
-#: inc/widgets/widget_like_button.php:113
-#: inc/widgets/widget_like_button.php:123
-#: inc/widgets/widget_login_button.php:50
-#: inc/widgets/widget_login_button.php:60
+#: inc/widgets/widget_likebutton.php:113
+#: inc/widgets/widget_likebutton.php:123
+#: inc/widgets/widget_loginbutton.php:50
+#: inc/widgets/widget_loginbutton.php:60
 #: inc/widgets/widget_activity.php:123
-#: inc/widgets/widget_like_box.php:102
-#: inc/widgets/widget_like_box.php:112
-#: inc/widgets/widget_like_box.php:122
+#: inc/widgets/widget_likebox.php:102
+#: inc/widgets/widget_likebox.php:112
+#: inc/widgets/widget_likebox.php:122
 #: inc/admin_plugins.php:89
 #: inc/admin_plugins.php:103
 #: inc/admin_plugins.php:134
@@ -163,14 +163,14 @@ msgstr "Arată Faces?"
 msgid "Yes"
 msgstr "Da"
 
-#: inc/widgets/widget_like_button.php:114
-#: inc/widgets/widget_like_button.php:124
-#: inc/widgets/widget_login_button.php:51
-#: inc/widgets/widget_login_button.php:61
+#: inc/widgets/widget_likebutton.php:114
+#: inc/widgets/widget_likebutton.php:124
+#: inc/widgets/widget_loginbutton.php:51
+#: inc/widgets/widget_loginbutton.php:61
 #: inc/widgets/widget_activity.php:124
-#: inc/widgets/widget_like_box.php:103
-#: inc/widgets/widget_like_box.php:113
-#: inc/widgets/widget_like_box.php:123
+#: inc/widgets/widget_likebox.php:103
+#: inc/widgets/widget_likebox.php:113
+#: inc/widgets/widget_likebox.php:123
 #: inc/admin_plugins.php:90
 #: inc/admin_plugins.php:104
 #: inc/admin_plugins.php:135
@@ -195,84 +195,84 @@ msgstr "Da"
 msgid "No"
 msgstr "Nu"
 
-#: inc/widgets/widget_like_button.php:121
+#: inc/widgets/widget_likebutton.php:121
 #: inc/admin_plugins.php:87
 msgid "Enable \"Send\" button ? %s(xfbml only)%s"
 msgstr "Activează \"Send \" buton?%s (xfbml numai)%s;"
 
-#: inc/widgets/widget_like_button.php:131
+#: inc/widgets/widget_likebutton.php:131
 #: inc/admin_plugins.php:61
 msgid "Action"
 msgstr "Acţiune"
 
-#: inc/widgets/widget_like_button.php:133
+#: inc/widgets/widget_likebutton.php:133
 #: inc/admin_plugins.php:63
 msgid "Like"
 msgstr "Ca"
 
-#: inc/widgets/widget_like_button.php:134
+#: inc/widgets/widget_likebutton.php:134
 #: inc/admin_plugins.php:64
 msgid "Recommend"
 msgstr "Recomanda"
 
-#: inc/widgets/widget_like_button.php:140
+#: inc/widgets/widget_likebutton.php:140
 #: inc/widgets/widget_activity.php:100
 #: inc/admin_plugins.php:358
 msgid "Font"
 msgstr "Sunt"
 
-#: inc/widgets/widget_like_button.php:154
+#: inc/widgets/widget_likebutton.php:154
 #: inc/widgets/widget_activity.php:129
-#: inc/widgets/widget_like_box.php:128
+#: inc/widgets/widget_likebox.php:128
 msgid "OR"
 msgstr "SAU"
 
-#: inc/widgets/widget_like_button.php:158
+#: inc/widgets/widget_likebutton.php:158
 #: inc/widgets/widget_activity.php:133
-#: inc/widgets/widget_like_box.php:132
+#: inc/widgets/widget_likebox.php:132
 msgid "Use code instead settings ?"
 msgstr "Folosiţi codul de schimb setările?"
 
-#: inc/widgets/widget_like_button.php:159
+#: inc/widgets/widget_likebutton.php:159
 #: inc/widgets/widget_activity.php:134
-#: inc/widgets/widget_like_box.php:133
+#: inc/widgets/widget_likebox.php:133
 msgid "Paste"
 msgstr "Pastă"
 
-#: inc/widgets/widget_like_button.php:159
+#: inc/widgets/widget_likebutton.php:159
 #: inc/widgets/widget_activity.php:134
-#: inc/widgets/widget_like_box.php:133
+#: inc/widgets/widget_likebox.php:133
 msgid "if you paste code, settings will be ignored"
 msgstr "Dacă lipiţi codul, setări vor fi ignorate"
 
-#: inc/widgets/widget_login_button.php:18
+#: inc/widgets/widget_loginbutton.php:18
 msgid "Add a Facebook Login Button. Customise the code, or use predefined Login button in settings"
 msgstr "buton pe setări"
 
-#: inc/widgets/widget_login_button.php:36
+#: inc/widgets/widget_loginbutton.php:36
 msgid "Facebook Login Button"
 msgstr "Facebook Intrare buton"
 
-#: inc/widgets/widget_login_button.php:58
+#: inc/widgets/widget_loginbutton.php:58
 #: inc/admin_plugins.php:439
 msgid "Show Profile picture ?"
 msgstr "Arata poza de profil?"
 
-#: inc/widgets/widget_login_button.php:75
+#: inc/widgets/widget_loginbutton.php:75
 #: inc/admin_plugins.php:452
 msgid "Max Rows (faces)"
 msgstr "Rânduri Max (fete)"
 
-#: inc/widgets/widget_login_button.php:82
+#: inc/widgets/widget_loginbutton.php:82
 #: inc/admin_plugins.php:458
 msgid "Logout Phrase"
 msgstr "Expresie Logout"
 
-#: inc/widgets/widget_login_button.php:88
+#: inc/widgets/widget_loginbutton.php:88
 msgid "Logout Url redirect"
 msgstr "Logout Url-ul de redirecţionare"
 
-#: inc/widgets/widget_login_button.php:95
+#: inc/widgets/widget_loginbutton.php:95
 #: inc/admin_plugins.php:470
 msgid "Custom Css"
 msgstr "Particularizate Css"
@@ -290,14 +290,14 @@ msgid "Domain (ex: mysite.com)"
 msgstr "Domeniul (ex: mysite.com)"
 
 #: inc/widgets/widget_activity.php:76
-#: inc/widgets/widget_like_box.php:76
+#: inc/widgets/widget_likebox.php:76
 #: inc/admin_plugins.php:249
 #: inc/admin_plugins.php:351
 msgid "Colorscheme of box"
 msgstr "Colorscheme de box"
 
 #: inc/widgets/widget_activity.php:86
-#: inc/widgets/widget_like_box.php:86
+#: inc/widgets/widget_likebox.php:86
 #: inc/admin_plugins.php:256
 #: inc/admin_plugins.php:332
 #: inc/admin_plugins.php:573
@@ -315,26 +315,26 @@ msgid "Border color"
 msgstr "Frontieră de culoare"
 
 #: inc/widgets/widget_activity.php:121
-#: inc/widgets/widget_like_box.php:120
+#: inc/widgets/widget_likebox.php:120
 #: inc/admin_plugins.php:283
 #: inc/admin_plugins.php:344
 msgid "Show Header ?"
 msgstr "Arată antet?"
 
-#: inc/widgets/widget_like_box.php:18
+#: inc/widgets/widget_likebox.php:18
 msgid "Add a Facebook Like Box. Customise the code, or use predefined Like box in settings"
 msgstr "Setări"
 
-#: inc/widgets/widget_like_box.php:40
+#: inc/widgets/widget_likebox.php:40
 msgid "Facebook Like Box"
 msgstr "Facebook Ca Box"
 
-#: inc/widgets/widget_like_box.php:93
+#: inc/widgets/widget_likebox.php:93
 #: inc/admin_plugins.php:262
 msgid "Height of box (only for iframe)"
 msgstr "Înălţimea cutie (numai pentru iframe)"
 
-#: inc/widgets/widget_like_box.php:110
+#: inc/widgets/widget_likebox.php:110
 #: inc/admin_plugins.php:276
 msgid "Show Stream ?"
 msgstr "Arată Stream?"

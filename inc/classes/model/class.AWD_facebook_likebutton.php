@@ -1,29 +1,28 @@
 <?php
 
 /**
- * 
+ *
  * @author alexhermann
  *
  */
 class AWD_facebook_likebutton
 {
-
     /**
-     * href 
+     * href
      * the URL to like. The XFBML version defaults to the current page
      */
     protected $href;
 
     /**
-     * send 
+     * send
      * specifies whether to include a Send button with the Like button. This only works with the XFBML version
      */
     protected $send;
 
     /**
-     * layout 
+     * layout
      * there are three options
-     *   standard - displays social text to the right of the button and friends' profile photos below. Minimum width: 225 pixels. Minimum increases 
+     *   standard - displays social text to the right of the button and friends' profile photos below. Minimum width: 225 pixels. Minimum increases
      *              by 40px if action is 'recommend' by and increases by 60px if send is 'true'. Default width: 450 pixels. Height: 35 pixels (without photos) or 80 pixels (with photos).
      *   button_count - displays the total number of likes to the right of the button. Minimum width: 90 pixels. Default width: 90 pixels. Height: 20 pixels
      *   box_count - displays the total number of likes above the button. Minimum width: 55 pixels. Default width: 55 pixels. Height: 65 pixels
@@ -31,43 +30,43 @@ class AWD_facebook_likebutton
     protected $layout;
 
     /**
-     * show_faces 
+     * show_faces
      * specifies whether to display profile photos below the button (standard layout only)
      */
     protected $show_faces;
 
     /**
-     * width 
+     * width
      * the width of the Like button
      */
     protected $width;
 
     /**
-     * height 
+     * height
      * the verb to display on the button. Options: 'like', 'recommend'
      */
     protected $height;
 
     /**
-     * action 
+     * action
      * the width of the plugin in pixels. Default width: 300px
      */
     protected $action = 'like';
 
     /**
-     * font 
+     * font
      * the font to display in the button. Options: 'arial', 'lucida grande', 'segoe ui', 'tahoma', 'trebuchet ms', 'verdana'
      */
     protected $font;
 
     /**
-     * colorscheme 
+     * colorscheme
      * the color scheme for the like button. Options: 'light', 'dark'
      */
     protected $colorscheme;
 
     /**
-     * ref 
+     * ref
      * a label for tracking referrals; must be less than 50 characters and can contain alphanumeric characters and some punctuation (currently +/=-.:_). The ref attribute causes two parameters to be added to the referrer URL when a user clicks a link from a stream story about a Like action:
      *   fb_ref - the ref parameter
      *   fb_source - the stream type ('home', 'profile', 'search', 'other') in which the click occurred and the story type ('oneline' or 'multiline'), concatenated with an underscore.
@@ -76,7 +75,7 @@ class AWD_facebook_likebutton
     protected $ref;
 
     /**
-     * type 
+     * type
      * template to use, xfbml, html5, or iframe
      */
     protected $type;
@@ -312,30 +311,15 @@ class AWD_facebook_likebutton
     }
 
     /**
-     * Getter: likebutton
-     * @return likebutton html/xfbml/iframe
+     * Get the template
+     * @return string
      */
     public function getTemplate()
     {
-        return 'like_button_'.$this->type.'.php';
+        return 'likebutton.php';
     }
 
-    //******VIEWS******//
-   /* protected function likeButtonHtml5()
-    {
-        return '';
+    
     }
-
-    protected function likeButtonXfbml()
-    {
-        return '<fb:like href="' . $this->href . '" send="' . $this->send . '" width="' . $this->width . '" colorscheme="' . $this->colorscheme . '" layout=' . $this->layout . ' show_faces="' . $this->show_faces . '" font="' . $this->font . '" action="' . $this->action . '" ref="' . $this->ref . '"></fb:like>';
-    }
-
-    protected function likeButtonIframe()
-    {
-        return '<iframe src="http://www.facebook.com/plugins/like.php?href=' . urlencode($this->href) . '&amp;send=' . $this->send . '&amp;layout=' . $this->layout . '&amp;width=' . $this->width . '&amp;show_faces=' . $this->show_faces . '&amp;action=' . $this->action . '&amp;colorscheme=' . $this->colorscheme . '&amp;font=' . $this->font . '&amp;height=' . $this->height . '&ref=' . urlencode($this->ref) . '" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:' . $this->width . 'px; height:' . $this->height . 'px;" allowTransparency="true"></iframe>';
-    }*/
-
-}
 
 ?>
