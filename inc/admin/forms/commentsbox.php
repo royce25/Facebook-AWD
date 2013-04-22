@@ -8,16 +8,12 @@
 $fields['commentsbox'] = array(
     'title_config' => array(
         'type' => 'html',
-        'html' => '
-			<h1>' . __('Configure the comments box', $this->ptd) . '</h1>
-		',
+        'html' => '<h1>' . __('Configure the comments box', $this->ptd) . '</h1>',
         'widget_no_display' => true
     ),
     'before_url' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		'
+        'html' => '<div class="row">'
     ),
     'widget_title' => array(
         'type' => 'text',
@@ -34,15 +30,11 @@ $fields['commentsbox'] = array(
     ),
     'after_url' => array(
         'type' => 'html',
-        'html' => '
-			</div>
-		'
+        'html' => '</div>'
     ),
     'before_config' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		'
+        'html' => '<div class="row">'
     ),
     'type' => array(
         'type' => 'select',
@@ -72,15 +64,11 @@ $fields['commentsbox'] = array(
     ),
     'after_config' => array(
         'type' => 'html',
-        'html' => '
-			</div>
-		'
+        'html' => '</div>'
     ),
     'before_on_posts' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		',
+        'html' => '<div class="row">',
         'widget_no_display' => true
     ),
     'on_pages' => array(
@@ -118,16 +106,12 @@ $fields['commentsbox'] = array(
     ),
     'after_on_posts' => array(
         'type' => 'html',
-        'html' => '
-			</div>
-		',
+        'html' => '</div>',
         'widget_no_display' => true
     ),
     'before_config2' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		'
+        'html' => '<div class="row">'
     ),
     'place' => array(
         'type' => 'select',
@@ -175,43 +159,38 @@ $fields['commentsbox'] = array(
     ),
     'after_config2' => array(
         'type' => 'html',
-        'html' => '
-			</div>
-		',
+        'html' => '</div>',
     ),
     'link_manage' => array(
         'type' => 'html',
-        'html' => ($this->options['app_id'] != '' ?
-                '<a class="btn" target="_blank" href="https://developers.facebook.com/tools/comments?id=' . $this->options['app_id'] . '">' . __('Manage comments', $this->ptd) . '</a>
-		' : ''),
+        'html' => ($this->options['app_id'] != '' ? '<a class="btn" target="_blank" href="https://developers.facebook.com/tools/comments?id=' . $this->options['app_id'] . '">' . __('Manage comments', $this->ptd) . '</a>' : ''),
         'widget_no_display' => true
     ),
     'preview' => array(
         'type' => 'html',
         'html' => '
-			<h1>' . __('Preview', $this->ptd) . '</h1>
-			<div class="well">' . $this->get_the_commentsbox("", array("width" => "420")) . '</div>
-			<h1>' . __('Options List', $this->ptd) . '</h1>
-			<table class="table table-bordered table-condensed table-striped">
-				<thead>
-					<tr>
-						<th>Option</th>
-						<th>Value</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr><td>url</td><td>string</td></tr>
-					<tr><td>width</td><td>number</td></tr>
-					<tr><td>nb</td><td>number</td></tr>
-					<tr><td>colorscheme</td><td>light or dark</td></tr>
-					<tr><td>mobile</td><td>0 or 1</td></tr>
-					<tr><td>type</td><td>xfbml or iframe or html5</td></tr>
-				</tbody>
-				<tfoot>
-					<tr><th colspan="2">[AWD_comments option="value"]</th></tr>
-				</tfoot>
-			</table>
-		',
+            <h1>' . __('Preview', $this->ptd) . '</h1>
+            <div class="well">' . $this->get_the_commentsbox("", array("width" => "420")) . '</div>
+            <h1>' . __('Options List', $this->ptd) . '</h1>
+            <table class="table table-bordered table-condensed table-striped">
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>url</td><td>string</td></tr>
+                    <tr><td>width</td><td>number</td></tr>
+                    <tr><td>nb</td><td>number</td></tr>
+                    <tr><td>colorscheme</td><td>light or dark</td></tr>
+                    <tr><td>mobile</td><td>0 or 1</td></tr>
+                    <tr><td>type</td><td>xfbml or iframe or html5</td></tr>
+                </tbody>
+                <tfoot>
+                        <tr><th colspan="2">[AWD_facebook_commentsbox option="value"]</th></tr>
+                </tfoot>
+            </table>',
         'widget_no_display' => true
     )
 );

@@ -8,16 +8,12 @@
 $fields['activitybox'] = array(
     'title_config' => array(
         'type' => 'html',
-        'html' => '
-			<h1>' . __('Configure the box', $this->ptd) . '</h1>
-		',
+        'html' => '<h1>' . __('Configure the box', $this->ptd) . '</h1>',
         'widget_no_display' => true
     ),
     'start_domain' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		'
+        'html' => '<div class="row">'
     ),
     'widget_title' => array(
         'type' => 'text',
@@ -34,15 +30,11 @@ $fields['activitybox'] = array(
     ),
     'end_domain' => array(
         'type' => 'html',
-        'html' => '
-			</div>
-		'
+        'html' => '</div>'
     ),
     'start_config' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		'
+        'html' => '<div class="row">'
     ),
     'type' => array(
         'type' => 'select',
@@ -148,43 +140,40 @@ $fields['activitybox'] = array(
     ),
     'end_config' => array(
         'type' => 'html',
-        'html' => '
-			</div>
-		'
+        'html' => '</div>'
     ),
     'preview' => array(
         'type' => 'html',
         'html' => '
-			<h1>' . __('Preview', $this->ptd) . '</h1>
-			<div class="well">' . $this->get_the_activitybox() . '</div>
-			<h1>' . __('Options List', $this->ptd) . '</h1>
-			<table class="table table-bordered table-condensed table-striped">
-				<thead>
-					<tr>
-						<th>Option</th>
-						<th>Value</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr><td>domain</td><td>string</td></tr>
-					<tr><td>width</td><td>number</td></tr>
-					<tr><td>height</td><td>number</td></tr>
-					<tr><td>colorscheme</td><td>light or dark</td></tr>
-					<tr><td>fonts</td><td>string</td></tr>
-					<tr><td>border_color</td><td>hexadecimal string (ex: #ffffff for white)</td></tr>
-					<tr><td>recommendations</td><td>0 or 1</td></tr>
-					<tr><td>header</td><td>0 or 1</td></tr>
-					<tr><td>type</td><td>xfbml or iframe or html5</td></tr>
-					<tr><td>max_age</td><td>string</td></tr>
-					<tr><td>ref</td><td>string</td></tr>
-					<tr><td>linktarget</td><td>_blank or _top or _parent</td></tr>
-					<tr><td>filter</td><td>string</td></tr>
-				</tbody>
-				<tfoot>
-					<tr><th colspan="2">[AWD_activitybox option="value"]</th></tr>
-				</tfoot>
-			</table>
-		',
+            <h1>' . __('Preview', $this->ptd) . '</h1>
+            <div class="well">' . $this->get_the_activitybox() . '</div>
+            <h1>' . __('Options List', $this->ptd) . '</h1>
+            <table class="table table-bordered table-condensed table-striped">
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>domain</td><td>string</td></tr>
+                    <tr><td>width</td><td>number</td></tr>
+                    <tr><td>height</td><td>number</td></tr>
+                    <tr><td>colorscheme</td><td>light or dark</td></tr>
+                    <tr><td>fonts</td><td>string</td></tr>
+                    <tr><td>border_color</td><td>hexadecimal string (ex: #ffffff for white)</td></tr>
+                    <tr><td>recommendations</td><td>0 or 1</td></tr>
+                    <tr><td>header</td><td>0 or 1</td></tr>
+                    <tr><td>type</td><td>xfbml or iframe or html5</td></tr>
+                    <tr><td>max_age</td><td>string</td></tr>
+                    <tr><td>ref</td><td>string</td></tr>
+                    <tr><td>linktarget</td><td>_blank or _top or _parent</td></tr>
+                    <tr><td>filter</td><td>string</td></tr>
+                </tbody>
+                <tfoot>
+                    <tr><th colspan="2">[AWD_facebook_activitybox option="value"]</th></tr>
+                </tfoot>
+            </table>',
         'widget_no_display' => true
     )
 );

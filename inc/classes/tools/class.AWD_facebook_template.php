@@ -95,6 +95,7 @@ class AWD_facebook_template
                 'content' => $message
             );
             $content = $this->render($template, $params, false);
+
         } else if (isset($this->messages) && count($this->messages) > 0 AND is_array($this->messages)) {
 
             foreach ($this->messages as $key => $message) {
@@ -145,8 +146,9 @@ class AWD_facebook_template
      * @param string $tag
      * @return type
      */
-    public function renderShortcode(array $options, $content = null, $tag)
+    public function renderShortcode($options, $content = null, $tag)
     {
+        $options = shortcode_atts(array(), $options);
         return $this->renderPlugin($tag, $options);
     }
 

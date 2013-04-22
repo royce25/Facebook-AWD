@@ -8,16 +8,12 @@
 $fields['loginbutton'] = array(
     'title_config' => array(
         'type' => 'html',
-        'html' => '
-			<h1>' . __('Configure the button', $this->ptd) . '</h1>
-		',
+        'html' => '<h1>' . __('Configure the button', $this->ptd) . '</h1>',
         'widget_no_display' => true
     ),
     'start_config' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		'
+        'html' => '<div class="row">'
     ),
     'widget_title' => array(
         'type' => 'text',
@@ -106,37 +102,34 @@ $fields['loginbutton'] = array(
     ),
     'end_config' => array(
         'type' => 'html',
-        'html' => '
-			</div>
-		'
+        'html' => '</div>'
     ),
     'preview' => array(
         'type' => 'html',
         'html' => '
-			<h1>' . __('Preview', $this->ptd) . '</h1>
-			<div class="well">' . $this->get_the_loginbutton() . '</div>
-			<h1>' . __('Options List', $this->ptd) . '</h1>
-			<table class="table table-bordered table-condensed table-striped">
-				<thead>
-					<tr>
-						<th>Option</th>
-						<th>Value</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr><td>profile_picture</td><td>0 or 1</td></tr>
-					<tr><td>faces</td><td>0 or 1</td></tr>
-					<tr><td>maxrow</td><td>number (only if faces = 1)</td></tr>
-					<tr><td>login_url</td><td>string</td></tr>
-					<tr><td>logout_url</td><td>string</td></tr>
-					<tr><td>width</td><td>number</td></tr>
-					<tr><td>image</td><td>url</td></tr>
-				</tbody>
-				<tfoot>
-					<tr><th colspan="2">[AWD_loginbutton option="value"]</th></tr>
-				</tfoot>
-			</table>
-		',
+            <h1>' . __('Preview', $this->ptd) . '</h1>
+            <div class="well">' . $this->get_the_loginbutton() . '</div>
+            <h1>' . __('Options List', $this->ptd) . '</h1>
+            <table class="table table-bordered table-condensed table-striped">
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>profile_picture</td><td>0 or 1</td></tr>
+                    <tr><td>faces</td><td>0 or 1</td></tr>
+                    <tr><td>maxrow</td><td>number (only if faces = 1)</td></tr>
+                    <tr><td>login_url</td><td>string</td></tr>
+                    <tr><td>logout_url</td><td>string</td></tr>
+                    <tr><td>width</td><td>number</td></tr>
+                    <tr><td>image</td><td>url</td></tr>
+                </tbody>
+                <tfoot>
+                    <tr><th colspan="2">[AWD_facebook_loginbutton option="value"]</th></tr>
+                </tfoot>
+            </table>',
         'widget_no_display' => true
     )
 );

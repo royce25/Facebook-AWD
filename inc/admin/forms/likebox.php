@@ -8,16 +8,12 @@
 $fields['likebox'] = array(
     'title_config' => array(
         'type' => 'html',
-        'html' => '
-			<h1>' . __('Configure the box', $this->ptd) . '</h1>
-		',
+        'html' => '<h1>' . __('Configure the box', $this->ptd) . '</h1>',
         'widget_no_display' => true
     ),
     'start_url' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		'
+        'html' => '<div class="row">'
     ),
     'widget_title' => array(
         'type' => 'text',
@@ -40,9 +36,7 @@ $fields['likebox'] = array(
     ),
     'start_config' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		'
+        'html' => '<div class="row">'
     ),
     'type' => array(
         'type' => 'select',
@@ -125,40 +119,37 @@ $fields['likebox'] = array(
     ),
     'end_config' => array(
         'type' => 'html',
-        'html' => '
-			</div>
-		'
+        'html' => '</div>'
     ),
     'preview' => array(
         'type' => 'html',
         'html' => '
-			<h1>' . __('Preview', $this->ptd) . '</h1>
-			<div class="well">' . $this->get_the_likebox() . '</div>
-			<h1>' . __('Options List', $this->ptd) . '</h1>
-			<table class="table table-bordered table-condensed table-striped">
-				<thead>
-					<tr>
-						<th>Option</th>
-						<th>Value</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr><td>url</td><td>string</td></tr>
-					<tr><td>width</td><td>number</td></tr>
-					<tr><td>height</td><td>number</td></tr>
-					<tr><td>colorscheme</td><td>light or dark</td></tr>
-					<tr><td>faces</td><td>0 or 1</td></tr>
-					<tr><td>border_color</td><td>hexadecimal string (ex: #ffffff for white)</td></tr>
-					<tr><td>stream</td><td>like or recommend</td></tr>
-					<tr><td>header</td><td>0 or 1</td></tr>
-					<tr><td>type</td><td>xfbml or iframe or html5</td></tr>
-					<tr><td>force_wall</td><td>string</td></tr>
-				</tbody>
-				<tfoot>
-					<tr><th colspan="2">[AWD_likebox option="value"]</th></tr>
-				</tfoot>
-			</table>
-		',
+            <h1>' . __('Preview', $this->ptd) . '</h1>
+            <div class="well">' . $this->get_the_likebox() . '</div>
+            <h1>' . __('Options List', $this->ptd) . '</h1>
+            <table class="table table-bordered table-condensed table-striped">
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>url</td><td>string</td></tr>
+                    <tr><td>width</td><td>number</td></tr>
+                    <tr><td>height</td><td>number</td></tr>
+                    <tr><td>colorscheme</td><td>light or dark</td></tr>
+                    <tr><td>faces</td><td>0 or 1</td></tr>
+                    <tr><td>border_color</td><td>hexadecimal string (ex: #ffffff for white)</td></tr>
+                    <tr><td>stream</td><td>like or recommend</td></tr>
+                    <tr><td>header</td><td>0 or 1</td></tr>
+                    <tr><td>type</td><td>xfbml or iframe or html5</td></tr>
+                    <tr><td>force_wall</td><td>string</td></tr>
+                </tbody>
+                <tfoot>
+                    <tr><th colspan="2">[AWD_facebook_likebox option="value"]</th></tr>
+                </tfoot>
+            </table>',
         'widget_no_display' => true
     )
 );

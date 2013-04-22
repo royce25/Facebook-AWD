@@ -118,22 +118,16 @@ $fields['likebutton'] = array(
     ),
     'after_config' => array(
         'type' => 'html',
-        'html' => '
-			</div>
-		'
+        'html' => '</div>'
     ),
     'title_usage' => array(
         'type' => 'html',
-        'html' => '
-			<h1>' . __('Define a default usage', $this->ptd) . '</h1>
-		',
+        'html' => '<h1>' . __('Define a default usage', $this->ptd) . '</h1>',
         'widget_no_display' => true
     ),
     'before_url' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		'
+        'html' => '<div class="row">'
     ),
     'href' => array(
         'type' => 'text',
@@ -143,15 +137,11 @@ $fields['likebutton'] = array(
     ),
     'after_url' => array(
         'type' => 'html',
-        'html' => '
-			</div>
-		'
+        'html' => '</div>'
     ),
     'before_on_pages' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		',
+        'html' => '<div class="row">',
         'widget_no_display' => true
     ),
     'on_pages' => array(
@@ -179,16 +169,12 @@ $fields['likebutton'] = array(
     ),
     'after_on_pages' => array(
         'type' => 'html',
-        'html' => '
-			</div>
-		',
+        'html' => '</div>',
         'widget_no_display' => true
     ),
     'before_on_posts' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		',
+        'html' => '<div class="row">',
         'widget_no_display' => true
     ),
     'on_posts' => array(
@@ -216,16 +202,12 @@ $fields['likebutton'] = array(
     ),
     'after_on_posts' => array(
         'type' => 'html',
-        'html' => '
-				</div>
-		',
+        'html' => '</div>',
         'widget_no_display' => true
     ),
     'before_on_posts_types' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		',
+        'html' => '<div class="row">',
         'widget_no_display' => true
     ),
     'on_custom_post_types' => array(
@@ -253,16 +235,12 @@ $fields['likebutton'] = array(
     ),
     'after_on_posts_types' => array(
         'type' => 'html',
-        'html' => '
-				</div>
-		',
+        'html' => '</div>',
         'widget_no_display' => true
     ),
     'before_on_exclude' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		',
+        'html' => '<div class="row">',
         'widget_no_display' => true
     ),
     'exclude_post_type' => array(
@@ -288,16 +266,14 @@ $fields['likebutton'] = array(
     ),
     'after_exclude' => array(
         'type' => 'html',
-        'html' => '
-				</div>
-		',
+        'html' => '</div>',
         'widget_no_display' => true
     ),
     'preview' => array(
         'type' => 'html',
         'html' => '
             <h1>' . __('Preview', $this->ptd) . '</h1>
-            <div class="well">' . $this->get_the_likebutton() . '</div>
+            <div class="well">' . do_shortcode('[AWD_facebook_likebutton]') . '</div>
             <h1>' . __('Options List', $this->ptd) . '</h1>
             <table class="table table-bordered table-condensed table-striped">
                 <thead>

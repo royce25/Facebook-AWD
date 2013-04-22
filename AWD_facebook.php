@@ -868,7 +868,7 @@ Class AWD_facebook
     public function activity_content()
     {
         $url = parse_url(home_url());
-        echo do_shortcode('[AWD_Facebook_activitybox domain=' . $url['host'] . '" width="258" height="200" header="false" font="lucida grande" border_color="#F9F9F9" recommendations="1" ref="Facebook AWD Plugin"]');
+        echo do_shortcode('[AWD_facebook_activitybox domain=' . $url['host'] . '" width="258" height="200" header="false" font="lucida grande" border_color="#F9F9F9" recommendations="1" ref="Facebook AWD Plugin"]');
     }
 
     /**
@@ -1691,7 +1691,7 @@ Class AWD_facebook
 
         //enable by default like button
         if (isset($options['likebutton']['redefine']) && $options['likebutton']['redefine'] == 1) {
-            $likebutton = $this->get_the_likebutton($post);
+            $likebutton = do_shortcode('[AWD_facebook_likebutton]');
             if ($options['likebutton']['enabled'] == 1) {
                 if ($options['likebutton']['place'] == 'bottom')
                     return $content . $likebutton;
@@ -1710,7 +1710,7 @@ Class AWD_facebook
                 && !in_array($post->ID, $exclude_post_page_id)
                 //no in terms to exclude
                 && !$is_term_to_exclude) {
-            $likebutton = $this->get_the_likebutton($post);
+            $likebutton = do_shortcode('[AWD_facebook_likebutton]');
             if ($post->post_type == 'page' && $this->options['likebutton']['on_pages']) {
                 if ($this->options['likebutton']['place_on_pages'] == 'bottom')
                     return $content . $likebutton;
@@ -2756,47 +2756,7 @@ Class AWD_facebook
      */
     public function the_loginbutton_wp_login()
     {
-        echo '
-		<div class="AWD_facebook_connect_wplogin" style="text-align:right;">
-		' . $this->get_the_loginbutton() . '
-		</div>
-		<br />
-		';
-    }
-
-    //****************************************************************************************
-    //	LIKE BUTTON
-    //****************************************************************************************
-    /**
-     * @return the like button shortcode
-     * @return html code
-     */
-    public function shortcode_likebutton($atts = array(
-    ))
-    {
-        global $post;
-        return $this->get_the_likebutton($post, $atts);
-    }
-
-    /**
-     * @return the like button
-     * @return string
-     */
-    public function get_the_likebutton($post = "", $options = array(
-    ))
-    {
-        if (!isset($options['href']) OR empty($options['href']))
-            if (is_object($post))
-                $options['href'] = get_permalink($post->ID);
-
-        $options = wp_parse_args($options, $this->options['likebutton']);
-        try {
-            $object = new AWD_facebook_likebutton($options);
-            $params = array('object' => $object);
-            return $this->templateManager->render($object->getTemplate(), $params, false);
-        } catch (Exception $e) {
-            return $this->templateManager->displayMessage($e->getMessage(), 'error', false);
-        }
+        echo $this->get_the_loginbutton();
     }
 
     /**

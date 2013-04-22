@@ -8,16 +8,12 @@
 $fields['shared_activitybox'] = array(
     'title_config' => array(
         'type' => 'html',
-        'html' => '
-			<h1>' . __('Configure the box', $this->ptd) . '</h1>
-		',
+        'html' => '<h1>' . __('Configure the box', $this->ptd) . '</h1>',
         'widget_no_display' => true
     ),
     'start_title' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		'
+        'html' => '<div class="row">'
     ),
     'widget_title' => array(
         'type' => 'text',
@@ -28,15 +24,11 @@ $fields['shared_activitybox'] = array(
     ),
     'end_title' => array(
         'type' => 'html',
-        'html' => '
-			</div>
-		'
+        'html' => '</div>'
     ),
     'start_config' => array(
         'type' => 'html',
-        'html' => '
-			<div class="row">
-		'
+        'html' => '<div class="row">'
     ),
     'width' => array(
         'type' => 'text',
@@ -66,32 +58,30 @@ $fields['shared_activitybox'] = array(
     ),
     'end_config' => array(
         'type' => 'html',
-        'html' => '
-			</div>
-		'
+        'html' => '</div>'
     ),
     'preview' => array(
         'type' => 'html',
         'html' => '
-			<h1>' . __('Preview', $this->ptd) . '</h1>
-			<div class="well">' . $this->get_the_shared_activitybox() . '</div>
-			<h1>' . __('Options List', $this->ptd) . '</h1>
-			<table class="table table-bordered table-condensed table-striped">
-				<thead>
-					<tr>
-						<th>Option</th>
-						<th>Value</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr><td>width</td><td>number</td></tr>
-					<tr><td>height</td><td>number</td></tr>
-					<tr><td>fonts</td><td>string</td></tr>
-				</tbody>
-				<tfoot>
-					<tr><th colspan="2">[AWD_shared_activitybox option="value"]</th></tr>
-				</tfoot>
-			</table>
+            <h1>' . __('Preview', $this->ptd) . '</h1>
+            <div class="well">' . $this->get_the_shared_activitybox() . '</div>
+            <h1>' . __('Options List', $this->ptd) . '</h1>
+            <table class="table table-bordered table-condensed table-striped">
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>width</td><td>number</td></tr>
+                    <tr><td>height</td><td>number</td></tr>
+                    <tr><td>fonts</td><td>string</td></tr>
+                </tbody>
+                <tfoot>
+                    <tr><th colspan="2">[AWD_facebook_shared_activitybox option="value"]</th></tr>
+                </tfoot>
+            </table>
 		',
         'widget_no_display' => true
     )
