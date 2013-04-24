@@ -18,8 +18,8 @@ jQuery 1.7.2 reuired.
 
 Want to contribute ?
 --------------
-You can easily contribute to the Facebook awd plugin using Pull requests on git Hub.
-Just fork the repo, make changes, commit, and push.
+You can contribute to the Facebook AWD plugin using Pull requests on git Hub.
+Fork the repo, make changes, commit, and push.
 Thanks for your support.
 
 Credits:
