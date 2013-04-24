@@ -14,6 +14,14 @@ Easy to install and setup.
 jQuery 1.7.2 reuired.
 [Read more...](http://facebook-awd.ahwebdev.fr/features/ "Features of Facebook AWD")
 
+[Visit the Facebook AWD website for more informations](http://facebook-awd.ahwebdev.fr "Facebook AWD all in one")
+
+Want to contribute ?
+--------------
+You can easily contribute to the Facebook awd plugin using Pull requests on git Hub.
+Just fork the repo, make changes, commit, and push.
+Thanks for your support.
+
 Credits:
 
 - Facebook AWD by AHWEBDEV (Alexandre Hermann)
@@ -23,6 +31,5 @@ Credits:
 - Lang: US US_us by AHWEBDEV
 - Lang: Slovak SK_sk by Branco http://WebHostingGeeks.com
 
-[Visit the Facebook AWD website for more informations](http://facebook-awd.ahwebdev.fr "Facebook AWD all in one")
 
 [logo]: http://www.ahwebdev.fr/wp-content/uploads/2011/06/facebook_awd_all_in_one_556x180.png "Facebook AWD Logo"
