@@ -7,6 +7,7 @@
  */
 class AWD_facebook_template
 {
+
     private $options;
 
     private $deps;
@@ -19,13 +20,20 @@ class AWD_facebook_template
 
     public $warnings = array();
 
-    public function __construct(array $options, $deps)
+    protected $AWD_facebook;
+
+    public $helpTitle;
+
+    public function __construct($AWD_facebook)
     {
-        $this->options = $options;
+        $this->AWD_facebook = $AWD_facebook;
+        $this->options = $this->AWD_facebook->getOptions();
+        $this->templatesPath = $this->options['templates_path'];
+        $this->deps = $this->AWD_facebook->deps;
+        $urlImages = $AWD_facebook->pluginImagesUrl;
+        $this->helpTitle = '<div class=\'header_lightbox_help_title\'><img style=\'vertical-align:middle;\' src=\''.$urlImages.'facebook-mini.png\' alt=\'facebook logo\'/> '.__('Help',AWD_facebook::PTD).'</div></i>';
         $this->messages = array();
         $this->errors = array();
-        $this->templatesPath = $options['templates_path'];
-        $this->deps = $deps;
     }
 
     /**
@@ -95,7 +103,6 @@ class AWD_facebook_template
                 'content' => $message
             );
             $content = $this->render($template, $params, false);
-
         } else if (isset($this->messages) && count($this->messages) > 0 AND is_array($this->messages)) {
 
             foreach ($this->messages as $key => $message) {
@@ -125,14 +132,16 @@ class AWD_facebook_template
     public function renderPlugin($plugin, array $options)
     {
         try {
-            if(is_string($plugin)){
-                $options = wp_parse_args($options, $this->options[str_replace('AWD_facebook_', '', $plugin)]);
-                $this->deps[$plugin];
+            if (is_string($plugin)) {
+                $slug = str_replace('AWD_facebook_', '', $plugin);
+                $options = wp_parse_args($options, $this->options[$slug]);
+                $options = apply_filters('AWD_facebook_render_'.$slug, $options);
                 $object = new $plugin($options);
-            }else if(is_object($plugin)){
+            } else if (is_object($plugin)) {
                 $object = $plugin;
             }
-            $params = array('object' => $object);
+            //Always pass object
+            $params = array('object' => $object, 'options' => $options);
             return $this->render($object->getTemplate(), $params, false);
         } catch (Exception $e) {
             return $this->displayMessage($e->getMessage(), 'error', false);
@@ -148,10 +157,10 @@ class AWD_facebook_template
      */
     public function renderShortcode($options, $content = null, $tag)
     {
-        $options = shortcode_atts(array(), $options);
+        if (!is_array($options))
+            $options = array();
         return $this->renderPlugin($tag, $options);
     }
-
 
     /**
      *

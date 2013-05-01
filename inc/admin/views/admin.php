@@ -6,19 +6,17 @@
  */
 global $screen_layout_columns;
 $page = $_GET['page'];
-$page_hook = $this->blog_admin_page_hook;
-if ($page == $this->plugin_slug . '_open_graph')
-    $page_hook = $this->blog_admin_opengraph_hook;
-elseif ($page == $this->plugin_slug . '_plugins')
-    $page_hook = $this->blog_admin_plugins_hook;
-//Try to find meta box for each plugins
-else {
+$page_hook = $this->getAdminMenuHook();
+
+if ($page == self::PLUGIN_SLUG . '_open_graph') {
+    $page_hook = $this->getOpengraphMenuHook();
+} elseif ($page == self::PLUGIN_SLUG . '_plugins') {
+    $page_hook = $this->getPluginsMenuHook();
+} else {
     $plugins = $this->plugins;
-    if (is_array($plugins)) {
-        foreach ($plugins as $plugin) {
-            if ($page == $plugin->plugin_slug) {
-                $page_hook = $plugin->plugin_admin_hook;
-            }
+    foreach ($plugins as $plugin) {
+        if ($page == $plugin::PLUGIN_SLUG) {
+            $page_hook = $plugin->getAdminMenuHook();
         }
     }
 }
@@ -55,12 +53,13 @@ $current_screen = get_current_screen();
                 <ul class="nav">
                     <?php
                     global $submenu;
-                    if (isset($submenu[$this->plugin_slug])) {
-                        foreach ($submenu[$this->plugin_slug] as $page) {
+                    if (isset($submenu[self::PLUGIN_SLUG])) {
+                        foreach ($submenu[self::PLUGIN_SLUG] as $page) {
                             if (current_user_can($page[1])) {
                                 echo '
-                                <li ' . ($_GET['page'] == $page[2] ? 'class="active"' : '') . '><a href="' . admin_url('admin.php?page=' . $page[2]) . '" title="' . $page[3] . '">' . $page[0] . '</a></li>
-                                ';
+                                    <li ' . ($_GET['page'] == $page[2] ? 'class="active"' : '') . '>
+                                        <a href="' . admin_url('admin.php?page=' . $page[2]) . '" title="' . $page[3] . '">' . $page[0] . '</a>
+                                    </li>';
                             }
                         }
                     }

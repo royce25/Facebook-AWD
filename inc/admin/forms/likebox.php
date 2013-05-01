@@ -8,7 +8,7 @@
 $fields['likebox'] = array(
     'title_config' => array(
         'type' => 'html',
-        'html' => '<h1>' . __('Configure the box', $this->ptd) . '</h1>',
+        'html' => '<h1>' . __('Configure the box', self::PTD) . '</h1>',
         'widget_no_display' => true
     ),
     'start_url' => array(
@@ -17,14 +17,14 @@ $fields['likebox'] = array(
     ),
     'widget_title' => array(
         'type' => 'text',
-        'label' => __('Title', $this->ptd),
+        'label' => __('Title', self::PTD),
         'class' => 'span4',
         'attr' => array('class' => 'span4'),
         'widget_only' => true
     ),
     'href' => array(
         'type' => 'text',
-        'label' => __('Url of the page', $this->ptd),
+        'label' => __('Url of the page', self::PTD),
         'class' => 'span4',
         'attr' => array('class' => 'span4')
     ),
@@ -41,79 +41,79 @@ $fields['likebox'] = array(
     'type' => array(
         'type' => 'select',
         'options' => array(
-            array('value' => 'iframe', 'label' => __('Iframe', $this->ptd)),
-            array('value' => 'xfbml', 'label' => __('Xfbml', $this->ptd)),
-            array('value' => 'html5', 'label' => __('html5', $this->ptd)),
+            array('value' => 'iframe', 'label' => __('Iframe', self::PTD)),
+            array('value' => 'xfbml', 'label' => __('Xfbml', self::PTD)),
+            array('value' => 'html5', 'label' => __('html5', self::PTD)),
         ),
-        'label' => __('Type', $this->ptd),
+        'label' => __('Type', self::PTD),
         'class' => 'span2',
         'attr' => array('class' => 'span2')
     ),
     'colorscheme' => array(
         'type' => 'select',
         'options' => array(
-            array('value' => 'light', 'label' => __('light', $this->ptd)),
-            array('value' => 'dark', 'label' => __('Dark', $this->ptd)),
+            array('value' => 'light', 'label' => __('light', self::PTD)),
+            array('value' => 'dark', 'label' => __('Dark', self::PTD)),
         ),
-        'label' => __('Colors', $this->ptd),
+        'label' => __('Colors', self::PTD),
         'class' => 'span2',
         'attr' => array('class' => 'span2')
     ),
     'show_faces' => array(
         'type' => 'select',
         'options' => array(
-            array('value' => '0', 'label' => __('No', $this->ptd)),
-            array('value' => '1', 'label' => __('Yes', $this->ptd)),
+            array('value' => '0', 'label' => __('No', self::PTD)),
+            array('value' => '1', 'label' => __('Yes', self::PTD)),
         ),
-        'label' => __('Show faces', $this->ptd),
+        'label' => __('Show faces', self::PTD),
         'class' => 'span2',
         'attr' => array('class' => 'span2')
     ),
     'stream' => array(
         'type' => 'select',
         'options' => array(
-            array('value' => '0', 'label' => __('No', $this->ptd)),
-            array('value' => '1', 'label' => __('Yes', $this->ptd)),
+            array('value' => '0', 'label' => __('No', self::PTD)),
+            array('value' => '1', 'label' => __('Yes', self::PTD)),
         ),
-        'label' => __('Show Stream', $this->ptd),
+        'label' => __('Show Stream', self::PTD),
         'class' => 'span2',
         'attr' => array('class' => 'span2')
     ),
     'header' => array(
         'type' => 'select',
         'options' => array(
-            array('value' => '0', 'label' => __('No', $this->ptd)),
-            array('value' => '1', 'label' => __('Yes', $this->ptd)),
+            array('value' => '0', 'label' => __('No', self::PTD)),
+            array('value' => '1', 'label' => __('Yes', self::PTD)),
         ),
-        'label' => __('Show Header ?', $this->ptd),
+        'label' => __('Show Header ?', self::PTD),
         'class' => 'span2',
         'attr' => array('class' => 'span2')
     ),
     'force_wall' => array(
         'type' => 'select',
         'options' => array(
-            array('value' => '0', 'label' => __('No', $this->ptd)),
-            array('value' => '1', 'label' => __('Yes', $this->ptd)),
+            array('value' => '0', 'label' => __('No', self::PTD)),
+            array('value' => '1', 'label' => __('Yes', self::PTD)),
         ),
-        'label' => __('Force Wall ?', $this->ptd),
+        'label' => __('Force Wall ?', self::PTD),
         'class' => 'span2',
         'attr' => array('class' => 'span2')
     ),
     'width' => array(
         'type' => 'text',
-        'label' => __('Width of box', $this->ptd),
+        'label' => __('Width of box', self::PTD),
         'class' => 'span2',
         'attr' => array('class' => 'span2')
     ),
     'height' => array(
         'type' => 'text',
-        'label' => __('Height of box', $this->ptd),
+        'label' => __('Height of box', self::PTD),
         'class' => 'span2',
         'attr' => array('class' => 'span2')
     ),
     'border_color' => array(
         'type' => 'text',
-        'label' => __('Border color', $this->ptd),
+        'label' => __('Border color', self::PTD),
         'class' => 'span2',
         'attr' => array('class' => 'span2')
     ),
@@ -124,9 +124,9 @@ $fields['likebox'] = array(
     'preview' => array(
         'type' => 'html',
         'html' => '
-            <h1>' . __('Preview', $this->ptd) . '</h1>
-            <div class="well">' . $this->get_the_likebox() . '</div>
-            <h1>' . __('Options List', $this->ptd) . '</h1>
+            <h1>' . __('Preview', self::PTD) . '</h1>
+            <div class="well">' . do_shortcode('[AWD_facebook_likebox]') . '</div>
+            <h1>' . __('Options List', self::PTD) . '</h1>
             <table class="table table-bordered table-condensed table-striped">
                 <thead>
                     <tr>
@@ -153,4 +153,6 @@ $fields['likebox'] = array(
         'widget_no_display' => true
     )
 );
+$fields['likebox'] = apply_filters("AWD_facebook_fields_likebox", $fields['likebox']);
+
 ?>

@@ -1,9 +1,9 @@
 <?php
 /**
- * Like Button View
+ * Activity Box View
  *
  * @package facebook-awd
- * @var echo $object AWD_facebook_likebutton
+ * @var $object AWD_facebook_activitybox
  */
 ?>
 <div class="AWD_facebook_activitybox">
@@ -47,27 +47,16 @@
         <iframe
             src="http://www.facebook.com/plugins/activity.php?site=<?php
             echo $object->getDomain();
-            ?>&amp;width=<?php
-            echo $object->getWidth();
-            ?>&amp;height=<?php
-            echo $object->getHeight();
-            ?>&amp;header=<?php
-            echo $object->getHeader();
-            ?>&amp;colorscheme=<?php
-            echo $object->getColorscheme();
-            ?>&amp;border_color=<?php
-            urlencode($this->getBorderColor());
-            ?>&amp;recommendations=<?php
-            echo $object->getRecommendations();
-            ?>&amp;linktarget=<?php
-            echo $object->getLinktarget();
-            ?>&amp;max_age=<?php
-            echo $object->getMaxAge();
-            ?>&amp;ref=<?php
-            echo $object->getRef();
-            ?>&amp;filter=<?php
-            echo $object->getFilter();
-            ?>"
+            ?>&amp;width=<?php echo $object->getWidth();
+            ?>&amp;height=<?php echo $object->getHeight();
+            ?>&amp;header=<?php echo $object->getHeader();
+            ?>&amp;colorscheme=<?php echo $object->getColorscheme();
+            ?>&amp;border_color=<?php echo urlencode($object->getBorderColor());
+            ?>&amp;recommendations=<?php echo $object->getRecommendations();
+            ?>&amp;linktarget=<?php echo $object->getLinktarget();
+            ?>&amp;max_age=<?php echo $object->getMaxAge();
+            ?>&amp;ref=<?php echo $object->getRef();
+            ?>&amp;filter=<?php echo $object->getFilter(); ?>"
             scrolling="no"
             frameborder="0"
             style="border:none; overflow:hidden; width:<?php echo $object->getWidth(); ?>px; height:<?php echo $object->getHeight(); ?>px;"

@@ -41,19 +41,13 @@ class AWD_facebook_form
 
     public function start()
     {
-        $html =
-                '
-		<form action="' . $this->action . '" method="' . $this->method . '" id="' . $this->prefix . $this->id . '" name="' . $this->prefix . $this->id . '">
-		';
+        $html = '<form action="' . $this->action . '" method="' . $this->method . '" id="' . $this->prefix . $this->id . '" name="' . $this->prefix . $this->id . '">';
         return $html;
     }
 
     public function end()
     {
-        $html =
-                '
-		</form>
-		';
+        $html = '</form>';
         return $html;
     }
 
@@ -75,58 +69,62 @@ class AWD_facebook_form
     {
         $field_id = $this->getFieldId($id);
         $html = '
-		<div class="' . $class . '">
-			<label for="' . $field_id . '">' . $label . '</label>
-			<textarea id="' . $field_id . '" name="' . $this->prefix . $id . '" ' . $this->processAttr($attrs) . '>' . $value . '</textarea>
-		</div>';
+            <div class="' . $class . '">
+                <label for="' . $field_id . '">' . $label . '</label>
+                <textarea id="' . $field_id . '" name="' . $this->prefix . $id . '" ' . $this->processAttr($attrs) . '>' . $value . '</textarea>
+            </div>';
         return $html;
     }
 
     public function addInputText($label, $id, $value, $class = '', $attrs = array(), $prepend = '', $append = '')
     {
         $field_id = $this->getFieldId($id);
-        $html = '
-		<div class="' . $class . '">';
+        $html = '<div class="' . $class . '">';
+
         if ($label != '') {
-            $html .='
-				<label for="' . $field_id . '">' . $label . '</label>';
+            $html .= '<label for="' . $field_id . '">' . $label . '</label>';
+
         }
+
         if ($prepend != '' OR $append) {
-            $html .= '
-				<div class="' . ($append != '' ? 'input-append' : '') . ' ' . ($prepend != '' ? 'input-prepend' : '') . ' ">';
+            $html .= '<div class="' . ($append != '' ? 'input-append' : '') . ' ' . ($prepend != '' ? 'input-prepend' : '') . ' ">';
         }
+
         if ($prepend != '') {
             $html .= '<span class="add-on"><i class="' . $prepend . '"></i></span>';
         }
+
         $html .= '<input type="text" id="' . $field_id . '" name="' . $this->prefix . $id . '" value="' . $value . '" ' . $this->processAttr($attrs) . ' />';
+
         if ($append != '') {
             $html .= $append;
         }
+
         if ($prepend OR $append) {
-            $html .= '
-				</div>';
+            $html .= '</div>';
         }
-        $html .='
-		</div>';
+
+        $html .='</div>';
+
         return $html;
     }
 
     public function addSelect($label, $id, $options, $value, $class = '', $attrs = array())
     {
         $field_id = $this->getFieldId($id);
-        $html = '
-		<div class="' . $class . '">
-			<label for="' . $field_id . '">' . $label . '</label>
-			<select id="' . $field_id . '" name="' . $this->prefix . $id . '" ';
+        $html = '<div class="' . $class . '">
+                    <label for="' . $field_id . '">'.$label.'</label>
+                    <select id="' . $field_id . '" name="' . $this->prefix . $id . '" ';
+
         $html .= $this->processAttr($attrs);
-        $html .= '>
-			';
+        $html .= '>';
+
         foreach ($options as $option => $info) {
             $html .='<option value="' . $info['value'] . '" ' . ($info['value'] == $value ? 'selected="selected"' : '') . ' >' . $info['label'] . '</option>';
         }
-        $html .='
-			</select>
-		</div>';
+
+        $html .='</select>
+            </div>';
         return $html;
     }
 
@@ -148,15 +146,16 @@ class AWD_facebook_form
         $field_id = $this->getFieldId($id);
         $html = '
 		<div class="' . $class . '">
-			<label for="' . $field_id . '">' . $label . '</label>
-			<div class="input-append">
-				<input type="text" id="' . $field_id . '" name="' . $this->prefix . $id . '" value="' . $value . '" ' . $this->processAttr($attrs) . ' />
-				<button class="btn AWD_button_media" type="button" ' . $this->processAttr($datas) . ' data-field="' . $field_id . '"><i class="icon-upload"></i></button>';
+                    <label for="' . $field_id . '">' . $label . '</label>
+                    <div class="input-append">
+                        <input type="text" id="' . $field_id . '" name="' . $this->prefix . $id . '" value="' . $value . '" ' . $this->processAttr($attrs) . ' />
+                        <button class="btn AWD_button_media" type="button" ' . $this->processAttr($datas) . ' data-field="' . $field_id . '"><i class="icon-upload"></i></button>';
         if ($rm == true) {
             $html .='<button class="btn btn-warning AWD_delete_media"><i class="icon-minus icon-white"></i></button>';
         }
-        $html.='</div>
-		</div>';
+        $html.='
+            </div>
+	</div>';
         return $html;
     }
 
@@ -168,6 +167,7 @@ class AWD_facebook_form
     public function proccessFields($fieldset_id, $fields, $widget_instance = null)
     {
         global $AWD_facebook;
+        $options = $AWD_facebook->getOptions();
         $html = '';
         if (count($fields) > 0) {
             foreach ($fields as $id => $field) {
@@ -177,12 +177,12 @@ class AWD_facebook_form
                         continue;
                     }
                 }
+
                 if (!$this->isWidget() && isset($field['widget_only'])) {
                     if ($field['widget_only'] == true) {
                         continue;
                     }
                 }
-
 
                 //get the value of the field only if it's not a html content
                 if ($field['type'] != 'html') {
@@ -192,24 +192,23 @@ class AWD_facebook_form
                         $value = $widget_instance[$id];
                     } else {
                         $fieldname = $fieldset_id . '[' . $id . ']';
-                        $value = $AWD_facebook->options[$fieldset_id][$id];
+                        $value = $options[$fieldset_id][$id];
                     }
                 }
-                $help = ''; //!$this->isWidget() ? $AWD_facebook->get_the_help($id) : '';
 
                 switch ($field['type']) {
 
                     case 'select':
-                        $html.= $this->addSelect($field['label'] . ' ' . $help, $fieldname, $field['options'], $value, $field['class'], $field['attr']);
+                        $html.= $this->addSelect($field['label'], $fieldname, $field['options'], $value, $field['class'], $field['attr']);
                         break;
                     case 'text':
-                        $html.= $this->addInputText($field['label'] . ' ' . $help, $fieldname, $value, $field['class'], $field['attr']);
+                        $html.= $this->addInputText($field['label'], $fieldname, $value, $field['class'], $field['attr']);
                         break;
                     case 'html':
                         $html.= $field['html'];
                         break;
                     case 'media':
-                        $html.= $this->addMediaButton($field['label'] . ' ' . $help, $fieldname, $value, $field['class'], $field['attr']);
+                        $html.= $this->addMediaButton($field['label'], $fieldname, $value, $field['class'], $field['attr']);
                         break;
                 }
             }
