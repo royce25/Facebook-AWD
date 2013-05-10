@@ -1,9 +1,8 @@
 <?php
 
 /**
- *
- * @author alexhermann
- *
+ * Model form fields definition
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 $fields['loginbutton'] = array(
     'title_config' => array(
@@ -122,7 +121,7 @@ $fields['loginbutton'] = array(
                     <tr><td>faces</td><td>0 or 1</td></tr>
                     <tr><td>maxrow</td><td>number (only if faces = 1)</td></tr>
                     <tr><td>login_url</td><td>string</td></tr>
-                    <tr><td>logout_url</td><td>string</td></tr>
+                    <tr><td>logoutUrl</td><td>string</td></tr>
                     <tr><td>width</td><td>number</td></tr>
                     <tr><td>image</td><td>url</td></tr>
                 </tbody>

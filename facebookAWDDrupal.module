@@ -1,0 +1,35 @@
+<?php
+
+//Facebook AWD use it own autoloader.
+//Maybe we should remove it and use the dedicated one in drupal
+require_once('autoload.php');
+
+use AHWEBDEV\FacebookAWD\FacebookAWD;
+
+/**
+ * Menu hook
+ */
+function facebookAWDDrupal_menu()
+{
+    $items = array();
+    $items['admin/config/facebookAWD'] = array(
+        'title' => FacebookAWD::PLUGIN_NAME,
+        'description' => 'My Description',
+        'position' => 'left',
+        'weight' => -100,
+        'page callback' => 'system_admin_menu_block_page',
+        'access arguments' => array('administer site configuration'),
+        'file' => 'system.admin.inc',
+        'file path' => drupal_get_path('module', 'system'),
+    );
+
+    //We need at least one child item, otherwise parent will not show up
+    $items['admin/config/facebookAWD/child-name'] = array(
+        'title' => 'Settings',
+        'description' => 'Configure your Facebook Application',
+        'page callback' => 'drupal_goto',
+        'page arguments' => array('my-path'),
+        'access arguments' => array('administer site configuration'),
+    );
+    return $items;
+}

@@ -1,9 +1,9 @@
 <?php
 /**
  * Activity Box View
- *
  * @package facebook-awd
- * @var $object AWD_facebook_activitybox
+ * @var $object AWD_facebook_commentsbox
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 ?>
 <div class="AWD_facebook_activitybox">

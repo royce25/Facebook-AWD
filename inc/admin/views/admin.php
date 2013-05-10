@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * @author alexhermann
- *
+ * View Admin template
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 global $screen_layout_columns;
 $page = $_GET['page'];
@@ -64,9 +63,6 @@ $current_screen = get_current_screen();
                         }
                     }
                     ?>
-                    <?php if (current_user_can('manage_facebook_awd_settings')) { ?>
-                        <!-- <li><a href="http://facebook-awd.ahwebdev.fr/plugins/" target="blank" title="Facebook AWD plugins">Facebook AWD plugins</a></li>-->
-                    <?php } ?>
                     <li><a href="http://facebook-awd.ahwebdev.fr/documentation/" target="blank" title="Documentation">Documentation</a></li>
                     <!-- <li><a href="http://facebook-awd.ahwebdev.fr/support/" target="blank" title="Support">Support</a></li> -->
                     <?php ?>
@@ -83,7 +79,7 @@ $current_screen = get_current_screen();
         do_action('AWD_facebook_admin_notices', true);
         ?>
     </div>
-    <div id="poststuff" class="metabox-holder <?php echo 2 == $screen_layout_columns ? ' has-right-sidebar' : ''; ?>">
+    <div id="poststuff" class="metabox-holder has-right-sidebar">
         <?php wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false); ?>
         <?php wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false); ?>
         <div id="side-info-column" class="inner-sidebar">

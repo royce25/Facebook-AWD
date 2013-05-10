@@ -1,10 +1,12 @@
 <?php
+
+use AHWEBDEV\Form;
+
 /**
- *
- * @author alexhermann
- *
+ * View Admin settgins template
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
-$form = new AWD_facebook_form('form_settings', 'POST', '', self::OPTION_PREFIX);
+$form = new Form('form_settings', 'POST', '', self::OPTION_PREFIX);
 ?>
 <div id="div_options_content">
     <?php echo $form->start(); ?>
@@ -125,7 +127,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', self::OPTION_PREFIX);
                     <i class="icon-share"></i> <code><?php echo md5($this->options['app_id']); ?></code></p>
                     <h4><?php _e("Subscriptions detected:", self::PTD); ?></h4>
                     <?php
-                    $subscriptions = $this->get_realtime_subscriptions();
+                    $subscriptions = $this->getRealtimeSubscriptions();
                     if (!is_wp_error($subscriptions)) {
                         ?>
                         <?php if (count($subscriptions)) { ?>
@@ -166,22 +168,22 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', self::OPTION_PREFIX);
                 <div id="managepages" class="tab-pane">
                     <?php
                     if ($this->options['connect_enable'] == 0) {
-                        $this->templateManager->displayMessage(sprintf(__('Facebook connect is required to manage pages %sRetry%s', self::PTD), '<a class="btn btn-danger" href="' . $this->get_current_url() . '">', '</a>'), 'error');
+                        $this->templateManager->displayMessage(sprintf(__('Facebook connect is required to manage pages %sRetry%s', self::PTD), '<a class="btn btn-danger" href="' . $this->getCurrentUrl() . '">', '</a>'), 'error');
                     } else {
-                        if ($this->current_facebook_user_can('publish_stream')) {
+                        if ($this->currentFacebookUserCan('publish_stream')) {
                             $this->templateManager->displayMessage(__('Publish Stream is enabled', self::PTD), 'success');
                         } else {
-                            echo '<a href="#" data-scope="email,publish_stream" class="get_permissions btn btn-info"><i class="icon-ok-sign icon-white"></i> ' . __('Authorize App to publish on your pages', self::PTD) . '</a>';
+                            echo '<a href="#" data-scope="email,publish_stream" class="getPermissions btn btn-info"><i class="icon-ok-sign icon-white"></i> ' . __('Authorize App to publish on your pages', self::PTD) . '</a>';
                         }
 
-                        if ($this->current_facebook_user_can('manage_pages')) {
+                        if ($this->currentFacebookUserCan('manage_pages')) {
                             $message = __('Pages can be managed', self::PTD) . ' <a href="#" id="toogle_list_pages" class="btn btn-info"><i class="icon-check icon-white"></i> ' . __('Select pages to link with Wordpress', self::PTD) . '</a>';
                             $this->templateManager->displayMessage($message, 'success');
                         } else {
-                            echo '<a href="#" data-scope="email,manage_pages" class="get_permissions btn btn-info"><i class="icon-ok-sign icon-white"></i> ' . __('Authorize App to access your pages', self::PTD) . '</a>';
+                            echo '<a href="#" data-scope="email,manage_pages" class="getPermissions btn btn-info"><i class="icon-ok-sign icon-white"></i> ' . __('Authorize App to access your pages', self::PTD) . '</a>';
                         }
 
-                        if ($this->current_facebook_user_can('manage_pages') && $this->is_user_logged_in_facebook()) {
+                        if ($this->currentFacebookUserCan('manage_pages') && $this->isUserLoggedInFacebook()) {
                             ?>
                             <div class="toogle_fb_pages hidden well">
                                 <h2><?php _e('Check the page you want to sync with your posts.', self::PTD); ?></h2>
@@ -229,10 +231,10 @@ $form = new AWD_facebook_form('form_settings', 'POST', '', self::OPTION_PREFIX);
                                 ?>
                             </div>
                         <?php } ?>
-                        <?php if ($this->current_facebook_user_can('publish_stream') && current_user_can('manage_facebook_awd_settings')) { ?>
+                        <?php if ($this->currentFacebookUserCan('publish_stream') && current_user_can('manage_facebook_awd_settings')) { ?>
                             <div class="row">
                                 <?php
-                                if ($this->current_facebook_user_can('manage_pages')) {
+                                if ($this->currentFacebookUserCan('manage_pages')) {
                                     echo $form->addSelect(__('Auto publish post on Facebook pages ?', self::PTD), 'publish_to_pages', array(
                                         array(
                                             'value' => 0,

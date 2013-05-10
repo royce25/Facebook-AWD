@@ -1,9 +1,9 @@
 <?php
 /**
  * Shared Activity Box View
- *
  * @package facebook-awd
  * @var $object AWD_facebook_shared_activitybox
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 ?>
 <div class="AWD_facebook_activitybox">

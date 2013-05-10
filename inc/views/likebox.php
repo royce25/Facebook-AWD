@@ -1,14 +1,14 @@
 <?php
 /**
  * Like Box View
- *
  * @package facebook-awd
- * @var $object AWD_facebook_likebutton
+ * @var $object AWD_facebook_likebox
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 ?>
 <div class="AWD_facebook_likebox">
 
-    <?php if($object->getType() === 'html5'){ ?>
+    <?php if ($object->getType() === 'html5') { ?>
 
         <div class="fb-like-box"
              data-href="<?php echo $object->getHref(); ?>"
@@ -22,7 +22,7 @@
              data-force_wall="<?php echo $object->getForceWall(); ?>">
         </div>
 
-    <?php }else if($object->getType() === 'xfbml'){ ?>
+    <?php } else if ($object->getType() === 'xfbml') { ?>
 
         <fb:like-box
             href="<?php echo $object->getHref(); ?>"
@@ -36,7 +36,7 @@
             force_wall="<?php echo $object->getForceWall(); ?>">
         </fb:like-box>
 
-    <?php }else if($object->getType() === 'iframe'){ ?>
+    <?php } else if ($object->getType() === 'iframe') { ?>
 
         <iframe src="http://www.facebook.com/plugins/likebox.php?href=<?php
         echo urlencode($object->getHref());
@@ -48,9 +48,10 @@
         ?>&amp;border_color=<?php echo urlencode($object->getBorderColor());
         ?>&amp;stream=<?php echo $object->getStream();
         ?>&amp;force_wall=<?php echo $object->getForceWall(); ?>"
-        scrolling="no"
-        frameborder="0"
-        style="border:none; overflow:hidden; width:<?php echo $object->getWidth(); ?>px; height:<?php echo $object->getHeight(); ?>px;" allowTransparency="true"></iframe>
+                scrolling="no"
+                frameborder="0"
+                style="border:none; overflow:hidden; width:<?php echo $object->getWidth(); ?>px; height:<?php echo $object->getHeight(); ?>px;" allowTransparency="true">
+        </iframe>
 
     <?php } ?>
 

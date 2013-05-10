@@ -1,9 +1,8 @@
 <?php
 
 /**
- *
- * @author alexhermann
- *
+ * Model list menu definition
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 $list_menu_plugins = array(
     'likebutton_settings' => __('Like Button', self::PTD),

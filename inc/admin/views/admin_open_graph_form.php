@@ -1,8 +1,10 @@
 <?php
+
+use AHWEBDEV\AWD_facebook_form;
+
 /**
- *
- * @author alexhermann
- *
+ * View Admin opegraph form template
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 ?>
 <h1><?php _e('1. Define Object', self::PTD); ?></h1>
@@ -21,12 +23,12 @@ $object = array(
     'auto_load_audios_attachment' => 0
 );
 $form = new AWD_facebook_form('form_create_opengraph_object', 'POST', null, self::OPTION_PREFIX);
-if ($object_id instanceof AWD_facebook_form) {
-    $form = $object_id;
-} else if (is_array($object_id)) {
-    $object = $object_id;
-} else if ($object_id != '') {
-    $object = wp_parse_args($this->options['opengraph_objects'][$object_id], $object);
+if ($objectId instanceof AWD_facebook_form) {
+    $form = $objectId;
+} else if (is_array($objectId)) {
+    $object = $objectId;
+} else if ($objectId != '') {
+    $object = wp_parse_args($this->options['opengraph_objects'][$objectId], $object);
 }
 
 if ($copy == 'true')
@@ -34,9 +36,9 @@ if ($copy == 'true')
 if (!isset($object['object_title']))
     $object['object_title'] = '';
 
-$ogp = $this->opengraph_array_to_object($object);
+$ogp = $this->opengraphArrayToObject($object);
 
-if (!is_array($object_id))
+if (!is_array($objectId))
     echo $form->start();
 ?>
 <div class="alert alert-info">
@@ -189,7 +191,7 @@ if (!is_array($object_id))
         ?>
     </div>
 </div>
-<?php if (!is_array($object_id)) { ?>
+<?php if (!is_array($objectId)) { ?>
     <div class="form-actions">
         <div class="btn-group pull-right">
             <button class="btn btn-primary awd_submit_ogp"><i class="icon-ok icon-white"></i> <?php _e('Save this object', self::PTD); ?></button>

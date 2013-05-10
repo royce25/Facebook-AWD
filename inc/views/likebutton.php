@@ -1,16 +1,16 @@
 <?php
 /**
  * Like Button View
- *
  * @package facebook-awd
  * @var $object AWD_facebook_likebutton
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 ?>
 
 
 <div class="AWD_facebook_likebutton">
 
-    <?php if($object->getType() === 'html5'){ ?>
+    <?php if ($object->getType() === 'html5') { ?>
 
         <div class="fb-like"
              data-href="<?php echo $object->getHref(); ?>"
@@ -24,7 +24,7 @@
              data-ref="<?php echo $object->getRef(); ?>">
         </div>
 
-    <?php }else if($object->getType() === 'xfbml'){ ?>
+    <?php } else if ($object->getType() === 'xfbml') { ?>
 
         <fb:like
             href="<?php echo $object->getHref(); ?>"
@@ -38,7 +38,7 @@
             ref="<?php echo $object->getHref(); ?>">
         </fb:like>
 
-    <?php }else if($object->getType() === 'iframe'){ ?>
+    <?php } else if ($object->getType() === 'iframe') { ?>
 
         <iframe
             src="http://www.facebook.com/plugins/like.php?href=<?php

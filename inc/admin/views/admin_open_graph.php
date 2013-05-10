@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * @author alexhermann
- *
+ * View Admin opengraph template
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 ?>
 <div id="div_options_content">
@@ -20,7 +19,7 @@
                         <?php
                         if (is_array($ogp_objects) && count($ogp_objects)) {
                             foreach ($ogp_objects as $ogp_object) {
-                                echo $this->get_open_graph_object_list_item($ogp_object);
+                                echo $this->getOpengraphObjectListItem($ogp_object);
                             }
                         }
                         echo '<tr class="awd_no_objects ' . (is_array($ogp_objects) && count($ogp_objects) ? 'hidden' : '') . '">
@@ -38,7 +37,7 @@
 
                 <h1><?php _e('Define Objects relation', self::PTD); ?></h1>
                 <div class="awd_ogp_links">
-                    <?php echo $this->get_open_graph_object_links_form(); ?>
+                    <?php echo $this->getOpengraphObjectLinksForm(); ?>
                 </div>
             </div>
         </div>

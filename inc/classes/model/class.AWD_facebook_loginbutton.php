@@ -1,12 +1,9 @@
 <?php
 
 /**
- * AWD_facebook_loginbutton
  *
- * This class generate login button for facebook.
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  *
- * @package facebook-awd
- * @author AHWEBDEV (Alexandre Hermann)
  */
 class AWD_facebook_loginbutton
 {

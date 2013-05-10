@@ -1,12 +1,12 @@
 <?php
 
-require_once(dirname(__FILE__) . '/class.AWD_facebook_plugin_interface.php');
-
 /**
  *
- * @author alexhermann
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  *
  */
+require_once(dirname(__FILE__) . '/class.AWD_facebook_plugin_interface.php');
+
 abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_interface
 {
     /**

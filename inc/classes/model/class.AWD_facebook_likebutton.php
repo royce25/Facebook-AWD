@@ -2,7 +2,7 @@
 
 /**
  *
- * @author alexhermann
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  *
  */
 class AWD_facebook_likebutton

@@ -1,9 +1,8 @@
 <?php
 
 /**
- *
- * @author alexhermann
- *
+ * Model form fields definition
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 $fields['shared_activitybox'] = array(
     'title_config' => array(

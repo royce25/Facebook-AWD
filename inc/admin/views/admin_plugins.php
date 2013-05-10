@@ -1,8 +1,10 @@
 <?php
+
+use AHWEBDEV\AWD_facebook_form;
+
 /**
- *
- * @author alexhermann
- *
+ * View Admin plugins template
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 $fields = array();
 $list_menu_plugins = array();
@@ -22,7 +24,7 @@ $list_menu_plugins = apply_filters('AWD_facebook_plugins_menu', $list_menu_plugi
 if (!is_array($list_menu_plugins)) {
     $list_menu_plugins = array();
 }
-$form = new AWD_facebook_form('form_settings', 'POST', $this->get_current_url(), self::OPTION_PREFIX);
+$form = new AWD_facebook_form('form_settings', 'POST', $this->getCurrentUrl(), self::OPTION_PREFIX);
 ?>
 <div id="div_options_content">
 
@@ -111,6 +113,7 @@ $form = new AWD_facebook_form('form_settings', 'POST', $this->get_current_url(),
             unset($plugin_fields['likebox']);
             unset($plugin_fields['likebutton']);
             unset($plugin_fields['activitybox']);
+            unset($plugin_fields['shared_activitybox']);
             foreach ($plugin_fields as $plugin => $fields) {
                 ?>
                 <div id="<?php echo $plugin ?>_settings" class="tab-pane">

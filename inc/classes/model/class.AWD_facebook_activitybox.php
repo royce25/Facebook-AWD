@@ -1,12 +1,9 @@
 <?php
 
 /**
- * AWD_facebook_activity
  *
- * This class generate activity box for facebook.
- *
- * @package facebook-awd
- * @author AHWEBDEV (Alexandre Hermann)
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
+ * 
  */
 class AWD_facebook_activitybox
 {

@@ -1,10 +1,10 @@
 <?php
 /**
  * Login button View
- *
  * @package facebook-awd
- * @var $object AWD_facebook_activitybox
+ * @var $object AWD_facebook_loginbutton
  * @var $options array
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 
 global $AWD_facebook;
@@ -16,20 +16,22 @@ $options = $AWD_facebook->getOptions();
     <?php
     //search and replace pattern for redirect url
     //@TODO remove those init line to object construct.
-    $options['login_redirect_url'] = str_replace(array("%CURRENT_URL%"), array($AWD_facebook->get_current_url()), $options['loginbutton']['login_redirect_url']);
-    $options['logout_redirect_url'] = str_replace(array("%CURRENT_URL%"), array($AWD_facebook->get_current_url()), $options['loginbutton']['logout_redirect_url']);
+    $options['login_redirect_url'] = str_replace(array("%CURRENT_URL%"), array($AWD_facebook->getCurrentUrl()), $options['loginbutton']['login_redirect_url']);
+    $options['logout_redirect_url'] = str_replace(array("%CURRENT_URL%"), array($AWD_facebook->getCurrentUrl()), $options['loginbutton']['logout_redirect_url']);
 
 
-    $displayConnect = $AWD_facebook->is_user_logged_in_facebook() && $options['connect_enable'] && is_user_logged_in();
+    $displayConnect = $AWD_facebook->isUserLoggedInFacebook() && $options['connect_enable'] && is_user_logged_in();
     ?>
 
     <?php if ($displayConnect) { ?>
-
+        <?php
+        $me = $AWD_facebook->getMe();
+        ?>
         <div class="AWD_profile AWD_facebook_wrap">
             <?php if ($object->getShowProfilePicture() == 1 && $object->getShowFaces() == 0) { ?>
                 <div class="AWD_profile_image pull-left">
-                    <a href="<?php echo $AWD_facebook->me['link']; ?>" target="_blank" class="thumbnail">
-                        <?php echo get_avatar($AWD_facebook->get_current_user()->ID, '50'); ?>
+                    <a href="<?php echo $me['link']; ?>" target="_blank" class="thumbnail">
+                        <?php echo get_avatar($AWD_facebook->getCurrentUser()->ID, '50'); ?>
                     </a>
                 </div>
             <?php } ?>
@@ -49,8 +51,8 @@ $options = $AWD_facebook->getOptions();
                 <?php } else { ?>
 
                     <div class="AWD_name">
-                        <a href="<?php echo $AWD_facebook->me['link']; ?>" target="_blank">
-                            <?php echo $AWD_facebook->me['name']; ?>
+                        <a href="<?php echo $me['link']; ?>" target="_blank">
+                            <?php echo $me['name']; ?>
                         </a>
                     </div>
 
