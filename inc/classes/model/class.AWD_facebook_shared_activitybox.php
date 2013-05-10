@@ -7,6 +7,7 @@
  */
 class AWD_facebook_shared_activitybox
 {
+
     /**
      * width
      * the width of the plugin in pixels. Default width: 300px
@@ -67,40 +68,20 @@ class AWD_facebook_shared_activitybox
     }
 
     /**
-     *
-     * @return type
+     * Getter: activity
+     * @return activity html/xfbml/iframe
      */
-    public function getWidth()
+    public function get()
     {
-        return $this->width;
+        return $this->activityHtml5();
     }
 
-    /**
-     *
-     * @return type
-     */
-    public function getHeight()
+    //******VIEWS******//
+    public function activityHtml5()
     {
-        return $this->height;
+        return '<div class="fb-shared-activity" data-width="' . $this->width . '" data-height="' . $this->height . '" data-font="' . $this->font . '"></div>';
     }
 
-    /**
-     *
-     * @return type
-     */
-    public function getFont()
-    {
-        return $this->font;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return 'shared_activitybox.php';
-    }
 }
 
 ?>

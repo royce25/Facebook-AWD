@@ -5,11 +5,6 @@
  */
 function AWDFacebookAdmin($) {
 
-    /**
-     *
-     * @param {type} button
-     * @returns {undefined}
-     */
     this.reloadAppInfos = function(button)
     {
         $(button).button('loading');
@@ -21,11 +16,6 @@ function AWDFacebookAdmin($) {
         });
     };
 
-    /**
-     *
-     * @param {type} button
-     * @returns {Boolean}
-     */
     this.showUploadDialog = function(button)
     {
         var $button = $(button);
@@ -47,10 +37,6 @@ function AWDFacebookAdmin($) {
         return false;
     };
 
-    /**
-     *
-     * @returns {undefined}
-     */
     this.initToolTip = function()
     {
         $('.awd_tooltip_donate').popover({
@@ -72,17 +58,25 @@ function AWDFacebookAdmin($) {
         });
         $('.awd_tooltip').popover({
             placement: 'right',
-            trigger: 'focus',
+            title: function() {
+                return $(".header_lightbox_help_title").html();
+            },
+            content: function() {
+                var id = $(this).attr('id');
+                console.log(id);
+                var html = $("#lightbox_" + id).html();
+                if (html == null) {
+                    html = '...';
+                }
+                return '<div class="AWD_facebook_wrap">' + html + '</div>';
+            },
             delay: {
-                show: 300
+                show: 300,
+                hide: 500
             }
         });
     };
 
-    /**
-     *
-     * @returns {undefined}
-     */
     this.initTab = function()
     {
         $('#plugins_menu li:eq(0) a').tab('show');
@@ -90,13 +84,6 @@ function AWDFacebookAdmin($) {
         $('#settings_ogp_menu li:eq(0) a').tab('show');
     };
 
-    /**
-     *
-     * @param {type} master
-     * @param {type} depend
-     * @param {type} value
-     * @returns {undefined}
-     */
     this.dependListener = function(master, depend, value)
     {
         $(master).change(function() {
@@ -110,10 +97,6 @@ function AWDFacebookAdmin($) {
         $(master).trigger('change');
     };
 
-    /**
-     *
-     * @returns {undefined}
-     */
     this.bindEvents = function()
     {
         var $awd = this;
@@ -288,19 +271,21 @@ function AWDFacebookAdmin($) {
             }, 'json');
         });
 
+
         //Pattern template vars in opengraph
         var id_focused = "";
         $(":input").live('focus', function() {
             id_focused = $(this).attr('id');
         });
-
         $(".opengraph_placeholder button").live('click', function(e) {
             e.preventDefault();
             var b = $(this);
             var value = $("#" + id_focused).val();
             $("#" + id_focused).val(value + b.text());
+
         });
 
+        //submit the form to update/save the object
         $('#awd_fcbk_option_form_create_opengraph_object').live('submit', function(e) {
             e.preventDefault();
             var $form = $(this);
@@ -325,7 +310,6 @@ function AWDFacebookAdmin($) {
             e.preventDefault();
             $('#awd_fcbk_option_form_create_opengraph_object_links').submit();
         });
-
         $('#awd_fcbk_option_form_create_opengraph_object_links').live('submit', function(e) {
             e.preventDefault();
             $('#submit_ogp').button('loading');
@@ -335,14 +319,18 @@ function AWDFacebookAdmin($) {
             }, 'json');
         });
 
+        $('.awd_debug .page-header').each(function() {
+            $(this).next().hide();
+            $(this).css('cursor', 'pointer');
+            $(this).click(function() {
+                $(this).next().slideToggle();
+            });
+        });
+
         $(".alert").alert();
     };
 
 
-    /**
-     *
-     * @returns {undefined}
-     */
     this.init = function()
     {
         $.fn.button.defaults = {loadingText: 'Loading...'};
@@ -355,9 +343,9 @@ function AWDFacebookAdmin($) {
         prettyPrint();
         $('.AWD_facebook').button();
     };
-
     this.init();
-};
+}
+;
 var AWD_facebook_admin;
 jQuery(document).ready(function($) {
     AWD_facebook_admin = new AWDFacebookAdmin($);

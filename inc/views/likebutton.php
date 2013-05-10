@@ -6,8 +6,6 @@
  * @var $object AWD_facebook_likebutton
  */
 ?>
-
-
 <div class="AWD_facebook_likebutton">
 
     <?php if($object->getType() === 'html5'){ ?>
@@ -43,15 +41,25 @@
         <iframe
             src="http://www.facebook.com/plugins/like.php?href=<?php
             echo urlencode($object->getHref());
-            ?>&amp;send=<?php echo $object->getSend();
-            ?>&amp;layout=<?php echo $object->getLayout();
-            ?>&amp;width=<?php echo $object->getWidth();
-            ?>&amp;show_faces=<?php echo $object->getShowFaces();
-            ?>&amp;action=<?php echo $object->getAction();
-            ?>&amp;colorscheme=<?php echo $object->getColorscheme();
-            ?>&amp;font=<?php echo $object->getFont();
-            ?>&amp;height=<?php echo $object->getHeight();
-            ?>&ref=<?php echo urlencode($object->getRef()); ?>"
+            ?>&amp;send=<?php
+            echo $object->getSend();
+            ?>&amp;layout=<?php
+            echo $object->getLayout();
+            ?>&amp;width=<?php
+            echo $object->getWidth();
+            ?>&amp;show_faces=<?php
+            echo $object->getShowFaces();
+            ?>&amp;action=<?php
+            echo $object->getAction();
+            ?>&amp;colorscheme=<?php
+            echo $object->getColorscheme();
+            ?>&amp;font=<?php
+            echo $object->getFont();
+            ?>&amp;height=<?php
+            echo $object->getHeight();
+            ?>&ref=<?php
+            echo urlencode($object->getRef());
+            ?>"
             scrolling="no"
             frameborder="0"
             style="border:none; overflow:hidden; width:<?php echo $object->getWidth(); ?>px; height:<?php echo $object->getHeight(); ?>px;"

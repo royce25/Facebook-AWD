@@ -119,7 +119,7 @@ class AWD_facebook_options
         $this->setDefaultValue('publish_to_profile', 0);
         $this->setDefaultValue('publish_to_pages', 0);
         $this->setDefaultValue('publish_message_text', null);
-        $this->setDefaultValue('publish_read_more_text', __('Read More', $AWD_facebook::PTD));
+        $this->setDefaultValue('publish_read_more_text', __('Read More', $AWD_facebook->ptd));
         $this->setDefaultValue('fb_publish_to_pages', null);
         $this->setDefaultValue('templates_path', dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.'views');
 
@@ -135,11 +135,11 @@ class AWD_facebook_options
         $this->setDefaultValue('opengraph_objects', array());
         $this->setDefaultValue('opengraph_object_links', array());
         $this->setDefaultValue('opengraph_contexts', array(
-            'frontpage' => __('Frontpage', $AWD_facebook::PTD),
-            'page' => __('Pages', $AWD_facebook::PTD),
-            'post' => __('Posts', $AWD_facebook::PTD),
-            'archive' => __('Archives', $AWD_facebook::PTD),
-            'author' => __('Authors', $AWD_facebook::PTD)
+            'frontpage' => __('Frontpage', $AWD_facebook->ptd),
+            'page' => __('Pages', $AWD_facebook->ptd),
+            'post' => __('Posts', $AWD_facebook->ptd),
+            'archive' => __('Archives', $AWD_facebook->ptd),
+            'author' => __('Authors', $AWD_facebook->ptd)
         ));
 
         //Plugins options
@@ -217,12 +217,12 @@ class AWD_facebook_options
             'display_on_register_page' => 0,
             'login_redirect_url' => '',
             'logout_redirect_url' => '',
-            'logout_label' => __('Logout', $AWD_facebook::PTD),
+            'logout_label' => __('Logout', $AWD_facebook->ptd),
             'show_profile_picture' => 1,
             'show_faces' => 0,
             'maxrow' => 1,
             'width' => 200,
-            'image' => $AWD_facebook->pluginImagesUrl . 'f-connect.png'
+            'image' => $AWD_facebook->plugin_url_images . 'f-connect.png'
         );
         $this->setDefaultValue('loginbutton', $loginbutton);
 
@@ -238,7 +238,6 @@ class AWD_facebook_options
             'on_posts' => 0,
             'on_custom_post_types' => 0,
             'exclude_post_id' => '',
-            'order_by' => 'social',
             'place' => 'after',
             'comments_template_path' => dirname(dirname(dirname(__FILE__))) . '/views/default_comments.php'
         );

@@ -6,34 +6,32 @@
  *
  */
 //NEEDED VARS
-global $wpdb;
+$plugin_directory = array_pop(explode(DIRECTORY_SEPARATOR, dirname(dirname(__FILE__))));
 $this->wpdb = $wpdb;
-
-$this->pluginUrl = WP_PLUGIN_URL . DIRECTORY_SEPARATOR . basename(dirname(dirname(__FILE__)));
-$this->pluginImagesUrl = $this->pluginUrl . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR;
-
+$this->plugin_url = plugins_url($plugin_directory);
+$this->plugin_url_images = $this->plugin_url . "/assets/img/";
+$this->set_admin_roles();
 //TRANSLATION
-load_plugin_textdomain(self::PTD, false, dirname(__FILE__) . DIRECTORY_SEPARATOR . 'langs' . DIRECTORY_SEPARATOR);
+load_plugin_textdomain($this->ptd, false, dirname(plugin_basename(__FILE__)) . '/langs/');
 
 //init
-$this->set_admin_roles();
-add_action("init", array(&$this, 'wpInit'));
-add_action('admin_init', array(&$this, 'adminInitialisation'));
+add_action("init", array(&$this, 'wp_init'));
+add_action('admin_init', array(&$this, 'admin_initialisation'));
 
 //DISPLAY ADMIN
-add_action('admin_bar_init', array(&$this, 'adminBarInit'));
-add_action('AWD_facebook_admin_settings_check', array(&$this, 'missingConfig'));
-add_action('admin_menu', array(&$this, 'adminMenu'));
-add_action('network_admin_menu', array(&$this, 'loadJs'));
-add_filter("admin_footer_text", array($this, 'adminFooterText'), 10, 1);
+add_action('admin_bar_init', array(&$this, 'admin_bar_init'));
+add_action('AWD_facebook_admin_settings_check', array(&$this, 'missing_config'));
+add_action('admin_menu', array(&$this, 'admin_menu'));
+add_action('network_admin_menu', array(&$this, 'add_js_options'));
+add_filter("admin_footer_text", array($this, 'admin_footer_text'), 10, 1);
 
 //DISPLAY FRONT
 add_filter('language_attributes', array($this, 'ogp_language_attributes'), 10, 1);
-add_action('after_setup_theme', array(&$this, 'addThemeSupport'));
+add_action('after_setup_theme', array(&$this, 'add_theme_support'));
 add_action('wp_head', array(&$this, 'display_ogp_objects'));
 add_filter('the_content', array(&$this, 'the_content'));
 add_filter('comments_template', array(&$this, 'the_comments_form'));
-add_action('wp_enqueue_scripts', array(&$this, 'frontEnqueueJs'));
+add_action('wp_enqueue_scripts', array(&$this, 'front_enqueue_js'));
 
 //INTERNAL
 add_action('wp_ajax_get_media_field', array(&$this, 'ajax_get_media_field'));
@@ -47,7 +45,7 @@ add_filter('query_vars', array(&$this, 'insert_query_vars'));
 add_action('wp_loaded', array(&$this, 'flush_rules'));
 add_action('parse_query', array(&$this, 'parse_request'));
 add_filter('logout_url', array(&$this, 'logout_url'));
-add_action('save_post', array(&$this, 'handlePostUpdate'));
+add_action('save_post', array(&$this, 'save_options_post_editor'));
 add_action('edit_user_profile', array(&$this, 'user_profile_edit'));
 add_action('show_user_profile', array(&$this, 'user_profile_edit'));
 add_action('personal_options_update', array(&$this, 'user_profile_save'));
@@ -57,16 +55,16 @@ add_action("wp_ajax_awd_fcbk_save_settings", array(&$this, 'ajax_hook_post_from_
 
 //remove frame security header to allow the website admin to work in iframe
 remove_action('login_init', 'send_frame_options_header');
-remove_action('adminInit', 'send_frame_options_header');
+remove_action('admin_init', 'send_frame_options_header');
 
 //OPTIONS
-$this->optionsManager = new AWD_facebook_options(self::OPTION_PREFIX, $this->wpdb);
+$this->optionsManager = new AWD_facebook_options($this->plugin_option_pref, $this->wpdb);
 $this->optionsManager->load();
 $this->options = $this->optionsManager->getOptions();
 
 //Tools
-$this->templateManager = new AWD_facebook_template($this);
-$shortcodeCallback = array($this->templateManager, 'renderShortcode');
+$this->templateManager = new AWD_facebook_template($this->options, $this->deps);
+$shortcodeCallback = array(&$this->templateManager, 'renderShortcode');
 add_shortcode('AWD_facebook_likebutton', $shortcodeCallback);
 add_shortcode('AWD_facebook_likebox', $shortcodeCallback);
 add_shortcode('AWD_facebook_activitybox', $shortcodeCallback);

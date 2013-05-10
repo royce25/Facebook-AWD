@@ -9,318 +9,198 @@ require_once(dirname(__FILE__) . '/class.AWD_facebook_plugin_interface.php');
  */
 abstract class AWD_facebook_plugin_abstract implements AWD_facebook_plugin_interface
 {
-    /**
-     * The plugin Slug
-     */
-    const PLUGIN_SLUG = 'awd_plugin_exemple';
 
-    /**
-     * The plugin name
-     */
-    const PLUGIN_NAME = 'Configure me';
-
-    /**
-     * The plugin text domain
-     */
-    const PTD = 'AWD_facebook_plugin_exemple';
-
-    /**
-     * The min version required of Facebook AWD
-     */
-    const MIN_VERSION = 1.4;
-
-    /**
-     * The file related to the plugin
-     * @var string
-     */
-    protected $file;
-
-    /**
-     * The Admin Menu Hook
-     * @var string
-     */
-    protected $adminMenuHook = null;
-
-    /**
-     * The dependencies of the plugin
-     * @var array
-     */
-    protected static $requires = array('connect' => 0);
-
-    /**
-     * The instance of Facebook AWD
-     * @var AWD_facebook
-     */
+    //****************************************************************************************
+    //	VARS
+    //****************************************************************************************
     public $AWD_facebook;
 
-    /**
-     * The plugin url
-     * @var string
-     */
-    public $pluginUrl;
+    public $plugin_url;
 
-    /**
-     * The plugin images url
-     * @var string
-     */
-    public $pluginImagesUrl;
+    public $plugin_url_images;
 
-    /**
-     *
-     * @param string $file
-     * @param type $AWD_facebook
-     */
+    public $plugin_slug = 'awd_plugin_exemple';
+
+    public $plugin_name = 'Configure me';
+
+    public $plugin_text_domain = 'AWD_facebook_plugin_exemple';
+
+    public $version_requiered = 1.4;
+
+    public $deps = array('connect' => 0);
+
+    public $file;
+
+    public $plugin_admin_hook;
+
+    //****************************************************************************************
+    //	REQUIRED INIT
+    //****************************************************************************************
     public function __construct($file, $AWD_facebook)
     {
         $this->file = $file;
         require_once(ABSPATH . 'wp-admin/includes/plugin.php');
         if (is_plugin_inactive('facebook-awd/AWD_facebook.php')) {
-            add_action('AWD_facebook_admin_notices', array(&$this, 'missingParent'));
+            add_action('AWD_facebook_admin_notices', array(&$this, 'missing_parent'));
             deactivate_plugins($this->file);
-        } elseif ($AWD_facebook->getVersion() < self::MIN_VERSION) {
-            add_action('AWD_facebook_admin_notices', array(&$this, 'oldParent'));
+        } elseif ($AWD_facebook->get_version() < $this->version_requiered) {
+            add_action('AWD_facebook_admin_notices', array(&$this, 'old_parent'));
             deactivate_plugins($this->file);
         } else {
             add_action('AWD_facebook_plugins_init', array(&$this, 'initialisation'));
-            add_action('AWD_facebook_save_custom_settings', array(&$this, 'handlePostUpdate'));
-            add_action('AWD_facebook_register_widgets', array(&$this, 'registerWidgets'));
+            add_action('AWD_facebook_save_custom_settings', array(&$this, 'hook_post_from_custom_options'));
+            add_action('AWD_facebook_register_widgets', array(&$this, 'register_widgets'));
         }
         $this->AWD_facebook = $AWD_facebook;
     }
 
     /**
-     * This method must be declared in the child class as init
+     * Declare this function as absrat to force the declaration
      */
     abstract function initialisation();
 
-    /**
-     * The init of the plugin
-     * This method must be calld in the initialisation(); abstract method.
-     */
     public function init()
     {
-        $options = $this->AWD_facebook->getOptions();
+        //the init is done after the Constructor, So Facebook AWD does not contains the good values in options.
+        $this->AWD_facebook->optionsManager->load();
+        $this->AWD_facebook->options = $this->AWD_facebook->optionsManager->getOptions();
 
-        $this->pluginUrl = WP_PLUGIN_URL . DIRECTORY_SEPARATOR . basename(dirname($this->file));
-        $this->pluginImagesUrl = $this->pluginUrl . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR;
+        $this->plugin_url = plugins_url(basename(dirname(dirname(dirname($this->file)))));
+        $this->plugin_url_images = $this->plugin_url . "/assets/img/";
 
-        load_plugin_textdomain(self::PTD, false, dirname(plugin_basename($this->file)) . DIRECTORY_SEPARATOR . 'langs' . DIRECTORY_SEPARATOR);
+        load_plugin_textdomain($this->ptd, false, dirname(plugin_basename($this->file)) . '/langs/');
 
-        if ($options['connect_enable'] != 1 && self::$requires['connect'] == 1) {
-
-            add_action('AWD_facebook_admin_notices', array(&$this, 'missingFacebookConnect'));
+        if ($this->AWD_facebook->options['connect_enable'] != 1 && $this->deps['connect'] == 1) {
+            add_action('AWD_facebook_admin_notices', array(&$this, 'missing_facebook_connect'));
             deactivate_plugins($this->file);
-
         } else {
-
-            add_action('AWD_facebook_admin_menu', array(&$this, 'adminMenu'));
+            add_action('AWD_facebook_admin_menu', array(&$this, 'admin_menu'));
             //to enqueue style only on front end
-            add_action('wp_enqueue_scripts', array(&$this, 'frontEnqueueJs'));
-            add_action('wp_enqueue_scripts', array(&$this, 'frontEnqueueCss'));
+            add_action('wp_enqueue_scripts', array(&$this, 'front_enqueue_js'));
+            add_action('wp_enqueue_scripts', array(&$this, 'front_enqueue_css'));
             //to enqueue global scripts everywhere
-            add_action('admin_print_scripts', array(&$this, 'globalEnqueueJs'));
-            add_action('admin_print_style', array(&$this, 'globalEnqueueCss'));
-            add_action('wp_enqueue_scripts', array(&$this, 'globalEnqueueJs'));
-            add_action('wp_enqueue_styles', array(&$this, 'globalEnqueueCss'));
+            add_action('admin_print_scripts', array(&$this, 'global_enqueue_js'));
+            add_action('admin_print_style', array(&$this, 'global_enqueue_css'));
+            add_action('wp_enqueue_scripts', array(&$this, 'global_enqueue_js'));
+            add_action('wp_enqueue_styles', array(&$this, 'global_enqueue_css'));
 
-            add_filter('AWD_facebook_jsVars', array($this, 'jsVars'));
+            add_filter('AWD_facebook_js_vars', array($this, 'js_vars'));
             //Add action to create custom menu and custom form in plugin
-            add_filter('AWD_facebook_plugins_menu', array(&$this, 'pluginSettingsMenu'), 10, 1);
-            add_filter('AWD_facebook_plugins_form', array(&$this, 'pluginSettingsForm'), 10, 1);
-
+            add_filter('AWD_facebook_plugins_menu', array(&$this, 'plugin_settings_menu'), 10, 1);
+            add_filter('AWD_facebook_plugins_form', array(&$this, 'plugin_settings_form'), 10, 1);
         }
+        add_filter('AWD_facebook_options', array($this, 'default_options'));
+        $this->AWD_facebook->options = apply_filters('AWD_facebook_options', $this->AWD_facebook->options);
 
-        add_filter('AWD_facebook_options', array($this, 'defaultOptions'));
-
-        $this->AWD_facebook->addPlugin($this);
+        $this->AWD_facebook->plugins[$this->plugin_slug] = $this;
     }
 
-    /**
-     * Regiter options of the plugin
-     *
-     * @param array $options
-     * @return array
-     */
-    public function defaultOptions($options)
+    public function default_options($options)
     {
         return $options;
     }
 
-    /**
-     * Get the version of the plugin
-     * @return strgin
-     */
-    public function getVersion()
+    public function get_version()
     {
         include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
         $plugin_folder = get_plugins();
-        return $plugin_folder[basename(dirname($this->file)) . DIRECTORY_SEPARATOR . str_replace('class.', '', basename($this->file))]['Version'];
+        return $plugin_folder[basename(dirname(dirname(dirname($this->file)))) . '/' . str_replace('class.', '', basename($this->file))]['Version'];
     }
 
-    /**
-     * Display error if facebook connect is not activated
-     */
-    public function missingFacebookConnect()
+    public function missing_facebook_connect()
     {
-        $this->AWD_facebook->templateManager->displayMessage(self::PLUGIN_NAME . ' ' . __("can not be activated: Facebook Connect plugin must be activated", self::PTD), 'error');
+        $this->AWD_facebook->templateManager->displayMessage($this->plugin_name . ' ' . __("can not be activated: Facebook Connect plugin must be activated", $this->ptd), 'error');
     }
 
-    /**
-     * Display error if Facebook AWD plugin is too old
-     */
-    public function oldParent()
+    public function old_parent()
     {
-        $this->AWD_facebook->templateManager->displayMessage(self::PLUGIN_NAME . ' ' . __("can not be activated: Facebook AWD is out to date... You can download the last version or update it from the Wordpress plugin directory", self::PTD), 'error');
+        $this->AWD_facebook->templateManager->displayMessage($this->plugin_name . ' ' . __("can not be activated: Facebook AWD is out to date... You can download the last version or update it from the Wordpress plugin directory", $this->ptd), 'error');
     }
 
-    /**
-     * Display error if Facebook AWD is not installed
-     */
-    public function missingParent()
+    public function missing_parent()
     {
-        $this->AWD_facebook->templateManager->displayMessage(self::PLUGIN_NAME . ' ' . __("can not be activated: Facebook AWD plugin must be installed... you can download it from the Wordpress plugin directory", self::PTD), 'error');
+        $this->AWD_facebook->templateManager->displayMessage($this->plugin_name . ' ' . __("can not be activated: Facebook AWD plugin must be installed... you can download it from the Wordpress plugin directory", $this->ptd), 'error');
     }
 
-    /**
-     * Init of the admin of the plugin
-     */
-    public function adminInit()
+    //****************************************************************************************
+    //	LIB Facebook AWD
+    //****************************************************************************************
+    public function admin_init()
     {
         add_screen_option('layout_columns', array('max' => 2, 'default' => 2));
     }
 
-    /**
-     * Init of the admin menu of the plugin
-     */
-    public function adminMenu()
+    public function admin_menu()
     {
         //Load the js lib AWD
-        if ($this->getAdminMenuHook() !== null) {
-            add_action('load-' . $this->getAdminMenuHook(), array(&$this, 'adminInit'));
-            add_action('admin_print_styles-' . $this->getAdminMenuHook(), array(&$this->AWD_facebook, 'adminEnqueueCss'));
-            add_action('admin_print_styles-' . $this->getAdminMenuHook(), array(&$this, 'adminEnqueueCss'));
-            add_action('admin_print_scripts-' . $this->getAdminMenuHook(), array(&$this->AWD_facebook, 'adminEnqueueJs'));
-            add_action('admin_print_scripts-' . $this->getAdminMenuHook(), array(&$this, 'adminEnqueueJs'));
+        if ($this->plugin_admin_hook != '') {
+            add_action('load-' . $this->plugin_admin_hook, array(&$this, 'admin_init'));
+            add_action('admin_print_styles-' . $this->plugin_admin_hook, array(&$this->AWD_facebook, 'admin_enqueue_css'));
+            add_action('admin_print_styles-' . $this->plugin_admin_hook, array(&$this, 'admin_enqueue_css'));
+            add_action('admin_print_scripts-' . $this->plugin_admin_hook, array(&$this->AWD_facebook, 'admin_enqueue_js'));
+            add_action('admin_print_scripts-' . $this->plugin_admin_hook, array(&$this, 'admin_enqueue_js'));
         }
     }
 
-    /**
-     * Filter to add items in  the plugins menu list of admin
-     * @param array $list
-     * @return array
-     */
-    public function pluginSettingsMenu($list)
+    public function plugin_settings_menu($list)
     {
         return $list;
     }
 
-    /**
-     * Filter to add items in the plugins form section
-     * note: the tab of the section must be initilized using the menu filter. (methods: pluginSettingsMenu())
-     *
-     * @param array $fields
-     * @return array
-     */
-    public function pluginSettingsForm($fields)
+    public function plugin_settings_form($fields)
     {
         return $fields;
     }
 
-    public function jsVars($vars)
+    public function js_vars($vars)
     {
-        //$vars['FBEventHandler']['callbacks'][self::PLUGIN_SLUG][] = 'nameOfcallbackinitFunction';
+        //$vars['FBEventHandler']['callbacks'][$this->plugin_slug][] = 'nameOfcallbackinitFunction';
         return $vars;
     }
 
-    /**
-     * Method to handle post data when a post is updated
-     */
-    public function handlePostUpdate()
+    public function hook_post_from_custom_options()
     {
 
     }
 
-    /**
-     * Display the admin form in plugin area if dedicated page was create.
-     */
-    public function adminForm()
+    public function admin_form()
     {
 
     }
 
-    /**
-     * Enqueue javascript of the plugin on all pages
-     */
-    public function globalEnqueueJs()
+    public function global_enqueue_js()
     {
 
     }
 
-    /**
-     * Enqueue css styles of the plugin on all pages
-     */
-    public function globalEnqueueCss()
+    public function global_enqueue_css()
     {
 
     }
 
-    /**
-     * Enqueue public javascript of the plugin
-     */
-    public function frontEnqueueJs()
+    public function front_enqueue_js()
     {
 
     }
 
-    /**
-     * Enqueue public css styles of the plugin
-     */
-    public function frontEnqueueCss()
+    public function front_enqueue_css()
     {
 
     }
 
-    /**
-     * Enqueue admin javascript of the plugin
-     */
-    public function adminEnqueueJs()
+    public function admin_enqueue_js()
     {
 
     }
 
-    /**
-     * Enqueue admin css styles of the plugin
-     */
-    public function adminEnqueueCss()
+    public function admin_enqueue_css()
     {
 
     }
 
-    /**
-     * Register the widget
-     */
-    public function registerWidgets()
+    public function register_widgets()
     {
 
     }
-
-    /**
-     * Get the menu hook
-     * @return string
-     */
-    public function getAdminMenuHook()
-    {
-        return $this->adminMenuHook;
-    }
-
-    /**
-     * Set the menu Hook
-     * @param string
-     */
-    public function setAdminMenuHook($adminMenuHook)
-    {
-        $this->adminMenuHook = $adminMenuHook;
-    }
-
 
 }

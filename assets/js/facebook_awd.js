@@ -6,11 +6,6 @@
 var AWD_facebook = function() {
 
     return {
-        
-        /**
-         *
-         * @returns {undefined}
-         */
         FbEventHandler: function()
         {
             if (awd_fcbk.FBEventHandler.callbacks) {
@@ -27,13 +22,6 @@ var AWD_facebook = function() {
                 AWD_facebook.connect(redirect_url);
             });
         },
-
-        /**
-         *
-         * @param {type} response
-         * @param {type} redirect_url
-         * @returns {undefined}
-         */
         callbackLogin: function(response, redirect_url)
         {
             var redirect = '';
@@ -46,12 +34,6 @@ var AWD_facebook = function() {
                 }
             }
         },
-
-        /**
-         *
-         * @param {type} redirect_url
-         * @returns {Boolean}
-         */
         connect: function(redirect_url)
         {
             FB.login(
@@ -65,19 +47,9 @@ var AWD_facebook = function() {
             );
             return false;
         },
-
-        /**
-         *
-         * @returns {undefined}
-         */
         logout: function() {
             window.location.href = awd_fcbk.logoutUrl;
         },
-
-        /**
-         *
-         * @returns {@exp;AWD_facebook@pro;fbConnected}
-         */
         isFbConnected: function() {
             FB.getLoginStatus(function(response) {
                 if (response.status === 'connected') {
