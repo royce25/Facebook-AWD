@@ -33,6 +33,7 @@ class BackendController extends BaseBackendController
     {
         add_action('admin_menu', array(&$this, 'adminMenu'));
         add_action('admin_init', array(&$this, 'adminInit'));
+        add_action("init", array(&$this, 'registerAssets'));
     }
 
     /**
@@ -48,10 +49,9 @@ class BackendController extends BaseBackendController
      */
     public function adminMenu()
     {
-        $facebookAWDAdminPicto = plugins_url(FacebookAWD::getAsset('img/facebook-mini.png'));
-        $facebookAWDSettingsPicto = plugins_url(FacebookAWD::getAsset('img/settings.png'));
-        $facebookAWDPluginsPicto = plugins_url(FacebookAWD::getAsset('img/plugins.png'));
-        $facebookAWDOpenGraphPicto = plugins_url(FacebookAWD::getAsset('img/ogp-logo.png'));
+        $facebookAWDAdminPicto = plugins_url('facebook-awd/'.FacebookAWD::getAsset('img/facebook-mini.png'));
+        $facebookAWDSettingsPicto = plugins_url('facebook-awd/'.FacebookAWD::getAsset('img/settings.png'));
+        $facebookAWDPluginsPicto = plugins_url('facebook-awd/'.FacebookAWD::getAsset('img/plugins.png'));
 
         $settingsMenuHook = add_menu_page(FacebookAWD::PLUGIN_ADMIN_NAME, __(FacebookAWD::PLUGIN_NAME, FacebookAWD::PTD), 'manage_options', FacebookAWD::PLUGIN_SLUG, array($this, 'content'), $facebookAWDAdminPicto, self::MENU_POSITION);
         add_submenu_page(FacebookAWD::PLUGIN_SLUG, __('Settings', FacebookAWD::PTD), '<img src="' . $facebookAWDSettingsPicto . '" /> ' . __('Settings', FacebookAWD::PTD), 'manage_options', FacebookAWD::PLUGIN_SLUG);
@@ -59,9 +59,6 @@ class BackendController extends BaseBackendController
 
         $pluginsMenuHook = add_submenu_page(FacebookAWD::PLUGIN_SLUG, __('Plugins', FacebookAWD::PTD), '<img src="' . $facebookAWDPluginsPicto . '" /> ' . __('Plugins', FacebookAWD::PTD), 'manage_options', FacebookAWD::PLUGIN_SLUG . '_plugins', array($this, 'content'));
         $this->setPluginsMenuHook($pluginsMenuHook);
-
-        $opengraphMenuHook = add_submenu_page(FacebookAWD::PLUGIN_SLUG, __('Open Graph', FacebookAWD::PTD), '<img src="' . $facebookAWDOpenGraphPicto . '" /> ' . __('Open Graph', FacebookAWD::PTD), 'manage_options', FacebookAWD::PLUGIN_SLUG . '_opengraph', array($this, 'content'));
-        $this->setOpengraphMenuHook($opengraphMenuHook);
     }
 
     /**
@@ -71,11 +68,9 @@ class BackendController extends BaseBackendController
     {
         add_action("load-" . $this->getSettingsMenuHook(), array(&$this, 'layout'));
         add_action("load-" . $this->getPluginsMenuHook(), array(&$this, 'layout'));
-        add_action("load-" . $this->getOpengraphMenuHook(), array(&$this, 'layout'));
 
         add_action('admin_print_styles-' . $this->getSettingsMenuHook(), array(&$this, 'enqueueStyles'));
         add_action('admin_print_styles-' . $this->getPluginsMenuHook(), array(&$this, 'enqueueStyles'));
-        add_action('admin_print_styles-' . $this->getOpengraphMenuHook(), array(&$this, 'enqueueStyles'));
         add_action('admin_print_styles-post-new.php', array(&$this, 'enqueueStyles'));
         add_action('admin_print_styles-post.php', array(&$this, 'enqueueStyles'));
         add_action('admin_print_styles-link-add.php', array(&$this, 'enqueueStyles'));
@@ -84,21 +79,34 @@ class BackendController extends BaseBackendController
 
         add_action('admin_print_scripts-' . $this->getSettingsMenuHook(), array(&$this, 'enqueueScripts'));
         add_action('admin_print_scripts-' . $this->getPluginsMenuHook(), array(&$this, 'enqueueScripts'));
-        add_action('admin_print_scripts-' . $this->getOpengraphMenuHook(), array(&$this, 'enqueueScripts'));
-        add_action('admin_print_scripts-post-new.php', array(&$this, 'enqueueScripts'));
-        add_action('admin_print_scripts-post.php', array(&$this, 'enqueueScripts'));
-        add_action('admin_print_scripts-link-add.php', array(&$this, 'enqueueScripts'));
-        add_action('admin_print_scripts-link.php', array(&$this, 'enqueueScripts'));
-        add_action('admin_print_scripts-widgets.php', array(&$this, 'enqueueScripts'));
 
         //register the meta boxes
         //Settings page
-        $facebookAWDSettingsPicto = plugins_url(FacebookAWD::getAsset('img/settings.png'));
-        add_meta_box(FacebookAWD::PLUGIN_SLUG . "_settings", __('Settings', FacebookAWD::PTD) . ' <img style="vertical-align:middle;" src="' . $facebookAWDSettingsPicto . '" />', array(&$this, 'settingsContent'), $this->getSettingsMenuHook(), 'normal', 'core');
+        //$facebookAWDSettingsPicto = plugins_url('facebook-awd/'.FacebookAWD::getAsset('img/settings.png'));
+        //add_meta_box(FacebookAWD::PLUGIN_SLUG . "_settings", __('Settings', FacebookAWD::PTD) . ' <img style="vertical-align:middle;" src="' . $facebookAWDSettingsPicto . '" />', array(&$this, 'settingsContent'), $this->getSettingsMenuHook(), 'normal', 'core');
 
         //add_meta_box(FacebookAWD::PLUGIN_SLUG . "_facebook", __('My Facebook', self::PTD) . ' <img style="vertical-align:middle;" src="' . $this->pluginImagesUrl . 'facebook-mini.png" alt="facebook logo"/>', array(&$this, 'facebookUserContent'), $this->getAdminMenuHook(), 'side', 'core');
         //add_meta_box(FacebookAWD::PLUGIN_SLUG . "_app_infos", __('Application Infos', self::PTD) . ' ' . $icon, array(&$this, 'appInfosContent'), $this->getAdminMenuHook(), 'side', 'core');
         //add_meta_box(FacebookAWD::PLUGIN_SLUG . "_info_metabox", __('About the developper', self::PTD), array(&$this, 'generalContent'), $this->getAdminMenuHook(), 'side', 'core');
+    }
+
+    /**
+     * Register all assets inside the wordpress assets management system
+     */
+    public function registerAssets()
+    {
+        $assets = $this->facebookAWD->getAssets();
+        foreach ($assets as $type => $files) {
+            foreach ($files as $fileName => $path) {
+                $media = 'all';
+                $deps = array();
+                if ($type === 'script') {
+                    $deps = array('jquery');
+                    $media = true;
+                }
+                call_user_func_array('wp_register_' . $type, array('facebook-awd-' . $fileName, plugins_url('facebook-awd/'.FacebookAWD::getAsset($path)), $deps, null, $media));
+            }
+        }
     }
 
     /**
@@ -134,27 +142,42 @@ class BackendController extends BaseBackendController
     public function content()
     {
         //global $screen_layout_columns;
-        $page = $_GET['page'];
-        //$page_hook = $this->getSettingsMenuHook();
-        //$screen = get_current_screen();
-        $templateManager = $this->facebookAWD->getTemplateManager();
+        $hook = $_GET['page'];
         global $submenu;
         $menuItems = array();
         if (isset($submenu[FacebookAWD::PLUGIN_SLUG])) {
             foreach ($submenu[FacebookAWD::PLUGIN_SLUG] as $page) {
+                $class = '';
+                if($hook == $page[2]){
+                    $pagetitle = $page[3];
+                    $class = 'active';
+                }
                 $menuItems[] = array(
-                    'class' => $page == $page[2] ? 'active' : '',
+                    'class' => $class,
                     'url' => admin_url('admin.php?page=' . $page[2]),
                     'title' => $page[3],
                     'value' => $page[0]
                 );
             }
         }
-        //render the admin view
-        $template = dirname($this->facebookAWD->getFile()) . '/Resources/views/admin/index.html.php';
-        $templateManager->render($template, array(
-            'menuItems' => $menuItems
-        ));
+
+        $params = array(
+            'menuItems' => $menuItems,
+            'title' => $pagetitle,
+            'sidebar' => $this->sidebarContent($hook)
+        );
+
+        echo parent::renderContent($params);
+    }
+
+    /**
+     * Render the sidebar content
+     * @param string $hook
+     * @return string
+     */
+    public function sidebarContent($hook)
+    {
+        return '<h4>My Facebook</h4>';
     }
 
     public function settingsContent()

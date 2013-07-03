@@ -24,7 +24,7 @@ class FacebookAWD
      * The slug of the plugin
      */
 
-    const PLUGIN_SLUG = 'facebook_awd';
+    const PLUGIN_SLUG = 'facebookAWD';
 
     /**
      * The title of the admin interface
@@ -77,6 +77,7 @@ class FacebookAWD
             ),
             'style' => array(
                 'bootstrap-css' => 'css/bootstrap.css',
+                'bootstrap-reponsive-css' => 'css/bootstrap-responsive.min.css',
                 'google-code-prettify-css' => 'css/google-code-prettify/prettify.css',
             )
         );
@@ -182,12 +183,16 @@ class FacebookAWD
      */
     public static function getAsset($path, $basePath = '')
     {
-        if ($basePath == '')
-            $basePath = 'facebook-awd/lib/AHWEBDEV/FacebookAWD/Resources/public/';
+        if (empty($basePath))
+            $basePath = '';
 
-        return $basePath . $path;
+        return 'lib/AHWEBDEV/FacebookAWD/Resources/public/' . $path;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function getFile()
     {
         $f = new \ReflectionClass($this);

@@ -5,8 +5,10 @@
  */
 ?>
 <style type="text/css">
+    body,
     #wpwrap,
-    .header_lightbox_help {
+    .header_lightbox_help,
+    #overlay-content {
         background: linear-gradient(left, rgb(33,113,148) 25%, rgb(21,83,110) 63%, rgb(3,68,98) 82%);
         background: -o-linear-gradient(left, rgb(33,113,148) 25%, rgb(21,83,110) 63%, rgb(3,68,98) 82%);
         background: -moz-linear-gradient(left, rgb(33,113,148) 25%, rgb(21,83,110) 63%, rgb(3,68,98) 82%);
@@ -27,12 +29,15 @@
         -webkit-border-radius: 10px 10px 0px 0px;
         border-radius: 10px 10px 0px 0px;
     }
+    #page{
+        background: none;
+    }
 </style>
 <div class="wrap facebookAWD">
     <div id="logo_facebook_awd"></div>
     <div class="navbar primary">
         <div class="navbar-inner">
-            <div class="container">
+            <div class="container-fluid">
                 <ul class="nav">
                     <?php
                     foreach ($menuItems as $item) {
@@ -54,33 +59,32 @@
     </div>
     <div class="bgshadow"></div>
 
+
     <div id="AWD_facebook_notices">
         <?php
-//do_action('AWD_facebook_admin_notices', true);
+        //do_action('AWD_facebook_admin_notices', true);
         ?>
     </div>
-    <div id="poststuff" class="metabox-holder has-right-sidebar">
-        <?php //wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false); ?>
-        <?php //wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false);  ?>
-        <div id="side-info-column" class="inner-sidebar">
-            <?php
-            //do_meta_boxes($page_hook, 'side', null);
-            ?>
-        </div>
-        <div id="post-body" class="has-sidebar">
-            <div id="post-body-content" class="has-sidebar-content">
+
+    <h1><?php echo $title; ?></h1>
+
+    <div id="facebookAWD_content" class="row-fluid">
+
+        <div class="span8">
+            <div class="well">
                 <?php //do_meta_boxes($page_hook, 'normal', null);  ?>
             </div>
         </div>
-        <br class="clear" />
-        <script type="text/javascript">
-            /*jQuery(document).ready(function($) {
-             // close postboxes that should be closed
-             $('.if-js-closed').removeClass('if-js-closed').addClass('closed');
-             // postboxes setup
-             postboxes.add_postbox_toggles('<?php echo $page_hook; ?>');
-             });*/
-        </script>
+
+        <div class="span4">
+            <div class="well">
+
+            <?php
+            echo $sidebar;
+            //do_meta_boxes($page_hook, 'side', null);
+            ?>
+            </div>
+        </div>
+
     </div>
 </div>
-<div class="clear"></div>

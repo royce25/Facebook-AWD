@@ -1,8 +1,8 @@
 <?php
 
-namespace AHWEBDEV\FacebookAWD\Extension\Drupal;
+namespace AHWEBDEV\FacebookAWD\Extension\Provider\Drupal;
 
-use AHWEBDEV\FacebookAWD\Extension\ExtensionBridge as BaseExtensionBridge;
+use AHWEBDEV\FacebookAWD\Extension\Model\ExtensionBridge as BaseExtensionBridge;
 
 /*
  * This file is part of FacebookAWD.
@@ -33,6 +33,16 @@ class ExtensionBridge extends BaseExtensionBridge
         $this->extension = new Extension($this);
         $this->facebookAWD->addExtensionBridge($this);
     }
+
+    /**
+     * Return the exension managed by this bridge
+     * @return Extension
+     */
+    public function getExtension()
+    {
+        return $this->extension;
+    }
+
 
 }
 

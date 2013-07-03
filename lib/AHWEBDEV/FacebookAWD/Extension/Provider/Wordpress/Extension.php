@@ -28,7 +28,6 @@ class Extension extends BaseExtension
     public function init()
     {
         add_action('after_setup_theme', array(&$this, 'launch'));
-        add_action("init", array(&$this, 'registerAssets'));
     }
 
     /**
@@ -38,26 +37,7 @@ class Extension extends BaseExtension
     {
         $this->setBackendController(new BackendController($this));
     }
-
-    /**
-     * Register all assets inside the wordpress assets management system
-     */
-    public function registerAssets()
-    {
-        $assets = $this->facebookAWD->getAssets();
-        foreach ($assets as $type => $files) {
-            foreach ($files as $fileName => $path) {
-                $media = 'all';
-                $deps = array();
-                if ($type === 'script') {
-                    $deps = array('jquery');
-                    $media = true;
-                }
-                call_user_func_array('wp_register_' . $type, array('facebook-awd-' . $fileName, plugins_url(FacebookAWD::getAsset($path)), $deps, null, $media));
-            }
-        }
-    }
-
+    
 }
 
 ?>

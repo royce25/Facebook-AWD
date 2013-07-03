@@ -1,9 +1,9 @@
 <?php
 
-namespace AHWEBDEV\FacebookAWD\Extension\Drupal;
+namespace AHWEBDEV\FacebookAWD\Extension\Provider\Drupal;
 
-use AHWEBDEV\FacebookAWD\Extension\Drupal\Controller\BackendController;
-use AHWEBDEV\FacebookAWD\Extension\Extension as BaseExtension;
+use AHWEBDEV\FacebookAWD\Extension\Provider\Drupal\Controller\BackendController;
+use AHWEBDEV\FacebookAWD\Extension\Model\Extension as BaseExtension;
 use AHWEBDEV\FacebookAWD\FacebookAWD;
 
 /*
@@ -21,29 +21,15 @@ use AHWEBDEV\FacebookAWD\FacebookAWD;
  */
 class Extension extends BaseExtension
 {
-    /**
-     * The FacebookAWD instance
-     *
-     * @var FacebookAWD
-     */
-    protected $facebookAWD;
-
-    /**
-     * Get the FacebookAWD instance
-     * @return FacebookAWD
-     */
-    public function getFacebookAWD()
-    {
-        return $this->facebookAWD;
-    }
 
     /**
      * Launch the extension and add functionnality to wprdoress hook
      */
     public function init()
     {
-        
+        $this->setBackendController(new BackendController($this));
     }
+
 }
 
 ?>

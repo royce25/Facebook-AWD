@@ -22,6 +22,12 @@ abstract class BackendController implements BackendControllerInterface
 {
 
     /**
+     * The admin menu hook
+     * @var string
+     */
+    protected $adminMenuHook;
+
+    /**
      * The settings menu hook
      * @var string
      */
@@ -32,12 +38,6 @@ abstract class BackendController implements BackendControllerInterface
      * @var string
      */
     protected $pluginsMenuHook;
-
-    /**
-     * the opengraph menu hook
-     * @var string
-     */
-    protected $opengraphMenuHook;
 
     /**
      * The parent extension of this class
@@ -104,21 +104,35 @@ abstract class BackendController implements BackendControllerInterface
     }
 
     /**
-     * Return the opengraph menu hook
+     * Return the admin menu hook
      * @return string
      */
-    public function getOpengraphMenuHook()
+    public function getAdminMenuHook()
     {
-        return $this->opengraphMenuHook;
+        return $this->adminMenuHook;
     }
 
     /**
-     * Set the opengraph menu hook
+     * Set the admin menu hook
      * @param string
      */
-    public function setOpengraphMenuHook($opengraphMenuHook)
+    public function setAdminMenuHook($adminMenuHook)
     {
-        $this->opengraphMenuHook = $opengraphMenuHook;
+        $this->adminMenuHook = $adminMenuHook;
+        return $this;
+    }
+
+    /**
+     *
+     * @param array $params
+     * @return string
+     */
+    public function renderContent(array $params)
+    {
+        $templateManager = $this->facebookAWD->getTemplateManager();
+        //render the admin view
+        $template = dirname($this->facebookAWD->getFile()) . '/Resources/views/admin/index.html.php';
+        return $templateManager->render($template, $params, false);
     }
 
 }

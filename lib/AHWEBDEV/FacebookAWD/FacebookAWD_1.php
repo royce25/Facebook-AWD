@@ -19,7 +19,7 @@ use OpenGraphProtocolVideo;
  * @package facebook-awd
  * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
-class FacebookAWD
+class FacebookAWDDD
 {
     /**
      * The name of the plugin
