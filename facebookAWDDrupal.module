@@ -11,15 +11,24 @@ use AHWEBDEV\FacebookAWD\FacebookAWD;
  */
 function facebookAWDDrupal_menu()
 {
-    $controller = drupal_container()->get('ahwebdev.facebook_awd.extension')->getExtension()->getBackendController();
+    $controller = facebookAWDDrupalGetBridge()->getExtension()->getBackendController();
     return $controller->adminMenu();
 }
 
 /**
  * Settings
  */
-function facebokoAWD_settings($hook)
+function facebookAWDDrupal_settings($hook)
 {
-    $controller = drupal_container()->get('ahwebdev.facebook_awd.extension')->getExtension()->getBackendController();
+    $controller = facebookAWDDrupalGetBridge()->getExtension()->getBackendController();
     return $controller->content($hook);
+}
+
+/**
+ * Return the extensionBridge interface
+ * @return ExtensionBridgeInterface
+ */
+function facebookAWDDrupalGetBridge(){
+    $extensionBridgeName = 'ahwebdev.facebook_awd.extension_bridge';
+    return drupal_container()->get($extensionBridgeName);
 }

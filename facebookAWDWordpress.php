@@ -1,4 +1,5 @@
 <?php
+
 /**
   Plugin Name: Facebook AWD
   Plugin URI: http://facebook-awd.ahwebdev.fr
@@ -10,13 +11,10 @@
   Text Domain: FacebookAWD
   Last modification: 10/05/2013
  */
-
 //autoload of Facebook AWD application
 require_once('autoload.php');
 
-//Use the extensionBridge to start the app depending on the tpye of platform
-use AHWEBDEV\FacebookAWD\Extension\Provider\Wordpress\ExtensionBridge;
+//initialize the Extension
+$facebookAWDContainer = new AHWEBDEV\FacebookAWD\Provider\Wordpress\Container();
 
-//initialize the brigde
-$extensionBridge = new ExtensionBridge();
 ?>
