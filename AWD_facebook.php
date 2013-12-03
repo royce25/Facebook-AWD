@@ -265,7 +265,7 @@ Class AWD_facebook
      * hook action added to init
      */
     public function wp_init()
-    {
+    { //mod pr
         //Js
         wp_register_script($this->plugin_slug . '-bootstrap-js', $this->plugin_url . '/assets/js/bootstrap.min.js', array(
             'jquery'), $this->get_version(), true);
