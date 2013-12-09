@@ -1,9 +1,10 @@
 <?php
 
-namespace AHWEBDEV\FacebookAWD\Provider\Wordpress\Controller;
+namespace AHWEBDEV\FacebookAWD\Controller;
 
-use AHWEBDEV\FacebookAWD\Extension\Controller\BackendController as BaseBackendController;
 use AHWEBDEV\FacebookAWD\FacebookAWD;
+use AHWEBDEV\Framework\Controller\BackendControllerInterface;
+use AHWEBDEV\Framework\Controller\Controller;
 
 /*
  * This file is part of FacebookAWD.
@@ -16,9 +17,9 @@ use AHWEBDEV\FacebookAWD\FacebookAWD;
  * BackendController
  *
  * @author Alexandre Hermann <hermann.alexandren@ahwebdev.fr>
- * @package FacebookAWD\Extension\Wordpress
+ * @package FacebookAWD
  */
-class BackendController extends BaseBackendController
+class BackendController extends Controller implements BackendControllerInterface
 {
     /**
      * The position of the menu in list
@@ -26,6 +27,85 @@ class BackendController extends BaseBackendController
      */
 
     const MENU_POSITION = 6;
+
+    /**
+     * The admin menu hook references
+     *
+     * @var array
+     */
+    protected $adminMenuHooks = array();
+
+    /**
+     * Get the admin menu hook references
+     *
+     * @return array
+     */
+    public function getAdminMenuHooks()
+    {
+        return $this->adminMenuHooks;
+    }
+
+    /**
+     * Set the admin menu hook references
+     *
+     * @param string
+     */
+    public function setAdminMenuHooks(array $adminMenuHooks)
+    {
+        $this->adminMenuHooks = $adminMenuHooks;
+        return $this;
+    }
+
+    /**
+     * Add an admin menu hook references
+     *
+     * @param string $name
+     * @param callback $hook
+     * @return \AHWEBDEV\FacebookAWD\Controller\BackendController
+     */
+    public function addAdminMenuHook($name, $hook)
+    {
+        $this->adminMenuHooks[$name] = $hook;
+        return $this;
+    }
+
+    /**
+     * Get an admin menu hook reference
+     *
+     * @return array
+     */
+    public function getAdminMenuHook($name)
+    {
+        return $this->adminMenuHooks[$name];
+    }
+
+    /**
+     * Remove an admin menu hook reference
+     *
+     * @param string $name
+     * @return \AHWEBDEV\FacebookAWD\Controller\BackendController
+     */
+    public function removeAdminMenuHook($name)
+    {
+        unset($this->adminMenuHooks[$name]);
+        return $this;
+    }
+
+    /**
+     * Get the menu iems as array
+     *
+     * @return array
+     */
+    public function getBlockItems()
+    {
+        return array(
+            'home' => array(
+                'title' => "Home",
+                'controller' => $this->container->get('backend.home_controller'),
+                'action' => 'home'
+            )
+        );
+    }
 
     /**
      * Init the admin
@@ -47,8 +127,14 @@ class BackendController extends BaseBackendController
         $capability = 'manage_options';
         $menuSlug = FacebookAWD::PLUGIN_SLUG;
         $callback = array($this, 'content');
-        $hook = add_submenu_page($parentSlug, $pageTitle, $menuTitle, $capability, $menuSlug, $callback);
 
+        //check install ok
+        $installController = $this->container->get('backend.install_controller');
+        if (!$installController->isReady() || isset($_REQUEST['settings'])) {
+            $callback = array($installController, 'install');
+        }
+
+        $hook = add_submenu_page($parentSlug, $pageTitle, $menuTitle, $capability, $menuSlug, $callback);
         $this->addAdminMenuHook($menuSlug, $hook);
     }
 
@@ -72,7 +158,7 @@ class BackendController extends BaseBackendController
      */
     public function registerAssets()
     {
-        $assets = $this->facebookAWD->getAssets();
+        $assets = $this->container->getAssets();
         foreach ($assets as $type => $files) {
             foreach ($files as $fileName => $path) {
                 $media = 'all';
@@ -108,6 +194,7 @@ class BackendController extends BaseBackendController
         wp_enqueue_script('postbox');
 
         //wp_enqueue_script('facebook-awd-bootstrap-js');
+        wp_enqueue_script('facebook-awd-jquery-validate-js');
         wp_enqueue_script('facebook-awd-bootstrap-tab-js');
         wp_enqueue_script('facebook-awd-bootstrap-transition-js');
         wp_enqueue_script('facebook-awd-google-code-prettify-js');
@@ -120,9 +207,8 @@ class BackendController extends BaseBackendController
      */
     public function content()
     {
-        $menuItems = $this->getMenuItems();
-        $template = dirname($this->facebookAWD->getFile()) . '/Resources/views/admin/index.html.php';
-        echo parent::render($template, array('menuItems' => $menuItems));
+        $template = dirname($this->container->getFile()) . '/Resources/views/admin/index.html.php';
+        echo $this->render($template, array('blockView'=> $this->container->get('backend.home_controller')->home()));
     }
 
 }

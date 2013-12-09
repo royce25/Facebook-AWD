@@ -2,8 +2,6 @@
 
 namespace AHWEBDEV\Framework;
 
-use AHWEBDEV\Framework\Controller\BackendControllerInterface;
-
 
 /*
  * This file is part of the little Framework AHWEBDEV.
@@ -20,18 +18,6 @@ use AHWEBDEV\Framework\Controller\BackendControllerInterface;
  */
 interface ContainerInterface
 {
-    /**
-     *
-     * @return BackendControllerInterface $backendController
-     */
-    public function getBackendController();
-
-    /**
-     *
-     * @param BackendControllerInterface $backendController
-     */
-    public function setBackendController(BackendControllerInterface $backendController);
-
     /**
      * Init of the framework
      */

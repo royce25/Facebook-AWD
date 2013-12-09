@@ -21,6 +21,7 @@ use AHWEBDEV\Framework\Controller\ControllerInterface;
  */
 abstract class Controller implements ControllerInterface
 {
+
     /**
      * The parent extension of this class
      * @var Container
@@ -35,7 +36,15 @@ abstract class Controller implements ControllerInterface
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->init();
+    }
+
+    /**
+     *
+     * @return Container
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 
     /**
@@ -44,9 +53,9 @@ abstract class Controller implements ControllerInterface
      * @param array $params
      * @return string
      */
-    public function render($template, array $params)
+    public function render($template, array $params = array())
     {
-        $templateManager = $this->container->getTemplateManager();
+        $templateManager = $this->container->get('services.template_manager');
         //render the admin view
         return $templateManager->render($template, $params, false);
     }
@@ -54,7 +63,12 @@ abstract class Controller implements ControllerInterface
     /**
      * Init the admin
      */
-    abstract function init();
+    public function init()
+    {
+        //silence;
+    }
+
+
 }
 
 ?>

@@ -1,5 +1,0 @@
-services:
-  ahwebdev.facebook_awd.extension_bridge:
-    class: AHWEBDEV\FacebookAWD\Provider\Drupal\ExtensionBridge
-    #tags:
-    # - { name: facebook_awd }

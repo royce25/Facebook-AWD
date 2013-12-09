@@ -18,72 +18,17 @@ namespace AHWEBDEV\Framework\OptionManager;
 interface OptionManagerInterface
 {
     /**
-     * Merge defined arguments into defaults array.
      *
-     * @param object|string|array $args
-     * @param array $defaults
-     * @return array|string
+     * @param string $key
+     * @param Object $element
      */
-    public static function parseArgs($args, $defaults = '');
+    public function save($key, $element);
 
     /**
-     * Get options
      *
-     * @return array
+     * @param string $key
      */
-    public function getOptions();
-
-    /**
-     * Set Options
-     *
-     * @param array $options
-     */
-    public function setOptions(array $options);
-
-    /**
-     * Get Option
-     *
-     * @param string $name
-     * @return mixed
-     */
-    public function getOption($name, $value);
-
-    /**
-     * Set Option
-     *
-     * @param type $name
-     * @param mixed $value
-     */
-    public function setOption($name, $value);
-
-    /**
-     * Get default Options
-     *
-     * @return array
-     */
-    public function getDefaultOptions();
-
-    /**
-     * Set Options
-     *
-     * @param array $options
-     */
-    public function setDefaultOptions(array $defaultOptions);
-
-    /**
-     * Load Options From database
-     */
-    public function load();
-
-    /**
-     * Save Options in database
-     */
-    public function save();
-
-    /**
-     * Reset Options in database
-     */
-    public function reset();
+    public function load($key);
 }
 
 ?>

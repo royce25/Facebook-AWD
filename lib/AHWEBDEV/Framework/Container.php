@@ -22,97 +22,54 @@ use AHWEBDEV\Framework\TemplateManager\TemplateManager;
  */
 abstract class Container implements ContainerInterface
 {
-
-    /**
-     *
-     * @var TemplateManager
-     */
-    protected $templateManager;
-
-    /**
-     *
-     * @var OptionManager
-     */
-    protected $optionManager;
-
     /**
      * The BackendControllerInterface instance
      *
      * @var BackendControllerInterface
      */
-    protected $backendController;
+    protected $services;
 
     /**
      * Constructor
      */
     public function __construct()
     {
+        $this->services = array();
+
+        $templateManager = new TemplateManager($this);
+        $this->set('services.template_manager', $templateManager);
+
+        $optionManager = new OptionManager($this);
+        $this->set('services.option_manager', $optionManager);
+
         $this->init();
     }
 
     /**
-     * Return the backend controller
+     * Return a service by name
      *
-     * @return BackendControllerInterface
+     * @param string $name
+     * @return The service
+     * @throws \Exception
      */
-    public function getBackendController()
+    public function get($name)
     {
-        return $this->backendController;
+        if(isset($this->services[$name])){
+            return $this->services[$name];
+        }
+        throw new \Exception('The service name '.$name.' was not found', 500);
     }
 
     /**
-     * Set the backend controller
+     * Set a service
      *
-     * @param \AHWEBDEV\FacebookAWD\Extension\Controller\BackendControllerInterface $backendController
-     * @return \AHWEBDEV\Framework\ContainerInterface
+     * @param string $name
+     * @param $service
+     * @return \AHWEBDEV\Framework\Container
      */
-    public function setBackendController(BackendControllerInterface $backendController)
+    public function set($name, $service)
     {
-        $this->backendController = $backendController;
-        return $this;
-    }
-
-    /**
-     * Return the OptionManager
-     *
-     * @return OptionManager
-     */
-    public function getOptionManager()
-    {
-        return $this->optionManager;
-    }
-
-    /**
-     * Set the OptionManager
-     *
-     * @param \AHWEBDEV\Framework\OptionManager $optionManager
-     * @return \AHWEBDEV\Framework\ContainerInterface
-     */
-    public function setOptionManager(OptionManager $optionManager)
-    {
-        $this->optionManager = $optionManager;
-        return $this;
-    }
-
-    /**
-     * Return the TemplateManager
-     *
-     * @return TemplateManager
-     */
-    public function getTemplateManager()
-    {
-        return $this->templateManager;
-    }
-
-    /**
-     * Set the OptionManager
-     *
-     * @param \AHWEBDEV\Framework\TemplateManager $templateManager
-     * @return \AHWEBDEV\Framework\ContainerInterface
-     */
-    public function setTemplateManager(TemplateManager $templateManager)
-    {
-        $this->templateManager = $templateManager;
+        $this->services[$name] = $service;
         return $this;
     }
 

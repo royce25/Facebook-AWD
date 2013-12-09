@@ -23,7 +23,7 @@ interface BackendControllerInterface
      *
      * @return array
      */
-    public function getMenuItems();
+    public function getBlockItems();
 }
 
 ?>

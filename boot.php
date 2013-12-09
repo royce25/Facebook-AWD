@@ -15,6 +15,6 @@
 require_once('autoload.php');
 
 //initialize the Extension
-$facebookAWDContainer = new AHWEBDEV\FacebookAWD\Provider\Standalone\Container();
+$facebookAWD = new AHWEBDEV\FacebookAWD\FacebookAWD();
 
 ?>

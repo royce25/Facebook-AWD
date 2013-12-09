@@ -17,6 +17,7 @@ namespace AHWEBDEV\Framework\TemplateManager;
  */
 class TemplateManager
 {
+
     protected $options;
 
     protected $messages = array();
@@ -96,7 +97,7 @@ class TemplateManager
      * @param type $echo
      * @return type
      */
-    public function render($template, $params, $echo = true)
+    public function render($template, $params = array(), $echo = true)
     {
         extract($params);
 

@@ -2,23 +2,26 @@
 
 namespace AHWEBDEV\FacebookAWD\Api;
 
+use AHWEBDEV\FacebookAWD\Model\Application;
+use Facebook;
+
 /**
  * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
-class AWD_facebook_api extends \Facebook
+class Api extends Facebook
 {
 
     /**
      * Constructor
      * @param array $options
      */
-    public function __construct($options)
+    public function __construct(Application $application)
     {
-        self::$CURL_OPTS = $options['curl_options'];
+        //self::$CURL_OPTS = array();//$options['curl_options'];
         parent::__construct(array(
-            'appId' => $options['app_id'],
-            'secret' => $options['app_secret_key'],
-            'timeOut' => $options['timeout'],
+            'appId' => $application->getId(),
+            'secret' => $application->getSecretKey(),
+            'timeOut' => 5000,
         ));
     }
 

@@ -2,9 +2,12 @@
 
 namespace AHWEBDEV\FacebookAWD;
 
-use AHWEBDEV\FacebookAWD\Extension\ExtensionBridgeInterface;
-use AHWEBDEV\FacebookAWD\OptionManager\OptionManager;
-use AHWEBDEV\FacebookAWD\TemplateManager\TemplateManager;
+use AHWEBDEV\FacebookAWD\Api\Api;
+use AHWEBDEV\FacebookAWD\Controller\BackendController;
+use AHWEBDEV\FacebookAWD\Controller\HomeController;
+use AHWEBDEV\FacebookAWD\Controller\InstallController;
+use AHWEBDEV\FacebookAWD\Model\Application;
+use AHWEBDEV\Framework\Container as BaseContainer;
 use ReflectionClass;
 
 /**
@@ -13,7 +16,7 @@ use ReflectionClass;
  * @package facebook-awd
  * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
-class FacebookAWD
+class FacebookAWD extends BaseContainer
 {
     /**
      * The name of the plugin
@@ -25,7 +28,7 @@ class FacebookAWD
      * The slug of the plugin
      */
 
-    const PLUGIN_SLUG = 'facebookAWD';
+    const PLUGIN_SLUG = 'FacebookAWD';
 
     /**
      * The title of the admin interface
@@ -54,6 +57,7 @@ class FacebookAWD
         $this->assets = array(
             'script' => array(
                 //'bootstrap-js' => 'js/bootstrap.min.js',
+                'jquery-validate-js' => 'js/jquery.validate.min.js',
                 'bootstrap-tab-js' => 'js/bootstrap/tab.js',
                 'bootstrap-transition-js' => 'js/bootstrap/transition.js',
                 'google-code-prettify-js' => 'js/google-code-prettify/prettify.js',
@@ -65,6 +69,7 @@ class FacebookAWD
                 'google-code-prettify-css' => 'css/google-code-prettify/prettify.css',
             )
         );
+        parent::__construct();
     }
 
     /**
@@ -112,6 +117,55 @@ class FacebookAWD
     {
         $f = new ReflectionClass($this);
         return $f->getFileName();
+    }
+
+    /**
+     * Init
+     */
+    public function init()
+    {
+
+        $om = $this->get('services.option_manager');
+
+        //load application
+        $application = $om->load('options.application');
+        if (!$application) {
+            $application = new Application();
+        }
+        $this->set('services.application', $application);
+
+        //load api
+        $api = null;
+        if ($application) {
+            $api = new Api($application);
+            $this->set('services.api', $api);
+        }
+        $this->set('services.api', $api);
+
+        //load controllers
+        $backendController = new BackendController($this);
+        $this->set('backend.controller', $backendController);
+
+        $installController = new InstallController($this);
+        $this->set('backend.install_controller', $installController);
+
+        $homeController = new HomeController($this);
+        $this->set('backend.home_controller', $homeController);
+
+        //start plugin
+        add_action('after_setup_theme', array(&$this, 'launch'));
+
+        return $this;
+    }
+
+    /**
+     * Launch the extension and add functionnality to wprdoress hook
+     */
+    public function launch()
+    {
+        if (is_admin()) {
+            $this->get('backend.controller')->init();
+        }
     }
 
 }
