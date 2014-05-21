@@ -18,28 +18,25 @@ use ReflectionClass;
  */
 class FacebookAWD extends BaseContainer
 {
+
     /**
      * The name of the plugin
      */
-
     const PLUGIN_NAME = 'Facebook AWD';
 
     /**
      * The slug of the plugin
      */
-
     const PLUGIN_SLUG = 'FacebookAWD';
 
     /**
      * The title of the admin interface
      */
-
     const PLUGIN_ADMIN_NAME = 'Facebook Admin';
 
     /**
      * The plugin text domain
      */
-
     const PTD = self::PLUGIN_SLUG;
 
     /**
