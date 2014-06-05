@@ -5,8 +5,18 @@ namespace AHWEBDEV\FacebookAWD\Api;
 use AHWEBDEV\FacebookAWD\Model\Application;
 use Facebook;
 
+/*
+ * This file is part of FacebookAWD.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 /**
- * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
+ * Api
+ *
+ * @author Alexandre Hermann <hermann.alexandren@ahwebdev.fr>
+ * @package FacebookAWD
  */
 class Api extends Facebook
 {
@@ -35,5 +45,3 @@ class Api extends Facebook
     }
 
 }
-
-?>

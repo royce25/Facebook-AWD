@@ -19,7 +19,7 @@ use OpenGraphProtocolVideo;
  * @package facebook-awd
  * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
-class FacebookAWDDD
+class FacebookAWD_1
 {
     /**
      * The name of the plugin
@@ -45,8 +45,6 @@ class FacebookAWDDD
      * The plugin text domain
      */
     const PTD = 'AWD_facebook';
-
-
 
     /**
      * The options of the plugins
@@ -135,7 +133,6 @@ class FacebookAWDDD
     protected $javascriptsAssets = array();
     protected $stylesheetAssets = array();
 
-
     /**
      * Constructor
      */
@@ -212,7 +209,7 @@ class FacebookAWDDD
 
     /**
      * Getter Version
-     * @param array $pluginFolderVar
+     * @param  array  $pluginFolderVar
      * @return string
      */
     public function getVersion($pluginFolderVar = array())
@@ -221,6 +218,7 @@ class FacebookAWDDD
             include_once(ABSPATH . 'wp-admin/includes/plugin.php');
             $pluginFolder = get_plugins();
         }
+
         return $pluginFolder['facebook-awd/AWD_facebook.php']['Version'];
     }
 
@@ -276,7 +274,7 @@ class FacebookAWDDD
     /**
      * Add footer text ads Facebook AWD version
      *
-     * @param string $footer_text
+     * @param  string $footer_text
      * @return string
      */
     public function adminFooterText($footer_text)
@@ -472,7 +470,7 @@ class FacebookAWDDD
         echo do_shortcode('[AWD_facebook_likebox href="https://www.facebook.com/Ahwebdev" colorscheme="light" stream="0" height="260" show_faces="1" xfbml="0" width="257"]');
         echo '<h4>' . __('Follow me on Twitter', self::PTD) . '</h4>
             <a href="https://twitter.com/ah_webdev" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="true">Follow @ah_webdev</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+            <script>!function (d,s,id) {var js,fjs=d.getElementsByTagName(s)[0];if (!d.getElementById(id)) {js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
     }
 
     /**
@@ -633,7 +631,7 @@ class FacebookAWDDD
         if ($this->isUserLoggedInFacebook()) {
             echo do_shortcode('[AWD_facebook_loginbutton width="200" logout_label="<i class=\"icon-off icon-white\"></i> ' . __('Logout', self::PTD) . '" show_profile_picture="1"]');
             $this->templateManager->displayMessage(sprintf(__("%s Facebook ID: %s", self::PTD), '<i class="icon-user"></i> ', $this->uid));
-        } else if ($this->options['connect_enable']) {
+        } elseif ($this->options['connect_enable']) {
             echo '<a href="#" class="AWD_facebook_connect_button btn btn-info" data-redirect="' . $this->getCurrentUrl() . '"><i class="icon-user icon-white"></i> ' . __("Login with Facebook", self::PTD) . '</a>';
         } else {
             $this->templateManager->displayMessage(sprintf(__('You should enable FB connect in %sApp settings%s', self::PTD), '<a href="admin.php?page=' . self::PLUGIN_SLUG . '">', '</a>'), 'warning');
@@ -646,7 +644,7 @@ class FacebookAWDDD
 
     /**
      * Filter the html attributes
-     * @param string $languageAttributes
+     * @param  string $languageAttributes
      * @return string
      */
     public function ogpLanguageAttributes($languageAttributes)
@@ -656,6 +654,7 @@ class FacebookAWDDD
             $namespaceUrl = $this->options['app_infos']['namespace'] . ': http://ogp.me/ns/fb/' . $this->options['app_infos']['namespace'];
         }
         $languageAttributes .= ' prefix="' . \OpenGraphProtocol::PREFIX . ': ' . \OpenGraphProtocol::NS . ' fb:http://ogp.me/ns/fb# ' . $namespaceUrl . '"';
+
         return $languageAttributes;
     }
 
@@ -691,7 +690,7 @@ class FacebookAWDDD
 
     /**
      * Admin return an item for object's template list in admin.
-     * @param array $object
+     * @param  array  $object
      * @return string
      */
     public function getOpengraphObjectListItem($object)
@@ -749,6 +748,7 @@ class FacebookAWDDD
                 'links_form' => $this->getOpengraphObjectLinksForm()));
             exit();
         }
+
         return false;
     }
 
@@ -792,7 +792,7 @@ class FacebookAWDDD
 
     /**
      * Transform an array into an OpenGraphProtocol object
-     * @param array $object
+     * @param  array             $object
      * @return OpenGraphProtocol
      */
     public function opengraphArrayToObject($object)
@@ -848,13 +848,14 @@ class FacebookAWDDD
                 }
             }
         }
+
         return $ogp;
     }
 
     /**
      * Create a OpenGraphProtocolImage object from image url
      *
-     * @param string $imageUrl
+     * @param  string                 $imageUrl
      * @return OpenGraphProtocolImage
      */
     public function createOpengraphProtocolImage($imageUrl)
@@ -884,12 +885,13 @@ class FacebookAWDDD
                 $ogpImg->setURL($imageUrl);
             }
         }
+
         return $ogpImg;
     }
 
     /**
      * Create a OpenGraphProtocolVideo object from video url
-     * @param string $videoUrl
+     * @param  string                 $videoUrl
      * @return OpenGraphProtocolVideo
      */
     public function createOpengraphProtocolVideo($videoUrl)
@@ -931,7 +933,7 @@ class FacebookAWDDD
 
     /**
      * Create an OpenGraphProtocolAudio object from audio url
-     * @param string $audioUrl
+     * @param  string                  $audioUrl
      * @return \OpenGraphProtocolAudio
      */
     public function createOpengraphProtocolAudio($audioUrl)
@@ -959,12 +961,13 @@ class FacebookAWDDD
                 $ogpAudio->setURL($audioUrl);
             }
         }
+
         return $ogpAudio;
     }
 
     /**
      * Test if url return 200
-     * @param string $url
+     * @param  string  $url
      * @return boolean
      */
     public function isValidUrl($url)
@@ -1042,8 +1045,8 @@ class FacebookAWDDD
 
     /**
      * Helper to get html opengraph tags by post id.
-     * @param integer $postId
-     * @return string $html
+     * @param  integer $postId
+     * @return string  $html
      */
     public function getOgpTags($postId)
     {
@@ -1055,6 +1058,7 @@ class FacebookAWDDD
             $html = $this->defineOgpObjects();
         endwhile;
         wp_reset_postdata();
+
         return $html;
     }
 
@@ -1079,6 +1083,7 @@ class FacebookAWDDD
         } else {
             $description = esc_attr(str_replace("\r\n", ' ', substr(strip_tags(strip_shortcodes($post->post_content)), 0, 160)));
         }
+
         return $description;
     }
 
@@ -1257,7 +1262,7 @@ class FacebookAWDDD
                 if ($custom['opengraph']['object_link'] == 'custom') {
                     $definedFromPost = 1;
                     $objectTemplate = $custom['awd_ogp'];
-                } else if ($custom['opengraph']['object_link'] != '') {
+                } elseif ($custom['opengraph']['object_link'] != '') {
                     $definedFromPost = 1;
                     $linkedObject = $custom['opengraph']['object_link'];
                 }
@@ -1333,16 +1338,18 @@ class FacebookAWDDD
                     }
                 }
             }
+
             return $this->renderOgpTags($objectTemplate, $definedFromPost);
         }
+
         return false;
     }
 
     /**
      * Replace all the pattern by related content
      *
-     * @param array $arrayReplace
-     * @param array $objectTemplate
+     * @param  array $arrayReplace
+     * @param  array $objectTemplate
      * @return array
      */
     public function processOpengraphPattern($arrayReplace, $objectTemplate)
@@ -1361,13 +1368,14 @@ class FacebookAWDDD
                 $objectTemplate[$field] = $value;
             }
         }
+
         return $objectTemplate;
     }
 
     /**
      * Render opengraph tags, replace pattern by value depending on linked_object
-     * @param array $objectTemplate
-     * @param boolean $definedFromPost
+     * @param  array   $objectTemplate
+     * @param  boolean $definedFromPost
      * @return string
      */
     public function renderOgpTags($objectTemplate, $definedFromPost = 0)
@@ -1381,6 +1389,7 @@ class FacebookAWDDD
             $html .= '<meta property="fb:admins" content="' . $this->options['admins'] . '" />' . "\n";
         $html .= $ogp->toHTML();
         $html .= "\n" . '<!-- ' . self::PLUGIN_NAME . ' END Opengraph -->' . "\n";
+
         return $html;
     }
 
@@ -1391,7 +1400,7 @@ class FacebookAWDDD
     /**
      * The Filter on the content to add like button
      *
-     * @param string $content
+     * @param  string $content
      * @return string $content
      */
     public function filterContent($content)
@@ -1482,6 +1491,7 @@ class FacebookAWDDD
                     return $likebutton . $content;
             }
         }
+
         return $content;
     }
 
@@ -1528,7 +1538,7 @@ class FacebookAWDDD
 
     /**
      * Return all pages selected by user to publish on.
-     * @param type $userId
+     * @param  type  $userId
      * @return array
      */
     public function getPagesToPublish($userId = null)
@@ -1555,15 +1565,16 @@ class FacebookAWDDD
                 }
             }
         }
+
         return $publishToPages;
     }
 
     /**
      * Publish the WP_Post to facebook
-     * @param array $toPages
-     * @param integer $postId
-     * @param string $message
-     * @param string $readMoreText
+     * @param  array            $toPages
+     * @param  integer          $postId
+     * @param  string           $message
+     * @param  string           $readMoreText
      * @return \WP_Error|string
      */
     public function publishPostToFacebook($toPages, $postId, $message = null, $readMoreText = null)
@@ -1589,13 +1600,15 @@ class FacebookAWDDD
                 try {
                     //try to post batch request to publish on all pages asked + profile at one time
                     $postId = $this->fcbk->api($feedPath, 'POST', $params);
+
                     return $postId;
                 } catch (FacebookApiException $e) {
                     $error = new \WP_Error($e->getCode(), $e->getMessage());
+
                     return $error;
                 }
             }
-        } else if (is_int(absint($toPages))) {
+        } elseif (is_int(absint($toPages))) {
             $feedPath = '/' . $toPages . '/feed/';
             $params = array(
                 'message' => $message,
@@ -1609,12 +1622,15 @@ class FacebookAWDDD
             try {
                 //try to post batch request to publish on profile
                 $postId = $this->fcbk->api($feedPath, 'POST', $params);
+
                 return $postId;
             } catch (FacebookApiException $e) {
                 $error = new \WP_Error($e->getCode(), $e->getMessage());
+
                 return $error;
             }
         }
+
         return $result;
     }
 
@@ -1632,6 +1648,7 @@ class FacebookAWDDD
             }
             $this->optionsManager->setOptions($newOptions);
             $this->optionsManager->save();
+
             return true;
         } else {
             return false;
@@ -1655,7 +1672,7 @@ class FacebookAWDDD
             } else {
                 $this->templateManager->addError(new \WP_Error('AWD_facebook_save_option', __('Options not updated there is an error...', self::PTD)));
             }
-        } else if (isset($_POST[self::OPTION_PREFIX . '_nonce_reset_options']) && wp_verify_nonce($_POST[self::OPTION_PREFIX . '_nonce_reset_options'], self::PLUGIN_SLUG . '_reset_options')) {
+        } elseif (isset($_POST[self::OPTION_PREFIX . '_nonce_reset_options']) && wp_verify_nonce($_POST[self::OPTION_PREFIX . '_nonce_reset_options'], self::PLUGIN_SLUG . '_reset_options')) {
             $this->optionsManager->reset();
             $this->templateManager->addMessage('success', __('Options were reseted', self::PTD));
         }
@@ -1720,7 +1737,7 @@ class FacebookAWDDD
 
     /**
      * Add facebook fields in user profile
-     * @param WP_User $user
+     * @param  WP_User $user
      * @return string
      */
     public function userProfileEdit($user)
@@ -1781,7 +1798,7 @@ class FacebookAWDDD
 
     /**
      * Return the WP_User by facebook uid
-     * @param type $fbUid
+     * @param  type             $fbUid
      * @return \WP_User|boolean
      */
     public function getUserFromFbuid($fbUid)
@@ -1789,6 +1806,7 @@ class FacebookAWDDD
         $existingUser = $this->wpdb->get_var('SELECT DISTINCT `u`.`ID` FROM `' . $this->wpdb->users . '` `u` JOIN `' . $this->wpdb->usermeta . '` `m` ON `u`.`ID` = `m`.`user_id`  WHERE (`m`.`meta_key` = "fb_uid" AND `m`.`meta_value` = "' . $fbUid . '" )  LIMIT 1 ');
         if ($existingUser) {
             $user = get_userdata($existingUser);
+
             return $user;
         } else {
             return false;
@@ -1802,16 +1820,17 @@ class FacebookAWDDD
     public function getFacebookUsers()
     {
         $existingUsers = $this->wpdb->get_results('SELECT DISTINCT `u`.`ID`,`u`.`display_name`,`m`.`meta_value`   FROM `' . $this->wpdb->users . '` `u` JOIN `' . $this->wpdb->usermeta . '` `m` ON `u`.`ID` = `m`.`user_id`  WHERE (`m`.`meta_key` = "fb_uid" AND `m`.`meta_value` !="" )');
+
         return $existingUsers;
     }
 
     /**
      * Filter the wordpress avatar adding the facebook one.
-     * @param string $avatar
-     * @param string|integer|\WP_User $commentsObjects
-     * @param string $size
-     * @param string $default
-     * @param string $alt
+     * @param  string                  $avatar
+     * @param  string|integer|\WP_User $commentsObjects
+     * @param  string                  $size
+     * @param  string                  $default
+     * @param  string                  $alt
      * @return string
      */
     public function getFacebookAvatar($avatar, $commentsObjects, $size, $default, $alt)
@@ -1833,21 +1852,23 @@ class FacebookAWDDD
         if ($fbuid != '' && $fbuid != 0) {
             if ($size <= 70) {
                 $type = 'square';
-            } else if ($size > 70) {
+            } elseif ($size > 70) {
                 $type = 'normal';
             } else {
                 $type = 'large';
             }
             $fbAvatarUrl = 'http://graph.facebook.com/' . $fbuid . '/picture' . ($type != '' ? '?type=' . $type : '');
             $myAvatar = "<img src='" . $fbAvatarUrl . "' class='avatar AWD_fbavatar' alt='" . $alt . "' height='" . $size . "' />";
+
             return $myAvatar;
         }
+
         return $avatar;
     }
 
     /**
      * Test if a Facebook user can perform an action
-     * @param string $perm
+     * @param  string  $perm
      * @return boolean
      */
     public function currentFacebookUserCan($perm)
@@ -1858,29 +1879,32 @@ class FacebookAWDDD
                     return true;
             }
         }
+
         return false;
     }
 
     /**
      * Return the Facebook user by facebook uid
-     * @param integer $fbuid
+     * @param  integer         $fbuid
      * @return \WP_Error|array
      */
     public function getFbUser($fbuid)
     {
         try {
             $fbuser = $this->fcbk->api('/' . $fbuid, 'GET');
+
             return $fbuser;
         } catch (FacebookApiException $e) {
             $fbError = $e->getResult();
             $error = new \WP_Error(403, self::PLUGIN_NAME . ' Error: ' . $fbError['error']['type'] . ' ' . $fbError['error']['message']);
+
             return $error;
         }
     }
 
     /**
      * Return the Facebook user's permissions by facebook uid
-     * @param type $fbuid
+     * @param  type            $fbuid
      * @return \WP_Error|array
      */
     public function getPermissions($fbuid)
@@ -1889,10 +1913,12 @@ class FacebookAWDDD
         try {
             $perms = $this->fcbk->api('/' . $fbuid . '/permissions');
             $perms = isset($perms['data'][0]) ? $perms['data'][0] : array();
+
             return $perms;
         } catch (FacebookApiException $e) {
             $fbError = $e->getResult();
             $error = new \WP_Error(403, self::PLUGIN_NAME . ' Error: ' . $fbError['error']['type'] . ' ' . $fbError['error']['message']);
+
             return $error;
         }
     }
@@ -1909,13 +1935,16 @@ class FacebookAWDDD
                 $sub = $this->fcbk->api('/' . $this->options['app_id'] . '/subscriptions', 'GET', array("access_token" => $this->fcbk->getApplicationAccessToken()));
             } else {
                 $error = new \WP_Error(500, self::PLUGIN_NAME . " Api not configured");
+
                 return $error;
             }
             $sub = isset($sub['data']) ? $sub['data'] : array();
+
             return $sub;
         } catch (FacebookApiException $e) {
             $fbError = $e->getResult();
             $error = new \WP_Error(403, self::PLUGIN_NAME . ' Error: ' . $fbError['error']['type'] . ' ' . $fbError['error']['message']);
+
             return $error;
         }
     }
@@ -1928,17 +1957,19 @@ class FacebookAWDDD
     {
         try {
             $fbPages = $this->fcbk->api('/me/accounts');
+
             return $fbPages;
         } catch (FacebookApiException $e) {
             $fbError = $e->getResult();
             $error = new \WP_Error(403, self::PLUGIN_NAME . ' Error: ' . $fbError['error']['type'] . ' ' . $fbError['error']['message']);
+
             return $error;
         }
     }
 
     /**
      * Get all facebook user datas.
-     * @param type $fbuid
+     * @param  type $fbuid
      * @return type
      */
     public function getFacebookUserData($fbuid)
@@ -1983,7 +2014,7 @@ class FacebookAWDDD
     /**
      * Update the user facebook data
      * @param integer $wpUserId
-     * @param array $data
+     * @param array   $data
      */
     public function updateFacebookUserData($wpUserId, array $data)
     {
@@ -2010,10 +2041,11 @@ class FacebookAWDDD
     public function getExistingUserFromFacebook()
     {
         $existing_user = $this->wpdb->get_var('SELECT DISTINCT `u`.`ID` FROM `' . $this->wpdb->users . '` `u` JOIN `' . $this->wpdb->usermeta . '` `m` ON `u`.`ID` = `m`.`user_id`
-		WHERE (`m`.`meta_key` = "fb_uid" AND `m`.`meta_value` ="' . $this->uid . '")
-		OR (`m`.`meta_key` = "fb_email" AND `m`.`meta_value`="' . $this->me['email'] . '") OR (`u`.`user_email` = "' . $this->me['email'] . '")  LIMIT 1 ');
+        WHERE (`m`.`meta_key` = "fb_uid" AND `m`.`meta_value` ="' . $this->uid . '")
+        OR (`m`.`meta_key` = "fb_email" AND `m`.`meta_value`="' . $this->me['email'] . '") OR (`u`.`user_email` = "' . $this->me['email'] . '")  LIMIT 1 ');
         if (empty($existing_user))
             $existing_user = false;
+
         return $existing_user;
     }
 
@@ -2026,6 +2058,7 @@ class FacebookAWDDD
         if (isset($this->uid) && $this->uid != 0 && count($this->me)) {
             return true;
         }
+
         return false;
     }
 
@@ -2056,10 +2089,10 @@ class FacebookAWDDD
         <!-- ' . self::PLUGIN_NAME . ' Facebook Library Library-->
         <div id="fb-root"></div>
         <script type="text/javascript">
-            (function(d){
+            (function (d) {
                 var js, id = "facebook-jssdk",
                 ref = d.getElementsByTagName("script")[0];
-                if (d.getElementById(id)){
+                if (d.getElementById(id)) {
                         return;
                 }
                 js = d.createElement("script");
@@ -2070,8 +2103,8 @@ class FacebookAWDDD
 
         if ($this->options['connect_enable'] == 1) {
             $html .= '
-            jQuery(document).ready(function(){
-                window.fbAsyncInit = function(){
+            jQuery(document).ready(function () {
+                window.fbAsyncInit = function () {
                     FB.init({
                             appId : awd_fcbk.app_id,
                             channelUrl : "' . $this->_channel_url . '",
@@ -2134,6 +2167,7 @@ class FacebookAWDDD
         //@TODO add an option to remove this email send.
         if (is_int($new_user)) {
             wp_new_user_notification($new_user, $userdata['user_pass']);
+
             return $new_user;
         }
 
@@ -2162,16 +2196,18 @@ class FacebookAWDDD
                 //Found existing user in WP
                 $wpUserId = $this->getExistingUserFromFacebook();
             }
+
             return $wpUserId;
         }
+
         return false;
     }
 
     /**
      * Authenticate the current user using Facebook provider
-     * @param \WP_User $user
-     * @param string $username
-     * @param string $password
+     * @param  \WP_User $user
+     * @param  string   $username
+     * @param  string   $password
      * @return \WP_User
      */
     public function authenticate($user, $username = '', $password = '')
@@ -2184,7 +2220,7 @@ class FacebookAWDDD
         }
         if (is_wp_error($wpUserId)) {
             wp_die($wpUserId);
-        } else if (false === $wpUserId) {
+        } elseif (false === $wpUserId) {
             wp_redirect($this->_oauth_url);
             exit();
         }
@@ -2219,6 +2255,7 @@ class FacebookAWDDD
 
             return $logoutUrl;
         }
+
         return $url;
     }
 
@@ -2417,24 +2454,26 @@ class FacebookAWDDD
 
     /**
      * Insert the facebook rewrite rules into wp rules
-     * @param type $rules
+     * @param  type $rules
      * @return type
      */
     public function insertRewriteRules($rules)
     {
         $newrules = array();
         $newrules['facebook-awd/(login|logout|unsync|channel.html|deauthorize|realtime-update-api)$'] = 'index.php?facebook_awd[action]=$matches[1]';
+
         return $newrules + $rules;
     }
 
     /**
      * Insert plugin query vars
-     * @param array $vars
+     * @param  array  $vars
      * @return string
      */
     public function insertQueryVars($vars)
     {
         $vars[] = 'facebook_awd';
+
         return $vars;
     }
 
@@ -2639,7 +2678,7 @@ class FacebookAWDDD
     /**
      * Replace the default comments form
      * @global \WP_Post $post
-     * @param string $commentsTemplatePath
+     * @param  string $commentsTemplatePath
      * @return string
      */
     public function theCommentsForm($commentsTemplatePath)
@@ -2665,6 +2704,7 @@ class FacebookAWDDD
                 }
             }
         }
+
         return $commentsTemplatePath;
     }
 
@@ -2915,7 +2955,7 @@ class FacebookAWDDD
 
     /**
      * Add a dependency path
-     * @param string $name
+     * @param string              $name
      * @param string|array|object $value
      */
     public function addDependency($name, $value)
@@ -3055,5 +3095,3 @@ class FacebookAWDDD
     }
 
 }
-
-?>

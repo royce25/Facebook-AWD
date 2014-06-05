@@ -3,8 +3,8 @@
 Contributors: AHWEBDEV 
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZQ2VL33YXHJLC
 Tags: facebook, facebook tab, like button, open graph, opengraph actions, comments, fbconnect, likebox, activity box, all in one, fb connect, fb comments, facebook comments, register
-Requires at least: 3.3
-Tested up to: 3.5
+Requires at least: 4.0
+Tested up to: 4.0
 License: GPLv3
 Stable tag: 1.6
 

@@ -4,6 +4,8 @@
  * Model form fields definition
  * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
+use AHWEBDEV\FacebookAWD\FacebookAWD;
+
 $fields['application'] = array(
     'id' => array(
         'type' => 'text',
@@ -18,5 +20,5 @@ $fields['application'] = array(
         'attr' => array('class' => 'form-control')
     )
 );
-$fields['activitybox'] = apply_filters("AWD_facebook_fields_activitybox", $fields['activitybox']);
-?>
+
+$fields = apply_filters(FacebookAWD::PLUGIN_SLUG . "_fields", $fields);

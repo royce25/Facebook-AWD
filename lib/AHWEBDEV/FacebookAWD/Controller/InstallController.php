@@ -5,7 +5,6 @@ namespace AHWEBDEV\FacebookAWD\Controller;
 use AHWEBDEV\FacebookAWD\Api\Api;
 use AHWEBDEV\Framework\Controller\Controller;
 use AHWEBDEV\Framework\TemplateManager\Form;
-use Exception;
 
 /*
  * This file is part of FacebookAWD.
@@ -24,14 +23,10 @@ class InstallController extends Controller
 {
 
     /**
-     * Init the admin
+     * Install layout
+     * @return string
      */
-    public function init()
-    {
-        return $this;
-    }
-
-    public function install()
+    public function index()
     {
         $response = $this->handleInstall();
         if ($response) {
@@ -41,47 +36,27 @@ class InstallController extends Controller
         $form = new Form('fawd', 'POST', '', 'fawd_install');
         $om = $this->container->get('services.option_manager');
         $application = $this->container->get('services.application');
-        //print_r($application);
+
         $formView = $form->proccessFields('application', $application->getFormConfig());
-        $template = dirname($this->container->getFile()) . '/Resources/views/admin/install.html.php';
-        $error = $om->load('fawd_application_error');
-        echo parent::render($template, array(
-            'form' => $form,
-            'formView' => $formView,
+        $template = $this->container->getRoot()->getRootPath() . '/Resources/views/admin/install/install.html.php';
+        $errors = $om->load('fawd_application_error');
+
+        echo $this->render($template, array(
+            'title' => __('Setup', $this->container->getPtd()),
             'application' => $application,
-            'error' => $error
+            'formContent' => $this->installForm(array(
+                'form' => $form,
+                'formView' => $formView,
+                'errors' => $errors
+            ))
         ));
         return;
     }
 
-    public function isReady()
-    {
-        return $this->container->get('services.option_manager')->load('fawd_ready');
-    }
-
-    public function updateInstall()
-    {
-        $facebook = $this->container->get('services.api');
-        $om = $this->container->get('services.option_manager');
-        $application = $this->container->get('services.application');
-        $valid = true;
-        try {
-            $appInfos = $facebook->api('/' . $facebook->getAppId());
-
-            $application->bind($appInfos);
-            $om->save('options.application', $application);
-            $this->container->set('services.application', $application);
-
-            $om->save('fawd_ready', true);
-            $om->save('fawd_application_error', null);
-        } catch (Exception $e) {
-            $valid = false;
-            $om->save('fawd_application_error', $e->getMessage());
-            $om->save('fawd_ready', false);
-        }
-        return $valid;
-    }
-
+    /**
+     * Handle the install
+     * @return boolean
+     */
     public function handleInstall()
     {
         $token = isset($_POST['fawd_application']['token']) ? $_POST['fawd_application']['token'] : null;
@@ -95,7 +70,8 @@ class InstallController extends Controller
 
             //check the install using the api
             if ($this->updateInstall()) {
-                $template = dirname($this->container->getFile()) . '/Resources/views/admin/install-success.html.php';
+                $template = $this->container->getRoot()->getRootPath() . '/Resources/views/admin/install/install-success.html.php';
+
                 return $this->render($template, array(
                             'application' => $application
                 ));
@@ -105,6 +81,51 @@ class InstallController extends Controller
         }
     }
 
-}
+    /**
+     * Check and save the data in DB
+     * @return boolean
+     */
+    public function updateInstall()
+    {
+        $facebook = $this->container->get('services.api');
+        $om = $this->container->get('services.option_manager');
+        $application = $this->container->get('services.application');
+        $valid = true;
+        try {
+            $appInfos = $facebook->api('/' . $facebook->getAppId());
+            $application->bind($appInfos);
+            $om->save('options.application', $application);
+            $this->container->set('services.application', $application);
 
-?>
+            $om->save('fawd_ready', true);
+            $om->save('fawd_application_error', null);
+        } catch (\Exception $e) {
+            $valid = false;
+            $om->save('fawd_application_error', $e->getMessage());
+            $om->save('fawd_ready', false);
+        }
+
+        return $valid;
+    }
+
+    /**
+     * Return the HTML Install form
+     * @param array $options
+     * @return type
+     */
+    public function installForm(array $options)
+    {
+        $template = $this->container->getRoot()->getRootPath() . '/Resources/views/admin/install/installForm.html.php';
+        return $this->render($template, $options);
+    }
+
+    /**
+     * Check if the plugin is ready
+     * @return boolean
+     */
+    public function isReady()
+    {
+        return $this->container->get('services.option_manager')->load('fawd_ready');
+    }
+
+}

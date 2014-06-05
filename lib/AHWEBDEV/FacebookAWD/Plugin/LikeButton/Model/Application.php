@@ -2,20 +2,14 @@
 
 namespace AHWEBDEV\FacebookAWD\Model;
 
+use AHWEBDEV\FacebookAWD\FacebookAWD;
 use AHWEBDEV\Framework\Model\Model;
 
-/*
- * This file is part of FacebookAWD.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 /**
- * Application
+ * Facebook AWD Application Model
  *
- * @author Alexandre Hermann <hermann.alexandren@ahwebdev.fr>
- * @package FacebookAWD
+ * @package facebook-awd
+ * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 class Application extends Model
 {
@@ -245,11 +239,11 @@ class Application extends Model
         return array(
             'id' => array(
                 'type' => 'text',
-                'label' => 'Identifier'
+                'label' => __('Identifier', $this->container->getPtd()),
             ),
             'secretKey' => array(
                 'type' => 'text',
-                'label' => 'Secret Key'
+                'label' => __('Secret Key', $this->container->getPtd()),
             )
         );
     }

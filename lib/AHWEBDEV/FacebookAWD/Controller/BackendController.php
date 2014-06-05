@@ -3,7 +3,6 @@
 namespace AHWEBDEV\FacebookAWD\Controller;
 
 use AHWEBDEV\FacebookAWD\FacebookAWD;
-use AHWEBDEV\Framework\Controller\BackendControllerInterface;
 use AHWEBDEV\Framework\Controller\Controller;
 
 /*
@@ -19,14 +18,8 @@ use AHWEBDEV\Framework\Controller\Controller;
  * @author Alexandre Hermann <hermann.alexandren@ahwebdev.fr>
  * @package FacebookAWD
  */
-class BackendController extends Controller implements BackendControllerInterface
+class BackendController extends Controller
 {
-    /**
-     * The position of the menu in list
-     * @var string
-     */
-
-    const MENU_POSITION = 6;
 
     /**
      * The admin menu hook references
@@ -53,19 +46,21 @@ class BackendController extends Controller implements BackendControllerInterface
     public function setAdminMenuHooks(array $adminMenuHooks)
     {
         $this->adminMenuHooks = $adminMenuHooks;
+
         return $this;
     }
 
     /**
      * Add an admin menu hook references
      *
-     * @param string $name
-     * @param callback $hook
+     * @param  string $name
+     * @param  callback $hook
      * @return \AHWEBDEV\FacebookAWD\Controller\BackendController
      */
     public function addAdminMenuHook($name, $hook)
     {
         $this->adminMenuHooks[$name] = $hook;
+
         return $this;
     }
 
@@ -76,45 +71,34 @@ class BackendController extends Controller implements BackendControllerInterface
      */
     public function getAdminMenuHook($name)
     {
-        return $this->adminMenuHooks[$name];
+        if (isset($this->adminMenuHooks[$name])) {
+            return $this->adminMenuHooks[$name];
+        }
+        return false;
     }
 
     /**
      * Remove an admin menu hook reference
      *
-     * @param string $name
+     * @param  string $name
      * @return \AHWEBDEV\FacebookAWD\Controller\BackendController
      */
     public function removeAdminMenuHook($name)
     {
         unset($this->adminMenuHooks[$name]);
+
         return $this;
     }
 
     /**
-     * Get the menu iems as array
-     *
-     * @return array
-     */
-    public function getBlockItems()
-    {
-        return array(
-            'home' => array(
-                'title' => "Home",
-                'controller' => $this->container->get('backend.home_controller'),
-                'action' => 'home'
-            )
-        );
-    }
-
-    /**
      * Init the admin
+     * This method is called during plugins_loaded wordpress hook
      */
     public function init()
     {
-        add_action('admin_menu', array(&$this, 'adminMenu'));
-        add_action('admin_init', array(&$this, 'adminInit'));
-        add_action("init", array(&$this, 'registerAssets'));
+        add_action('admin_menu', array($this, 'adminMenu'));
+        add_action('admin_init', array($this, 'adminInit'));
+        add_action("init", array($this, 'registerAssets'));
     }
 
     /**
@@ -122,20 +106,28 @@ class BackendController extends Controller implements BackendControllerInterface
      */
     public function adminMenu()
     {
-        $parentSlug = 'options-general.php';
-        $menuTitle = $pageTitle = FacebookAWD::PLUGIN_ADMIN_NAME;
-        $capability = 'manage_options';
-        $menuSlug = FacebookAWD::PLUGIN_SLUG;
-        $callback = array($this, 'content');
-
         //check install ok
         $installController = $this->container->get('backend.install_controller');
-        if (!$installController->isReady() || isset($_REQUEST['settings'])) {
-            $callback = array($installController, 'install');
+
+        if (!$installController->isReady() || isset($_REQUEST['master_settings'])) {
+            $this->container->set('backend.home_controller', $installController);
+        } else {
+            //init plugins
+            do_action('facebookawd_register_plugins', $this->container);
         }
 
-        $hook = add_submenu_page($parentSlug, $pageTitle, $menuTitle, $capability, $menuSlug, $callback);
-        $this->addAdminMenuHook($menuSlug, $hook);
+        $menuTitle = $this->container->getTitle();
+        $capability = 'manage_options';
+        $menuSlug = $this->container->getSlug();
+        $controller = $this->container->get('backend.home_controller');
+        $pageHook = add_menu_page($menuTitle, $menuTitle, $capability, $menuSlug, array($controller, 'index'));
+        $this->addAdminMenuHook($this->container->getSlug(), $pageHook);
+    }
+
+    public function regiterWPActionsHook($pageHook)
+    {
+        add_action('admin_print_styles-' . $pageHook, array($this, 'enqueueStyles'));
+        add_action('admin_print_scripts-' . $pageHook, array($this, 'enqueueScripts'));
     }
 
     /**
@@ -143,14 +135,27 @@ class BackendController extends Controller implements BackendControllerInterface
      */
     public function adminInit()
     {
-        $hook = $this->getAdminMenuHook(FacebookAWD::PLUGIN_SLUG);
-        add_action('admin_print_styles-' . $hook, array(&$this, 'enqueueStyles'));
-        add_action('admin_print_styles-post-new.php', array(&$this, 'enqueueStyles'));
-        add_action('admin_print_styles-post.php', array(&$this, 'enqueueStyles'));
-        add_action('admin_print_styles-link-add.php', array(&$this, 'enqueueStyles'));
-        add_action('admin_print_styles-link.php', array(&$this, 'enqueueStyles'));
-        add_action('admin_print_styles-widgets.php', array(&$this, 'enqueueStyles'));
-        add_action('admin_print_scripts-' . $hook, array(&$this, 'enqueueScripts'));
+        $controller = $this->container->get('backend.home_controller');
+        $pageHook = $this->getAdminMenuHook($this->container->getSlug());
+        $this->regiterWPActionsHook($pageHook);
+        add_action('load-' . $pageHook, array($controller, 'init'));
+        add_screen_option('layout_columns', array('max' => 2, 'default' => 1));
+
+        //plugin init
+        foreach ($this->container->getPlugins() as $plugin) {
+            $pluginObj = $plugin['instance'];
+            $pageHook = $this->getAdminMenuHook($pluginObj->getSlug());
+            if ($pageHook) {
+                $this->regiterWPActionsHook($pageHook);
+            }
+        }
+
+        /*
+          add_action('admin_print_styles-post-new.php', array($this, 'enqueueStyles'));
+          add_action('admin_print_styles-post.php', array($this, 'enqueueStyles'));
+          add_action('admin_print_styles-link-add.php', array($this, 'enqueueStyles'));
+          add_action('admin_print_styles-link.php', array($this, 'enqueueStyles'));
+          add_action('admin_print_styles-widgets.php', array($this, 'enqueueStyles')); */
     }
 
     /**
@@ -167,7 +172,7 @@ class BackendController extends Controller implements BackendControllerInterface
                     $deps = array('jquery');
                     $media = true;
                 }
-                call_user_func_array('wp_register_' . $type, array('facebook-awd-' . $fileName, plugins_url('facebook-awd/' . FacebookAWD::getResource($path)), $deps, null, $media));
+                call_user_func_array('wp_register_' . $type, array($this->container->getSlug() . '-' . $fileName, plugins_url('facebook-awd/' . FacebookAWD::getResource($path)), $deps, null, $media));
             }
         }
     }
@@ -177,8 +182,9 @@ class BackendController extends Controller implements BackendControllerInterface
      */
     public function enqueueStyles()
     {
-        wp_enqueue_style('facebook-awd-bootstrap-css');
-        wp_enqueue_style('facebook-awd-google-code-prettify-css');
+        wp_enqueue_style($this->container->getSlug() . '-bootstrap-css');
+        wp_enqueue_style($this->container->getSlug() . '-animate-css');
+        wp_enqueue_style($this->container->getSlug() . '-google-code-prettify-css');
         wp_enqueue_style('thickbox');
     }
 
@@ -189,28 +195,19 @@ class BackendController extends Controller implements BackendControllerInterface
     {
         wp_enqueue_script('media-upload');
         wp_enqueue_script('thickbox');
+
         wp_enqueue_script('common');
         wp_enqueue_script('wp-list');
         wp_enqueue_script('postbox');
 
-        //wp_enqueue_script('facebook-awd-bootstrap-js');
-        wp_enqueue_script('facebook-awd-jquery-validate-js');
-        wp_enqueue_script('facebook-awd-bootstrap-tab-js');
-        wp_enqueue_script('facebook-awd-bootstrap-transition-js');
-        wp_enqueue_script('facebook-awd-google-code-prettify-js');
-        wp_enqueue_script('facebook-awd-admin-js');
-        wp_enqueue_script('facebook-awd-global-js');
-    }
-
-    /**
-     * Base Admin content
-     */
-    public function content()
-    {
-        $template = dirname($this->container->getFile()) . '/Resources/views/admin/index.html.php';
-        echo $this->render($template, array('blockView'=> $this->container->get('backend.home_controller')->home()));
+        wp_enqueue_script($this->container->getSlug() . '-google-code-prettify-js');
+        wp_enqueue_script($this->container->getSlug() . '-bootstrap-js');
+        wp_enqueue_script($this->container->getSlug() . '-jquery-validate-js');
+        //wp_enqueue_script('facebook-awd-bootstrap-tab-js');
+        //wp_enqueue_script('facebook-awd-bootstrap-transition-js');
+        //
+        //wp_enqueue_script('facebook-awd-admin-js');
+        //wp_enqueue_script('facebook-awd-global-js');
     }
 
 }
-
-?>

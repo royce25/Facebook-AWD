@@ -8,6 +8,8 @@ use AHWEBDEV\FacebookAWD\Controller\HomeController;
 use AHWEBDEV\FacebookAWD\Controller\InstallController;
 use AHWEBDEV\FacebookAWD\Model\Application;
 use AHWEBDEV\Framework\Container as BaseContainer;
+use AHWEBDEV\Framework\OptionManager\OptionManager;
+use AHWEBDEV\Framework\TemplateManager\TemplateManager;
 use ReflectionClass;
 
 /**
@@ -20,75 +22,32 @@ class FacebookAWD extends BaseContainer
 {
 
     /**
-     * The name of the plugin
-     */
-    const PLUGIN_NAME = 'Facebook AWD';
-
-    /**
-     * The slug of the plugin
-     */
-    const PLUGIN_SLUG = 'FacebookAWD';
-
-    /**
-     * The title of the admin interface
-     */
-    const PLUGIN_ADMIN_NAME = 'Facebook Admin';
-
-    /**
-     * The plugin text domain
-     */
-    const PTD = self::PLUGIN_SLUG;
-
-    /**
-     * All assets required to work with facebook AWD.
-     *
-     * @var array
-     */
-    protected $assets = array();
-
-    /**
      * Constructor
      */
     public function __construct()
     {
+        $this->title = 'Facebook AWD';
+        $this->slug = 'facebookawd';
+        $this->ptd = 'facebookawd';
+        $this->rootPath = __DIR__;
+
         $this->assets = array(
             'script' => array(
-                //'bootstrap-js' => 'js/bootstrap.min.js',
+                'bootstrap-js' => 'js/bootstrap.min.js',
                 'jquery-validate-js' => 'js/jquery.validate.min.js',
-                'bootstrap-tab-js' => 'js/bootstrap/tab.js',
-                'bootstrap-transition-js' => 'js/bootstrap/transition.js',
-                'google-code-prettify-js' => 'js/google-code-prettify/prettify.js',
+                //'bootstrap-tab-js' => 'js/bootstrap/tab.js',
+                //'bootstrap-transition-js' => 'js/bootstrap/transition.js',
+                //'google-code-prettify-js' => 'js/google-code-prettify/prettify.js',
                 'admin-js' => 'js/facebook_awd_admin.js',
                 'global-js' => 'js/facebook_awd.js',
             ),
             'style' => array(
                 'bootstrap-css' => 'css/bootstrap.css',
-                'google-code-prettify-css' => 'css/google-code-prettify/prettify.css',
+                'animate-css' => 'css/animate.css',
+            //'google-code-prettify-css' => 'css/google-code-prettify/prettify.css',
             )
         );
         parent::__construct();
-    }
-
-    /**
-     * Return the assets
-     *
-     * @return array
-     */
-    public function getAssets()
-    {
-        return $this->assets;
-    }
-
-    /**
-     * Set the assets
-     *
-     * @param array $assets
-     * @return \AHWEBDEV\FacebookAWD\FacebookAWD
-     */
-    public function setAssets(array $assets)
-    {
-        $this->assets = $assets;
-        return $this;
     }
 
     /**
@@ -99,30 +58,23 @@ class FacebookAWD extends BaseContainer
      */
     public static function getResource($path, $basePath = '')
     {
-        if (empty($basePath))
+        if (empty($basePath)) {
             $basePath = '';
-
+        }
         return 'lib/AHWEBDEV/FacebookAWD/Resources/public/' . $path;
-    }
-
-    /**
-     * Return this file name
-     *
-     * @return string
-     */
-    public function getFile()
-    {
-        $f = new ReflectionClass($this);
-        return $f->getFileName();
     }
 
     /**
      * Init
      */
-    public function init()
+    public function init(\AHWEBDEV\Framework\ContainerInterface $container = null)
     {
+        $tm = new TemplateManager($this);
+        $om = new OptionManager($this);
 
-        $om = $this->get('services.option_manager');
+        $this->set('services.template_manager', $tm);
+        $this->set('services.option_manager', $om);
+
 
         //load application
         $application = $om->load('options.application');
@@ -149,10 +101,40 @@ class FacebookAWD extends BaseContainer
         $homeController = new HomeController($this);
         $this->set('backend.home_controller', $homeController);
 
-        //start plugin
-        add_action('after_setup_theme', array(&$this, 'launch'));
+        $this->initPlugins();
+
+        //wordpress boot
+        apply_filters('facebookawd_loaded', $this);
+        add_action('plugins_loaded', array($this, 'launch'));
 
         return $this;
+    }
+
+    public function initPlugins()
+    {
+        require_once dirname(__FILE__) . '/Plugin/LikeButton/boot.php';
+        require_once dirname(__FILE__) . '/Plugin/LikeBox/boot.php';
+    }
+
+    public function registerPlugin($name, $plugin)
+    {
+        if (!function_exists('get_plugins')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
+        $f = new ReflectionClass($plugin);
+        $this->plugins[$name] = array(
+            'data' => \get_plugin_data(dirname($f->getFileName()) . '/boot.php', false, true),
+            'instance' => $plugin
+        );
+
+        return $this;
+    }
+    
+    public function getInfos()
+    {
+        $f = new ReflectionClass($this);
+        return \get_plugin_data(dirname($f->getFileName()) . '/boot.php', false, true);
     }
 
     /**
@@ -160,11 +142,10 @@ class FacebookAWD extends BaseContainer
      */
     public function launch()
     {
+
         if (is_admin()) {
             $this->get('backend.controller')->init();
         }
     }
 
 }
-
-?>
