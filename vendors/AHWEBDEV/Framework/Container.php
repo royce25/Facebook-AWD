@@ -5,6 +5,7 @@ namespace AHWEBDEV\Framework;
 use AHWEBDEV\FacebookAWD\FacebookAWD;
 use AHWEBDEV\Framework\ContainerInterface;
 use AHWEBDEV\Framework\Controller\BackendControllerInterface;
+use AHWEBDEV\Framework\Plugin\Plugin;
 use Exception;
 use ReflectionClass;
 
@@ -21,7 +22,7 @@ use ReflectionClass;
  * @author Alexandre Hermann <hermann.alexandren@ahwebdev.fr>
  * @package AHWEBDEV\Framework
  */
-abstract class Container implements \AHWEBDEV\Framework\ContainerInterface
+abstract class Container implements ContainerInterface
 {
 
     /**
@@ -224,7 +225,13 @@ abstract class Container implements \AHWEBDEV\Framework\ContainerInterface
         }
     }
 
-    public function registerPlugin($name, $plugin)
+    /**
+     * 
+     * @param string $name
+     * @param Plugin $plugin
+     * @return \AHWEBDEV\Framework\Container
+     */
+    public function registerPlugin($name, Plugin $plugin)
     {
         $this->plugins[$name] = $plugin;
         return $this;

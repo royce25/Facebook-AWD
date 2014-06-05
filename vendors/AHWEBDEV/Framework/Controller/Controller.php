@@ -28,6 +28,12 @@ abstract class Controller implements ControllerInterface
     protected $container;
 
     /**
+     *
+     * @var String 
+     */
+    protected $listenerResponse;
+
+    /**
      * Constructor
      *
      * @param ContainerInterface $container
@@ -57,6 +63,26 @@ abstract class Controller implements ControllerInterface
         $templateManager = $this->container->getRoot()->get('services.template_manager');
         //render the admin view
         return $templateManager->render($template, $params, false);
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public function getListenerResponse()
+    {
+        return $this->listenerResponse;
+    }
+
+    /**
+     * 
+     * @param string $listenerResponse
+     * @return \AHWEBDEV\Framework\Controller\Controller
+     */
+    public function setListenerResponse($listenerResponse)
+    {
+        $this->listenerResponse = $listenerResponse;
+        return $this;
     }
 
     /**

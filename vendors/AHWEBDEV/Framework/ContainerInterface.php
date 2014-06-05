@@ -2,6 +2,8 @@
 
 namespace AHWEBDEV\Framework;
 
+use AHWEBDEV\Framework\Plugin\Plugin;
+
 /*
  * This file is part of the little Framework AHWEBDEV.
  *
@@ -47,7 +49,7 @@ interface ContainerInterface
 
     public function setPtd($ptd);
 
-    public function registerPlugin($name, $plugin);
+    public function registerPlugin($name, Plugin $plugin);
 
     public function debug($echo = true);
 }

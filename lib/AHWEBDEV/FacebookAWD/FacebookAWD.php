@@ -6,9 +6,12 @@ use AHWEBDEV\FacebookAWD\Api\Api;
 use AHWEBDEV\FacebookAWD\Controller\BackendController;
 use AHWEBDEV\FacebookAWD\Controller\HomeController;
 use AHWEBDEV\FacebookAWD\Controller\InstallController;
+use AHWEBDEV\FacebookAWD\Listener\RequestListener;
 use AHWEBDEV\FacebookAWD\Model\Application;
 use AHWEBDEV\Framework\Container as BaseContainer;
+use AHWEBDEV\Framework\ContainerInterface;
 use AHWEBDEV\Framework\OptionManager\OptionManager;
+use AHWEBDEV\Framework\Plugin\Plugin;
 use AHWEBDEV\Framework\TemplateManager\TemplateManager;
 use ReflectionClass;
 
@@ -67,14 +70,40 @@ class FacebookAWD extends BaseContainer
     /**
      * Init
      */
-    public function init(\AHWEBDEV\Framework\ContainerInterface $container = null)
+    public function init(ContainerInterface $container = null)
+    {
+        //init services
+        $this->initServices();
+
+        //init controllers
+        $this->initControllers();
+
+        //init plugins
+        $this->initPlugins();
+
+        //init listeners
+        $this->initListeners();
+
+        //wordpress boot
+        apply_filters('facebookawd_loaded', $this);
+        add_action('plugins_loaded', array($this, 'launch'));
+
+        //init front end action
+        $this->get('listener.request_listener')->init();
+        
+        return $this;
+    }
+    
+    /**
+     * Init the default services
+     */
+    public function initServices()
     {
         $tm = new TemplateManager($this);
-        $om = new OptionManager($this);
-
         $this->set('services.template_manager', $tm);
-        $this->set('services.option_manager', $om);
 
+        $om = new OptionManager($this);
+        $this->set('services.option_manager', $om);
 
         //load application
         $application = $om->load('options.application');
@@ -91,6 +120,28 @@ class FacebookAWD extends BaseContainer
         }
         $this->set('services.api', $api);
 
+        //load application
+        $application = $om->load('options.application');
+        if (!$application) {
+            $application = new Application();
+        }
+        $this->set('services.application', $application);
+    }
+
+    /**
+     * Set the defaults listeners
+     */
+    public function initListeners()
+    {
+        $requestListener = new RequestListener($this);
+        $this->set('listener.request_listener', $requestListener);
+    }
+
+    /**
+     * Set the defaults controllers
+     */
+    public function initControllers()
+    {
         //load controllers
         $backendController = new BackendController($this);
         $this->set('backend.controller', $backendController);
@@ -100,23 +151,24 @@ class FacebookAWD extends BaseContainer
 
         $homeController = new HomeController($this);
         $this->set('backend.home_controller', $homeController);
-
-        $this->initPlugins();
-
-        //wordpress boot
-        apply_filters('facebookawd_loaded', $this);
-        add_action('plugins_loaded', array($this, 'launch'));
-
-        return $this;
     }
 
+    /**
+     * Init the default plugins
+     */
     public function initPlugins()
     {
         require_once dirname(__FILE__) . '/Plugin/LikeButton/boot.php';
         require_once dirname(__FILE__) . '/Plugin/LikeBox/boot.php';
     }
 
-    public function registerPlugin($name, $plugin)
+    /**
+     * 
+     * @param string $name
+     * @param Plugin $plugin
+     * @return \AHWEBDEV\FacebookAWD\FacebookAWD
+     */
+    public function registerPlugin($name, Plugin $plugin)
     {
         if (!function_exists('get_plugins')) {
             require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -130,7 +182,11 @@ class FacebookAWD extends BaseContainer
 
         return $this;
     }
-    
+
+    /**
+     * Get the infos of a plugins that use a boot file
+     * @return array
+     */
     public function getInfos()
     {
         $f = new ReflectionClass($this);
@@ -138,11 +194,11 @@ class FacebookAWD extends BaseContainer
     }
 
     /**
-     * Launch the extension and add functionnality to wprdoress hook
+     * Launch the container
      */
     public function launch()
     {
-
+        //launch the init of the backend
         if (is_admin()) {
             $this->get('backend.controller')->init();
         }

@@ -23,14 +23,23 @@ class InstallController extends Controller
 {
 
     /**
+     * Init the admin
+     * Listen for install post
+     */
+    public function init()
+    {
+        parent::init();
+        $this->setListenerResponse($this->handleInstall());
+    }
+
+    /**
      * Install layout
      * @return string
      */
     public function index()
     {
-        $response = $this->handleInstall();
-        if ($response) {
-            echo $response;
+        if ($this->listenerResponse) {
+            echo $this->listenerResponse;
             return;
         }
         $form = new Form('fawd', 'POST', '', 'fawd_install');
@@ -113,7 +122,7 @@ class InstallController extends Controller
      * @param array $options
      * @return type
      */
-    public function installForm(array $options)
+    protected function installForm(array $options)
     {
         $template = $this->container->getRoot()->getRootPath() . '/Resources/views/admin/install/installForm.html.php';
         return $this->render($template, $options);

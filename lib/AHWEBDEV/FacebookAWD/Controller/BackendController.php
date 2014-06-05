@@ -134,7 +134,7 @@ class BackendController extends Controller
      * Init the admin
      */
     public function adminInit()
-    {
+    {   
         $controller = $this->container->get('backend.home_controller');
         $pageHook = $this->getAdminMenuHook($this->container->getSlug());
         $this->regiterWPActionsHook($pageHook);
@@ -149,6 +149,10 @@ class BackendController extends Controller
                 $this->regiterWPActionsHook($pageHook);
             }
         }
+        
+        //init the listener in admin only
+        $requestListener = $this->container->get('listener.request_listener');
+        $requestListener->adminInit();
 
         /*
           add_action('admin_print_styles-post-new.php', array($this, 'enqueueStyles'));
