@@ -3,8 +3,8 @@
 $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
-
 return array(
-    'AHWEBDEV\\FacebookAWD' => $baseDir . DIRECTORY_SEPARATOR . 'lib',
-    'AHWEBDEV\\Framework' => $vendorDir . DIRECTORY_SEPARATOR
+    'AHWEBDEV\\FacebookAWD' => $baseDir . DIRECTORY_SEPARATOR . 'src',
+    'AHWEBDEV\\Framework' => $vendorDir . DIRECTORY_SEPARATOR,
+    'AHWEBDEV\\Wordpress' => $vendorDir . DIRECTORY_SEPARATOR
 );

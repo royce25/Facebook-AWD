@@ -3,7 +3,6 @@
 namespace AHWEBDEV\Framework;
 
 use AHWEBDEV\FacebookAWD\FacebookAWD;
-use AHWEBDEV\Framework\ContainerInterface;
 use AHWEBDEV\Framework\Controller\BackendControllerInterface;
 use AHWEBDEV\Framework\Plugin\Plugin;
 use Exception;
@@ -27,19 +26,19 @@ abstract class Container implements ContainerInterface
 
     /**
      * The title
-     * @var string 
+     * @var string
      */
     protected $title;
 
     /**
      * the slug identifier
-     * @var string 
+     * @var string
      */
     protected $slug;
 
     /**
      * the text domain
-     * @var string 
+     * @var string
      */
     protected $ptd;
 
@@ -59,13 +58,13 @@ abstract class Container implements ContainerInterface
 
     /**
      *
-     * @var array 
+     * @var array
      */
     protected $plugins = array();
 
     /**
      *
-     * @var string 
+     * @var string
      */
     protected $rootPath = __DIR__;
 
@@ -80,8 +79,8 @@ abstract class Container implements ContainerInterface
     /**
      * Return a service by name
      *
-     * @param  string     $name
-     * @return The        service
+     * @param  string    $name
+     * @return The       service
      * @throws Exception
      */
     public function get($name)
@@ -119,7 +118,7 @@ abstract class Container implements ContainerInterface
     /**
      * Set the assets
      *
-     * @param  array                             $assets
+     * @param  array       $assets
      * @return FacebookAWD
      */
     public function setAssets(array $assets)
@@ -130,7 +129,7 @@ abstract class Container implements ContainerInterface
     }
 
     /**
-     * 
+     *
      * @return array
      */
     public function getPlugins()
@@ -139,13 +138,14 @@ abstract class Container implements ContainerInterface
     }
 
     /**
-     * 
-     * @param array $plugins
+     *
+     * @param  array                         $plugins
      * @return \AHWEBDEV\Framework\Container
      */
     public function setPlugins(array $plugins)
     {
         $this->plugins = $plugins;
+
         return $this;
     }
 
@@ -178,40 +178,43 @@ abstract class Container implements ContainerInterface
 
     /**
      * Set the title
-     * @param type $title
+     * @param  type                          $title
      * @return \AHWEBDEV\Framework\Container
      */
     public function setTitle($title)
     {
         $this->title = $title;
+
         return $this;
     }
 
     /**
      * Set the slug
-     * @param type $slug
+     * @param  type                          $slug
      * @return \AHWEBDEV\Framework\Container
      */
     public function setSlug($slug)
     {
         $this->slug = $slug;
+
         return $this;
     }
 
     /**
      * Set the text domain
-     * @param type $slug
+     * @param  type                          $slug
      * @return \AHWEBDEV\Framework\Container
      */
     public function setPtd($ptd)
     {
         $this->ptd = $ptd;
+
         return $this;
     }
 
     /**
      * The debugger
-     * @param boolean $echo
+     * @param  boolean $echo
      * @return string
      */
     public function debug($echo = true)
@@ -226,14 +229,15 @@ abstract class Container implements ContainerInterface
     }
 
     /**
-     * 
-     * @param string $name
-     * @param Plugin $plugin
+     *
+     * @param  string                        $name
+     * @param  Plugin                        $plugin
      * @return \AHWEBDEV\Framework\Container
      */
     public function registerPlugin($name, Plugin $plugin)
     {
         $this->plugins[$name] = $plugin;
+
         return $this;
     }
 
@@ -245,6 +249,7 @@ abstract class Container implements ContainerInterface
     public function getFile($file)
     {
         $f = new ReflectionClass($file);
+
         return $f->getFileName();
     }
 
@@ -258,7 +263,7 @@ abstract class Container implements ContainerInterface
     }
 
     /**
-     * 
+     *
      * @return type
      */
     public function getRootPath()
@@ -268,12 +273,12 @@ abstract class Container implements ContainerInterface
 
     /**
      *
-     * @var ContainerInterface 
+     * @var ContainerInterface
      */
     protected $container;
 
     /**
-     * 
+     *
      * @return ContainerInterface
      */
     public function getParent()
@@ -291,6 +296,7 @@ abstract class Container implements ContainerInterface
         while ($rootContainer->container != null) {
             $rootContainer = $rootContainer->container;
         }
+
         return $rootContainer;
     }
 

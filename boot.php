@@ -12,10 +12,8 @@ ini_set('display_errors', true);
   Text Domain: FacebookAWD
   Last modification: 22/05/2014
  */
-//autoload of Facebook AWD application
-require_once('autoload.php');
-
 //initialize the Extension
+require_once __DIR__ . '/vendors/autoload/autoload.php';
 $facebookAWD = new AHWEBDEV\FacebookAWD\FacebookAWD();
 $facebookAWD->init();
 

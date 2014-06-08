@@ -2,8 +2,6 @@
 
 namespace AHWEBDEV\Framework\Controller;
 
-use AHWEBDEV\Framework\ContainerInterface;
-
 /*
  * This file is part of the little Framework AHWEBDEV.
  *
@@ -19,11 +17,6 @@ use AHWEBDEV\Framework\ContainerInterface;
  */
 interface ControllerInterface
 {
-    /**
-     *
-     * @param \AHWEBDEV\Framework\ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container);
 
     /**
      * Render some content based on params.
@@ -37,4 +30,17 @@ interface ControllerInterface
      * Boot of the controller.
      */
     public function init();
+
+    /**
+     *
+     * @return string
+     */
+    public function getListenerResponse();
+
+    /**
+     *
+     * @param  string                                    $listenerResponse
+     * @return \AHWEBDEV\Framework\Controller\Controller
+     */
+    public function setListenerResponse($listenerResponse);
 }

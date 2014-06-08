@@ -34,6 +34,7 @@ abstract class Model implements FormConfigInterface
         }
         $formConfig = array_merge_recursive($config, $this->getDefaultFormConfig());
         $formConfigFiltered = apply_filters('AWD_facebook_fields_' . get_class($this), $formConfig);
+
         return $formConfigFiltered;
     }
 

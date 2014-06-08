@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Composer\Autoload;
+namespace Composer\autoload;
 
 /**
  * ClassLoader implements a PSR-0 class loader
@@ -119,8 +119,8 @@ class ClassLoader
     /**
      * Registers a set of classes, replacing any others previously set.
      *
-     * @param string       $prefix  The classes prefix
-     * @param array|string $paths   The location(s) of the classes
+     * @param string       $prefix The classes prefix
+     * @param array|string $paths  The location(s) of the classes
      */
     public function set($prefix, $paths)
     {

@@ -15,7 +15,7 @@ use AHWEBDEV\Framework\ContainerInterface;
 abstract class Plugin extends BaseContainer
 {
     /**
-     * 
+     *
      * @param \AHWEBDEV\Framework\ContainerInterface $container
      */
     public function init(ContainerInterface $container = null)
@@ -28,7 +28,7 @@ abstract class Plugin extends BaseContainer
     }
 
     /**
-     * 
+     *
      */
-    abstract function boot();
+    abstract public function boot();
 }

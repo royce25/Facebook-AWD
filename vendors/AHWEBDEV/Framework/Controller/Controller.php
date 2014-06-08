@@ -29,7 +29,7 @@ abstract class Controller implements ControllerInterface
 
     /**
      *
-     * @var String 
+     * @var String
      */
     protected $listenerResponse;
 
@@ -41,15 +41,6 @@ abstract class Controller implements ControllerInterface
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-    }
-
-    /**
-     *
-     * @return Container
-     */
-    public function getContainer()
-    {
-        return $this->container;
     }
 
     /**
@@ -66,7 +57,7 @@ abstract class Controller implements ControllerInterface
     }
 
     /**
-     * 
+     *
      * @return string
      */
     public function getListenerResponse()
@@ -75,22 +66,19 @@ abstract class Controller implements ControllerInterface
     }
 
     /**
-     * 
-     * @param string $listenerResponse
+     *
+     * @param  string                                    $listenerResponse
      * @return \AHWEBDEV\Framework\Controller\Controller
      */
     public function setListenerResponse($listenerResponse)
     {
         $this->listenerResponse = $listenerResponse;
+
         return $this;
     }
 
     /**
      * Init the admin
      */
-    public function init()
-    {
-        //silence;
-    }
-
+    abstract function init();
 }

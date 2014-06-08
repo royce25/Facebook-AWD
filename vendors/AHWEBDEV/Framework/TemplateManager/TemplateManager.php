@@ -167,22 +167,23 @@ class TemplateManager
     {
         $this->messages[$type] = $message;
     }
-    
-    
+
     /**
      * Translate in template
-     * @param type $string
+     * @param  type $string
      * @return type
      */
-    public function __($string){
+    public function __($string)
+    {
         return __($string, $this->container->getPtd());
     }
-    
+
     /**
      * Echo & Translate in template
      * @param type $string
      */
-    public function _e($string){
+    public function _e($string)
+    {
         echo $this->__($string);
     }
 }
