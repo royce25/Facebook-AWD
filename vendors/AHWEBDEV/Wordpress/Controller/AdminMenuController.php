@@ -68,7 +68,6 @@ abstract class AdminMenuController extends Controller implements AdminMenuContro
         $parentSlug = $this->container->getSlug();
         $menuTitle = $this->getMenuTitle();
         $capability = 'manage_options';
-
         if ($this->getMenuType() === self::TYPE_MENU) {
             $pageHook = add_menu_page($menuTitle, $menuTitle, $capability, $menuSlug, array($this, 'index'));
         } elseif ($this->getMenuType() === self::TYPE_SUBMENU) {

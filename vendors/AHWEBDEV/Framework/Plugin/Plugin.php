@@ -16,7 +16,7 @@ abstract class Plugin extends BaseContainer
 {
     /**
      *
-     * @param \AHWEBDEV\Framework\ContainerInterface $container
+     * @param ContainerInterface $container
      */
     public function init(ContainerInterface $container = null)
     {

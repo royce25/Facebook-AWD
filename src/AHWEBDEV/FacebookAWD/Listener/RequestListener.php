@@ -41,13 +41,7 @@ class RequestListener
      */
     public function init()
     {
-        //we do not want to add query in admin side
-        //use adminInit to do this
-        if (is_admin()) {
-            return;
-        }
-
-        add_filter('rewrite_rules_array', array(&$this, 'insertRewriteRules'));
+        add_filter('rewrite_rules_array', array($this, 'insertRewriteRules'));
         add_action('parse_query', array($this, 'parseQuery'));
         add_filter('query_vars', array($this, 'addQueryVars'));
     }
@@ -58,10 +52,12 @@ class RequestListener
     public function parseQuery()
     {
         $this->query = get_query_var($this->container->getSlug());
-        if (!empty($this->query)) {
-            print_r($this->query);
+        //exit('d');
+        if (!empty($this->query) && is_array($this->query)) {
+            if (isset($this->query['action'])) {
+                return do_action($this->container->getSlug() . '_' . $this->query['action'], $this);
+            }
         }
-        exit('Request parser Facebook AWD');
     }
 
     /**
@@ -85,7 +81,6 @@ class RequestListener
         $newrules = array(
             $hook => $rule
         );
-
         return $newrules + $rules;
     }
 
@@ -105,7 +100,7 @@ class RequestListener
      */
     public function adminInit()
     {
-
+        
     }
 
 }

@@ -13,7 +13,6 @@ use AHWEBDEV\Framework\Plugin\Plugin;
  */
 class LikeButtonPlugin extends Plugin
 {
-
     /**
      * Define container data
      * Register the plugin on facebook AWD

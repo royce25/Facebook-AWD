@@ -21,7 +21,7 @@ use ReflectionClass;
  * @author Alexandre Hermann <hermann.alexandren@ahwebdev.fr>
  * @package AHWEBDEV\Framework
  */
-abstract class Container implements ContainerInterface
+abstract class Container implements \AHWEBDEV\Framework\ContainerInterface
 {
 
     /**
@@ -64,15 +64,22 @@ abstract class Container implements ContainerInterface
 
     /**
      *
-     * @var string
+     * @var \AHWEBDEV\Framework\ContainerInterface
      */
-    protected $rootPath = __DIR__;
+    protected $container = null;
+
+    /**
+     *
+     * @var boolean 
+     */
+    protected $apcLoaded = false;
 
     /**
      * Constructor
      */
     public function __construct()
     {
+        $this->apcLoaded = extension_loaded('apc');
         $this->services = array();
     }
 
@@ -88,6 +95,12 @@ abstract class Container implements ContainerInterface
         if (isset($this->services[$name])) {
             return $this->services[$name];
         }
+        if ($this->apcLoaded) {
+            $content = apc_fetch($this->slug . '_' . $name);
+            if ($content) {
+                return $content;
+            }
+        }
         throw new Exception('The service name ' . $name . ' was not found', 500);
     }
 
@@ -100,6 +113,9 @@ abstract class Container implements ContainerInterface
      */
     public function set($name, $service)
     {
+        if ($this->apcLoaded) {
+            apc_add($this->slug . '_' . $name, $service, 120);
+        }
         $this->services[$name] = $service;
 
         return $this;
@@ -268,18 +284,14 @@ abstract class Container implements ContainerInterface
      */
     public function getRootPath()
     {
-        return $this->rootPath;
+        $reflection = new \ReflectionClass($this);
+        $directory = dirname($reflection->getFileName());
+        return $directory;
     }
 
     /**
      *
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     *
-     * @return ContainerInterface
+     * @return \AHWEBDEV\Framework\ContainerInterface
      */
     public function getParent()
     {
@@ -288,7 +300,7 @@ abstract class Container implements ContainerInterface
 
     /**
      * Returns the Root container
-     * @return ContainerInterface
+     * @return \AHWEBDEV\Framework\ContainerInterface
      */
     public function getRoot()
     {
@@ -296,12 +308,20 @@ abstract class Container implements ContainerInterface
         while ($rootContainer->container != null) {
             $rootContainer = $rootContainer->container;
         }
-
         return $rootContainer;
+    }
+
+    /**
+     * Return Apc interface
+     */
+    public function apcInterface()
+    {
+        include_once __DIR__ . '/apc.php';
+        exit();
     }
 
     /**
      *
      */
-    abstract public function init(ContainerInterface $container = null);
+    abstract public function init(\AHWEBDEV\Framework\ContainerInterface $container = null);
 }

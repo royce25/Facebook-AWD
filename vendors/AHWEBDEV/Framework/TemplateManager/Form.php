@@ -2,91 +2,101 @@
 
 namespace AHWEBDEV\Framework\TemplateManager;
 
+use RuntimeException;
+
+/*
+ * This file is part of the little Framework AHWEBDEV.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 /**
+ * Form
  *
- * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
- *
+ * @author Alexandre Hermann <hermann.alexandren@ahwebdev.fr>
+ * @package AHWEBDEV\Framework
  */
 class Form
 {
 
+    /**
+     *
+     * @var string 
+     */
     protected $id;
-    protected $method = 'GET';
-    protected $action;
-    protected $widget;
 
-    public function __construct($id = null, $method = null, $action = null)
+    /**
+     *
+     * @var array 
+     */
+    protected $defaultOptions;
+
+    //protected $widget;
+
+    /**
+     * 
+     * @param type $id
+     */
+    public function __construct($id = null)
     {
         $this->id = $id;
-        $this->method = $method;
-        $this->action = $action;
-        if ($this->isWidget($this->id)) {
-            $this->id = null;
-            $this->widget = $id;
-        }
-    }
-
-    public function isWidget($widget = null)
-    {
-        if (is_object($widget))
-            return is_subclass_of($widget, 'WP_Widget');
-
-        return is_subclass_of($this->widget, 'WP_Widget');
-    }
-
-    public function start()
-    {
-        $html = '<form action="' . $this->action . '" method="' . $this->method . '" id="' . $this->id . '" name="' . $this->prefix . $this->id . '">';
-
-        return $html;
-    }
-
-    public function end()
-    {
-        $html = '</form>';
-
-        return $html;
-    }
-
-    public function addInputCheckBox($id, $value, $class = '', $attrs = array())
-    {
-        $field_id = $this->getFieldId($id);
-        $html = '<input type="checkbox" id="' . $field_id . '" ' . ($value == 1 ? 'checked="checked"' : '') . 'name="' . $this->prefix . $id . '" value="1" ' . $this->processAttr($attrs) . ' />';
-
-        return $html;
-    }
-
-    public function addInputHidden($config)
-    {
-        $default = array();
-        $config = array_merge($default, $config);
-        $id = $this->getFieldId($config['name']);
-        $html = '<input type="hidden" id="' . $id . '" name="' . $config['name'] . '" value="' . $config['value'] . '" ' . $this->processAttr($config['attr']) . ' />';
-
-        return $html;
-    }
-
-    public function addInputTextArea($label, $id, $value, $class = '', $attrs = array())
-    {
-        $field_id = $this->getFieldId($id);
-        $html = '
-            <div class="' . $class . '">
-                <label for="' . $field_id . '">' . $label . '</label>
-                <textarea id="' . $field_id . '" name="' . $this->prefix . $id . '" ' . $this->processAttr($attrs) . '>' . $value . '</textarea>
-            </div>';
-
-        return $html;
-    }
-
-    public function addInputText($config)
-    {
-        $default = array(
+        $this->defaultOptions = array(
             'label_attr' => array('class' => 'control-label'),
+            'label_after' => false,
+            'label' => false,
+            'help' => false,
+            'type' => false,
+            'group' => true,
             'class' => 'form-group',
             'attr' => array('class' => 'form-control')
         );
-        $config = array_merge($default, $config);
-        $id = $this->getFieldId($config['name']);
+        /* if ($this->isWidget($this->id)) {
+          $this->id = null;
+          $this->widget = $id;
+          } */
+    }
+
+    public function getMappingsTypes()
+    {
+        return array(
+            'text' => 'createInputText',
+            'hidden' => 'createInputHidden',
+            'select' => 'createSelect',
+            'checkbox' => 'createInputCheckBox'
+        );
+    }
+
+    public function getMethodByType($type)
+    {
+        $types = $this->getMappingsTypes();
+        if (!isset($types[$type])) {
+            throw new RuntimeException('The type ' . $type . ' does not exist in form mapping');
+        }
+        return $types[$type];
+    }
+
+    /**
+     * 
+     * @param array $config
+     * @return string
+     */
+    public function createInputHidden($config)
+    {
+        $inputText = $this->createInputText($config);
+        $html = str_ireplace('type="text"', 'type="hidden"', $inputText);
+        return $html;
+    }
+
+    /**
+     * Create an html input Text
+     * @param array $config
+     * @return string
+     */
+    public function createInputText($config)
+    {
+        $config = $this->mergeOptions($config);
+        $id = sanitize_key($config['name']);
 
 //        $html = '<div class="' . $config['class'] . '">';
 
@@ -97,7 +107,6 @@ class Form
           if ($prepend != '') {
           $html .= '<span class="add-on"><i class="' . $prepend . '"></i></span>';
           } */
-
         $html = '<input type="text" id="' . $id . '" name="' . $config['name'] . '" value="' . $config['value'] . '" ' . $this->processAttr($config['attr']) . ' />';
 
         /* if ($append != '') {
@@ -108,30 +117,42 @@ class Form
           $html .= '</div>';
           } */
 
-        return $this->controlGroupLabel($html, $config);
-
-        //return $html;
+        return $html;
     }
 
-    /* public function addSelect($label, $id, $options, $value, $class = '', $attrs = array())
-      {
-      $field_id = $this->getFieldId($id);
-      $html = '<div class="' . $class . '">
-      <label for="' . $field_id . '">' . $label . '</label>
-      <select id="' . $field_id . '" name="' . $this->prefix . $id . '" ';
+    public function createInputCheckBox($config)
+    {
+        $inputText = $this->createInputText($config);
+        $html = str_ireplace('type="text"', 'type="checkbox"', $inputText);
+        return $html;
+    }
 
-      $html .= $this->processAttr($attrs);
-      $html .= '>';
+    public function addInputTextArea($label, $id, $value, $class = '', $attrs = array())
+    {
+        $field_id = sanitize_key($id);
+        $html = '
+            <div class="' . $class . '">
+                <label for="' . $field_id . '">' . $label . '</label>
+                <textarea id="' . $field_id . '" name="' . $this->prefix . $id . '" ' . $this->processAttr($attrs) . '>' . $value . '</textarea>
+            </div>';
 
-      foreach ($options as $option => $info) {
-      $html .='<option value="' . $info['value'] . '" ' . ($info['value'] == $value ? 'selected="selected"' : '') . ' >' . $info['label'] . '</option>';
-      }
+        return $html;
+    }
 
-      $html .='</select>
-      </div>';
+    public function createSelect($config)
+    {
+        $config = $this->mergeOptions($config);
+        $id = sanitize_key($config['name']);
 
-      return $html;
-      } */
+        $html = '<select id="' . $id . '" name="' . $config['name'] . '" ';
+        $html .= $this->processAttr($config['attr']);
+        $html .= '>';
+        foreach ($config['options'] as $option => $info) {
+            $html .='<option value="' . $info['value'] . '" ' . ($info['value'] == $config['value'] ? 'selected="selected"' : '') . ' >' . $info['label'] . '</option>';
+        }
+        $html .='</select>';
+        return $html;
+    }
 
     protected function processAttr($attrs)
     {
@@ -147,9 +168,17 @@ class Form
         return $html;
     }
 
+    /**
+     * Merge form config with default options
+     */
+    public function mergeOptions(array $config)
+    {
+        return array_merge($this->defaultOptions, $config);
+    }
+
     /* public function addMediaButton($label, $id, $value, $class = '', $attrs = array(), $datas = array('data-title' => 'Upload Media', 'data-type' => 'image'), $rm = false)
       {
-      $fieldId = $this->getFieldId($id);
+      $fieldId = sanitize_key($id);
       $html ='<div class="input-append">
       <input type="text" id="' . $field_id . '" name="' . $this->prefix . $id . '" value="' . $value . '" ' . $this->processAttr($attrs) . ' />
       <button class="btn AWD_button_media" type="button" ' . $this->processAttr($datas) . ' data-field="' . $field_id . '"><i class="icon-upload"></i></button>';
@@ -165,85 +194,67 @@ class Form
       return $html;
       } */
 
-    public function controlGroupLabel($content, $config)
+    public function getHtml($config)
     {
-        $content = $this->addLabel($config) . $content;
-
-        return $this->controlGroup($content, $config);
+        //get the method to call from the config type
+        $method = $this->getMethodByType($config['type']);
+        return call_user_func_array(array($this, $method), array($config));
     }
 
-    public function controlGroup($content, $config)
+    /**
+     * Create a control group container
+     * @param array $config
+     * @return string
+     */
+    public function createControlGroup($config)
     {
-        $html = '<div class="' . $config['class'] . '">';
-        $html .= $content;
+        $field = $this->getHtml($config);
+        $html = '<div class="' . $config['class'] . ' ' . $config['type'] . '">';
+        if ($config['label']) {
+            $label = $this->createLabel($config);
+            if ($config['label_after']) {
+                $html .= $field . ' ' . $label;
+            } else if ($config['type'] == 'checkbox') {
+                $html .= str_replace('>', '>' . $field, $label);
+            } else {
+                $html .= $label . ' ' . $field;
+            }
+        } else {
+            $html .= $field;
+        }
+
+        if ($config['help']) {
+            $html .= '<span class="help-block">' . $config['help'] . '</span>';
+        }
         $html .= '</div>';
 
         return $html;
     }
 
-    public function getFieldId($fieldname)
+    public function createLabel($config)
     {
-        return rtrim(str_replace(array('[', ']', '__'), '_', $fieldname), '_');
-    }
-
-    public function addLabel($config)
-    {
-
-        $id = $this->getFieldId($config['name']);
-
+        $id = sanitize_key($config['name']);
         return '<label for="' . $id . '" ' . $this->processAttr($config['label_attr']) . '>' . $config['label'] . '</label>';
     }
 
-    public function proccessFields($fieldsetId, $fields, $widget_instance = null)
+    public function proccessFields($id, $fields)
     {
         $html = '';
         if (count($fields) > 0) {
             foreach ($fields as $field) {
-                if (!isset($field['type'])) {
+                $field = $this->mergeOptions($field);
+                if (!$field['type']) {
                     continue;
                 }
-                //if we are in a widget, check if we need to display html or not.
-                /* if ($this->isWidget() && isset($field['widget_no_display'])) {
-                  if ($field['widget_no_display'] == true) {
-                  continue;
-                  }
-                  } */
-
-                /* if (!$this->isWidget() && isset($field['widget_only'])) {
-                  if ($field['widget_only'] == true) {
-                  continue;
-                  }
-                  } */
-
-                //get the value of the field only if it's not a html content
+                //set the name of the fiels id_fieldsetId[fieldname]
                 if ($field['type'] != 'html') {
-                    //if we are in widget mode, we must redefine the name of field, and the associated values
-                    /* if ($this->isWidget()) {
-                      $fieldname = $this->widget->get_field_name($id);
-                      $value = $widget_instance[$id];
-                      } else { */
-                    $field['name'] = $this->id . '_' . $fieldsetId . '[' . $field['name'] . ']';
-                    //$value = $field['value'];
-                    //}
+                    $field['name'] = $this->id . '_' . $id . '[' . $field['name'] . ']';
                 }
-
-                switch ($field['type']) {
-
-                    case 'select':
-                        $html.= $this->addSelect($field['label'], $fieldname, $field['options'], $value, $field['class'], $field['attr']);
-                        break;
-                    case 'text':
-                        $html.= $this->addInputText($field);
-                        break;
-                    case 'hidden':
-                        $html.= $this->addInputHidden($field);
-                        break;
-                    case 'html':
-                        $html.= $field['html'];
-                        break;
-                    case 'media':
-                        $html.= $this->addMediaButton($field['label'], $fieldname, $value, $field['class'], $field['attr']);
-                        break;
+                //create html elemments
+                if (!$field['group']) {
+                    $html .= $this->getHtml($field);
+                } else {
+                    $html .= $this->createControlGroup($field);
                 }
             }
         }
@@ -251,4 +262,11 @@ class Form
         return $html;
     }
 
+    /* public function isWidget($widget = null)
+      {
+      if (is_object($widget))
+      return is_subclass_of($widget, 'WP_Widget');
+
+      return is_subclass_of($this->widget, 'WP_Widget');
+      } */
 }

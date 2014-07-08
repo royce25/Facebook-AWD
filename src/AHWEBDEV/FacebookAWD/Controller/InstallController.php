@@ -47,7 +47,7 @@ class InstallController extends AdminMenuController
      */
     public function getMenuTitle()
     {
-        return $this->container->getTitle().' Setup';
+        return $this->container->getTitle() . ' Setup';
     }
 
     /**
@@ -66,19 +66,29 @@ class InstallController extends AdminMenuController
      */
     public function index()
     {
+
         if ($this->listenerResponse) {
             echo $this->listenerResponse;
-
             return;
         }
-        $form = new Form('fawd', 'POST', '', 'fawd_install');
+        $form = new Form('fawd');
         $om = $this->container->get('services.option_manager');
         $application = $this->container->get('services.application');
-
+        $options = $this->container->get('services.options');
+        $token = array(
+            'token' => array(
+                'name' => 'token',
+                'type' => 'hidden',
+                'attr' => null,
+                'group' => false,
+                'value' => wp_create_nonce('fawd-token')
+            )
+        );
         $formView = $form->proccessFields('application', $application->getFormConfig());
+        $formView .= $form->proccessFields('options', $options->getFormConfig());
+        $formView .= $form->proccessFields('token', $token);
         $template = $this->container->getRoot()->getRootPath() . '/Resources/views/admin/install/install.html.php';
         $errors = $om->load('fawd_application_error');
-
         echo $this->render($template, array(
             'title' => __('Setup', $this->container->getPtd()),
             'application' => $application,
@@ -98,53 +108,47 @@ class InstallController extends AdminMenuController
      */
     public function handleInstall()
     {
-        $token = isset($_POST['fawd_application']['token']) ? $_POST['fawd_application']['token'] : null;
-        if ($token && wp_verify_nonce($token, 'fawd-token')) {
-            unset($_POST['fawd_application']['token']);
+        $request = filter_input_array(INPUT_POST);
+        $isTokenValid = isset($request['fawd_token']) ? wp_verify_nonce($request['fawd_token']['token'], 'fawd-token') : false;
+        if ($isTokenValid) {
+            $om = $this->container->get('services.option_manager');
+            try {
+                //bind app data
+                $application = $this->container->get('services.application');
+                $application->bind($request['fawd_application']);
+                //bind options data
+                $options = $this->container->get('services.options');
+                $options->bind($request['fawd_options']);
+                //instaciate a new facebook sdk
+                $facebook = new Api($application);
+                $appInfos = $facebook->api('/' . $facebook->getAppId());
+                $application->bind($appInfos);
 
-            $application = $this->container->get('services.application');
-            $application->bind($_POST['fawd_application']);
-            $api = new Api($application);
-            $this->container->set('services.api', $api);
+                //save options                
+                $om->save('options.application', $application);
+                $om->save('options', $options);
+                $om->save('fawd_ready', true);
+                $om->save('fawd_application_error', null);
 
-            //check the install using the api
-            if ($this->updateInstall()) {
+                //set new instance
+                $this->container->set('services.application', $application);
+                $this->container->set('services.options', $options);
+                $this->container->set('services.api', $facebook);
+
+                //delete memory cache 
+                //will be regenrated at next request.
+                $this->container->store(true);
+
                 $template = $this->container->getRoot()->getRootPath() . '/Resources/views/admin/install/install-success.html.php';
-
                 return $this->render($template, array(
                             'application' => $application
                 ));
-            } else {
+            } catch (Exception $e) {
+                $om->save('fawd_application_error', $e->getMessage());
+                $om->save('fawd_ready', false);
                 return false;
             }
         }
-    }
-
-    /**
-     * Check and save the data in DB
-     * @return boolean
-     */
-    public function updateInstall()
-    {
-        $facebook = $this->container->get('services.api');
-        $om = $this->container->get('services.option_manager');
-        $application = $this->container->get('services.application');
-        $valid = true;
-        try {
-            $appInfos = $facebook->api('/' . $facebook->getAppId());
-            $application->bind($appInfos);
-            $om->save('options.application', $application);
-            $this->container->set('services.application', $application);
-
-            $om->save('fawd_ready', true);
-            $om->save('fawd_application_error', null);
-        } catch (Exception $e) {
-            $valid = false;
-            $om->save('fawd_application_error', $e->getMessage());
-            $om->save('fawd_ready', false);
-        }
-
-        return $valid;
     }
 
     /**

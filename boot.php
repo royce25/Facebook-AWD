@@ -14,8 +14,9 @@ ini_set('display_errors', true);
  */
 //initialize the Extension
 require_once __DIR__ . '/vendors/autoload/autoload.php';
-$facebookAWD = new AHWEBDEV\FacebookAWD\FacebookAWD();
-$facebookAWD->init();
-
+$facebookAWD = AHWEBDEV\FacebookAWD\FacebookAWD::boot();
+//wordpress boot
+//init plugins
+//$facebookAWD->apcInterface();
 //extra debug tool
 //$facebookAWD->debug(true);

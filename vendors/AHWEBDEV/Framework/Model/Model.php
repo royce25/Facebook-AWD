@@ -17,24 +17,19 @@ abstract class Model implements FormConfigInterface
      */
     public function getFormConfig()
     {
-        $config = array(
-            'token' => array(
-                'name' => 'token',
-                'type' => 'hidden',
-                'attr' => null,
-                'value' => wp_create_nonce('fawd-token')
-            )
-        );
-        $properties = get_object_vars($this);
-        foreach ($properties as $key => $value) {
-            $config[$key] = array(
-                'name' => $key,
-                'value' => $value
-            );
+        $config = array();
+        $reflector = new \ReflectionClass(get_class($this));
+        foreach ($this as $key => $prop) {
+            if ($reflector->hasProperty($key)) {
+                $config[$key] = array(
+                    'name' => $key,
+                    'value' => $prop
+                );
+            }
         }
-        $formConfig = array_merge_recursive($config, $this->getDefaultFormConfig());
-        $formConfigFiltered = apply_filters('AWD_facebook_fields_' . get_class($this), $formConfig);
-
+        $formConfig = array_replace_recursive($config, $this->getDefaultFormConfig());
+        $formConfigFiltered = apply_filters('AWD_facebook_fields_' . get_class($this), $formConfig);        
+        
         return $formConfigFiltered;
     }
 
@@ -56,8 +51,11 @@ abstract class Model implements FormConfigInterface
      */
     public function bind(array $data)
     {
-        foreach ($data as $prop => $value) {
-            $this->{$prop} = $value;
+        $reflector = new \ReflectionClass(get_class($this));
+        foreach ($data as $propertyName => $value) {
+            if ($reflector->hasProperty($propertyName)) {
+                $this->{$propertyName} = $value;
+            }
         }
     }
 

@@ -70,6 +70,12 @@ class Application extends Model
 
     /**
      *
+     * @var integer
+     */
+    protected $dailyActiveUsers;
+
+    /**
+     *
      * @return integer
      */
     public function getId()
@@ -237,6 +243,26 @@ class Application extends Model
     }
 
     /**
+     * 
+     * @return integer
+     */
+    public function getDailyActiveUsers()
+    {
+        return $this->dailyActiveUsers;
+    }
+
+    /**
+     * 
+     * @param integer $dailyActiveUsers
+     * @return \AHWEBDEV\FacebookAWD\Model\Application
+     */
+    public function setDailyActiveUsers($dailyActiveUsers)
+    {
+        $this->dailyActiveUsers = $dailyActiveUsers;
+        return $this;
+    }
+
+    /**
      *
      * @return type
      */
@@ -245,11 +271,13 @@ class Application extends Model
         return array(
             'id' => array(
                 'type' => 'text',
-                'label' => 'Identifier'
+                'label' => 'Identifier',
+                'help' => 'This is the ID of your facebook application. You can find it or create an application <a href="https://developers.facebook.com/">here</a>'
             ),
             'secretKey' => array(
                 'type' => 'text',
-                'label' => 'Secret Key'
+                'label' => 'Secret Key',
+                'help' => 'This is the secret key of your facebook application. You can find it or create an application <a href="https://developers.facebook.com/">here</a>'
             )
         );
     }
@@ -263,13 +291,11 @@ class Application extends Model
         parent::bind($data);
 
         //camelCase respect
-        if (isset($this->monthly_active_users)) {
-            $this->iconUrl = $this->icon_url;
-            $this->logoUrl = $this->logo_url;
-            $this->monthlyActiveUsers = $this->monthly_active_users;
-            unset($this->icon_url);
-            unset($this->logo_url);
-            unset($this->monthly_active_users);
+        if (isset($data['monthly_active_users'])) {
+            $this->iconUrl = $data['icon_url'];
+            $this->logoUrl = $data['logo_url'];
+            $this->monthlyActiveUsers = $data['monthly_active_users'];
+            $this->dailyActiveUsers = $data['daily_active_users'];
         }
     }
 

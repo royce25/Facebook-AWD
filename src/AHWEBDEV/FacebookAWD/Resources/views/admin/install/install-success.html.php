@@ -24,6 +24,10 @@
                 <th>Monthly Active Users</th>
                 <td><?php echo $application->getMonthlyActiveUsers(); ?></td>
             </tr>
+            <tr>
+                <th>Daily Active Users</th>
+                <td><?php echo $application->getDailyActiveUsers(); ?></td>
+            </tr>
         </table>
     </div>
     <a class="btn btn-success btn-lg btn-block  animated fadeInUp" role="button" href="?page=<?php echo $this->container->getSlug(); ?>">Start now !</a>

@@ -49,7 +49,7 @@ class AdminController extends BaseController implements MetaboxInterface
     }
 
     /**
-     * Init the templates
+     * get the templates
      */
     public function getTemplates()
     {

@@ -102,6 +102,8 @@ class Admin extends BaseAdmin
         wp_enqueue_script('wp-list');
         wp_enqueue_script('postbox');
 
+        wp_enqueue_script($this->container->getSlug() . '-socket-io');
+        wp_enqueue_script($this->container->getSlug() . '-socket-js');
         wp_enqueue_script($this->container->getSlug() . '-google-code-prettify-js');
         wp_enqueue_script($this->container->getSlug() . '-bootstrap-js');
         wp_enqueue_script($this->container->getSlug() . '-jquery-validate-js');
