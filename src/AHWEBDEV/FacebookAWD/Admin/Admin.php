@@ -32,7 +32,7 @@ class Admin extends BaseAdmin
      * Register hook to print assets
      * @param string $pageHook
      */
-    public function regiterAssetsHook($pageHook)
+    public function enqueueAssetsHook($pageHook)
     {
         add_action('admin_print_styles-' . $pageHook, array($this, 'enqueueStyles'));
         add_action('admin_print_scripts-' . $pageHook, array($this, 'enqueueScripts'));
@@ -51,14 +51,15 @@ class Admin extends BaseAdmin
         $pageHook = $this->getAdminMenuHook($this->container->getSlug());
 
         $this->registerAssets();
-        $this->regiterAssetsHook($pageHook);
+        $this->enqueueAssetsHook($pageHook);
 
         //plugins init hook
         foreach ($this->container->getPlugins() as $plugin) {
             $pluginObj = $plugin['instance'];
             $pageHook = $this->getAdminMenuHook($pluginObj->getSlug());
             if ($pageHook) {
-                $this->regiterAssetsHook($pageHook);
+                //enqueue generals assets on plugins
+                $this->enqueueAssetsHook($pageHook);
             }
         }
 
@@ -110,7 +111,9 @@ class Admin extends BaseAdmin
         //wp_enqueue_script('facebook-awd-bootstrap-tab-js');
         //wp_enqueue_script('facebook-awd-bootstrap-transition-js');
         //
-        //wp_enqueue_script('facebook-awd-admin-js');
+        wp_enqueue_script($this->container->getSlug() . '-admin-js');
+        wp_enqueue_script($this->container->getSlug() . '-init-js');
+        wp_enqueue_script('jquery-form');
         //wp_enqueue_script('facebook-awd-global-js');
     }
 

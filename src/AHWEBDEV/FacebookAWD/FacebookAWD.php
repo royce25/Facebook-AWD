@@ -25,7 +25,6 @@ use RuntimeException;
  */
 class FacebookAWD extends Container
 {
-
     /**
      * Constructor
      */
@@ -48,7 +47,8 @@ class FacebookAWD extends Container
                 //'bootstrap-tab-js' => 'js/bootstrap/tab.js',
                 //'bootstrap-transition-js' => 'js/bootstrap/transition.js',
                 //'google-code-prettify-js' => 'js/google-code-prettify/prettify.js',
-                $prefix . '-admin-js' => $publicUrl . 'js/facebook_awd_admin.js',
+                $prefix . '-admin-js' => $publicUrl . 'js/admin.js',
+                $prefix . '-init-js' => $publicUrl . 'js/init.js',
                 $prefix . '-global-js' => $publicUrl . 'js/facebook_awd.js',
             ),
             'style' => array(
@@ -234,5 +234,4 @@ class FacebookAWD extends Container
         //$instance->store();
         return $instance;
     }
-
 }

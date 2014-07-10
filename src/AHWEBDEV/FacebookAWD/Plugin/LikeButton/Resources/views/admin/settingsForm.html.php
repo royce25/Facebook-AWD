@@ -4,7 +4,7 @@
  * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 ?>
-<div class="facebookAWD">
+<div class="facebookAWD <?php echo $postTypeName; ?> posttype_section">
     <?php if (!empty($success)) { ?>
         <div class="alert alert-success"><?php echo $success; ?></div>
     <?php } ?>

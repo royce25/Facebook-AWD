@@ -103,6 +103,7 @@ abstract class Admin implements \AHWEBDEV\Wordpress\Admin\AdminInterface
     public function registerAssets()
     {
         $assets = $this->container->getAssets();
+        print_r($assets);
         foreach ($assets as $type => $files) {
             foreach ($files as $fileName => $path) {
                 $media = 'all';

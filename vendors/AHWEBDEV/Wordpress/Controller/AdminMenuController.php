@@ -68,6 +68,7 @@ abstract class AdminMenuController extends Controller implements AdminMenuContro
         $parentSlug = $this->container->getSlug();
         $menuTitle = $this->getMenuTitle();
         $capability = 'manage_options';
+        
         if ($this->getMenuType() === self::TYPE_MENU) {
             $pageHook = add_menu_page($menuTitle, $menuTitle, $capability, $menuSlug, array($this, 'index'));
         } elseif ($this->getMenuType() === self::TYPE_SUBMENU) {
@@ -77,7 +78,9 @@ abstract class AdminMenuController extends Controller implements AdminMenuContro
         }
 
         $this->admin->addAdminMenuHook($parentSlug, $pageHook);
-
+        
+        //TODO add the addStyle method interface.
+        
         if ($this instanceof MetaboxInterface) {
             $this->addMetaboxes($pageHook);
             //add_screen_option('layout_columns', array('max' => 2, 'default' => 1));

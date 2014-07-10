@@ -55,6 +55,17 @@ abstract class Controller implements ControllerInterface
         //render the admin view
         return $templateManager->render($template, $params, false);
     }
+    
+    /**
+     * Render some content based on params.
+     *
+     * @param  array  $params
+     * @return string
+     */
+    public function isAjaxRequest()
+    {
+        return $this->container->getRoot()->get('services.template_manager')->isAjaxRequest();
+    }
 
     /**
      *
