@@ -9,7 +9,10 @@
     <form role="form" id="configuration_wizard" method="post" action="">
         <?php echo $formContent; ?>
         <p class="submit">
-            <input type="submit" name="install" id="installawd" class="btn btn-primary btn-block btn-lg animated fadeInUp" value="<?php _e('Install', $this->container->getPtd()); ?>" />
+            <input type="submit" name="install" id="installawd" class="btn btn-primary animated fadeInUp" value="<?php _e('Install', $this->container->getPtd()); ?>" />
+            <?php if($isReady){ ?>
+            <a class="btn btn-default animated fadeInRight" href="?page=<?php echo $this->container->getRoot()->getSlug(); ?>"><?php _e('Cancel', $this->container->getPtd()); ?></a>
+            <?php } ?>
         </p>
     </form>
 </div>

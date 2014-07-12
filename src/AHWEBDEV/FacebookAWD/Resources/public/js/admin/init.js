@@ -1,13 +1,11 @@
 /**
  * Init
  */
-var FacebookAwd = function() {
-    var $ = jQuery;
-};
-facebookAwd = new FacebookAwd();
+
+facebookAwdAdmin = new FacebookAwdAdmin();
 jQuery(document).ready(function($) {
-    //facebookAwd.bindEvents();
-    $(window).trigger('facebookAwd_ready', facebookAwd);
+    facebookAwdAdmin.bindEvents();
+    $(window).trigger('facebookAwdAdmin_ready', facebookAwdAdmin);
 });
 
 (function(d, s, id) {

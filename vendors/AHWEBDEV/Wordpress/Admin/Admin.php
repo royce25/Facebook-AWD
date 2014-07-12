@@ -97,26 +97,5 @@ abstract class Admin implements \AHWEBDEV\Wordpress\Admin\AdminInterface
         return $this;
     }
 
-    /**
-     *
-     */
-    public function registerAssets()
-    {
-        $assets = $this->container->getAssets();
-        print_r($assets);
-        foreach ($assets as $type => $files) {
-            foreach ($files as $fileName => $path) {
-                $media = 'all';
-                $deps = array();
-                if ($type === 'script') {
-                    $deps = array('jquery');
-                    $media = true;
-                }
-                call_user_func_array('wp_register_' . $type, array($fileName, $path, $deps, null, $media));
-            }
-        }
-    }
-
-    
     abstract public function init();
 }

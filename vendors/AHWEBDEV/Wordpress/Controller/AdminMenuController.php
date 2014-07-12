@@ -79,8 +79,6 @@ abstract class AdminMenuController extends Controller implements AdminMenuContro
 
         $this->admin->addAdminMenuHook($parentSlug, $pageHook);
         
-        //TODO add the addStyle method interface.
-        
         if ($this instanceof MetaboxInterface) {
             $this->addMetaboxes($pageHook);
             //add_screen_option('layout_columns', array('max' => 2, 'default' => 1));

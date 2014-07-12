@@ -25,6 +25,7 @@ use RuntimeException;
  */
 class FacebookAWD extends Container
 {
+
     /**
      * Constructor
      */
@@ -35,26 +36,41 @@ class FacebookAWD extends Container
         $this->ptd = 'facebookawd';
         $this->rootPath = __DIR__;
 
-        $publicUrl = plugins_url(null, __FILE__) . '/Resources/public/';
+        $publicUrl = plugins_url(null, __FILE__) . '/Resources/public';
         $prefix = $this->getSlug();
 
         $this->assets = array(
             'script' => array(
-                $prefix . '-socket-io' => 'http://localhost:8081/socket.io/socket.io.js',
-                $prefix . '-socket-js' => $publicUrl . 'js/socket.js',
-                $prefix . '-bootstrap-js' => $publicUrl . 'js/bootstrap.min.js',
-                $prefix . '-jquery-validate-js' => $publicUrl . 'js/jquery.validate.min.js',
-                //'bootstrap-tab-js' => 'js/bootstrap/tab.js',
-                //'bootstrap-transition-js' => 'js/bootstrap/transition.js',
-                //'google-code-prettify-js' => 'js/google-code-prettify/prettify.js',
-                $prefix . '-admin-js' => $publicUrl . 'js/admin.js',
-                $prefix . '-init-js' => $publicUrl . 'js/init.js',
-                $prefix . '-global-js' => $publicUrl . 'js/facebook_awd.js',
+                /* 'socket-io' => array(
+                  'src' => 'http://localhost:8081/socket.io/socket.io.js'
+                  ),
+                  'socket-js' => array(
+                  'src' => $publicUrl . '/js/socket.js'
+                  ), */
+                $prefix . 'bootstrap' => array(
+                    'src' => $publicUrl . '/js/bootstrap.min.js'
+                ),
+                $prefix . 'jquery-validate' => array(
+                    'src' => $publicUrl . '/js/jquery.validate.min.js'
+                ),
+                $prefix . 'admin' => array(
+                    'src' => $publicUrl . '/js/admin/admin.js'
+                ),
+                $prefix . 'admin-init' => array(
+                    'src' => $publicUrl . '/js/admin/init.js',
+                    'deps' => array($prefix . 'admin')
+                ),
+                $prefix => array(
+                    'src' => $publicUrl . '/js/init.js'
+                )
             ),
             'style' => array(
-                $prefix . '-bootstrap-css' => $publicUrl . 'css/bootstrap.css',
-                $prefix . '-animate-css' => $publicUrl . 'css/animate.css',
-            //'google-code-prettify-css' => 'css/google-code-prettify/prettify.css',
+                $prefix . 'bootstrap' => array(
+                    'src' => $publicUrl . '/css/bootstrap.css'
+                ),
+                $prefix . 'animate' => array(
+                    'src' => $publicUrl . '/css/animate.css'
+                )
             )
         );
         parent::__construct();
@@ -167,13 +183,34 @@ class FacebookAWD extends Container
     }
 
     /**
+     *
+     */
+    public function registerAssets()
+    {
+        $default = array(
+            'src' => null,
+            'deps' => array(),
+            'version' => null
+        );
+        foreach ($this->assets as $type => $assetsType) {
+            foreach ($assetsType as $id => $asset) {
+                $asset = array_replace_recursive($default, $asset);
+                $media = 'all';
+                if ($type === 'script') {
+                    $media = true;
+                }
+                call_user_func_array('wp_register_' . $type, array($id, $asset['src'], $asset['deps'], $asset['version'], $media));
+            }
+        }
+    }
+
+    /**
      * Get the infos of a plugins that use a boot file
      * @return array
      */
     public function getInfos()
     {
         $f = new ReflectionClass($this);
-
         return \get_plugin_data(dirname($f->getFileName()) . '/boot.php', false, true);
     }
 
@@ -185,10 +222,6 @@ class FacebookAWD extends Container
         $this->get('admin')->init();
         add_action('shutdown', array($this, 'shutdown'), 1000);
     }
-
-    /*     * ***
-     * Intefaced ???
-     */
 
     /**
      * Shutdown the process
@@ -213,6 +246,23 @@ class FacebookAWD extends Container
     }
 
     /**
+     * Return a token form Config
+     * @return array
+     */
+    public function getTokenFormConfig()
+    {
+        return array(
+            'token' => array(
+                'name' => 'token',
+                'type' => 'hidden',
+                'attr' => null,
+                'group' => false,
+                'value' => wp_create_nonce('fawd-token')
+            )
+        );
+    }
+
+    /**
      * Create a Facebook AWD instance and store it in apc if enabled.
      * If Instance exists in cache, FacebookAWD instance is returned
      * @return \self
@@ -228,10 +278,12 @@ class FacebookAWD extends Container
             $instance = new self();
             $instance->init();
         }
+
         $instance->preloadPlugins();
         apply_filters('facebookawd', $instance);
         add_action('plugins_loaded', array($instance, 'launch'));
-        //$instance->store();
+
         return $instance;
     }
+
 }

@@ -50,7 +50,7 @@ class Admin extends BaseAdmin
     {
         $pageHook = $this->getAdminMenuHook($this->container->getSlug());
 
-        $this->registerAssets();
+        $this->container->getRoot()->registerAssets();
         $this->enqueueAssetsHook($pageHook);
 
         //plugins init hook
@@ -85,9 +85,9 @@ class Admin extends BaseAdmin
      */
     public function enqueueStyles()
     {
-        wp_enqueue_style($this->container->getSlug() . '-bootstrap-css');
-        wp_enqueue_style($this->container->getSlug() . '-animate-css');
-        wp_enqueue_style($this->container->getSlug() . '-google-code-prettify-css');
+        wp_enqueue_style($this->container->getSlug() . 'bootstrap');
+        wp_enqueue_style($this->container->getSlug() . 'animate');
+        wp_enqueue_style($this->container->getSlug() . 'google-code-prettify');
         wp_enqueue_style('thickbox');
     }
 
@@ -103,16 +103,17 @@ class Admin extends BaseAdmin
         wp_enqueue_script('wp-list');
         wp_enqueue_script('postbox');
 
-        wp_enqueue_script($this->container->getSlug() . '-socket-io');
-        wp_enqueue_script($this->container->getSlug() . '-socket-js');
-        wp_enqueue_script($this->container->getSlug() . '-google-code-prettify-js');
-        wp_enqueue_script($this->container->getSlug() . '-bootstrap-js');
-        wp_enqueue_script($this->container->getSlug() . '-jquery-validate-js');
+        //TOdo Minify All files using grunt ?
+        wp_enqueue_script($this->container->getSlug() . 'socket-io');
+        wp_enqueue_script($this->container->getSlug() . 'socket');
+        wp_enqueue_script($this->container->getSlug() . 'google-code-prettify');
+        wp_enqueue_script($this->container->getSlug() . 'bootstrap');
+        wp_enqueue_script($this->container->getSlug() . 'jquery-validate');
         //wp_enqueue_script('facebook-awd-bootstrap-tab-js');
         //wp_enqueue_script('facebook-awd-bootstrap-transition-js');
         //
-        wp_enqueue_script($this->container->getSlug() . '-admin-js');
-        wp_enqueue_script($this->container->getSlug() . '-init-js');
+        wp_enqueue_script($this->container->getSlug() . 'admin');
+        wp_enqueue_script($this->container->getSlug() . 'admin-init');
         wp_enqueue_script('jquery-form');
         //wp_enqueue_script('facebook-awd-global-js');
     }

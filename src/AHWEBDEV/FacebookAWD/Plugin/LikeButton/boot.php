@@ -11,7 +11,6 @@
   Text Domain: FacebookAWD
   Last modification: 22/05/2014
  */
-
 use AHWEBDEV\FacebookAWD\Plugin\LikeButton\LikeButtonPlugin;
 
 //initialize the Extension

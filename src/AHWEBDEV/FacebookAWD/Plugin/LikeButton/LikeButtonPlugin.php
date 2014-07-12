@@ -2,6 +2,7 @@
 
 namespace AHWEBDEV\FacebookAWD\Plugin\LikeButton;
 
+use AHWEBDEV\FacebookAWD\Plugin\LikeButton\Controller\FrontController;
 use AHWEBDEV\FacebookAWD\Plugin\LikeButton\Controller\SettingsController;
 use AHWEBDEV\Framework\Plugin\Plugin;
 
@@ -13,6 +14,7 @@ use AHWEBDEV\Framework\Plugin\Plugin;
  */
 class LikeButtonPlugin extends Plugin
 {
+
     /**
      * Define container data
      * Register the plugin on facebook AWD
@@ -28,9 +30,13 @@ class LikeButtonPlugin extends Plugin
 
     public function boot()
     {
-        $controller = new SettingsController($this, $this->container->get('admin'));
-        $this->set('backend.controller', $controller);
-        $controller->init();
-    }
+        $settingsController = new SettingsController($this, $this->container->get('admin'));
+        $this->set('backend.controller', $settingsController);
+        $settingsController->init();
 
+        $frontController = new FrontController($this);
+        $this->set('front.controller', $frontController);
+        $frontController->init();
+    }
+    
 }

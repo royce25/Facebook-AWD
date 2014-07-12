@@ -8,6 +8,7 @@ use AHWEBDEV\Framework\TemplateManager\Form;
 use AHWEBDEV\Wordpress\Admin\MetaboxInterface;
 use AHWEBDEV\Wordpress\Controller\AdminMenuController as BaseController;
 use RuntimeException;
+use stdClass;
 
 /*
  * This file is part of FacebookAWD.
@@ -53,6 +54,32 @@ class SettingsController extends BaseController implements MetaboxInterface
     }
 
     /**
+     * Init the controller
+     * Add an wordpress action to create the admin menu/submenu page
+     */
+    public function init()
+    {
+        parent::init();
+        add_action('wp_ajax_save_settings_' . $this->container->getSlug(), array($this, 'handlesSettingsSection'));
+
+        //assets configurations
+        $publicUrl = plugins_url(null, __DIR__) . '/Resources/public';
+        $parentSlug = $this->container->getRoot()->getSlug();
+        $assets = $this->container->getRoot()->getAssets();
+        $assets['script'][$this->container->getSlug() . 'admin'] = array(
+            'src' => $publicUrl . '/js/admin.js',
+            'deps' => array($parentSlug . 'admin')
+        );
+        //the init js script requires this asset to be loaded before to be enqueu
+        $assets['script'][$parentSlug . 'admin-init']['deps'][] = $this->container->getSlug() . 'admin';
+        $this->container->getRoot()->setAssets($assets);
+
+        //enqueue this script.
+        $pageHook = $this->admin->getAdminMenuHook($this->container->getSlug());
+        add_action('admin_print_scripts-' . $pageHook, array($this, 'enqueueScripts'));
+    }
+
+    /**
      *
      * @param string $pageHook
      */
@@ -60,32 +87,40 @@ class SettingsController extends BaseController implements MetaboxInterface
     {
         $pageHook = $this->admin->getAdminMenuHook($this->container->getSlug());
         $adminController = $this->container->getRoot()->get('backend.controller');
+        $om = $this->container->getRoot()->get('services.option_manager');
+
+        //Default metaboxes
         $adminController->addMetaboxes($pageHook);
         remove_meta_box($pageHook . '_plugins', $pageHook, 'normal');
 
+        //post types metaboxes
         $postTypes = get_post_types(array('public' => true), 'objects');
         foreach ($postTypes as $postType) {
-            add_meta_box($pageHook . '_likebutton_posttype_' . $postType->name . '_settings', $postType->labels->name, array($this, 'settingsBoxes'), $pageHook, 'normal', 'default', array($postType));
+            $likeButtonPosType = $om->load('options.' . $this->container->getSlug() . '.' . $postType->name);
+            if (!is_object($likeButtonPosType)) {
+                $likeButtonPosType = new LikeButtonPostType();
+            }
+            //facebookawd admin
+            add_meta_box($this->container->getSlug() . $postType->name, $postType->labels->name, array($this, 'settingsBoxes'), $pageHook, 'normal', 'default', array($postType, $likeButtonPosType));
+
+            //post type pages
+            if (is_object($likeButtonPosType)) {
+                //$likeButtonPosType->setEnable(0);
+                add_action('admin_print_styles-post.php', array($this->admin, 'enqueueStyles'));
+                add_action('admin_print_styles-post.php', array($this->admin, 'enqueueScripts'));
+                add_action('save_post', array($this, 'handlesSettingsSection'));
+
+                add_meta_box($this->container->getSlug() . $postType->name, 'Like Button Settings', array($this, 'settingsBoxes'), $postType->name, 'normal', 'default', array($postType, $likeButtonPosType));
+            }
         }
     }
 
     /**
-     * Init the controller
-     * Add an wordpress action to create the admin menu/submenu page
+     * Enqueue assets
      */
-    public function init()
+    public function enqueueScripts()
     {
-        parent::init();
-        add_action('wp_ajax_save_likebutton_settings', array($this, 'handlesSettingsSection'));
-
-        //assets configurations
-        $publicUrl = plugins_url(null, __DIR__) . '/Resources/public/';
-        $assets = $this->container->getRoot()->getAssets();
-        $assets['script'][$this->container->getSlug() . '-admin-js'] = $publicUrl . 'js/admin.js';
-        $this->container->getRoot()->setAssets($assets);
-        
-        //we need a hook here to add the add style/script pages !
-        wp_enqueue_script($this->container->getSlug() . '-admin-js');
+        wp_enqueue_script($this->container->getSlug() . 'admin');
     }
 
     /**
@@ -117,36 +152,62 @@ class SettingsController extends BaseController implements MetaboxInterface
 
     /**
      * 
-     * @param $postType
+     * @param stdClass $postType
+     * @param LikeButtonPostType $likeButtonPostType
+     * @param null|WP_Post $post
      * @return string
      */
-    public function settingsSection($postType)
+    public function settingsSection($postType, $likeButtonPostType, $post = null)
     {
         $om = $this->container->getRoot()->get('services.option_manager');
-        $form = new Form('fawd_likebutton');
+        $form = new Form($this->container->getSlug());
 
-        $likeButtonPostType = $om->load('options.' . $postType->name . '.like_button');
-        $likeButton = $likeButtonPostType->getLikeButton();
+        $success = $om->load('fawd_application_' . $this->container->getSlug() . '_success_' . $postType->name);
+        $om->save('fawd_application_' . $this->container->getSlug() . '_success_' . $postType->name, false);
 
-        $sections = array();
-        $sections['default'] = $form->proccessFields('posttype_' . $postType->name, $likeButtonPostType->getFormConfig());
-        $sections['options'] = $form->proccessFields('posttype_' . $postType->name, $likeButton->getFormConfig());
-        $token = array(
-            'token' => array(
-                'name' => 'token',
-                'type' => 'hidden',
-                'attr' => null,
-                'group' => false,
-                'value' => wp_create_nonce('fawd-token')
-            )
+        //default instance and config
+        $likeButtonPostTypeFormConfig = $likeButtonPostType->getFormConfig();
+        //if we are on a post
+        if ($post) {
+            // try to get instance from post meta.
+            $likeButtonPostTypeFromPost = get_post_meta($post->ID, $this->container->getSlug() . '_posttype', true);
+            if (is_object($likeButtonPostTypeFromPost)) {
+                $likeButtonPostType = $likeButtonPostTypeFromPost;
+                $likeButtonPostTypeFormConfig = $likeButtonPostType->getFormConfig();
+                unset($likeButtonPostTypeFromPost);
+            }
+
+            //redefine section only on post
+            $likeButtonPostTypeFormConfig['redefine']['attr'] = array(
+                'class' => 'form-control hideIfOn',
+                'data-hide-on' => '.section_likeButtonPostTypeOptions'
+            );
+            $redefineFormConfig = array('redefine' => $likeButtonPostTypeFormConfig['redefine']);
+            $sections['redefine'] = $form->proccessFields('posttype_' . $postType->name, $redefineFormConfig);
+        }
+
+        //remove this field, he is only required on post edition.
+        unset($likeButtonPostTypeFormConfig['redefine']);
+
+        //enable section
+        $likeButtonPostTypeFormConfig['enable']['attr'] = array(
+            'class' => 'form-control hideIfOn',
+            'data-hide-on' => '.section_likeButtonPostType, .section_likeButton'
         );
-        $sections['security'] = $form->proccessFields('posttype_' . $postType->name, $token);
+        $enableFormConfig = array('enable' => $likeButtonPostTypeFormConfig['enable']);
+        unset($likeButtonPostTypeFormConfig['enable']);
 
-        $success = $om->load('fawd_application_like_button_success_' . $postType->name);
-        $om->save('fawd_application_like_button_success_' . $postType->name, false);
+        //the section
+        $sections['likeButtonPostTypeOptions'] = array(
+            'enable' => $form->proccessFields('posttype_' . $postType->name, $enableFormConfig),
+            'likeButtonPostType' => $form->proccessFields('posttype_' . $postType->name, $likeButtonPostTypeFormConfig),
+            'likeButton' => $form->proccessFields('posttype_' . $postType->name, $likeButtonPostType->getLikeButton()->getFormConfig())
+        );
+        $sections['security'] = $form->proccessFields('posttype_' . $postType->name, $this->container->getRoot()->getTokenFormConfig());
 
         $template = $this->container->getRootPath() . '/Resources/views/admin/settingsForm.html.php';
         return $this->render($template, array(
+                    'withSubmit' => !$post,
                     'postTypeName' => $postType->name,
                     'sections' => $sections,
                     'success' => $success
@@ -161,42 +222,50 @@ class SettingsController extends BaseController implements MetaboxInterface
      */
     public function settingsBoxes($post, array $metaboxData)
     {
-        $isValidPostType = isset($metaboxData['args'][0]) && is_object($metaboxData['args'][0]);
-        if (!$isValidPostType) {
-            throw new RuntimeException('The settingsBoxes methods requires $metaboxData[0] = $postType');
-        }
-        echo $this->settingsSection($metaboxData['args'][0]);
+        echo $this->settingsSection($metaboxData['args'][0], $metaboxData['args'][1], $post);
     }
 
     /**
      * 
      */
-    public function handlesSettingsSection()
+    public function handlesSettingsSection($postId = null)
     {
         $request = filter_input_array(INPUT_POST);
         if ($request) {
             foreach ($request as $key => $postTypeRequest) {
-                if (is_array($postTypeRequest)) {
-                    $isTokenValid = wp_verify_nonce($postTypeRequest['token'], 'fawd-token');
-                    if ($isTokenValid) {
-                        $likeButton = new LikeButton();
-                        $likeButton->bind($postTypeRequest);
-                        $likeButtonPostType = new LikeButtonPostType();
-                        $likeButtonPostType->bind($postTypeRequest);
-                        $likeButtonPostType->setLikeButton($likeButton);
+                if (preg_match('/' . $this->container->getSlug() . '_posttype/', $key)) {
+                    if (is_array($postTypeRequest)) {
+                        //echo "<pre>" . print_r($postTypeRequest, true) . "</pre>";
+                        $isTokenValid = wp_verify_nonce($postTypeRequest['token'], 'fawd-token');
+                        if ($isTokenValid) {
+                            $likeButton = new LikeButton();
+                            $likeButton->bind($postTypeRequest);
+                            $likeButtonPostType = new LikeButtonPostType();
+                            $likeButtonPostType->bind($postTypeRequest);
+                            $likeButtonPostType->setLikeButton($likeButton);
 
-                        $postTypeName = str_replace('fawd_likebutton_posttype_', '', $key);
-                        $om = $this->container->getRoot()->get('services.option_manager');
-                        $om->save('options.' . $postTypeName . '.like_button', $likeButtonPostType);
-                        $om->save('fawd_application_like_button_success_' . $postTypeName, 'Settings were updated with success');
+                            //save meta to post if redefine is used.
+                            if (isset($postTypeRequest['redefine']) && $postId) {
+                                if ($postTypeRequest['redefine'] == true) {
+                                    update_post_meta($postId, $this->container->getSlug() . '_posttype', $likeButtonPostType);
+                                } else {
+                                    delete_post_meta($postId, $this->container->getSlug() . '_posttype');
+                                }
+                                return;
+                            }
 
-                        if ($this->isAjaxRequest()) {
-                            $template = $this->container->getRoot()->getRootPath() . '/Resources/views/ajax/ajax.json.php';
-                            echo $this->render($template, array(
-                                'postTypeName' => $postTypeName,
-                                'section' => $this->settingsSection(get_post_type_object($postTypeName))
-                            ));
-                            exit;
+                            $postTypeName = str_replace($this->container->getSlug() . '_posttype_', '', $key);
+                            $om = $this->container->getRoot()->get('services.option_manager');
+                            $om->save('options.' . $this->container->getSlug() . '.' . $postTypeName, $likeButtonPostType);
+                            $om->save('fawd_application_' . $this->container->getSlug() . '_success_' . $postTypeName, 'Settings were updated with success');
+                            if ($this->isAjaxRequest()) {
+                                $template = $this->container->getRoot()->getRootPath() . '/Resources/views/ajax/ajax.json.php';
+                                echo $this->render($template, array(
+                                    'postTypeName' => $postTypeName,
+                                    'section' => $this->settingsSection(get_post_type_object($postTypeName), $likeButtonPostType)
+                                ));
+                                exit;
+                            }
                         }
                     }
                 }

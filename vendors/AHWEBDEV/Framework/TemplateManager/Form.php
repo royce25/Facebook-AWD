@@ -49,7 +49,8 @@ class Form
             'type' => false,
             'group' => true,
             'class' => 'form-group',
-            'attr' => array('class' => 'form-control')
+            'attr' => array('class' => 'form-control'),
+            'value' => ''
         );
         /* if ($this->isWidget($this->id)) {
           $this->id = null;
@@ -63,7 +64,8 @@ class Form
             'text' => 'createInputText',
             'hidden' => 'createInputHidden',
             'select' => 'createSelect',
-            'checkbox' => 'createInputCheckBox'
+            'checkbox' => 'createInputCheckBox',
+            'html' => 'createHtml'
         );
     }
 
@@ -74,6 +76,11 @@ class Form
             throw new RuntimeException('The type ' . $type . ' does not exist in form mapping');
         }
         return $types[$type];
+    }
+
+    public function createHtml($config)
+    {
+        return $config['html'];
     }
 
     /**
@@ -214,8 +221,9 @@ class Form
             $label = $this->createLabel($config);
             if ($config['label_after']) {
                 $html .= $field . ' ' . $label;
-            } else if ($config['type'] == 'checkbox') {
-                $html .= str_replace('>', '>' . $field, $label);
+                /* } else if ($config['type'] == 'checkbox') {
+                  $html .= str_replace('>', '>' . $field, $label);
+                 */
             } else {
                 $html .= $label . ' ' . $field;
             }

@@ -56,11 +56,6 @@ interface AdminInterface
     public function removeAdminMenuHook($name);
 
     /**
-     * Register assets using wp_register_(script|style)
-     */
-    public function registerAssets();
-
-    /**
      * Init the admin
      */
     public function init();

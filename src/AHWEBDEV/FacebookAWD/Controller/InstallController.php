@@ -75,21 +75,13 @@ class InstallController extends AdminMenuController
         $om = $this->container->get('services.option_manager');
         $application = $this->container->get('services.application');
         $options = $this->container->get('services.options');
-        $token = array(
-            'token' => array(
-                'name' => 'token',
-                'type' => 'hidden',
-                'attr' => null,
-                'group' => false,
-                'value' => wp_create_nonce('fawd-token')
-            )
-        );
         $formView = $form->proccessFields('application', $application->getFormConfig());
         $formView .= $form->proccessFields('options', $options->getFormConfig());
-        $formView .= $form->proccessFields('token', $token);
+        $formView .= $form->proccessFields('token', $this->container->getTokenFormConfig());
         $template = $this->container->getRoot()->getRootPath() . '/Resources/views/admin/install/install.html.php';
         $errors = $om->load('fawd_application_error');
         echo $this->render($template, array(
+            'isReady' => $this->isReady(),
             'title' => __('Setup', $this->container->getPtd()),
             'application' => $application,
             'formContent' => $this->installForm(array(
