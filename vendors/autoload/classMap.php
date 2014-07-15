@@ -2,7 +2,7 @@
 
 $vendorDir = dirname(__DIR__);
 return array(
-    'Facebook' => $vendorDir . DIRECTORY_SEPARATOR . 'Facebook' . DIRECTORY_SEPARATOR . 'facebook.php'
+    //'Facebook' => $vendorDir . DIRECTORY_SEPARATOR . 'Facebook' . DIRECTORY_SEPARATOR . 'facebook.php'
 
     /*$dependencies = array(
             //AWD dependencies and plugins

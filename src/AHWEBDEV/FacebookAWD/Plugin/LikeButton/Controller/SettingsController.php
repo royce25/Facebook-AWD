@@ -4,6 +4,7 @@ namespace AHWEBDEV\FacebookAWD\Plugin\LikeButton\Controller;
 
 use AHWEBDEV\FacebookAWD\Plugin\LikeButton\Model\LikeButton;
 use AHWEBDEV\FacebookAWD\Plugin\LikeButton\Model\LikeButtonPostType;
+use AHWEBDEV\FacebookAWD\Widget\Widget;
 use AHWEBDEV\Framework\TemplateManager\Form;
 use AHWEBDEV\Wordpress\Admin\MetaboxInterface;
 use AHWEBDEV\Wordpress\Controller\AdminMenuController as BaseController;
@@ -77,6 +78,23 @@ class SettingsController extends BaseController implements MetaboxInterface
         //enqueue this script.
         $pageHook = $this->admin->getAdminMenuHook($this->container->getSlug());
         add_action('admin_print_scripts-' . $pageHook, array($this, 'enqueueScripts'));
+
+        add_action('widgets_init', array($this, 'registerWidgets'));
+    }
+
+    public function registerWidgets()
+    {
+        //widgets
+        global $wp_widget_factory;
+        $wp_widget_factory->widgets[$this->container->getSlug()] = new Widget($this->container, array(
+            'idBase' => $this->container->getSlug(),
+            'name' => $this->container->getTitle(),
+            'description' => $this->container->getTitle(),
+            'ptd' => $this->container->getPtd(),
+            'model' => 'AHWEBDEV\FacebookAWD\Plugin\LikeButton\Model\LikeButton',
+            'selfCallback' => array($this->container->get('front.controller'), 'renderLikeButton'),
+            'preview' => true
+        ));
     }
 
     /**

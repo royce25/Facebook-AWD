@@ -36,6 +36,7 @@ class FrontController extends BaseController
         //front end hooks
         add_filter('the_content', array($this, 'addLikeButton'));
         add_filter('wp_enqueue_scripts', array($this, 'enqueueScripts'));
+        add_shortcode($this->container->getSlug(), array($this, 'shortcodeLikeButton'));
     }
 
     /**
@@ -87,6 +88,26 @@ class FrontController extends BaseController
     }
 
     /**
+     * 
+     * @param \AHWEBDEV\FacebookAWD\Plugin\LikeButton\Model\LikeButton $likeButton
+     * @return string
+     */
+    public function shortcodeLikeButton($options, $content = null)
+    {
+        //to camelcase convert for model binding.
+        $configs = array();
+        foreach ($options as $key => $value) {
+            $configs[self::underscoreToCC($key)] = $value;
+        }
+        if (isset($configs['singularOnly']) && !is_singular()) {
+            return;
+        }
+        $likeButton = new LikeButton();
+        $likeButton->bind($configs);
+        return $this->renderLikeButton($likeButton);
+    }
+
+    /**
      * Add the like buntton on content
      * @param string $content
      * @return string
@@ -99,6 +120,7 @@ class FrontController extends BaseController
 
         $post = get_post();
         $likeButtonPosType = $this->getLikeButtonPostTypeFromPost($post);
+        
         if (!$likeButtonPosType) {
             return $content;
         }
@@ -124,6 +146,11 @@ class FrontController extends BaseController
         }
         ksort($contents);
         return implode('', $contents);
+    }
+
+    public static function underscoreToCC($string)
+    {
+        return lcfirst(preg_replace("/ /", "", ucwords(preg_replace("/_/", " ", $string))));
     }
 
 }

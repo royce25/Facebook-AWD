@@ -14,6 +14,7 @@ use AHWEBDEV\Framework\ContainerInterface;
 use AHWEBDEV\Framework\OptionManager\OptionManager;
 use AHWEBDEV\Framework\Plugin\Plugin;
 use AHWEBDEV\Framework\TemplateManager\TemplateManager;
+use Facebook\FacebookSession;
 use ReflectionClass;
 use RuntimeException;
 
@@ -96,6 +97,8 @@ class FacebookAWD extends Container
         //init front end action
         $this->get('listener.request_listener')->init();
 
+        apply_filters('facebookawd', $this);
+
         return $this;
     }
 
@@ -122,12 +125,11 @@ class FacebookAWD extends Container
         $this->set('services.options', $options);
 
         //load api
-        $api = null;
+        $fbAppSession = null;
         if ($application) {
-            $api = new Api($application);
-            $this->set('services.api', $api);
+            $fbAppSession = FacebookSession::newAppSession($application->getId(), $application->getSecretKey());
         }
-        $this->set('services.api', $api);
+        $this->set('services.facebook.appSession', $fbAppSession);
 
         $admin = new Admin($this);
         $this->set('admin', $admin);
@@ -157,7 +159,7 @@ class FacebookAWD extends Container
     /**
      * Init the default plugins
      */
-    public function preloadPlugins()
+    public static function preloadPlugins()
     {
         require_once dirname(__FILE__) . '/Plugin/LikeButton/boot.php';
         require_once dirname(__FILE__) . '/Plugin/LikeBox/boot.php';
@@ -220,7 +222,7 @@ class FacebookAWD extends Container
     public function launch()
     {
         $this->get('admin')->init();
-        add_action('shutdown', array($this, 'shutdown'), 1000);
+        //add_action('shutdown', array($this, 'shutdown'), 1000);
     }
 
     /**
@@ -270,17 +272,21 @@ class FacebookAWD extends Container
     public static function boot()
     {
         $instance = null;
+        self::preloadPlugins();
+
         $apc = extension_loaded('apc');
         if ($apc) {
+            //apc_delete('FacebookAWD');
             $instance = apc_fetch('FacebookAWD');
         }
         if (!$instance) {
             $instance = new self();
             $instance->init();
+            //this action will register plugins into the memory for next load.
+            //the preload static method help us to include plugins files.
+            do_action('facebookawd_register_plugins', $instance);
         }
-
-        $instance->preloadPlugins();
-        apply_filters('facebookawd', $instance);
+        //defer the launch of facebook awd when plugins are ready.
         add_action('plugins_loaded', array($instance, 'launch'));
 
         return $instance;

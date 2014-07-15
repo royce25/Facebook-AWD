@@ -13,7 +13,7 @@ use AHWEBDEV\Wordpress\Controller\AdminMenuController as BaseController;
  */
 
 /**
- * InstallController
+ * AdminController
  *
  * @author Alexandre Hermann <hermann.alexandren@ahwebdev.fr>
  * @package FacebookAWD\Extension\Wordpress

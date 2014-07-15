@@ -2,10 +2,11 @@
 
 namespace AHWEBDEV\FacebookAWD\Controller;
 
-use AHWEBDEV\FacebookAWD\Api\Api;
 use AHWEBDEV\Framework\TemplateManager\Form;
 use AHWEBDEV\Wordpress\Controller\AdminMenuController;
 use Exception;
+use Facebook\FacebookRequest;
+use Facebook\FacebookSession;
 
 /*
  * This file is part of FacebookAWD.
@@ -111,11 +112,18 @@ class InstallController extends AdminMenuController
                 //bind options data
                 $options = $this->container->get('services.options');
                 $options->bind($request['fawd_options']);
-                //instaciate a new facebook sdk
-                $facebook = new Api($application);
-                $appInfos = $facebook->api('/' . $facebook->getAppId());
-                $application->bind($appInfos);
 
+                //test the facebook data, and fetch info from application.
+                FacebookSession::setDefaultApplication($application->getId(), $application->getSecretKey());
+                $fbAppSession = FacebookSession::newAppSession($application->getId(), $application->getSecretKey());
+                if(!$fbAppSession->getSessionInfo()->isValid()){
+                    throw new Exception('The FB application settings are invalid');
+                }
+                $request = new FacebookRequest($fbAppSession, 'GET', '/' . $application->getId());
+                $response = $request->execute();
+                $applicationData = $response->getGraphObject()->asArray();
+                $application->bind($applicationData);
+                
                 //save options                
                 $om->save('options.application', $application);
                 $om->save('options', $options);
@@ -125,7 +133,7 @@ class InstallController extends AdminMenuController
                 //set new instance
                 $this->container->set('services.application', $application);
                 $this->container->set('services.options', $options);
-                $this->container->set('services.api', $facebook);
+                $this->container->set('services.facebook.appSession', $fbAppSession);
 
                 //delete memory cache 
                 //will be regenrated at next request.

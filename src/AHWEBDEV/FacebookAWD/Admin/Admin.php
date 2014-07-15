@@ -23,7 +23,12 @@ class Admin extends BaseAdmin
         } else {
             //init plugins
             $this->container->get('backend.controller')->init();
-            do_action('facebookawd_register_plugins', $this->container);
+            foreach($this->container->getPlugins() as $data){
+                $data["instance"]->initControllers();
+            }
+            //the instance is ready to be stored into memory for next load
+            //the container has pugins and services and controllers already set.
+            $this->container->store();
         }
         add_action('admin_init', array($this, 'adminInit'));
     }

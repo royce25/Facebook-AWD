@@ -4,6 +4,7 @@ namespace AHWEBDEV\FacebookAWD\Plugin\LikeButton;
 
 use AHWEBDEV\FacebookAWD\Plugin\LikeButton\Controller\FrontController;
 use AHWEBDEV\FacebookAWD\Plugin\LikeButton\Controller\SettingsController;
+use AHWEBDEV\FacebookAWD\Widget\Widget;
 use AHWEBDEV\Framework\Plugin\Plugin;
 
 /**
@@ -32,11 +33,14 @@ class LikeButtonPlugin extends Plugin
     {
         $settingsController = new SettingsController($this, $this->container->get('admin'));
         $this->set('backend.controller', $settingsController);
-        $settingsController->init();
-
         $frontController = new FrontController($this);
         $this->set('front.controller', $frontController);
-        $frontController->init();
     }
-    
+
+    public function initControllers()
+    {
+        $this->get('backend.controller')->init();
+        $this->get('front.controller')->init();
+    }
+
 }
