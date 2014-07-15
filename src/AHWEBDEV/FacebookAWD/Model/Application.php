@@ -82,13 +82,13 @@ class Application extends Model
 
     /**
      *
-     * @var integer 
+     * @var integer
      */
     protected $dailyActiveUsersRank;
 
     /**
-     * 
-     * @var integer 
+     *
+     * @var integer
      */
     protected $weeklyActiveUsers;
 
@@ -261,7 +261,7 @@ class Application extends Model
     }
 
     /**
-     * 
+     *
      * @return integer
      */
     public function getDailyActiveUsers()
@@ -270,18 +270,19 @@ class Application extends Model
     }
 
     /**
-     * 
-     * @param integer $dailyActiveUsers
+     *
+     * @param  integer                                 $dailyActiveUsers
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
     public function setDailyActiveUsers($dailyActiveUsers)
     {
         $this->dailyActiveUsers = $dailyActiveUsers;
+
         return $this;
     }
 
     /**
-     * 
+     *
      * @return integer
      */
     public function getMonthlyActiveUsersRank()
@@ -290,7 +291,7 @@ class Application extends Model
     }
 
     /**
-     * 
+     *
      * @return integer
      */
     public function getDailyActiveUsersRank()
@@ -299,7 +300,7 @@ class Application extends Model
     }
 
     /**
-     * 
+     *
      * @return integer
      */
     public function getWeeklyActiveUsers()
@@ -308,35 +309,38 @@ class Application extends Model
     }
 
     /**
-     * 
-     * @param integer $monthlyActiveUsersRank
+     *
+     * @param  integer                                 $monthlyActiveUsersRank
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
     public function setMonthlyActiveUsersRank($monthlyActiveUsersRank)
     {
         $this->monthlyActiveUsersRank = $monthlyActiveUsersRank;
+
         return $this;
     }
 
     /**
-     * 
-     * @param integer $dailyActiveUsersRank
+     *
+     * @param  integer                                 $dailyActiveUsersRank
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
     public function setDailyActiveUsersRank($dailyActiveUsersRank)
     {
         $this->dailyActiveUsersRank = $dailyActiveUsersRank;
+
         return $this;
     }
 
     /**
-     * 
-     * @param integer $weeklyActiveUsers
+     *
+     * @param  integer                                 $weeklyActiveUsers
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
     public function setWeeklyActiveUsers($weeklyActiveUsers)
     {
         $this->weeklyActiveUsers = $weeklyActiveUsers;
+
         return $this;
     }
 

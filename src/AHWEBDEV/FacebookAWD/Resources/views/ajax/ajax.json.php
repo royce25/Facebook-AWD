@@ -8,4 +8,3 @@
  * Params are defined in the templatemanager
  */
 echo json_encode($params);
-

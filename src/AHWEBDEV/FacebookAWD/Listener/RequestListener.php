@@ -67,7 +67,6 @@ class RequestListener
      */
     public function insertRewriteRules($rules)
     {
-        //TODO add a function
         $conditions = array(
             'login',
             'logout',
@@ -81,6 +80,7 @@ class RequestListener
         $newrules = array(
             $hook => $rule
         );
+
         return $newrules + $rules;
     }
 
@@ -100,7 +100,7 @@ class RequestListener
      */
     public function adminInit()
     {
-        
+
     }
 
 }

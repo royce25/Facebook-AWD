@@ -180,6 +180,7 @@ class FacebookAWD extends Container
             'data' => \get_plugin_data(dirname($f->getFileName()) . '/boot.php', false, true),
             'instance' => $plugin
         );
+
         return $this;
     }
 
@@ -212,6 +213,7 @@ class FacebookAWD extends Container
     public function getInfos()
     {
         $f = new ReflectionClass($this);
+
         return \get_plugin_data(dirname($f->getFileName()) . '/boot.php', false, true);
     }
 

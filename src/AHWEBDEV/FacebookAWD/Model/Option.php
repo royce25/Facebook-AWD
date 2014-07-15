@@ -27,7 +27,7 @@ class Option extends Model
     protected $allowDataCollect;
 
     /**
-     * 
+     *
      * @return boolean
      */
     public function getAllowDataCollect()
@@ -36,13 +36,14 @@ class Option extends Model
     }
 
     /**
-     * 
-     * @param Boolean $allowDataCollect
+     *
+     * @param  Boolean                            $allowDataCollect
      * @return \AHWEBDEV\FacebookAWD\Model\Option
      */
     public function setAllowDataCollect($allowDataCollect)
     {
         $this->allowDataCollect = $allowDataCollect;
+
         return $this;
     }
 

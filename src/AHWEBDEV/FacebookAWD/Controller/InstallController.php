@@ -70,6 +70,7 @@ class InstallController extends AdminMenuController
 
         if ($this->listenerResponse) {
             echo $this->listenerResponse;
+
             return;
         }
         $form = new Form('fawd');
@@ -109,7 +110,7 @@ class InstallController extends AdminMenuController
                 //bind app data
                 $application = $this->container->get('services.application');
                 $application->bind($request['fawdapplication']);
-                                
+
                 //bind options data
                 $options = $this->container->get('services.options');
                 $options->bind($request['fawdoptions']);
@@ -117,15 +118,15 @@ class InstallController extends AdminMenuController
                 //test the facebook data, and fetch info from application.
                 FacebookSession::setDefaultApplication($application->getId(), $application->getSecretKey());
                 $fbAppSession = FacebookSession::newAppSession($application->getId(), $application->getSecretKey());
-                if(!$fbAppSession->getSessionInfo()->isValid()){
+                if (!$fbAppSession->getSessionInfo()->isValid()) {
                     throw new Exception('The FB application settings are invalid');
                 }
                 $request = new FacebookRequest($fbAppSession, 'GET', '/' . $application->getId());
                 $response = $request->execute();
                 $applicationData = $response->getGraphObject()->asArray();
                 $application->bind($applicationData);
-                
-                //save options                
+
+                //save options
                 $om->save('options.application', $application);
                 $om->save('options', $options);
                 $om->save('fawd_ready', true);
@@ -136,17 +137,19 @@ class InstallController extends AdminMenuController
                 $this->container->set('services.options', $options);
                 $this->container->set('services.facebook.appSession', $fbAppSession);
 
-                //delete memory cache 
+                //delete memory cache
                 //will be regenrated at next request.
                 $this->container->store(true);
 
                 $template = $this->container->getRoot()->getRootPath() . '/Resources/views/admin/install/install-success.html.php';
+
                 return $this->render($template, array(
                             'application' => $application
                 ));
             } catch (Exception $e) {
                 $om->save('fawd_application_error', $e->getMessage());
                 $om->save('fawd_ready', false);
+
                 return false;
             }
         }
