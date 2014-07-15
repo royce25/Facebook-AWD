@@ -4,10 +4,10 @@ namespace AHWEBDEV\FacebookAWD\Plugin\LikeButton\Controller;
 
 use AHWEBDEV\FacebookAWD\Plugin\LikeButton\Model\LikeButton;
 use AHWEBDEV\FacebookAWD\Plugin\LikeButton\Model\LikeButtonPostType;
-use AHWEBDEV\FacebookAWD\Widget\Widget;
 use AHWEBDEV\Framework\TemplateManager\Form;
 use AHWEBDEV\Wordpress\Admin\MetaboxInterface;
 use AHWEBDEV\Wordpress\Controller\AdminMenuController as BaseController;
+use AHWEBDEV\Wordpress\Widget\Widget;
 use RuntimeException;
 use stdClass;
 
