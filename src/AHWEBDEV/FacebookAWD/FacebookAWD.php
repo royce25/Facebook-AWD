@@ -278,13 +278,13 @@ class FacebookAWD extends Container
             //apc_delete('FacebookAWD');
             $instance = apc_fetch('FacebookAWD');
         }
-        if (!$instance) {
+        //if (!$instance) {
             $instance = new self();
             $instance->init();
             //this action will register plugins into the memory for next load.
             //the preload static method help us to include plugins files.
             do_action('facebookawd_register_plugins', $instance);
-        }
+        //}
         //defer the launch of facebook awd when plugins are ready.
         add_action('plugins_loaded', array($instance, 'launch'));
 

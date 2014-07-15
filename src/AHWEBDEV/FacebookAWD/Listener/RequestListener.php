@@ -55,7 +55,7 @@ class RequestListener
         //exit('d');
         if (!empty($this->query) && is_array($this->query)) {
             if (isset($this->query['action'])) {
-                return do_action($this->container->getSlug() . '_' . $this->query['action'], $this);
+                do_action($this->container->getSlug() . '_' . $this->query['action'], $this);
             }
         }
     }
@@ -88,7 +88,7 @@ class RequestListener
      * Insert a query vars in WP related to the slug of the container
      * @return array
      */
-    public function addQueryVars()
+    public function addQueryVars(array $vars)
     {
         $vars[] = $this->container->getSlug();
 

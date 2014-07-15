@@ -102,16 +102,17 @@ class InstallController extends AdminMenuController
     public function handleInstall()
     {
         $request = filter_input_array(INPUT_POST);
-        $isTokenValid = isset($request['fawd_token']) ? wp_verify_nonce($request['fawd_token']['token'], 'fawd-token') : false;
+        $isTokenValid = isset($request['fawdtoken']) ? wp_verify_nonce($request['fawdtoken']['token'], 'fawd-token') : false;
         if ($isTokenValid) {
             $om = $this->container->get('services.option_manager');
             try {
                 //bind app data
                 $application = $this->container->get('services.application');
-                $application->bind($request['fawd_application']);
+                $application->bind($request['fawdapplication']);
+                                
                 //bind options data
                 $options = $this->container->get('services.options');
-                $options->bind($request['fawd_options']);
+                $options->bind($request['fawdoptions']);
 
                 //test the facebook data, and fetch info from application.
                 FacebookSession::setDefaultApplication($application->getId(), $application->getSecretKey());

@@ -72,7 +72,25 @@ class Application extends Model
      *
      * @var integer
      */
+    protected $monthlyActiveUsersRank;
+
+    /**
+     *
+     * @var integer
+     */
     protected $dailyActiveUsers;
+
+    /**
+     *
+     * @var integer 
+     */
+    protected $dailyActiveUsersRank;
+
+    /**
+     * 
+     * @var integer 
+     */
+    protected $weeklyActiveUsers;
 
     /**
      *
@@ -263,6 +281,66 @@ class Application extends Model
     }
 
     /**
+     * 
+     * @return integer
+     */
+    public function getMonthlyActiveUsersRank()
+    {
+        return $this->monthlyActiveUsersRank;
+    }
+
+    /**
+     * 
+     * @return integer
+     */
+    public function getDailyActiveUsersRank()
+    {
+        return $this->dailyActiveUsersRank;
+    }
+
+    /**
+     * 
+     * @return integer
+     */
+    public function getWeeklyActiveUsers()
+    {
+        return $this->weeklyActiveUsers;
+    }
+
+    /**
+     * 
+     * @param integer $monthlyActiveUsersRank
+     * @return \AHWEBDEV\FacebookAWD\Model\Application
+     */
+    public function setMonthlyActiveUsersRank($monthlyActiveUsersRank)
+    {
+        $this->monthlyActiveUsersRank = $monthlyActiveUsersRank;
+        return $this;
+    }
+
+    /**
+     * 
+     * @param integer $dailyActiveUsersRank
+     * @return \AHWEBDEV\FacebookAWD\Model\Application
+     */
+    public function setDailyActiveUsersRank($dailyActiveUsersRank)
+    {
+        $this->dailyActiveUsersRank = $dailyActiveUsersRank;
+        return $this;
+    }
+
+    /**
+     * 
+     * @param integer $weeklyActiveUsers
+     * @return \AHWEBDEV\FacebookAWD\Model\Application
+     */
+    public function setWeeklyActiveUsers($weeklyActiveUsers)
+    {
+        $this->weeklyActiveUsers = $weeklyActiveUsers;
+        return $this;
+    }
+
+    /**
      *
      * @return type
      */
@@ -295,7 +373,10 @@ class Application extends Model
             $this->iconUrl = $data['icon_url'];
             $this->logoUrl = $data['logo_url'];
             $this->monthlyActiveUsers = $data['monthly_active_users'];
+            $this->monthlyActiveUsersRank = $data['monthly_active_users_rank'];
             $this->dailyActiveUsers = $data['daily_active_users'];
+            $this->dailyActiveUsersRank = $data['daily_active_users_rank'];
+            $this->weeklyActiveUsers = $data['weekly_active_users'];
         }
     }
 

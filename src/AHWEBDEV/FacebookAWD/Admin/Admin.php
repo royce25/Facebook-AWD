@@ -75,8 +75,8 @@ class Admin extends BaseAdmin
         }
 
         //init the listener in admin only
-        $requestListener = $this->container->get('listener.request_listener');
-        $requestListener->adminInit();
+        //$requestListener = $this->container->get('listener.request_listener');
+        //$requestListener->adminInit();
 
         /*
           add_action('admin_print_styles-post-new.php', array($this, 'enqueueStyles'));
