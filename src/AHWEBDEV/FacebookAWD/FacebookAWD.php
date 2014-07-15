@@ -3,12 +3,12 @@
 namespace AHWEBDEV\FacebookAWD;
 
 use AHWEBDEV\FacebookAWD\Admin\Admin;
-use AHWEBDEV\FacebookAWD\Api\Api;
 use AHWEBDEV\FacebookAWD\Controller\AdminController;
 use AHWEBDEV\FacebookAWD\Controller\InstallController;
 use AHWEBDEV\FacebookAWD\Listener\RequestListener;
 use AHWEBDEV\FacebookAWD\Model\Application;
 use AHWEBDEV\FacebookAWD\Model\Option;
+use AHWEBDEV\FacebookAWD\Plugin\LikeButton\LikeButtonPlugin;
 use AHWEBDEV\Framework\Container;
 use AHWEBDEV\Framework\ContainerInterface;
 use AHWEBDEV\Framework\OptionManager\OptionManager;
@@ -161,8 +161,7 @@ class FacebookAWD extends Container
      */
     public static function preloadPlugins()
     {
-        require_once dirname(__FILE__) . '/Plugin/LikeButton/boot.php';
-        require_once dirname(__FILE__) . '/Plugin/LikeBox/boot.php';
+        new LikeButtonPlugin();
     }
 
     /**

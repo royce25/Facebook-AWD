@@ -7,3 +7,6 @@
 [submodule "vendors/Facebook"]
 	path = vendors/Facebook
 	url = git@github.com:facebook/facebook-php-sdk-v4.git
+[submodule "vendors/AHWEBDEV/FacebookAWD/Plugin/LikeButton"]
+	path = vendors/AHWEBDEV/FacebookAWD/Plugin/LikeButton
+	url = git@github.com:Facebook-AWD/LikeButton.git

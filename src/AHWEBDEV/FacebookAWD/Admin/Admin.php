@@ -23,7 +23,7 @@ class Admin extends BaseAdmin
         } else {
             //init plugins
             $this->container->get('backend.controller')->init();
-            foreach($this->container->getPlugins() as $data){
+            foreach ($this->container->getPlugins() as $data) {
                 $data["instance"]->initControllers();
             }
             //the instance is ready to be stored into memory for next load
@@ -41,6 +41,8 @@ class Admin extends BaseAdmin
     {
         add_action('admin_print_styles-' . $pageHook, array($this, 'enqueueStyles'));
         add_action('admin_print_scripts-' . $pageHook, array($this, 'enqueueScripts'));
+        add_action('admin_print_styles-widgets.php', array($this, 'enqueueScripts'));
+        add_action('admin_print_styles-widgets.php', array($this, 'enqueueStyles'));
     }
 
     public function initScreen()
@@ -81,7 +83,6 @@ class Admin extends BaseAdmin
           add_action('admin_print_styles-post.php', array($this, 'enqueueStyles'));
           add_action('admin_print_styles-link-add.php', array($this, 'enqueueStyles'));
           add_action('admin_print_styles-link.php', array($this, 'enqueueStyles'));
-          add_action('admin_print_styles-widgets.php', array($this, 'enqueueStyles'));
          */
     }
 
