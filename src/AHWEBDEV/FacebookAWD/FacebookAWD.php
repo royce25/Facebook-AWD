@@ -284,7 +284,7 @@ class FacebookAWD extends Container
 
         $apc = extension_loaded('apc');
         if ($apc) {
-            //apc_delete('FacebookAWD');
+            apc_delete('FacebookAWD');
             $instance = apc_fetch('FacebookAWD');
         }
         //if (!$instance) {
