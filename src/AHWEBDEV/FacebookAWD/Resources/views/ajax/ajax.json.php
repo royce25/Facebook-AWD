@@ -1,10 +1,8 @@
 <?php
 /**
- * View Json template
+ * Facebook AWD Template
+ *
+ * @package FacebookAWD
  * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
- */
-
-/**
- * Params are defined in the templatemanager
  */
 echo json_encode($params);

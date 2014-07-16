@@ -1,13 +1,24 @@
 <?php
 
+/**
+ * Facebook AWD
+ *
+ * This file is part of tha Facebook AWD package
+ * 
+ * @author Alexandre Hermann <hermann.alexandre@ahwebdev.fr>
+ */
+
 namespace AHWEBDEV\FacebookAWD\Admin;
 
 use AHWEBDEV\Wordpress\Admin\Admin as BaseAdmin;
 
 /**
- * Description of Admin
+ * This is the base admin class
  *
- * @author alexhermann
+ * This file add required hooks in wordpress admin using controllers and models
+ * 
+ * @category     Extension
+ * @author       Alexandre Hermann <hermann.alexandre@ahwebdev.fr>
  */
 class Admin extends BaseAdmin
 {
@@ -45,6 +56,9 @@ class Admin extends BaseAdmin
         add_action('admin_print_styles-widgets.php', array($this, 'enqueueStyles'));
     }
 
+    /**
+     * init the admin screen layout
+     */
     public function initScreen()
     {
         add_screen_option('layout_columns', array('max' => 2, 'default' => 1));

@@ -1,99 +1,114 @@
 <?php
 
+/**
+ * Facebook AWD
+ *
+ * This file is part of tha Facebook AWD package
+ * 
+ */
+
 namespace AHWEBDEV\FacebookAWD\Model;
 
 use AHWEBDEV\Framework\Model\Model;
 
-/*
- * This file is part of FacebookAWD.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 /**
- * Application
+ * This is the model of a facebook Application
  *
- * @author Alexandre Hermann <hermann.alexandren@ahwebdev.fr>
- * @package FacebookAWD
+ * This file is used to represent a facebook application.
+ * (Will be removed before 2.0)
+ * 
+ * @package      FacebookAWD
+ * @category     Extension
+ * @author       Alexandre Hermann <hermann.alexandre@ahwebdev.fr>
  */
 class Application extends Model
 {
 
     /**
-     *
+     * The id of the application
+     * 
      * @var integer
      */
     protected $id;
 
     /**
-     *
+     * The secret key of the application
      * @var string
      */
     protected $secretKey;
 
     /**
-     *
+     * the name of the application
+     * 
      * @var string
      */
     protected $name;
 
     /**
-     *
+     * the public link of the application
+     * 
      * @var string
      */
     protected $link;
 
     /**
-     *
+     * The namespace of the application
+     * 
      * @var string
      */
     protected $namespace;
 
     /**
-     *
+     * the iconUrl of the application
+     * 
      * @var string
      */
     protected $iconUrl;
 
     /**
-     *
+     * The logo Url of the application
      * @var string
      */
     protected $logoUrl;
 
     /**
-     *
+     * the nb of montly active users
+     * 
      * @var integer
      */
     protected $monthlyActiveUsers;
 
     /**
-     *
+     * the rank of montly active users
+     * 
      * @var integer
      */
     protected $monthlyActiveUsersRank;
 
     /**
-     *
+     * the nb of daily active users
+     * 
      * @var integer
      */
     protected $dailyActiveUsers;
 
     /**
-     *
+     * the rank of daily active users
+     * 
      * @var integer
      */
     protected $dailyActiveUsersRank;
 
     /**
-     *
+     * the nb of weekly active users
+     * 
      * @var integer
      */
     protected $weeklyActiveUsers;
 
     /**
-     *
+     * Get the id
+     * 
      * @return integer
      */
     public function getId()
@@ -102,7 +117,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Set the id
+     * 
      * @param  integer                                 $id
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
@@ -114,7 +130,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Get the secret key
+     * 
      * @return string
      */
     public function getSecretKey()
@@ -123,7 +140,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Set the secret key
+     * 
      * @param  string                                  $secretKey
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
@@ -135,7 +153,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Get the name
+     * 
      * @return string
      */
     public function getName()
@@ -144,7 +163,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Set the name
+     * 
      * @param  string                                  $name
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
@@ -156,7 +176,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Get the link
+     * 
      * @return string
      */
     public function getLink()
@@ -165,7 +186,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Set the link
+     * 
      * @param  string                                  $link
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
@@ -177,7 +199,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Get the namespace
+     * 
      * @return string
      */
     public function getNamespace()
@@ -186,6 +209,7 @@ class Application extends Model
     }
 
     /**
+     * Set the namespace
      *
      * @param  string                                  $namespace
      * @return \AHWEBDEV\FacebookAWD\Model\Application
@@ -198,7 +222,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Get the icon url
+     * 
      * @return string
      */
     public function getIconUrl()
@@ -207,7 +232,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Set the icon url
+     * 
      * @param  string                                  $iconUrl
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
@@ -219,6 +245,7 @@ class Application extends Model
     }
 
     /**
+     * Get the logo url
      *
      * @return string
      */
@@ -228,7 +255,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Set the icon url
+     * 
      * @param  string                                  $logoUrl
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
@@ -240,7 +268,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Get the nb of monthly active users
+     * 
      * @return integer
      */
     public function getMonthlyActiveUsers()
@@ -249,7 +278,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Set the nb of monthly active users
+     * 
      * @param  integer                                 $monthlyActiveUsers
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
@@ -261,7 +291,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Get the nb of dayly active users
+     * 
      * @return integer
      */
     public function getDailyActiveUsers()
@@ -270,7 +301,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Set the nb of dayly active users
+     * 
      * @param  integer                                 $dailyActiveUsers
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
@@ -282,6 +314,7 @@ class Application extends Model
     }
 
     /**
+     * Get the rank of monthly active users
      *
      * @return integer
      */
@@ -291,7 +324,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Get the rank of daily active users
+     * 
      * @return integer
      */
     public function getDailyActiveUsersRank()
@@ -300,7 +334,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Get the nb of Weekly active users
+     * 
      * @return integer
      */
     public function getWeeklyActiveUsers()
@@ -309,7 +344,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Set the rank of monthly active users
+     * 
      * @param  integer                                 $monthlyActiveUsersRank
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
@@ -321,7 +357,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Set the rank of daily active users
+     * 
      * @param  integer                                 $dailyActiveUsersRank
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
@@ -333,7 +370,8 @@ class Application extends Model
     }
 
     /**
-     *
+     * Set the nb of weekly active users
+     * 
      * @param  integer                                 $weeklyActiveUsers
      * @return \AHWEBDEV\FacebookAWD\Model\Application
      */
@@ -345,8 +383,7 @@ class Application extends Model
     }
 
     /**
-     *
-     * @return type
+     * {@inheritdoc}
      */
     protected function getDefaultFormConfig()
     {
@@ -365,8 +402,7 @@ class Application extends Model
     }
 
     /**
-     *
-     * @param array $data
+     * {@inheritdoc}
      */
     public function bind(array $data)
     {

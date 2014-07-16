@@ -1,29 +1,32 @@
 <?php
 
+/**
+ * Facebook AWD
+ *
+ * This file is part of tha Facebook AWD package
+ * 
+ */
+
 namespace AHWEBDEV\FacebookAWD\Controller;
 
 use AHWEBDEV\Wordpress\Admin\MetaboxInterface;
 use AHWEBDEV\Wordpress\Controller\AdminMenuController as BaseController;
 
-/*
- * This file is part of FacebookAWD.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 /**
- * AdminController
+ * This is the admin controller
  *
- * @author Alexandre Hermann <hermann.alexandren@ahwebdev.fr>
- * @package FacebookAWD\Extension\Wordpress
+ * This file add required hooks in wordpress admin using
+ * controllers and models
+ * 
+ * @package      FacebookAWD
+ * @category     Extension
+ * @author       Alexandre Hermann <hermann.alexandre@ahwebdev.fr>
  */
 class AdminController extends BaseController implements MetaboxInterface
 {
 
     /**
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getMenuType()
     {
@@ -31,8 +34,7 @@ class AdminController extends BaseController implements MetaboxInterface
     }
 
     /**
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getMenuSlug()
     {
@@ -40,8 +42,7 @@ class AdminController extends BaseController implements MetaboxInterface
     }
 
     /**
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getMenuTitle()
     {
@@ -63,7 +64,7 @@ class AdminController extends BaseController implements MetaboxInterface
     }
 
     /**
-     * Add meta boxes
+     * {@inheritdoc}
      */
     public function addMetaBoxes($pageHook)
     {

@@ -1,34 +1,46 @@
 <?php
 
+/**
+ * Facebook AWD
+ *
+ * This file is part of tha Facebook AWD package
+ * 
+ */
+
 namespace AHWEBDEV\FacebookAWD\Listener;
 
 use AHWEBDEV\Framework\ContainerInterface;
 
-/*
- * This file is part of FacebookAWD.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 /**
- * RequestListener
+ * This is the request listenner
  *
- * @author Alexandre Hermann <hermann.alexandren@ahwebdev.fr>
- * @package FacebookAWD
+ * This file is used to add some url
+ * listener / entry point to wordpress
+ * 
+ * @package      FacebookAWD
+ * @category     Extension
+ * @author       Alexandre Hermann <hermann.alexandre@ahwebdev.fr>
  */
 class RequestListener
 {
 
     /**
-     *
+     * The Container used with the listener
+     * 
      * @var ContainerInterface
      */
     protected $container;
+
+    /**
+     * The current query
+     * 
+     * @var mixed 
+     */
     protected $query;
 
     /**
-     *
+     * Constructor
+     * 
      * @param \AHWEBDEV\Framework\ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
@@ -100,7 +112,7 @@ class RequestListener
      */
     public function adminInit()
     {
-
+        
     }
 
 }

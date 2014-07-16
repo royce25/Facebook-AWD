@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Facebook AWD
+ *
+ * This file is part of tha Facebook AWD package
+ * 
+ */
+
 namespace AHWEBDEV\FacebookAWD;
 
 use AHWEBDEV\FacebookAWD\Admin\Admin;
@@ -19,10 +26,13 @@ use ReflectionClass;
 use RuntimeException;
 
 /**
- * Facebook AWD All in One
+ * FacebookAWD
  *
- * @package facebook-awd
- * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
+ * This file is the base container of the Facebook AWD extension
+ * 
+ * @package      FacebookAWD
+ * @category     Extension
+ * @author       Alexandre Hermann <hermann.alexandre@ahwebdev.fr>
  */
 class FacebookAWD extends Container
 {
@@ -165,10 +175,7 @@ class FacebookAWD extends Container
     }
 
     /**
-     *
-     * @param  string                            $name
-     * @param  Plugin                            $plugin
-     * @return \AHWEBDEV\FacebookAWD\FacebookAWD
+     * {@inheritdoc}
      */
     public function registerPlugin($name, Plugin $plugin)
     {
@@ -185,7 +192,7 @@ class FacebookAWD extends Container
     }
 
     /**
-     *
+     * Register Assets on this container
      */
     public function registerAssets()
     {
@@ -281,11 +288,11 @@ class FacebookAWD extends Container
             $instance = apc_fetch('FacebookAWD');
         }
         //if (!$instance) {
-            $instance = new self();
-            $instance->init();
-            //this action will register plugins into the memory for next load.
-            //the preload static method help us to include plugins files.
-            do_action('facebookawd_register_plugins', $instance);
+        $instance = new self();
+        $instance->init();
+        //this action will register plugins into the memory for next load.
+        //the preload static method help us to include plugins files.
+        do_action('facebookawd_register_plugins', $instance);
         //}
         //defer the launch of facebook awd when plugins are ready.
         add_action('plugins_loaded', array($instance, 'launch'));

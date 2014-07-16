@@ -1,6 +1,8 @@
 <?php
 /**
- * View Admin template
+ * Facebook AWD Template
+ *
+ * @package FacebookAWD
  * @author AHWEBDEV (Alexandre Hermann) [hermann.alexandre@ahwebev.fr]
  */
 ?>

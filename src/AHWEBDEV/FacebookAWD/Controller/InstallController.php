@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Facebook AWD
+ *
+ * This file is part of tha Facebook AWD package
+ * 
+ */
+
 namespace AHWEBDEV\FacebookAWD\Controller;
 
 use AHWEBDEV\Framework\TemplateManager\Form;
@@ -8,25 +15,20 @@ use Exception;
 use Facebook\FacebookRequest;
 use Facebook\FacebookSession;
 
-/*
- * This file is part of FacebookAWD.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 /**
- * InstallController
+ * This is the install controller
  *
- * @author Alexandre Hermann <hermann.alexandren@ahwebdev.fr>
- * @package FacebookAWD\Extension\Wordpress
+ * This file will add some install step at first install of the plugin.
+ * 
+ * @package      FacebookAWD
+ * @category     Extension
+ * @author       Alexandre Hermann <hermann.alexandre@ahwebdev.fr>
  */
 class InstallController extends AdminMenuController
 {
 
     /**
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getMenuType()
     {
@@ -34,8 +36,7 @@ class InstallController extends AdminMenuController
     }
 
     /**
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getMenuSlug()
     {
@@ -43,8 +44,7 @@ class InstallController extends AdminMenuController
     }
 
     /**
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getMenuTitle()
     {
@@ -52,8 +52,7 @@ class InstallController extends AdminMenuController
     }
 
     /**
-     * Init the admin
-     * Listen for install post
+     * {@inheritdoc}
      */
     public function init()
     {

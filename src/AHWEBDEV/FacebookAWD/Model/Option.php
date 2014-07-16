@@ -1,33 +1,37 @@
 <?php
 
+/**
+ * Facebook AWD
+ *
+ * This file is part of tha Facebook AWD package
+ * 
+ */
+
 namespace AHWEBDEV\FacebookAWD\Model;
 
 use AHWEBDEV\Framework\Model\Model;
 
-/*
- * This file is part of FacebookAWD.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 /**
- * Application
+ * This is the model options
  *
- * @author Alexandre Hermann <hermann.alexandren@ahwebdev.fr>
- * @package FacebookAWD
+ * This file represent a model of key/pair options that can be stored in memory
+ * 
+ * @package      FacebookAWD
+ * @category     Extension
+ * @author       Alexandre Hermann <hermann.alexandre@ahwebdev.fr>
  */
 class Option extends Model
 {
 
     /**
-     *
+     * Allow the collect of data
+     * 
      * @var string
      */
     protected $allowDataCollect;
 
     /**
-     *
+     * Get the allowed the collect of data
      * @return boolean
      */
     public function getAllowDataCollect()
@@ -36,7 +40,8 @@ class Option extends Model
     }
 
     /**
-     *
+     * Set the allowed the collect of data
+     * 
      * @param  Boolean                            $allowDataCollect
      * @return \AHWEBDEV\FacebookAWD\Model\Option
      */
@@ -48,8 +53,7 @@ class Option extends Model
     }
 
     /**
-     *
-     * @return type
+     * {@inheritdoc}
      */
     protected function getDefaultFormConfig()
     {
