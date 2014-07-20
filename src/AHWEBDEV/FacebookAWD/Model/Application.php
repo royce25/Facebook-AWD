@@ -3,7 +3,7 @@
 /**
  * Facebook AWD
  *
- * This file is part of tha Facebook AWD package
+ * This file is part of the facebook AWD package
  * 
  */
 

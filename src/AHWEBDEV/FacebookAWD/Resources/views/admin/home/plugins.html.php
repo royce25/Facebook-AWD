@@ -18,10 +18,10 @@
 
         <?php foreach ($plugins as $plugin) { ?>
             <li class="lists-group-item">
-                <a href="?page=<?php echo $plugin['instance']->getSlug(); ?>" class="btn btn-default pull-right"><span class="glyphicon glyphicon-cog"></span> Settings</a>
-                <h5 class="list-group-item-heading"><?php echo $plugin['data']['Name']; ?> <span class="label label-info label-sm"><?php echo $plugin['data']['Version']; ?></span></h5>
-                <p class="list-group-item-text"><?php echo $plugin['data']['Description']; ?></p>
-                <p class="list-group-item-text">Author: <?php echo $plugin['data']['Author']; ?></p>
+                <a href="?page=<?php echo $plugin->getSlug(); ?>" class="btn btn-default pull-right"><span class="glyphicon glyphicon-cog"></span> Settings</a>
+                <h5 class="list-group-item-heading"><?php echo $plugin->getTitle(); ?> <span class="label label-info label-sm"><?php echo $plugin->getVersion(); ?></span></h5>
+                <p class="list-group-item-text"><?php echo $plugin->getDescription(); ?></p>
+                <p class="list-group-item-text">Author: <?php echo $plugin->getAuthor(); ?></p>
                 <hr />
             </li>
         <?php } ?>

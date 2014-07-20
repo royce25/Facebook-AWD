@@ -3,7 +3,7 @@
 /**
  * Facebook AWD
  *
- * This file is part of tha Facebook AWD package
+ * This file is part of the facebook AWD package
  * 
  * @author Alexandre Hermann <hermann.alexandre@ahwebdev.fr>
  */
@@ -17,6 +17,7 @@ use AHWEBDEV\Wordpress\Admin\Admin as BaseAdmin;
  *
  * This file add required hooks in wordpress admin using controllers and models
  * 
+ * @package      FacebookAWD
  * @category     Extension
  * @author       Alexandre Hermann <hermann.alexandre@ahwebdev.fr>
  */
@@ -34,8 +35,8 @@ class Admin extends BaseAdmin
         } else {
             //init plugins
             $this->container->get('backend.controller')->init();
-            foreach ($this->container->getPlugins() as $data) {
-                $data["instance"]->initControllers();
+            foreach ($this->container->getPlugins() as $plugin) {
+                $plugin->initControllers();
             }
             //the instance is ready to be stored into memory for next load
             //the container has pugins and services and controllers already set.
@@ -76,8 +77,7 @@ class Admin extends BaseAdmin
 
         //plugins init hook
         foreach ($this->container->getPlugins() as $plugin) {
-            $pluginObj = $plugin['instance'];
-            $pageHook = $this->getAdminMenuHook($pluginObj->getSlug());
+            $pageHook = $this->getAdminMenuHook($plugin->getSlug());
             if ($pageHook) {
                 //enqueue generals assets on plugins
                 $this->enqueueAssetsHook($pageHook);
@@ -89,15 +89,8 @@ class Admin extends BaseAdmin
         }
 
         //init the listener in admin only
-        //$requestListener = $this->container->get('listener.request_listener');
-        //$requestListener->adminInit();
-
-        /*
-          add_action('admin_print_styles-post-new.php', array($this, 'enqueueStyles'));
-          add_action('admin_print_styles-post.php', array($this, 'enqueueStyles'));
-          add_action('admin_print_styles-link-add.php', array($this, 'enqueueStyles'));
-          add_action('admin_print_styles-link.php', array($this, 'enqueueStyles'));
-         */
+        $requestListener = $this->container->get('listener.request_listener');
+        $requestListener->adminInit();
     }
 
     /**
@@ -105,10 +98,11 @@ class Admin extends BaseAdmin
      */
     public function enqueueStyles()
     {
+        wp_enqueue_style('thickbox');
+        
         wp_enqueue_style($this->container->getSlug() . 'bootstrap');
         wp_enqueue_style($this->container->getSlug() . 'animate');
         wp_enqueue_style($this->container->getSlug() . 'google-code-prettify');
-        wp_enqueue_style('thickbox');
     }
 
     /**
@@ -118,24 +112,18 @@ class Admin extends BaseAdmin
     {
         wp_enqueue_script('media-upload');
         wp_enqueue_script('thickbox');
-
         wp_enqueue_script('common');
         wp_enqueue_script('wp-list');
         wp_enqueue_script('postbox');
+        wp_enqueue_script('jquery-form');
 
-        //TOdo Minify All files using grunt ?
         wp_enqueue_script($this->container->getSlug() . 'socket-io');
         wp_enqueue_script($this->container->getSlug() . 'socket');
         wp_enqueue_script($this->container->getSlug() . 'google-code-prettify');
         wp_enqueue_script($this->container->getSlug() . 'bootstrap');
         wp_enqueue_script($this->container->getSlug() . 'jquery-validate');
-        //wp_enqueue_script('facebook-awd-bootstrap-tab-js');
-        //wp_enqueue_script('facebook-awd-bootstrap-transition-js');
-        //
         wp_enqueue_script($this->container->getSlug() . 'admin');
         wp_enqueue_script($this->container->getSlug() . 'admin-init');
-        wp_enqueue_script('jquery-form');
-        //wp_enqueue_script('facebook-awd-global-js');
     }
 
 }

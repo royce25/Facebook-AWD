@@ -3,7 +3,7 @@
 /**
  * Facebook AWD
  *
- * This file is part of tha Facebook AWD package
+ * This file is part of the facebook AWD package
  * 
  */
 
@@ -171,7 +171,8 @@ class FacebookAWD extends Container
      */
     public static function preloadPlugins()
     {
-        new LikeButtonPlugin();
+        //new LikeButtonPlugin();
+        //new ConnectPlugin();
     }
 
     /**
@@ -179,14 +180,7 @@ class FacebookAWD extends Container
      */
     public function registerPlugin($name, Plugin $plugin)
     {
-        if (!function_exists('get_plugins')) {
-            require_once ABSPATH . 'wp-admin/includes/plugin.php';
-        }
-        $f = new ReflectionClass($plugin);
-        $this->plugins[$name] = array(
-            'data' => \get_plugin_data(dirname($f->getFileName()) . '/boot.php', false, true),
-            'instance' => $plugin
-        );
+        $this->plugins[$name] = $plugin;
 
         return $this;
     }
@@ -230,16 +224,6 @@ class FacebookAWD extends Container
     public function launch()
     {
         $this->get('admin')->init();
-        //add_action('shutdown', array($this, 'shutdown'), 1000);
-    }
-
-    /**
-     * Shutdown the process
-     * very last request
-     */
-    public function shutdown()
-    {
-        $this->store();
     }
 
     /**
@@ -265,7 +249,7 @@ class FacebookAWD extends Container
             'token' => array(
                 'name' => 'token',
                 'type' => 'hidden',
-                'attr' => null,
+                'attr' => array(),
                 'group' => false,
                 'value' => wp_create_nonce('fawd-token')
             )
@@ -274,7 +258,9 @@ class FacebookAWD extends Container
 
     /**
      * Create a Facebook AWD instance and store it in apc if enabled.
+     * 
      * If Instance exists in cache, FacebookAWD instance is returned
+     * 
      * @return \self
      */
     public static function boot()
@@ -287,13 +273,13 @@ class FacebookAWD extends Container
             apc_delete('FacebookAWD');
             $instance = apc_fetch('FacebookAWD');
         }
-        //if (!$instance) {
-        $instance = new self();
-        $instance->init();
-        //this action will register plugins into the memory for next load.
-        //the preload static method help us to include plugins files.
-        do_action('facebookawd_register_plugins', $instance);
-        //}
+        if (!$instance) {
+            $instance = new self();
+            $instance->init();
+            //this action will register plugins into the memory for next load.
+            //the preload static method help us to include plugins files.
+            do_action('facebookawd_register_plugins', $instance);
+        }
         //defer the launch of facebook awd when plugins are ready.
         add_action('plugins_loaded', array($instance, 'launch'));
 

@@ -9,6 +9,7 @@ require __DIR__ . '/ClassLoader.php';
 $loader = new ClassLoader();
 $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
+$wpPlugins = dirname($baseDir);
 $map = array(
     'AHWEBDEV\\FacebookAWD' => $baseDir . '/src',
     'AHWEBDEV\\FacebookAWD\\Plugin' => $vendorDir,
