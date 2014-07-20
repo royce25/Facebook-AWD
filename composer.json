@@ -1,0 +1,44 @@
+{
+    "name": "ahwebdev/facebookAWD",
+    "version": "dev-master",
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "ahwebdev/framework",
+                "version": "dev-master",
+                "source": {
+                    "url": "git@github.com:AHWEBDEV/Framework.git",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "ahwebdev/wordpress",
+                "version": "dev-master",
+                "source": {
+                    "url": "git@github.com:AHWEBDEV/WordpressPluginFramework.git",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "": [
+                "src/",
+                "vendor/ahwebdev/framework/src/",
+                "vendor/ahwebdev/wordpress/src/"
+            ]
+        }
+    },
+    "require": {
+        "ahwebdev/framework": "dev-master",
+        "ahwebdev/wordpress": "dev-master",
+        "facebook/php-sdk-v4": "dev-master"
+    }
+}

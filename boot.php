@@ -23,5 +23,6 @@
  * @author       Alexandre Hermann <hermann.alexandre@ahwebdev.fr>
  */
 ini_set('display_errors', true);
-require_once __DIR__ . '/vendors/autoload/autoload.php';
+
+require_once __DIR__ . '/vendor/autoload.php';
 $facebookAWD = AHWEBDEV\FacebookAWD\FacebookAWD::boot(__FILE__);
