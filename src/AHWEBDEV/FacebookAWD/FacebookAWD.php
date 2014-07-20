@@ -15,7 +15,6 @@ use AHWEBDEV\FacebookAWD\Controller\InstallController;
 use AHWEBDEV\FacebookAWD\Listener\RequestListener;
 use AHWEBDEV\FacebookAWD\Model\Application;
 use AHWEBDEV\FacebookAWD\Model\Option;
-use AHWEBDEV\FacebookAWD\Plugin\LikeButton\LikeButtonPlugin;
 use AHWEBDEV\Framework\Container;
 use AHWEBDEV\Framework\ContainerInterface;
 use AHWEBDEV\Framework\OptionManager\OptionManager;
@@ -234,7 +233,7 @@ class FacebookAWD extends Container
         if ($this->apcLoaded && !$clean) {
             apc_add('FacebookAWD', $this, 0);
         }
-        if ($clean) {
+        if ($this->apcLoaded && $clean) {
             apc_delete('FacebookAWD');
         }
     }

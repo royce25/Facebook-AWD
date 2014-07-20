@@ -5,7 +5,7 @@
   Plugin URI: http://facebook-awd.ahwebdev.fr
   Description: Facebook AWD will adds required extensions from facebook to your site.
   Version: 2.0
-  Author: AHWEBDEV
+  Author: Alexandre Hermann (AHWEBDEV) <hermann.alexandre@ahwebdev.fr>
   Author URI: http://www.ahwebdev.fr
   License: Copywrite AHWEBDEV
   Text Domain: FacebookAWD
@@ -24,4 +24,4 @@
  */
 ini_set('display_errors', true);
 require_once __DIR__ . '/vendors/autoload/autoload.php';
-$facebookAWD = AHWEBDEV\FacebookAWD\FacebookAWD::boot();
+$facebookAWD = AHWEBDEV\FacebookAWD\FacebookAWD::boot(__FILE__);

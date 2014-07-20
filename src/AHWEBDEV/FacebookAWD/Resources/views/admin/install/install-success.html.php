@@ -7,8 +7,8 @@
  */
 ?>
 <?php include dirname(__DIR__) . '/header.html.php'; ?>
-<div class="facebookAWD animated fadeInUp">
-    <div class="panel panel-success">
+<div class="facebookAWD">
+    <div class="panel panel-success animated fadeInDown">
         <div class="panel-heading">
             Facebook AWD is ready. <img src="<?php echo $application->getIconUrl(); ?>" alt="...">
         </div>
@@ -37,8 +37,9 @@
             </tr>
         </table>
     </div>
-    <a class="btn btn-success btn-lg btn-block  animated fadeInUp" role="button" href="?page=<?php echo $this->container->getSlug(); ?>">Start now !</a>
-
+    <div style="text-align:center;">
+        <a class="btn btn-success btn-lg animated bounceIn" role="button" href="?page=<?php echo $this->container->getSlug(); ?>">Start now !</a>
+    </div>
 </div>
 
 <?php include dirname(__DIR__) . '/footer.html.php'; ?>

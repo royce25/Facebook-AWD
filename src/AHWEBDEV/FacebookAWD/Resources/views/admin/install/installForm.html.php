@@ -9,4 +9,6 @@
 <?php if (!empty($errors)) { ?>
     <div class="alert alert-danger"><?php echo $errors; ?></div>
 <?php } ?>
-<?php echo $formView; ?>
+<div class="form-content animated fadeInDown">
+    <?php echo $formView; ?>
+</div>
