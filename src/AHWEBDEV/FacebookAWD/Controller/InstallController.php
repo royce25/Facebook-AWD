@@ -76,9 +76,9 @@ class InstallController extends AdminMenuController
         $om = $this->container->get('services.option_manager');
         $application = $this->container->get('services.application');
         $options = $this->container->get('services.options');
-        $formView = $form->proccessFields('application', $application->getFormConfig());
-        $formView .= $form->proccessFields('options', $options->getFormConfig());
-        $formView .= $form->proccessFields('token', $this->container->getTokenFormConfig());
+        $formView = $form->processFields('application', $application->getFormConfig());
+        $formView .= $form->processFields('options', $options->getFormConfig());
+        $formView .= $form->processFields('token', $this->container->getTokenFormConfig());
         $template = $this->container->getRoot()->getRootPath() . '/Resources/views/admin/install/install.html.php';
         $errors = $om->load('fawd_application_error');
         echo $this->render($template, array(

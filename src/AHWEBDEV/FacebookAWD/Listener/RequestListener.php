@@ -39,6 +39,13 @@ class RequestListener
     protected $query;
 
     /**
+     * Conditions
+     * 
+     * @var arrays 
+     */
+    protected $conditions;
+
+    /**
      * Constructor
      * 
      * @param \AHWEBDEV\Framework\ContainerInterface $container
@@ -46,6 +53,7 @@ class RequestListener
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->conditions = array();
     }
 
     /**
@@ -64,10 +72,11 @@ class RequestListener
     public function parseQuery()
     {
         $this->query = get_query_var($this->container->getSlug());
-        //exit('d');
         if (!empty($this->query) && is_array($this->query)) {
             if (isset($this->query['action'])) {
-                do_action($this->container->getSlug() . '_' . $this->query['action'], $this);
+                //echo $this->container->getSlug() . '_' . $this->query['action'];
+                //exit('dd');
+                do_action($this->container->getSlug() . $this->query['action'], $this);
             }
         }
     }
@@ -79,15 +88,7 @@ class RequestListener
      */
     public function insertRewriteRules($rules)
     {
-        $conditions = array(
-            'login',
-            'logout',
-            'unsync',
-            'channel.html',
-            'deauthorize',
-            'realtime-update-api'
-        );
-        $hook = $this->container->getSlug() . '/(' . implode('|', $conditions) . ')$';
+        $hook = $this->container->getSlug() . '/(' . implode('|', $this->conditions) . ')$';
         $rule = 'index.php?' . $this->container->getSlug() . '[action]=$matches[1]';
         $newrules = array(
             $hook => $rule
@@ -108,11 +109,46 @@ class RequestListener
     }
 
     /**
-     * Init the Admin listener
+     * Get the conditions path
+     * 
+     * @return type
      */
-    public function adminInit()
+    public function getConditions()
     {
-        
+        return $this->conditions;
     }
 
+    /**
+     * Add a condition path
+     * 
+     * @param string $condition
+     * @return \AHWEBDEV\FacebookAWD\Listener\RequestListener
+     */
+    public function addCondition($condition)
+    {
+        $this->conditions[] = $condition;
+        return $this;
+    }
+
+    /**
+     * Set the conditions path
+     * 
+     * @param array $conditions
+     * @return \AHWEBDEV\FacebookAWD\Listener\RequestListener
+     */
+    public function setConditions(array $conditions)
+    {
+        $this->conditions = $conditions;
+        return $this;
+    }
+    
+    /**
+     * Get the query
+     * 
+     * @return array
+     */
+    public function getQuery()
+    {
+        return $this->query;
+    }
 }

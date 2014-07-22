@@ -136,6 +136,8 @@ class FacebookAWD extends Container
         //load api
         $fbAppSession = null;
         if ($application) {
+            FacebookSession::setDefaultApplication($application->getId(), $application->getSecretKey());
+            //maybe not required...
             $fbAppSession = FacebookSession::newAppSession($application->getId(), $application->getSecretKey());
         }
         $this->set('services.facebook.appSession', $fbAppSession);
@@ -273,11 +275,11 @@ class FacebookAWD extends Container
             $instance = apc_fetch('FacebookAWD');
         }
         //if (!$instance) {
-            $instance = new self();
-            $instance->init();
-            //this action will register plugins into the memory for next load.
-            //the preload static method help us to include plugins files.
-            do_action('facebookawd_register_plugins', $instance);
+        $instance = new self();
+        $instance->init();
+        //this action will register plugins into the memory for next load.
+        //the preload static method help us to include plugins files.
+        do_action('facebookawd_register_plugins', $instance);
         //}
         //defer the launch of facebook awd when plugins are ready.
         add_action('plugins_loaded', array($instance, 'launch'));

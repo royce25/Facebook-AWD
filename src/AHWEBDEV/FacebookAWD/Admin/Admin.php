@@ -87,10 +87,6 @@ class Admin extends BaseAdmin
         foreach ($this->getAdminMenuHooks() as $hook) {
             add_action('load-' . $hook, array($this, 'initScreen'));
         }
-
-        //init the listener in admin only
-        $requestListener = $this->container->get('listener.request_listener');
-        $requestListener->adminInit();
     }
 
     /**
