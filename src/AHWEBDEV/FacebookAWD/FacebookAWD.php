@@ -161,19 +161,10 @@ class FacebookAWD extends Container
     public function initControllers()
     {
         $adminController = new AdminController($this, $this->get('admin'));
-        $this->set('backend.controller', $adminController);
+        $this->set('controller.backend', $adminController);
 
         $installController = new InstallController($this, $this->get('admin'));
-        $this->set('backend.install_controller', $installController);
-    }
-
-    /**
-     * Init the default plugins
-     */
-    public static function preloadPlugins()
-    {
-        //new LikeButtonPlugin();
-        //new ConnectPlugin();
+        $this->set('controller.install', $installController);
     }
 
     /**
@@ -228,19 +219,6 @@ class FacebookAWD extends Container
     }
 
     /**
-     * Store the facebook AWD instance into memory
-     */
-    public function store($clean = false)
-    {
-        if ($this->apcLoaded && !$clean) {
-            apc_add('FacebookAWD', $this, 0);
-        }
-        if ($this->apcLoaded && $clean) {
-            apc_delete('FacebookAWD');
-        }
-    }
-
-    /**
      * Return a token form Config
      * @return array
      */
@@ -258,32 +236,16 @@ class FacebookAWD extends Container
     }
 
     /**
-     * Create a Facebook AWD instance and store it in apc if enabled.
-     * 
-     * If Instance exists in cache, FacebookAWD instance is returned
+     * Create a Facebook AWD instance
      * 
      * @return \self
      */
     public static function boot()
     {
-        $instance = null;
-        self::preloadPlugins();
-
-        $apc = extension_loaded('apc');
-        if ($apc) {
-            apc_delete('FacebookAWD');
-            $instance = apc_fetch('FacebookAWD');
-        }
-        //if (!$instance) {
         $instance = new self();
         $instance->init();
-        //this action will register plugins into the memory for next load.
-        //the preload static method help us to include plugins files.
         do_action('facebookawd_register_plugins', $instance);
-        //}
-        //defer the launch of facebook awd when plugins are ready.
         add_action('plugins_loaded', array($instance, 'launch'));
-
         return $instance;
     }
 

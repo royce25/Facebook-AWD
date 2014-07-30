@@ -58,6 +58,12 @@ class InstallController extends AdminMenuController
     {
         parent::init();
         $this->setListenerResponse($this->handleInstall());
+
+        //this will allow the plugin to display login under facebook plateform application tab and canvas
+        //this is usually set by others plugins, but plugins are not registered when we are on install page.
+        //So allow iframe embeded from here.
+        remove_action('login_init', 'send_frame_options_header');
+        remove_action('admin_init', 'send_frame_options_header');
     }
 
     /**
@@ -135,11 +141,7 @@ class InstallController extends AdminMenuController
                 $this->container->set('services.application', $application);
                 $this->container->set('services.options', $options);
                 $this->container->set('services.facebook.appSession', $fbAppSession);
-
-                //delete memory cache
-                //will be regenrated at next request.
-                $this->container->store(true);
-
+                
                 $template = $this->container->getRoot()->getRootPath() . '/Resources/views/admin/install/install-success.html.php';
 
                 return $this->render($template, array(

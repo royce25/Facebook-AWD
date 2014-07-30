@@ -29,18 +29,15 @@ class Admin extends BaseAdmin
      */
     public function init()
     {
-        $installController = $this->container->get('backend.install_controller');
+        $installController = $this->container->get('controller.install');
         if (!$installController->isReady() || filter_input(INPUT_GET, 'master_settings', FILTER_SANITIZE_SPECIAL_CHARS)) {
             $installController->init();
         } else {
             //init plugins
-            $this->container->get('backend.controller')->init();
+            $this->container->get('controller.backend')->init();
             foreach ($this->container->getPlugins() as $plugin) {
                 $plugin->initControllers();
             }
-            //the instance is ready to be stored into memory for next load
-            //the container has pugins and services and controllers already set.
-            $this->container->store();
         }
         add_action('admin_init', array($this, 'adminInit'));
     }

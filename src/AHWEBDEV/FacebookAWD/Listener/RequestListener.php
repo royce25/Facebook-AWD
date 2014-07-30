@@ -74,8 +74,6 @@ class RequestListener
         $this->query = get_query_var($this->container->getSlug());
         if (!empty($this->query) && is_array($this->query)) {
             if (isset($this->query['action'])) {
-                //echo $this->container->getSlug() . '_' . $this->query['action'];
-                //exit('dd');
                 do_action($this->container->getSlug() . $this->query['action'], $this);
             }
         }
@@ -88,7 +86,7 @@ class RequestListener
      */
     public function insertRewriteRules($rules)
     {
-        $hook = $this->container->getSlug() . '/(' . implode('|', $this->conditions) . ')$';
+        $hook = $this->container->getSlug() . '/(' . implode('|', $this->conditions) . ')?';
         $rule = 'index.php?' . $this->container->getSlug() . '[action]=$matches[1]';
         $newrules = array(
             $hook => $rule
@@ -141,7 +139,7 @@ class RequestListener
         $this->conditions = $conditions;
         return $this;
     }
-    
+
     /**
      * Get the query
      * 
@@ -151,4 +149,5 @@ class RequestListener
     {
         return $this->query;
     }
+
 }
