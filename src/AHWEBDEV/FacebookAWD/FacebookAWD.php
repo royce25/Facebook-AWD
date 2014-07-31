@@ -126,7 +126,8 @@ class FacebookAWD extends Container
         $this->set('services.option_manager', $om);
 
         //load models
-        if (!$application = $om->load('options.application')) {
+        $application = $om->load('options.application');
+        if (!$application) {
             $application = new Application();
         }
         $this->set('services.application', $application);
@@ -138,9 +139,8 @@ class FacebookAWD extends Container
 
         //load api
         $fbAppSession = null;
-        if ($application) {
+        if ($application->getId() && $application->getSecretKey()) {
             FacebookSession::setDefaultApplication($application->getId(), $application->getSecretKey());
-            //maybe not required...
             $fbAppSession = FacebookSession::newAppSession($application->getId(), $application->getSecretKey());
         }
         $this->set('services.facebook.appSession', $fbAppSession);
