@@ -1,14 +1,15 @@
-/**
- * Init
+/*
+ * Facebook AWD helpers
  */
-var FacebookAwd = function() {
-    var $ = jQuery;
+var FacebookAWD = function() {
 };
-facebookAwd = new FacebookAwd();
+
+var facebookAWD = new FacebookAWD();
+
 jQuery(document).ready(function($) {
-    //facebookAwd.bindEvents();
-    $(window).trigger('facebookAwd_ready', facebookAwd);
+    $(window).trigger('FacebookAWD_ready', facebookAWD);
 });
+
 (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) {

@@ -58,25 +58,28 @@ class FacebookAWD extends Container
                   'src' => $publicUrl . '/js/socket.js'
                   ), */
                 $prefix . 'bootstrap' => array(
-                    'src' => $publicUrl . '/js/bootstrap.min.js'
+                    'src' => $publicUrl . '/js/bootstrap/bootstrap.min.js'
                 ),
                 $prefix . 'jquery-validate' => array(
-                    'src' => $publicUrl . '/js/jquery.validate.min.js'
+                    'src' => $publicUrl . '/js/jquery.validate.min.js',
+                    'deps' => array('jquery')
                 ),
                 $prefix . 'admin' => array(
-                    'src' => $publicUrl . '/js/admin/admin.js'
+                    'src' => $publicUrl . '/js/admin/admin.js',
+                    'deps' => array('jquery')
                 ),
                 $prefix . 'admin-init' => array(
                     'src' => $publicUrl . '/js/admin/init.js',
-                    'deps' => array($prefix . 'admin')
+                    'deps' => array($prefix . 'admin', 'jquery')
                 ),
                 $prefix => array(
-                    'src' => $publicUrl . '/js/init.js'
+                    'src' => $publicUrl . '/js/init.js',
+                    'deps' => array('jquery')
                 )
             ),
             'style' => array(
                 $prefix . 'bootstrap' => array(
-                    'src' => $publicUrl . '/css/bootstrap.css'
+                    'src' => $publicUrl . '/css/bootstrap/bootstrap.css'
                 ),
                 $prefix . 'animate' => array(
                     'src' => $publicUrl . '/css/animate.css'

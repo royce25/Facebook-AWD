@@ -92,7 +92,7 @@ class Admin extends BaseAdmin
     public function enqueueStyles()
     {
         wp_enqueue_style('thickbox');
-        
+
         wp_enqueue_style($this->container->getSlug() . 'bootstrap');
         wp_enqueue_style($this->container->getSlug() . 'animate');
         wp_enqueue_style($this->container->getSlug() . 'google-code-prettify');
@@ -103,13 +103,16 @@ class Admin extends BaseAdmin
      */
     public function enqueueScripts()
     {
+        //native wp scripts
         wp_enqueue_script('media-upload');
         wp_enqueue_script('thickbox');
         wp_enqueue_script('common');
         wp_enqueue_script('wp-list');
         wp_enqueue_script('postbox');
         wp_enqueue_script('jquery-form');
-
+        wp_enqueue_script('jquery');
+        
+        //add local scripts
         wp_enqueue_script($this->container->getSlug() . 'socket-io');
         wp_enqueue_script($this->container->getSlug() . 'socket');
         wp_enqueue_script($this->container->getSlug() . 'google-code-prettify');

@@ -1,19 +1,45 @@
+/*
+ * Facebook AWD Admin helpers
+ * 
+ * Init
+ */
+var facebookAWDAdmin = new FacebookAWDAdmin();
+
 /**
  * Init
  */
-
-facebookAwdAdmin = new FacebookAwdAdmin();
 jQuery(document).ready(function($) {
-    facebookAwdAdmin.bindEvents();
-    $(window).trigger('facebookAwdAdmin_ready', facebookAwdAdmin);
+    facebookAWDAdmin.bindEvents();
+    $(window).trigger('FacebookAWDAdmin_ready', facebookAWDAdmin);
 });
 
+/**
+ * Load async of the facebook sdk
+ */
 (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id))
         return;
     js = d.createElement(s);
     js.id = id;
-    js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&appId=409317535749344&version=v2.0";
+    js.src = "//connect.facebook.net/fr_FR/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
+
+
+window.$zopim || (function(d, s) {
+    var z = $zopim = function(c) {
+        z._.push(c);
+    }, $ = z.s = d.createElement(s), e = d.getElementsByTagName(s)[0];
+    z.set = function(o) {
+        z.set._.push(o);
+    };
+    z._ = [];
+    z.set._ = [];
+    $.async = !0;
+    $.setAttribute('charset', 'utf-8');
+    $.src = '//v2.zopim.com/?2JHh6o7wtxmzUPC8Ml8Io3HjOQr8pYNd';
+    z.t = +new Date;
+    $.type = 'text/javascript';
+    e.parentNode.insertBefore($, e);
+})(document, 'script');

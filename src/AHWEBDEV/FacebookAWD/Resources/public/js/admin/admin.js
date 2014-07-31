@@ -1,8 +1,7 @@
 /*
- * 
- * 
+ * Facebook AWD Admin helpers
  */
-var FacebookAwdAdmin = function() {
+var FacebookAWDAdmin = function() {
     var $ = jQuery;
 
     this.bindEvents = function() {
