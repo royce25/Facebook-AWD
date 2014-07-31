@@ -25,4 +25,17 @@
 ini_set('display_errors', true);
 
 require_once __DIR__ . '/vendor/autoload.php';
+global $facebookAWD;
 $facebookAWD = AHWEBDEV\FacebookAWD\FacebookAWD::boot(__FILE__);
+
+/**
+ * Helpers to getFacebookAWD
+ * 
+ * @global FacebookAWD $facebookAWD
+ * @return FacebookAWD
+ */
+function getFacebookAWD()
+{
+    global $facebookAWD;
+    return $facebookAWD;
+}

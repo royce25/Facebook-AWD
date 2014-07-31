@@ -30,7 +30,7 @@ class Admin extends BaseAdmin
     public function init()
     {
         $installController = $this->container->get('controller.install');
-        if (!$installController->isReady() || filter_input(INPUT_GET, 'master_settings', FILTER_SANITIZE_SPECIAL_CHARS)) {
+        if (!$installController->isReady() || filter_input(INPUT_GET, 'master_settings')) {
             $installController->init();
         } else {
             //init plugins
@@ -40,6 +40,8 @@ class Admin extends BaseAdmin
             }
         }
         add_action('admin_init', array($this, 'adminInit'));
+
+        return $this;
     }
 
     /**
@@ -111,7 +113,7 @@ class Admin extends BaseAdmin
         wp_enqueue_script('postbox');
         wp_enqueue_script('jquery-form');
         wp_enqueue_script('jquery');
-        
+
         //add local scripts
         wp_enqueue_script($this->container->getSlug() . 'socket-io');
         wp_enqueue_script($this->container->getSlug() . 'socket');

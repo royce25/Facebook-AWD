@@ -18,7 +18,6 @@ use AHWEBDEV\FacebookAWD\Model\Option;
 use AHWEBDEV\Framework\Container;
 use AHWEBDEV\Framework\ContainerInterface;
 use AHWEBDEV\Framework\OptionManager\OptionManager;
-use AHWEBDEV\Framework\Plugin\Plugin;
 use AHWEBDEV\Framework\TemplateManager\TemplateManager;
 use Facebook\FacebookSession;
 use ReflectionClass;
@@ -106,9 +105,6 @@ class FacebookAWD extends Container
         //init listeners
         $this->initListeners();
 
-        //init front end action
-        $this->get('listener.request_listener')->init();
-
         apply_filters('facebookawd', $this);
 
         return $this;
@@ -132,7 +128,8 @@ class FacebookAWD extends Container
         }
         $this->set('services.application', $application);
 
-        if (!$options = $om->load('options')) {
+        $options = $om->load('options');
+        if (!$options) {
             $options = new Option();
         }
         $this->set('services.options', $options);
@@ -171,16 +168,6 @@ class FacebookAWD extends Container
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function registerPlugin($name, Plugin $plugin)
-    {
-        $this->plugins[$name] = $plugin;
-
-        return $this;
-    }
-
-    /**
      * Register Assets on this container
      */
     public function registerAssets()
@@ -209,8 +196,8 @@ class FacebookAWD extends Container
     public function getInfos()
     {
         $f = new ReflectionClass($this);
-
-        return \get_plugin_data(dirname($f->getFileName()) . '/boot.php', false, true);
+        $boot = dirname(dirname(dirname($this->getRootPath()))) . '/boot.php';
+        return \get_plugin_data($boot, false, true);
     }
 
     /**
@@ -247,6 +234,8 @@ class FacebookAWD extends Container
     {
         $instance = new self();
         $instance->init();
+        //init front end action
+        $instance->get('listener.request_listener')->init();
         do_action('facebookawd_register_plugins', $instance);
         add_action('plugins_loaded', array($instance, 'launch'));
         return $instance;
