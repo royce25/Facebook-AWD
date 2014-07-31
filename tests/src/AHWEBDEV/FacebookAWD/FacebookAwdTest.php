@@ -15,7 +15,7 @@ class FacebookAWDTest extends \WP_UnitTestCase
         parent::setUp();
         $this->object = getFacebookAWD();
     }
-
+ 
     /**
      * @covers AHWEBDEV\FacebookAWD\FacebookAWD::init
      * @todo   Implement testInit().
