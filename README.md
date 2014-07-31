@@ -3,6 +3,7 @@ Facebook AWD
 
 V2 Alpha
 ----
+[![Build Status](https://travis-ci.org/Facebook-AWD/Facebook-AWD.svg?branch=Version2)](https://travis-ci.org/Facebook-AWD/Facebook-AWD)
 
 Facebook AWD is a wordpress extension that adds facebook functions on your website.
 
