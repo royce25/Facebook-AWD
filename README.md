@@ -9,16 +9,9 @@ Installation
 ```sh
 cd wp-content/plugins
 git clone git@github.com:Facebook-AWD/Facebook-AWD.git facebook-awd
-
-```
-if you want ot load native plugins
-
-```sh
 cd facebook-awd
-git submodule init
-git submodule update
+php composer.phar install
 ```
-
 
 ##### Requires php > 5.4
 
