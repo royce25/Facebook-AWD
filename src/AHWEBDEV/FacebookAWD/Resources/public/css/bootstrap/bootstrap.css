@@ -5960,3 +5960,7 @@ td.facebookAWD .visible-print {
 .facebookAWD .nav-tabs > .active > a:hover {
   outline: none;
 }
+.facebookAWD .fb-like span {
+  overflow: visible;
+  width: 450px !important;
+}

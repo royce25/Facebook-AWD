@@ -10,7 +10,7 @@
     <br />
     <ul class="list-group">
         <li class="lists-group-item ">
-            <a href="?page=<?php echo $this->container->getSlug(); ?>&master_settings=1" class="btn btn-warning pull-right"><span class="glyphicon glyphicon-cog"></span> Setup</a>
+            <a href="?page=<?php echo $this->container->getSlug(); ?>&master_settings=1" class="btn btn-warning pull-right animated fadeInLeft"><span class="glyphicon glyphicon-cog"></span> Setup</a>
             <h4 class="list-group-item-heading">Facebook AWD</h4>
             <p class="list-group-item-text">Base Facebook AWD container</p>
             <hr />
@@ -18,7 +18,7 @@
 
         <?php foreach ($plugins as $plugin) { ?>
             <li class="lists-group-item">
-                <a href="?page=<?php echo $plugin->getSlug(); ?>" class="btn btn-default pull-right"><span class="glyphicon glyphicon-cog"></span> Settings</a>
+                <a href="?page=<?php echo $plugin->getSlug(); ?>" class="btn btn-default pull-right animated fadeInLeft"><span class="glyphicon glyphicon-cog"></span> Settings</a>
                 <h5 class="list-group-item-heading">
                     <?php echo preg_replace('/' . $plugin->getRoot()->getTitle() . '/', '', $plugin->getTitle()); ?> 
                     <span class="label label-info label-sm"><?php echo $plugin->getVersion(); ?></span>

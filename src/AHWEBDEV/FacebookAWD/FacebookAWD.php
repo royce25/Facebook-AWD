@@ -11,13 +11,14 @@ namespace AHWEBDEV\FacebookAWD;
 
 use AHWEBDEV\FacebookAWD\Admin\Admin;
 use AHWEBDEV\FacebookAWD\Controller\AdminController;
+use AHWEBDEV\FacebookAWD\Controller\FrontController;
 use AHWEBDEV\FacebookAWD\Controller\InstallController;
 use AHWEBDEV\FacebookAWD\Listener\RequestListener;
 use AHWEBDEV\FacebookAWD\Model\Application;
 use AHWEBDEV\FacebookAWD\Model\Option;
+use AHWEBDEV\FacebookAWD\OptionManager\OptionManager;
 use AHWEBDEV\Framework\Container;
 use AHWEBDEV\Framework\ContainerInterface;
-use AHWEBDEV\Framework\OptionManager\OptionManager;
 use AHWEBDEV\Framework\TemplateManager\TemplateManager;
 use Facebook\FacebookSession;
 use ReflectionClass;
@@ -118,7 +119,7 @@ class FacebookAWD extends Container
         $tm = new TemplateManager($this);
         $this->set('services.template_manager', $tm);
 
-        $om = new OptionManager($this);
+        $om = new OptionManager($this->getSlug());
         $this->set('services.option_manager', $om);
 
         //load models
@@ -165,6 +166,9 @@ class FacebookAWD extends Container
 
         $installController = new InstallController($this, $this->get('admin'));
         $this->set('controller.install', $installController);
+
+        $frontController = new FrontController($this);
+        $this->set('controller.front', $frontController);
     }
 
     /**
@@ -228,11 +232,11 @@ class FacebookAWD extends Container
     /**
      * Create a Facebook AWD instance
      * 
-     * @return \self
+     * @return \AHWEBDEV\FacebookAWD\FacebookAWD
      */
     public static function boot()
     {
-        $instance = new self();
+        $instance = new static();
         $instance->init();
         //init front end action
         $instance->get('listener.request_listener')->init();

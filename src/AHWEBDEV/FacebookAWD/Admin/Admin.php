@@ -34,6 +34,7 @@ class Admin extends BaseAdmin
             $installController->init();
         } else {
             //init plugins
+            $this->container->get('controller.front')->init();
             $this->container->get('controller.backend')->init();
             foreach ($this->container->getPlugins() as $plugin) {
                 $plugin->initControllers();
