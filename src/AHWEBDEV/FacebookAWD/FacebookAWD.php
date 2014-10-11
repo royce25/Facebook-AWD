@@ -238,8 +238,10 @@ class FacebookAWD extends Container
     {
         $instance = new static();
         $instance->init();
-        //init front end action
+        
+        //init front end entry points + url rewrite
         $instance->get('listener.request_listener')->init();
+        
         do_action('facebookawd_register_plugins', $instance);
         add_action('plugins_loaded', array($instance, 'launch'));
         return $instance;
