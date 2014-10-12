@@ -12,8 +12,9 @@ namespace AHWEBDEV\FacebookAWD\Controller;
 use AHWEBDEV\Framework\TemplateManager\Form;
 use AHWEBDEV\Wordpress\Controller\AdminMenuController;
 use Exception;
-use Facebook\FacebookRequest;
-use Facebook\FacebookSession;
+use Facebook\Entities\FacebookApp;
+use Facebook\Entities\FacebookRequest;
+use Facebook\FacebookClient;
 
 /**
  * This is the install controller
@@ -73,20 +74,21 @@ class InstallController extends AdminMenuController
     public function index()
     {
 
+        //if success
         if ($this->listenerResponse) {
             echo $this->listenerResponse;
-
             return;
         }
+
         $form = new Form('fawd');
         $om = $this->container->get('services.option_manager');
-        $application = $this->container->get('services.application');
-        $options = $this->container->get('services.options');
+        $application = $om->get('options.application');
+        $options = $om->get('options');
         $formView = $form->processFields('application', $application->getFormConfig());
         $formView .= $form->processFields('options', $options->getFormConfig());
         $formView .= $form->processFields('token', $this->container->getTokenFormConfig());
         $template = $this->container->getRoot()->getRootPath() . '/Resources/views/admin/install/install.html.php';
-        $errors = $om->load('fawd_application_error');
+        $errors = $om->get('application_error');
         echo $this->render($template, array(
             'isReady' => $this->isReady(),
             'title' => __('Setup', $this->container->getPtd()),
@@ -113,43 +115,38 @@ class InstallController extends AdminMenuController
             $om = $this->container->get('services.option_manager');
             try {
                 //bind app data
-                $application = $this->container->get('services.application');
+                $application = $om->get('options.application');
                 $application->bind($request['fawdapplication']);
-
                 //bind options data
-                $options = $this->container->get('services.options');
+                $options = $om->get('options');
                 $options->bind($request['fawdoptions']);
 
-                //test the facebook data, and fetch info from application.
-                FacebookSession::setDefaultApplication($application->getId(), $application->getSecretKey());
-                $fbAppSession = FacebookSession::newAppSession($application->getId(), $application->getSecretKey());
-                if (!$fbAppSession->getSessionInfo()->isValid()) {
-                    throw new Exception('The FB application settings are invalid');
-                }
-                $request = new FacebookRequest($fbAppSession, 'GET', '/' . $application->getId());
-                $response = $request->execute();
+
+                $facebookApp = new FacebookApp($application->getId(), $application->getSecretKey());
+                $facebookClient = new FacebookClient();
+
+                $request = new FacebookRequest($facebookApp, $facebookApp->getAccessToken(), 'GET', '/' . $application->getId());
+                $response = $facebookClient->sendRequest($request);
                 $applicationData = $response->getGraphObject()->asArray();
                 $application->bind($applicationData);
 
                 //save options
-                $om->save('options.application', $application);
-                $om->save('options', $options);
-                $om->save('fawd_ready', true);
-                $om->save('fawd_application_error', null);
+                $om->set('options.application', $application);
+                $om->set('options', $options);
+                $om->set('ready', true);
+                $om->set('application_error', null);
 
                 //set new instance
-                $this->container->set('services.application', $application);
-                $this->container->set('services.options', $options);
-                $this->container->set('services.facebook.appSession', $fbAppSession);
-                
+                $this->container->set('services.facebook.app', $facebookApp);
+
                 $template = $this->container->getRoot()->getRootPath() . '/Resources/views/admin/install/install-success.html.php';
 
                 return $this->render($template, array(
                             'application' => $application
                 ));
             } catch (Exception $e) {
-                $om->save('fawd_application_error', $e->getMessage());
-                $om->save('fawd_ready', false);
+                $om->set('application_error', $e->getMessage());
+                $om->set('ready', false);
 
                 return false;
             }
@@ -174,7 +171,7 @@ class InstallController extends AdminMenuController
      */
     public function isReady()
     {
-        return $this->container->get('services.option_manager')->load('fawd_ready');
+        return $this->container->get('services.option_manager')->get('ready');
     }
 
 }

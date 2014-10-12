@@ -28,7 +28,10 @@ if (!function_exists('createSection_awdTemplate')) {
 ?>
 <div class="facebookAWD <?php echo $classes; ?>">
     <?php if (!empty($success)) { ?>
-        <div class="alert alert-success"><?php echo $success; ?></div>
+    <div class="alert alert-xs alert-success">
+        <a class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></a>
+        <?php echo $success; ?> 
+    </div>
     <?php } ?>
     <form role="form" id="configuration_wizard" method="post" action="">
         <?php if (!empty($errors)) { ?>
@@ -36,7 +39,7 @@ if (!function_exists('createSection_awdTemplate')) {
         <?php } ?>
         <?php createSection_awdTemplate($sections); ?>
         <?php if ($withSubmit) { ?>
-            <input type="submit" name="submit" id="submit_settings" class="btn btn-primary btn-mini" value="<?php _e('Save', $this->container->getPtd()); ?>" />
+            <input type="submit" name="submit" id="submit_settings" class="btn btn-xs btn-primary btn-mini" value="<?php _e('Save', $this->container->getPtd()); ?>" />
         <?php } ?>
     </form>
 </div>

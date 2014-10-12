@@ -20,7 +20,7 @@ use AHWEBDEV\Framework\Container;
 use AHWEBDEV\Framework\ContainerInterface;
 use AHWEBDEV\Framework\TemplateManager\TemplateManager;
 use AHWEBDEV\Wordpress\OptionManager\OptionManager;
-use Facebook\FacebookSession;
+use Facebook\Entities\FacebookApp;
 use ReflectionClass;
 use RuntimeException;
 
@@ -121,27 +121,26 @@ class FacebookAWD extends Container
 
         $om = new OptionManager($this->getSlug());
         $this->set('services.option_manager', $om);
+        $om->load();
 
         //load models
-        $application = $om->load('options.application');
+        $application = $om->get('options.application');
         if (!$application) {
             $application = new Application();
         }
-        $this->set('services.application', $application);
-
-        $options = $om->load('options');
+        $om->set('options.application', $application);
+        $options = $om->get('options');
         if (!$options) {
             $options = new Option();
         }
-        $this->set('services.options', $options);
+        $om->set('options', $options);
 
         //load api
-        $fbAppSession = null;
+        $facebookApp = null;
         if ($application->getId() && $application->getSecretKey()) {
-            FacebookSession::setDefaultApplication($application->getId(), $application->getSecretKey());
-            $fbAppSession = FacebookSession::newAppSession($application->getId(), $application->getSecretKey());
+            $facebookApp = new FacebookApp($application->getId(), $application->getSecretKey());
         }
-        $this->set('services.facebook.appSession', $fbAppSession);
+        $this->set('services.facebook.app', $facebookApp);
 
         $admin = new Admin($this);
         $this->set('admin', $admin);
@@ -238,10 +237,10 @@ class FacebookAWD extends Container
     {
         $instance = new static();
         $instance->init();
-        
+
         //init front end entry points + url rewrite
         $instance->get('listener.request_listener')->init();
-        
+
         do_action('facebookawd_register_plugins', $instance);
         add_action('plugins_loaded', array($instance, 'launch'));
         return $instance;

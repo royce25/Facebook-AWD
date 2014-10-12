@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Facebook AWD
  *
@@ -86,8 +85,9 @@ class AdminController extends BaseController implements MetaboxInterface
      */
     public function index()
     {
+        $application = $this->container->getRoot()->get('services.option_manager')->get('options.application');
         echo $this->render($this->getTemplates()['index'], array(
-            'application' => $this->container->getRoot()->get('services.application'),
+            'application' => $application,
             'args' => array(),
             'boxes' => array(
                 array(
@@ -110,7 +110,7 @@ class AdminController extends BaseController implements MetaboxInterface
      */
     public function welcomeSection()
     {
-        $application = $this->container->getRoot()->get('services.application');
+        $application = $this->container->getRoot()->get('services.option_manager')->get('options.application');
         echo $this->render($this->getTemplates()['welcome'], array('application' => $application));
     }
 
