@@ -76,16 +76,17 @@ class Admin extends BaseAdmin
         $this->enqueueAssetsHook($pageHook);
 
         //plugins init hook
-        foreach ($this->container->getPlugins() as $plugin) {
-            $pageHook = $this->getAdminMenuHook($plugin->getSlug());
-            if ($pageHook) {
-                //enqueue generals assets on plugins
-                $this->enqueueAssetsHook($pageHook);
-            }
-        }
+        /* foreach ($this->container->getPlugins() as $plugin) {
+          $pageHook = $this->getAdminMenuHook($plugin->getSlug());
+          if ($pageHook) {
+          //enqueue generals assets on plugins
+          $this->enqueueAssetsHook($pageHook);
+          }
+          } */
 
         foreach ($this->getAdminMenuHooks() as $hook) {
             add_action('load-' . $hook, array($this, 'initScreen'));
+            $this->enqueueAssetsHook($hook);
         }
     }
 
