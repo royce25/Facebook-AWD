@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Facebook AWD
  *
@@ -8,8 +9,8 @@
 
 namespace AHWEBDEV\FacebookAWD\Controller;
 
+use AHWEBDEV\FacebookAWD\Controller\AdminMenuController as BaseController;
 use AHWEBDEV\Wordpress\Admin\MetaboxInterface;
-use AHWEBDEV\Wordpress\Controller\AdminMenuController as BaseController;
 
 /**
  * This is the admin controller

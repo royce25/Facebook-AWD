@@ -9,12 +9,11 @@
 
 namespace AHWEBDEV\FacebookAWD\Controller;
 
+use AHWEBDEV\FacebookAWD\Controller\AdminMenuController;
 use AHWEBDEV\Framework\TemplateManager\Form;
-use AHWEBDEV\Wordpress\Controller\AdminMenuController;
 use Exception;
 use Facebook\Entities\FacebookApp;
 use Facebook\Entities\FacebookRequest;
-use Facebook\FacebookClient;
 
 /**
  * This is the install controller
@@ -81,14 +80,13 @@ class InstallController extends AdminMenuController
         }
 
         $form = new Form('fawd');
-        $om = $this->container->get('services.option_manager');
-        $application = $om->get('options.application');
-        $options = $om->get('options');
+        $application = $this->om->get('options.application');
+        $options = $this->om->get('options');
         $formView = $form->processFields('application', $application->getFormConfig());
         $formView .= $form->processFields('options', $options->getFormConfig());
         $formView .= $form->processFields('token', $this->container->getTokenFormConfig());
         $template = $this->container->getRoot()->getRootPath() . '/Resources/views/admin/install/install.html.php';
-        $errors = $om->get('application_error');
+        $errors = $this->om->get('application_error');
         echo $this->render($template, array(
             'isReady' => $this->isReady(),
             'title' => __('Setup', $this->container->getPtd()),
@@ -112,18 +110,17 @@ class InstallController extends AdminMenuController
         $request = filter_input_array(INPUT_POST);
         $isTokenValid = isset($request['fawdtoken']) ? wp_verify_nonce($request['fawdtoken']['token'], 'fawd-token') : false;
         if ($isTokenValid) {
-            $om = $this->container->get('services.option_manager');
             try {
                 //bind app data
-                $application = $om->get('options.application');
+                $application = $this->om->get('options.application');
                 $application->bind($request['fawdapplication']);
                 //bind options data
-                $options = $om->get('options');
+                $options = $this->om->get('options');
                 $options->bind($request['fawdoptions']);
 
 
                 $facebookApp = new FacebookApp($application->getId(), $application->getSecretKey());
-                $facebookClient = new FacebookClient();
+                $facebookClient = $this->container->get('services.facebook.client');
 
                 $request = new FacebookRequest($facebookApp, $facebookApp->getAccessToken(), 'GET', '/' . $application->getId());
                 $response = $facebookClient->sendRequest($request);
@@ -131,10 +128,10 @@ class InstallController extends AdminMenuController
                 $application->bind($applicationData);
 
                 //save options
-                $om->set('options.application', $application);
-                $om->set('options', $options);
-                $om->set('ready', true);
-                $om->set('application_error', null);
+                $this->om->set('options.application', $application);
+                $this->om->set('options', $options);
+                $this->om->set('ready', true);
+                $this->om->set('application_error', null);
 
                 //set new instance
                 $this->container->set('services.facebook.app', $facebookApp);
@@ -145,8 +142,8 @@ class InstallController extends AdminMenuController
                             'application' => $application
                 ));
             } catch (Exception $e) {
-                $om->set('application_error', $e->getMessage());
-                $om->set('ready', false);
+                $this->om->set('application_error', $e->getMessage());
+                $this->om->set('ready', false);
 
                 return false;
             }

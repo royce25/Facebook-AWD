@@ -21,6 +21,7 @@ use AHWEBDEV\Framework\ContainerInterface;
 use AHWEBDEV\Framework\TemplateManager\TemplateManager;
 use AHWEBDEV\Wordpress\OptionManager\OptionManager;
 use Facebook\Entities\FacebookApp;
+use Facebook\FacebookClient;
 use ReflectionClass;
 use RuntimeException;
 
@@ -141,6 +142,7 @@ class FacebookAWD extends Container
             $facebookApp = new FacebookApp($application->getId(), $application->getSecretKey());
         }
         $this->set('services.facebook.app', $facebookApp);
+        $this->set('services.facebook.client', new FacebookClient());
 
         $admin = new Admin($this);
         $this->set('admin', $admin);
