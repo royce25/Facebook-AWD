@@ -1,7 +1,7 @@
 /*
  * Facebook AWD Admin helpers
  */
-var FacebookAWDAdmin = function() {
+var FacebookAWDAdmin = function () {
     var $ = jQuery;
     var admin = this;
     /**
@@ -9,14 +9,14 @@ var FacebookAWDAdmin = function() {
      * s
      * @returns {void}
      */
-    this.bindEvents = function() {
+    this.bindEvents = function () {
 
         /**
          * Hide event on change value.
          * true = show
          * false = hidden
          */
-        $(document).on('change', '.hideIfOn', function(e, data) {
+        $(document).on('change', '.hideIfOn', function (e, data) {
             var sectionsHideOn = $(this).data('hideOn');
             var value = $(e.target).val() === '1' ? true : false;
             var $section = $(e.target).parents('.section').find(sectionsHideOn);
@@ -46,9 +46,9 @@ var FacebookAWDAdmin = function() {
      * 
      * @returns {void}
      */
-    this.animateAdmin = function() {
+    this.animateAdmin = function () {
         $btns = $('#postbox-container-2 a.btn');
-        $btns.on('click', function(e) {
+        $btns.on('click', function (e) {
             e.preventDefault();
             $(this).removeClass('fadeIn').addClass('fadeOutLeft');
 
@@ -64,9 +64,9 @@ var FacebookAWDAdmin = function() {
      * @param {Object} $form
      * @returns {void}
      */
-    this.submitSettingsForm = function($form, action) {
+    this.submitSettingsForm = function ($form, action) {
         var data = $form.serialize() + '&action=' + action;
-        $.post(ajaxurl, data, function(data) {
+        $.post(ajaxurl, data, function (data) {
             admin.insertSection(data);
         }, 'json');
     };
@@ -76,25 +76,30 @@ var FacebookAWDAdmin = function() {
      * @param {Object} data
      * @returns {void}
      */
-    this.insertSection = function(data) {
+    this.insertSection = function (data) {
         //insert new section
         $('.section.' + data.sectionClass).replaceWith(data.section);
+
         var $newSection = $('.section.' + data.sectionClass);
         $('.hideIfOn').trigger('change', {direct: 1});
+
+        //re parse xfbml if needed
+        FB.XFBML.parse($newSection.get(0));
 
         //scroll to the top of the section
         $('html, body').animate({
             scrollTop: $newSection.offset().top - 40
         });
 
+
         //hide alert after 5 secondes
         var $alert = $newSection.find('.alert-success');
         $alert.addClass('animated fadeInDown');
         clearTimeout(t1);
-        var t1 = setTimeout(function() {
+        var t1 = setTimeout(function () {
             $alert.removeClass('fadeInDown').addClass('fadeOutUp');
             clearTimeout(t2);
-            var t2 = setTimeout(function() {
+            var t2 = setTimeout(function () {
                 $alert.slideUp();
             }, 500);
         }, 5000);

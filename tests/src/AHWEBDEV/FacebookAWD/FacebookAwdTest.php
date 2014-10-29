@@ -30,7 +30,6 @@ class FacebookAWDTest extends \WP_UnitTestCase
             'controller.backend',
             'controller.install',
             'listener.request_listener',
-            //cannot be test for the moment 'services.facebook.appSession',
             'admin'
         );
         foreach ($servicesNames as $name) {
