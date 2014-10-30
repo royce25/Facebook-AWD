@@ -47,6 +47,7 @@ class Admin extends BaseAdmin
 
     /**
      * Register hook to print assets
+     * 
      * @param string $pageHook
      */
     public function enqueueAssetsHook($pageHook)
@@ -120,4 +121,5 @@ class Admin extends BaseAdmin
         //required to have the init and facebook data in the admin
         $this->container->get('controller.front')->enqueueScripts();
     }
+
 }

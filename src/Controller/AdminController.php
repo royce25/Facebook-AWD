@@ -36,14 +36,6 @@ class AdminController extends BaseController implements MetaboxInterface
     /**
      * {@inheritdoc}
      */
-    public function getMenuSlug()
-    {
-        return $this->container->getSlug();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getMenuTitle()
     {
         return $this->container->getTitle();

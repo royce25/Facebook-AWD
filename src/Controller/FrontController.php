@@ -51,6 +51,11 @@ class FrontController extends Controller
         wp_enqueue_style($this->container->getSlug() . 'bootstrap');
     }
 
+    /**
+     * Expose public js variales in the plugin object Data
+     * 
+     * @return array
+     */
     public function getPublicJSData()
     {
         $application = $this->om->get('options.application');

@@ -48,7 +48,7 @@ class RequestListener
     /**
      * Constructor
      * 
-     * @param \AHWEBDEV\Framework\ContainerInterface $container
+     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -81,8 +81,8 @@ class RequestListener
 
     /**
      * Insert Rewrite Rules to front End
-     * @param  type $rules
-     * @return type
+     * @param  array $rules
+     * @return array
      */
     public function insertRewriteRules($rules)
     {
@@ -109,7 +109,7 @@ class RequestListener
     /**
      * Get the conditions path
      * 
-     * @return type
+     * @return array
      */
     public function getConditions()
     {

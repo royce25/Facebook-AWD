@@ -53,7 +53,7 @@ class Option extends Model
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function getDefaultFormConfig()
     {

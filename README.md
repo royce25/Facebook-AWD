@@ -10,7 +10,8 @@ Installation
 cd wp-content/plugins
 git clone git@github.com:Facebook-AWD/Facebook-AWD.git facebook-awd
 cd facebook-awd
-php composer.phar install
+chmod +x ./bin/install.sh
+./bin/install.sh
 ```
 
 ##### Requires php > 5.4

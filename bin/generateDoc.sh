@@ -1,4 +1,6 @@
 #!/bin/sh
 
-rm -R ../docs
-phpdoc -d ../ -t ../docs/  --ignore "*/vendor/facebook/*,*/vendor/composer/*,*/Resources/*"  --title="Facebook AWD API"
+mkdir -p ../../facebook-awd
+rm -R ../../facebook-awd-docs/html
+php phpDocumentor.phar -c phpdoc.xml
+rm -R ../../facebook-awd-docs/cache
