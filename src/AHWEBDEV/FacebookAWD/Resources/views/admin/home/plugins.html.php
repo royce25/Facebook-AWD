@@ -16,11 +16,13 @@
             <hr />
         </li>
 
-        <?php foreach ($plugins as $plugin) { ?>
+        <?php
+        foreach ($plugins as $plugin) {
+            ?>
             <li class="lists-group-item">
                 <a href="?page=<?php echo $plugin->getSlug(); ?>" class="btn btn-default pull-right animated fadeInLeft"><span class="glyphicon glyphicon-cog"></span> Settings</a>
                 <h5 class="list-group-item-heading">
-                    <?php echo preg_replace('/' . $plugin->getRoot()->getTitle() . '/', '', $plugin->getTitle()); ?> 
+                    <?php echo $plugin->getTitle(); ?> 
                     <span class="label label-info label-sm"><?php echo $plugin->getVersion(); ?></span>
                 </h5>
                 <p class="list-group-item-text"><?php echo $plugin->getDescription(); ?></p>

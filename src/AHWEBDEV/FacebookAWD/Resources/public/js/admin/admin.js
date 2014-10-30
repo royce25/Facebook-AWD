@@ -64,9 +64,13 @@ var FacebookAWDAdmin = function () {
      * @param {Object} $form
      * @returns {void}
      */
-    this.submitSettingsForm = function ($form, action) {
+    this.submitSettingsForm = function ($form, action, callback) {
         var data = $form.serialize() + '&action=' + action;
         $.post(ajaxurl, data, function (data) {
+            if (callback) {
+                callback(data);
+                return;
+            }
             admin.insertSection(data);
         }, 'json');
     };
@@ -86,9 +90,13 @@ var FacebookAWDAdmin = function () {
         //re parse xfbml if needed
         FB.XFBML.parse($newSection.get(0));
 
+        //parse code block if needed
+        prettyPrint();
+
         //scroll to the top of the section
+        var top = typeof $newSection.offset() !== 'undefined' ? $newSection.offset().top : 0;
         $('html, body').animate({
-            scrollTop: $newSection.offset().top - 40
+            scrollTop: top - 40
         });
 
 

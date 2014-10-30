@@ -9,7 +9,7 @@
 
 namespace AHWEBDEV\FacebookAWD\Controller;
 
-use AHWEBDEV\FacebookAWD\Controller\AdminMenuController;
+use AHWEBDEV\Wordpress\Controller\AdminMenuController;
 use AHWEBDEV\Framework\TemplateManager\Form;
 use Exception;
 use Facebook\Entities\FacebookApp;

@@ -76,6 +76,10 @@ class FacebookAWD extends Container
                 $prefix => array(
                     'src' => $publicUrl . '/js/init.js',
                     'deps' => array('jquery')
+                ),
+                $prefix . 'prettify' => array(
+                    'src' => $publicUrl . '/google-code-prettify/prettify.js',
+                    'deps' => array($prefix . 'admin')
                 )
             ),
             'style' => array(
@@ -84,6 +88,11 @@ class FacebookAWD extends Container
                 ),
                 $prefix . 'animate' => array(
                     'src' => $publicUrl . '/css/animate.css'
+                ),
+                $prefix . 'prettify' => array(
+                    'src' => $publicUrl . '/google-code-prettify/tomorrow-night-blue.css',
+                    //'src' => $publicUrl . '/google-code-prettify/prettify.css',
+                    'deps' => array($prefix . 'bootstrap')
                 )
             )
         );

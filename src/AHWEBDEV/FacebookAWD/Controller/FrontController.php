@@ -9,7 +9,7 @@
 
 namespace AHWEBDEV\FacebookAWD\Controller;
 
-use AHWEBDEV\Framework\Controller\Controller as BaseController;
+use AHWEBDEV\Wordpress\Controller\Controller;
 
 /**
  * FacebookAWD FrontController
@@ -20,7 +20,7 @@ use AHWEBDEV\Framework\Controller\Controller as BaseController;
  * @category     Extension
  * @author       Alexandre Hermann <hermann.alexandre@ahwebdev.fr>
  */
-class FrontController extends BaseController
+class FrontController extends Controller
 {
 
     /**
@@ -29,16 +29,36 @@ class FrontController extends BaseController
     public function init()
     {
         //add scripts
+        add_action('wp_enqueue_scripts', array($this, 'enqueueScripts'));
         add_action('wp_enqueue_scripts', array($this, 'enqueueStyles'));
     }
 
     /**
-     * Enqueue assets
+     * Enqueue scripts
+     */
+    public function enqueueScripts()
+    {
+        $this->container->getRoot()->registerAssets();
+        wp_localize_script($this->container->getSlug(), $this->container->getSlug() . 'Data', $this->getPublicJSData());
+        wp_enqueue_script($this->container->getSlug());
+    }
+
+    /**
+     * Enqueue styles
      */
     public function enqueueStyles()
     {
-        $this->container->getRoot()->registerAssets();
-        wp_enqueue_style($this->container->getSlug().'bootstrap');
+        wp_enqueue_style($this->container->getSlug() . 'bootstrap');
+    }
+
+    public function getPublicJSData()
+    {
+        $application = $this->om->get('options.application');
+
+        $data = array(
+            'appId' => $application->getId(),
+        );
+        return $data;
     }
 
 }

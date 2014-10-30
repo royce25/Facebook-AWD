@@ -37,11 +37,11 @@ class Admin extends BaseAdmin
             $this->container->get('controller.front')->init();
             $this->container->get('controller.backend')->init();
             foreach ($this->container->getPlugins() as $plugin) {
+                //@todo put this in interface
                 $plugin->initControllers();
             }
         }
         add_action('admin_init', array($this, 'adminInit'));
-
         return $this;
     }
 
@@ -75,15 +75,6 @@ class Admin extends BaseAdmin
         $this->container->getRoot()->registerAssets();
         $this->enqueueAssetsHook($pageHook);
 
-        //plugins init hook
-        /* foreach ($this->container->getPlugins() as $plugin) {
-          $pageHook = $this->getAdminMenuHook($plugin->getSlug());
-          if ($pageHook) {
-          //enqueue generals assets on plugins
-          $this->enqueueAssetsHook($pageHook);
-          }
-          } */
-
         foreach ($this->getAdminMenuHooks() as $hook) {
             add_action('load-' . $hook, array($this, 'initScreen'));
             $this->enqueueAssetsHook($hook);
@@ -99,7 +90,7 @@ class Admin extends BaseAdmin
 
         wp_enqueue_style($this->container->getSlug() . 'bootstrap');
         wp_enqueue_style($this->container->getSlug() . 'animate');
-        wp_enqueue_style($this->container->getSlug() . 'google-code-prettify');
+        wp_enqueue_style($this->container->getSlug() . 'prettify');
     }
 
     /**
@@ -123,7 +114,10 @@ class Admin extends BaseAdmin
         wp_enqueue_script($this->container->getSlug() . 'bootstrap');
         wp_enqueue_script($this->container->getSlug() . 'jquery-validate');
         wp_enqueue_script($this->container->getSlug() . 'admin');
+        wp_enqueue_script($this->container->getSlug() . 'prettify');
         wp_enqueue_script($this->container->getSlug() . 'admin-init');
-    }
 
+        //required to have the init and facebook data in the admin
+        $this->container->get('controller.front')->enqueueScripts();
+    }
 }

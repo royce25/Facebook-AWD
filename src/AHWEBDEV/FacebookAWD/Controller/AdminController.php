@@ -9,7 +9,7 @@
 
 namespace AHWEBDEV\FacebookAWD\Controller;
 
-use AHWEBDEV\FacebookAWD\Controller\AdminMenuController as BaseController;
+use AHWEBDEV\Wordpress\Controller\AdminMenuController as BaseController;
 use AHWEBDEV\Wordpress\Admin\MetaboxInterface;
 
 /**
@@ -50,6 +50,14 @@ class AdminController extends BaseController implements MetaboxInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getIconUrl()
+    {
+        return plugins_url(null, __DIR__) . '/Resources/public/img/logo_icon.png';
+    }
+
+    /**
      * get the templates
      */
     public function getTemplates()
@@ -63,22 +71,24 @@ class AdminController extends BaseController implements MetaboxInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addMetaBoxes($pageHook)
+    public function addDefaultMetaBoxes($pageHook)
     {
-        $title = '<span class="facebookAWD"><span class="glyphicon glyphicon-th-list"></span></span> ' . __('Plugins', $this->container->getPtd());
-        add_meta_box($pageHook . '_plugins', $title, array($this, 'pluginsSection'), $pageHook, 'normal', 'default');
-
         $title = '<span class="facebookAWD"><span class="glyphicon glyphicon-info-sign"></span></span> ' . __('Documentation', $this->container->getPtd());
         add_meta_box($pageHook . '_documentation', $title, array($this, 'documentationSection'), $pageHook, 'side', 'default');
 
         $title = '<span class="facebookAWD"><span class="glyphicon glyphicon-thumbs-up"></span></span> ' . __('Be cool...', $this->container->getPtd());
         add_meta_box($pageHook . '_donate', $title, array($this, 'donateSection'), $pageHook, 'side', 'default');
+    }
 
-        //add_meta_box($pageHook . '_welcome', __('Welcome', $this->container->getPtd()), array($this, 'welcomeSection'), $pageHook, 'normal', 'high');
-        add_screen_option('layout_columns', array('max' => 2, 'default' => 1));
+    /**
+     * {@inheritdoc}
+     */
+    public function addMetaBoxes($pageHook)
+    {
+        $this->addDefaultMetaBoxes($pageHook);
+
+        $title = '<span class="facebookAWD"><span class="glyphicon glyphicon-th-list"></span></span> ' . __('Plugins', $this->container->getPtd());
+        add_meta_box($pageHook . '_plugins', $title, array($this, 'pluginsSection'), $pageHook, 'normal', 'default');
     }
 
     /**
