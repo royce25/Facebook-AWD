@@ -58,29 +58,28 @@ class FacebookAWD extends Container
                   'socket-js' => array(
                   'src' => $publicUrl . '/js/socket.js'
                   ), */
-                $prefix . 'bootstrap' => array(
-                    'src' => $publicUrl . '/js/bootstrap/bootstrap.min.js'
+                $prefix . 'prettify' => array(
+                    'src' => $publicUrl . '/google-code-prettify/prettify.js',
                 ),
                 $prefix . 'jquery-validate' => array(
                     'src' => $publicUrl . '/js/jquery.validate.min.js',
                     'deps' => array('jquery')
                 ),
-                $prefix . 'admin' => array(
-                    'src' => $publicUrl . '/js/admin/admin.js',
-                    'deps' => array('jquery')
-                ),
-                $prefix . 'admin-init' => array(
-                    'src' => $publicUrl . '/js/admin/init.js',
-                    'deps' => array($prefix . 'admin', 'jquery')
+                $prefix . 'bootstrap' => array(
+                    'src' => $publicUrl . '/js/bootstrap/bootstrap.min.js'
                 ),
                 $prefix => array(
                     'src' => $publicUrl . '/js/init.js',
                     'deps' => array('jquery')
                 ),
-                $prefix . 'prettify' => array(
-                    'src' => $publicUrl . '/google-code-prettify/prettify.js',
-                    'deps' => array($prefix . 'admin')
-                )
+                $prefix . 'admin' => array(
+                    'src' => $publicUrl . '/js/admin/admin.js',
+                    'deps' => array($prefix, 'jquery', $prefix . 'prettify')
+                ),
+                $prefix . 'admin-init' => array(
+                    'src' => $publicUrl . '/js/admin/init.js',
+                    'deps' => array($prefix, $prefix . 'admin')
+                ),
             ),
             'style' => array(
                 $prefix . 'bootstrap' => array(
