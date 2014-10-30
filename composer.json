@@ -30,9 +30,11 @@
     "autoload": {
         "psr-4": {
             "": [
-                "src/",
                 "vendor/ahwebdev/framework/src/",
                 "vendor/ahwebdev/wordpress/src/"
+            ],
+            "AHWEBDEV\\FacebookAWD\\": [
+                "src/"
             ]
         }
     },
