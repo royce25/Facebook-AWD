@@ -1,7 +1,3 @@
-.project
 nbproject
-docs
 composer.lock
-composer.phar
 vendor
-gen
