@@ -29,8 +29,10 @@
     ],
     "autoload": {
         "psr-4": {
-            "": [
-                "vendor/ahwebdev/framework/src/",
+            "AHWEBDEV\\Framework\\": [
+                "vendor/ahwebdev/framework/src/"
+            ],
+            "AHWEBDEV\\Wordpress\\": [
                 "vendor/ahwebdev/wordpress/src/"
             ],
             "AHWEBDEV\\FacebookAWD\\": [
@@ -42,5 +44,8 @@
         "ahwebdev/framework": "dev-master",
         "ahwebdev/wordpress": "dev-master",
         "facebook/php-sdk-v4": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
     }
 }

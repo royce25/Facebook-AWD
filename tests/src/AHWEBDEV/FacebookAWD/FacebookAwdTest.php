@@ -15,27 +15,6 @@ class FacebookAWDTest extends \WP_UnitTestCase
         parent::setUp();
         $this->object = getFacebookAWD();
     }
- 
-    /**
-     * @covers AHWEBDEV\FacebookAWD\FacebookAWD::init
-     * @todo   Implement testInit().
-     */
-    public function testInit()
-    {
-        $servicesNames = array(
-            'services.template_manager',
-            'services.option_manager',
-            'services.application',
-            'services.options',
-            'controller.backend',
-            'controller.install',
-            'listener.request_listener',
-            'admin'
-        );
-        foreach ($servicesNames as $name) {
-            $this->assertTrue($this->object->has($name));
-        }
-    }
 
     /**
      * @covers AHWEBDEV\FacebookAWD\FacebookAWD::initServices
@@ -46,12 +25,14 @@ class FacebookAWDTest extends \WP_UnitTestCase
         $servicesNames = array(
             'services.template_manager',
             'services.option_manager',
-            'services.application',
-            'services.options',
-            //cannot be test for the moment 'services.facebook.appSession',
+            //'services.facebook.app',//init the test app
+            'services.facebook.client',
             'admin'
         );
         foreach ($servicesNames as $name) {
+            if (!$this->object->has($name)) {
+                echo $name;
+            }
             $this->assertTrue($this->object->has($name));
         }
     }
@@ -73,7 +54,8 @@ class FacebookAWDTest extends \WP_UnitTestCase
     {
         $servicesNames = array(
             'controller.backend',
-            'controller.install'
+            'controller.install',
+            'controller.front'
         );
 
         foreach ($servicesNames as $name) {
@@ -102,15 +84,6 @@ class FacebookAWDTest extends \WP_UnitTestCase
         foreach ($assets['style'] as $id => $data) {
             $this->assertTrue(array_key_exists($id, $wp_styles->registered));
         }
-    }
-
-    /**
-     * @covers AHWEBDEV\FacebookAWD\FacebookAWD::getInfos
-     * @todo   Implement testGetInfos().
-     */
-    public function testGetInfos()
-    {
-        $this->assertTrue(is_array($this->object->getInfos()));
     }
 
     /**
