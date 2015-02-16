@@ -1,0 +1,8 @@
+ahwebdev_wordpress_plugin:
+    resource: "@AHWEBDEVWordpressPluginBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ahwebdev_facebook_awd_app:
+    resource: "@AHWEBDEVFacebookAWDAppBundle/Resources/config/routing.yml"
+    prefix:   /
+

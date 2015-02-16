@@ -1,0 +1,18 @@
+<?php
+
+/**
+  Plugin Name: FacebookAWD
+  Plugin URI: http://facebook-awd.ahwebdev.fr
+  Description: Facebook AWD will adds required extensions from facebook to your site.
+  Version: 2.0
+  Author: Alexandre Hermann (AHWEBDEV) <hermann.alexandre@ahwebdev.fr>
+  Author URI: http://www.ahwebdev.fr
+  License: Copywrite AHWEBDEV
+  Text Domain: FacebookAWD
+  Last modification: 22/05/2014
+ */
+//$env = 'prod';
+$env = 'dev';
+$booter = $env == "prod" ? "app.php" : "app_" . $env . ".php";
+$boot = create_function('', 'include __DIR__ . "/' . $booter . '";');
+add_action('plugins_loaded', $boot);

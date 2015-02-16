@@ -1,0 +1,21 @@
+services:
+    ahwebdev_facebook_awd_app.admin.general:
+        class: AHWEBDEV\Wordpress\PluginBundle\Admin\AdminPage
+        arguments:
+            - "facebookawd"
+            - "Facebook AWD"
+        tags:
+            - { name: ahwebdev_wordpress_plugin.admin.page }
+            
+    ahwebdev_facebook_awd_app.admin.documentation:
+        class: AHWEBDEV\Wordpress\PluginBundle\Admin\AdminPage
+        arguments:
+            - "facebookawd_documentation"
+            - "Documentation"
+            - ""
+            - @ahwebdev_facebook_awd_app.admin.general
+        tags:
+            - { name: ahwebdev_wordpress_plugin.admin.page }
+            
+            
+    

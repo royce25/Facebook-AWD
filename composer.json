@@ -1,6 +1,12 @@
 {
     "name": "ahwebdev/facebookAWD",
     "version": "dev-master",
+    "autoload": {
+        "psr-0": {
+            "": "src/",
+            "SymfonyStandard": "app/"
+        }
+    },
     "repositories": [
         {
             "type": "package",
@@ -27,23 +33,45 @@
             }
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "AHWEBDEV\\Framework\\": [
-                "vendor/ahwebdev/framework/src/"
-            ],
-            "AHWEBDEV\\Wordpress\\": [
-                "vendor/ahwebdev/wordpress/src/"
-            ],
-            "AHWEBDEV\\FacebookAWD\\": [
-                "src/"
-            ]
-        }
+    "post-root-package-install": [
+        "SymfonyStandard\\Composer::hookRootPackageInstall"
+    ],
+    "scripts": {
+        "post-install-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles"
+        ],
+        "post-update-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin"
     },
     "require": {
         "symfony/symfony": "dev-master",
-        "ahwebdev/framework": "dev-master",
-        "ahwebdev/wordpress": "dev-master",
+        "symfony/assetic-bundle": "~2.3",
+        "symfony/swiftmailer-bundle": "~2.3",
+        "symfony/monolog-bundle": "~2.4",
+        "sensio/distribution-bundle": "~3.0",
+        "sensio/generator-bundle": "~2.3",
         "facebook/php-sdk-v4": "dev-master"
+    },
+    "require-dev": {
+        "ahwebdev/framework": "dev-master",
+        "ahwebdev/wordpress": "dev-master"
+    },
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-web-dir": "web",
+        "symfony-var-dir": "test",
+        "symfony-assets-install": "relative"
     }
 }

@@ -1,0 +1,7 @@
+ahwebdev_facebook_awd_wpaction_default:
+    path: /toplevel_page_facebookawd
+    defaults: { _controller: AHWEBDEVFacebookAWDAppBundle:Default:testHookRequest}
+    
+ahwebdev_facebook_awd_wpaction_test:
+    path: /facebook-awd_page_facebookawd_documentation
+    defaults: { _controller: AHWEBDEVFacebookAWDAppBundle:Default:testHookRequest2}

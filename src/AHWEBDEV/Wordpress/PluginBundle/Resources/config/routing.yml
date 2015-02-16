@@ -1,0 +1,11 @@
+#ahwebdev_facebook_awd_app_general:
+#    resource: @AHWEBDEVWordpressPluginBundle/Resources/config/wprouting.yml
+#    type: wproute
+#    prefix: /wpaction
+#ahwebdev_wordpress_plugin_boot:
+#    path: /
+#   defaults: { _controller: AHWEBDEVWordpressPluginBundle:Wp:boot }
+
+ahwebdev_wordpress_plugin_test_blank:
+    path: /testme/
+    defaults: { _controller: AHWEBDEVWordpressPluginBundle:Wp:blank }

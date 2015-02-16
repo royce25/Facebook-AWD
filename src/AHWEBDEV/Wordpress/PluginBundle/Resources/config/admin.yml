@@ -1,0 +1,8 @@
+services:
+    ahwebdev_wordpress_plugin.admin.pool:
+        class: AHWEBDEV\Wordpress\PluginBundle\Admin\AdminPool
+        
+    ahwebdev_wordpress_plugin.admin.manager:
+        class: AHWEBDEV\Wordpress\PluginBundle\Admin\AdminManager
+        arguments: [@ahwebdev_wordpress_plugin.admin.pool, @ahwebdev_wordpress_plugin.wp_action_router]
+    

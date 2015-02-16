@@ -1,0 +1,8 @@
+#ahwebdev_facebook_awd_app:
+#    path: /
+#    defaults: { _controller: AHWEBDEVFacebookAWDAppBundle:Default:index }
+    
+ahwebdev_facebook_awd_app_general:
+    resource: @AHWEBDEVFacebookAWDAppBundle/Resources/config/wprouting.yml
+    type: wproute
+    prefix: /wpaction
