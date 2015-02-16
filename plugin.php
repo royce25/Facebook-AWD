@@ -11,8 +11,4 @@
   Text Domain: FacebookAWD
   Last modification: 22/05/2014
  */
-//$env = 'prod';
-$env = 'dev';
-$booter = $env == "prod" ? "app.php" : "app_" . $env . ".php";
-$boot = create_function('', 'include __DIR__ . "/' . $booter . '";');
-add_action('plugins_loaded', $boot);
+add_action('plugins_loaded', create_function('', 'include __DIR__ . "/' . (WP_DEBUG ? 'app_dev.php' : 'app.php') . '";'));

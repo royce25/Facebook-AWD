@@ -3,7 +3,6 @@
 namespace AHWEBDEV\Wordpress\PluginBundle\Routing;
 
 use Symfony\Component\Config\Loader\Loader;
-use Symfony\Component\Routing\RouteCollection;
 
 /**
  * WpActionRouteLoader
@@ -19,12 +18,8 @@ class WpActionRouteLoader extends Loader
     {
         $importedRoutes = $this->import($resource, 'yaml');
         foreach ($importedRoutes as $route) {
-            //$route->de
-            //$wpAction = 
-            $route->setDefault('_wpaction', true);
-            //var_dump($route);
+            //$route->setDefault('_wpaction', true);
         }
-        //$collection->addCollection($importedRoutes);
         return $importedRoutes;
     }
 

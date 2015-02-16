@@ -23,14 +23,10 @@ class AHWEBDEVWordpressPluginBundle extends Bundle
 
     public function boot()
     {
-        //@todo find a better way....
-        //We must know if function are loaded and not if we are in wordpress env.
-        //if this application is a plugin of wordpress and if we call the plugin directly
-        //we are in a wordpress env, but wp functions are not loaded
-        /*if (!function_exists('do_action')) {
-            require_once('/Users/alexhermann/Sites/Ahwebdev/facebookAWD/wp-blog-header.php');
-        }*/
-        $this->container->get('ahwebdev_wordpress_plugin.admin.manager')->boot();
+        //do not start the wp if we are under cli call
+        if (function_exists('do_action')) {
+            $this->container->get('ahwebdev_wordpress_plugin.admin.manager')->boot();
+        }
     }
 
     public function mytest()

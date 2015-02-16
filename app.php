@@ -33,19 +33,19 @@ if (is_plugin_active($plugin)) {
 
     $kernel = new AppKernel('prod', false);
     $kernel->loadClassCache();
-    $kernel = new AppCache($kernel);
-    
+    $appCache = new AppCache($kernel);
+
     // When using the HttpCache, you need to call the method in your front controller instead of relying on the configuration parameter
     Request::enableHttpMethodParameterOverride();
 
-    //create the request
-    $request = Request::createFromGlobals();
+    if (!function_exists('add_action')) {
+        require_once('/Users/alexhermann/Sites/Ahwebdev/facebookAWD/wp-blog-header.php');
 
-    //handle the request
-    $response = $kernel->handle($request);
-
-    //send the request
-    $response->send();
-
-    $kernel->terminate($request, $response);
+        $sf2request = Request::createFromGlobals();
+        $response = $appCache->handle($sf2request);
+        $response->send();
+        $appCache->terminate($sf2request, $response);
+    } else {
+        $appCache->getKernel()->boot();
+    }
 }

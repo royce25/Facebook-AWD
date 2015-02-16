@@ -74,22 +74,6 @@ class WpActionRouter
     }
 
     /**
-     * Handle the request
-     * 
-     * @param string $action
-     * @return Response
-     */
-    public function handle($action)
-    {
-        $path = '/wpaction/' . $action;
-        $request = self::cloneRequest($this->currentRequest, $path);
-        $request->attributes->set('wpaction', true);
-        $response = $this->httpKernel->handle($request, HttpKernelInterface::SUB_REQUEST);
-
-        return $response;
-    }
-
-    /**
      * Get the default Action
      * 
      * Returns an callback array
@@ -110,10 +94,15 @@ class WpActionRouter
      */
     public function controllerAction()
     {
-        //transfrom this action to controller action
-        $response = $this->handle(current_action());
+        $path = '/wpaction/' . current_action();
+        $request = self::cloneRequest($this->currentRequest, $path);
+        $request->attributes->set('wpaction', true);
+        $response = $this->httpKernel->handle($request);
         $response->send();
-        return $response;
+        if ($response->headers->has('X-Debug-Token-Link')) {
+            echo '<a target="blank" class="btn-link btn btn-warning btn small" href="' . plugins_url('facebook-awd/app_dev.php') . $response->headers->get('X-Debug-Token-Link') . '">Debug</a>';
+        }
+        $this->httpKernel->terminate($request, $response);
     }
 
 }

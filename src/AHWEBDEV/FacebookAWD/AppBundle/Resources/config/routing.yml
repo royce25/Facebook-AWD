@@ -4,5 +4,5 @@
     
 ahwebdev_facebook_awd_app_general:
     resource: @AHWEBDEVFacebookAWDAppBundle/Resources/config/wprouting.yml
-    type: wproute
+    #type: wproute
     prefix: /wpaction

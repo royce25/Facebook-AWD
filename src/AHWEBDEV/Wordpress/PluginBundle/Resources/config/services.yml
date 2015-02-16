@@ -4,10 +4,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request }
     
-    ahwebdev_wordpress_plugin.wp_route_loader:
-        class: AHWEBDEV\Wordpress\PluginBundle\Routing\WpActionRouteLoader
-        tags:
-            - { name: routing.loader }
+    #ahwebdev_wordpress_plugin.wp_route_loader:
+    #    class: AHWEBDEV\Wordpress\PluginBundle\Routing\WpActionRouteLoader
+    #    tags:
+    #        - { name: routing.loader }
             
     ahwebdev_wordpress_plugin.wp_action_router:
         class: AHWEBDEV\Wordpress\PluginBundle\Routing\WpActionRouter

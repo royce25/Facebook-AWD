@@ -63,7 +63,7 @@ $wordpressPath = '/Users/alexhermann/Sites/Ahwebdev/facebookAWD';
 //if we come directly from this file parse the request·
 
 if (!function_exists('add_action')) {
-    require_once('/Users/alexhermann/Sites/Ahwebdev/facebookAWD/wp-blog-header.php');
+    //require_once('/Users/alexhermann/Sites/Ahwebdev/facebookAWD/wp-blog-header.php');
 
     $sf2request = Request::createFromGlobals();
     $response = $kernel->handle($sf2request);
